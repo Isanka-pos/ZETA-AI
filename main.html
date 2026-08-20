@@ -1,0 +1,2302 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ZETA TOOLS — Sri Lankan Utility Suite</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
+    <link rel="preconnect" href="https://hashu-apis-production.up.railway.app" />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { display: ['Space Grotesk', 'sans-serif'], body: ['DM Sans', 'sans-serif'] } } } }
+    </script>
+    <style>
+        /* ===== CRITICAL PERFORMANCE: minimal, fast styles ===== */
+        :root {
+            --bg: #09090f;
+            --bg2: #0d0d14;
+            --bg3: #16161f;
+            --bg4: #22222e;
+            --brd: #1f1f2e;
+            --brd2: #2d2d40;
+            --tx: #eaeaf0;
+            --tx2: #9898b0;
+            --tx3: #5e5e7a;
+            --acc: #e8922a;
+            --acc-l: #f0a848;
+            --acc-g: rgba(232, 146, 42, 0.1);
+            --ok: #4ade80;
+            --err: #f87171;
+            --wrn: #fbbf24;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--tx);
+            overflow: hidden;
+            height: 100dvh;
+        }
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--brd2);
+            border-radius: 3px;
+        }
+        input,
+        textarea,
+        button,
+        select {
+            font-family: inherit;
+        }
+        .sr-file {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 280px;
+            min-width: 280px;
+            height: 100dvh;
+            background: linear-gradient(180deg, #0c0c15, #0a0a12);
+            border-right: 1px solid var(--brd);
+            display: flex;
+            flex-direction: column;
+            transition: transform .25s cubic-bezier(.4, 0, .2, 1);
+            z-index: 40;
+            position: relative;
+            overflow: hidden;
+        }
+        @media(max-width:768px) {
+            .sidebar {
+                position: fixed;
+                left: 0;
+                top: 0;
+                transform: translateX(-100%);
+                width: 280px;
+                min-width: 280px;
+            }
+            .sidebar.open {
+                transform: translateX(0)
+            }
+        }
+
+        .sb-brand {
+            padding: 20px 20px 16px;
+        }
+        .sb-brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .sb-brand-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--acc), #d4781a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: #fff;
+            flex-shrink: 0;
+            box-shadow: 0 4px 16px rgba(232, 146, 42, 0.25);
+        }
+        .sb-brand-name {
+            font-size: 17px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            color: var(--tx);
+            line-height: 1;
+        }
+        .sb-brand-sub {
+            font-size: 10px;
+            font-weight: 500;
+            color: var(--tx3);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+        .sb-version-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 10px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+            background: rgba(232, 146, 42, 0.08);
+            border: 1px solid rgba(232, 146, 42, 0.12);
+            color: var(--acc-l);
+        }
+
+        .sb-search {
+            padding: 0 16px;
+            margin-bottom: 6px;
+        }
+        .sb-search-wrap {
+            position: relative;
+        }
+        .sb-search-wrap i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--tx3);
+            font-size: 12px;
+            pointer-events: none;
+        }
+        .sb-search-wrap input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--brd);
+            border-radius: 12px;
+            padding: 10px 14px 10px 38px;
+            font-size: 13px;
+            color: var(--tx);
+            outline: none;
+            transition: border-color .15s;
+        }
+        .sb-search-wrap input::placeholder {
+            color: var(--tx3)
+        }
+        .sb-search-wrap input:focus {
+            border-color: rgba(232, 146, 42, 0.3);
+            background: rgba(232, 146, 42, 0.04);
+        }
+
+        .sb-section-label {
+            padding: 14px 20px 6px;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--tx3);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .sb-cat {
+            margin: 2px 12px;
+            padding: 0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background .15s;
+        }
+        .sb-cat:hover {
+            background: rgba(255, 255, 255, 0.025);
+        }
+        .sb-cat-head {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+        }
+        .sb-cat-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+        .sb-cat-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--tx);
+            line-height: 1.2;
+        }
+        .sb-cat-count {
+            font-size: 11px;
+            color: var(--tx3);
+            margin-top: 1px;
+        }
+
+        .sb-profile {
+            margin: auto 12px 12px;
+            padding: 14px;
+            border-radius: 14px;
+            background: rgba(232, 146, 42, 0.04);
+            border: 1px solid rgba(232, 146, 42, 0.08);
+            cursor: pointer;
+            transition: border-color .2s, background .2s;
+        }
+        .sb-profile:hover {
+            border-color: rgba(232, 146, 42, 0.2);
+            background: rgba(232, 146, 42, 0.08);
+        }
+        .sb-profile-inner {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .sb-profile-avatar {
+            position: relative;
+            flex-shrink: 0;
+        }
+        .sb-profile-avatar img {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 2px solid rgba(232, 146, 42, 0.2);
+        }
+        .sb-profile-dot {
+            position: absolute;
+            bottom: -1px;
+            right: -1px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--ok);
+            border: 2px solid #0d0d14;
+        }
+        .sb-profile-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--tx);
+            line-height: 1.2;
+        }
+        .sb-profile-status {
+            font-size: 11px;
+            color: var(--ok);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .sb-profile-status::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--ok);
+        }
+        .sb-profile-ellipsis {
+            margin-left: auto;
+            color: var(--tx3);
+            font-size: 14px;
+        }
+
+        /* ===== HEADER ===== */
+        .zeta-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 0 20px;
+            height: 64px;
+            min-height: 64px;
+            background: rgba(13, 13, 20, 0.96);
+            border-bottom: 1px solid var(--brd);
+            position: relative;
+            z-index: 1;
+        }
+        .zeta-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--acc), var(--acc-l), var(--acc), transparent);
+            background-size: 200% 100%;
+            animation: headerLine 4s ease-in-out infinite;
+            z-index: 2;
+        }
+        @keyframes headerLine {
+            0%,
+            100% {
+                background-position: 200% 0
+            }
+            50% {
+                background-position: 0% 0
+            }
+        }
+        .header-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #f0a848, #e8922a, #f5c76e, #e8922a);
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleShine 5s ease-in-out infinite;
+            line-height: 1;
+            user-select: none;
+        }
+        @keyframes titleShine {
+            0%,
+            100% {
+                background-position: 0% 50%
+            }
+            50% {
+                background-position: 100% 50%
+            }
+        }
+        .header-subtitle {
+            font-size: 10px;
+            font-weight: 500;
+            color: var(--tx3);
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            line-height: 1;
+            margin-top: 1px;
+        }
+        .header-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--brd);
+            background: var(--bg3);
+            color: var(--tx2);
+            cursor: pointer;
+            transition: all .2s;
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+        .header-btn:hover {
+            border-color: var(--acc);
+            color: var(--acc-l);
+            background: var(--acc-g);
+        }
+        .header-divider {
+            width: 1px;
+            height: 28px;
+            background: linear-gradient(to bottom, transparent, var(--brd2), transparent);
+            flex-shrink: 0;
+        }
+
+        /* ===== HERO (lightweight) ===== */
+        .hero-wrap {
+            position: relative;
+            padding: 32px 24px 28px;
+            text-align: center;
+            z-index: 1;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 14px;
+            border-radius: 100px;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            background: rgba(232, 146, 42, 0.08);
+            border: 1px solid rgba(232, 146, 42, 0.15);
+            color: var(--acc-l);
+            margin-bottom: 16px;
+        }
+        .hero-bolt-wrap {
+            margin-bottom: 12px;
+        }
+        .hero-bolt-wrap>div {
+            color: var(--acc);
+            font-size: 28px;
+            position: relative;
+            z-index: 1;
+        }
+        .hero-title-main {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(26px, 5.5vw, 48px);
+            font-weight: 700;
+            letter-spacing: -1.5px;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+        .hero-title-zeta {
+            background: linear-gradient(135deg, #f0a848, #e8922a, #f5c76e, #e8922a);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleGrad 4s ease-in-out infinite;
+        }
+        @keyframes titleGrad {
+            0%,
+            100% {
+                background-position: 0% 50%
+            }
+            50% {
+                background-position: 100% 50%
+            }
+        }
+        .hero-title-tools {
+            color: var(--tx);
+            font-weight: 300;
+        }
+        .hero-tagline {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--tx3);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .hero-greeting {
+            font-size: 14px;
+            color: var(--tx2);
+            margin-bottom: 20px;
+        }
+        .hero-stats {
+            display: inline-flex;
+            gap: 2px;
+            background: var(--bg3);
+            border: 1px solid var(--brd);
+            border-radius: 14px;
+            padding: 3px;
+        }
+        .hero-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px 18px;
+            border-radius: 10px;
+            min-width: 70px;
+        }
+        .hero-stat-val {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--acc-l);
+            line-height: 1;
+        }
+        .hero-stat-label {
+            font-size: 9px;
+            font-weight: 500;
+            color: var(--tx3);
+            margin-top: 3px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .hero-divider {
+            width: 50px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--acc), transparent);
+            margin: 24px auto 0;
+            border-radius: 1px;
+        }
+
+        /* ===== TOOL CARDS (no heavy animations) ===== */
+        .wc {
+            background: linear-gradient(145deg, rgba(22, 22, 31, 0.9), rgba(13, 13, 20, 0.95));
+            border: 1px solid var(--brd);
+            border-radius: 14px;
+            padding: 20px;
+            cursor: pointer;
+            transition: transform .2s, box-shadow .2s, border-color .2s;
+            position: relative;
+            will-change: transform;
+        }
+        .wc:hover {
+            border-color: rgba(232, 146, 42, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+        }
+        .wc-icon-wrap {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: transform .2s;
+        }
+        .wc:hover .wc-icon-wrap {
+            transform: scale(1.05);
+        }
+        .wc-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--tx);
+            line-height: 1.2;
+        }
+        .wc-desc {
+            font-size: 12px;
+            color: var(--tx3);
+            line-height: 1.5;
+        }
+        .wc-arrow {
+            position: absolute;
+            top: 18px;
+            right: 16px;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(232, 146, 42, 0.08);
+            color: var(--acc);
+            font-size: 11px;
+            opacity: 0;
+            transform: translateX(-4px);
+            transition: opacity .25s, transform .25s;
+        }
+        .wc:hover .wc-arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* ===== CATEGORY SECTION ===== */
+        .cat-section {
+            margin-bottom: 28px;
+            content-visibility: auto;
+            contain-intrinsic-size: 1px 380px;
+        }
+        .cat-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            padding-left: 2px;
+        }
+        .cat-accent {
+            width: 3px;
+            height: 14px;
+            border-radius: 2px;
+            background: var(--acc);
+            flex-shrink: 0;
+        }
+        .cat-label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--tx3);
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+        .cat-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--brd), transparent);
+        }
+        .cat-count-badge {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--tx3);
+            background: var(--bg3);
+            border: 1px solid var(--brd);
+            padding: 2px 8px;
+            border-radius: 6px;
+            flex-shrink: 0;
+        }
+
+        /* ===== FORM ELEMENTS ===== */
+        .ifield {
+            background: var(--bg3);
+            border: 1px solid var(--brd);
+            color: var(--tx);
+            border-radius: 10px;
+            padding: 10px 14px;
+            width: 100%;
+            font-size: 14px;
+            transition: border-color .15s, box-shadow .15s;
+            outline: none;
+        }
+        .ifield:focus {
+            border-color: var(--acc);
+            box-shadow: 0 0 0 3px var(--acc-g);
+        }
+        .ifield::placeholder {
+            color: var(--tx3);
+        }
+        .ifield:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+        }
+
+        .bp {
+            background: linear-gradient(135deg, var(--acc), var(--acc-l));
+            color: #fff;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            transition: transform .15s, box-shadow .15s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .bp:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(232, 146, 42, .3);
+        }
+        .bp:active {
+            transform: translateY(0);
+        }
+        .bp:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .bs {
+            background: var(--bg3);
+            border: 1px solid var(--brd);
+            color: var(--tx);
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all .15s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .bs:hover {
+            border-color: var(--brd2);
+            background: var(--bg4);
+        }
+
+        /* ===== MODAL ===== */
+        .mo {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .6);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+            animation: fi .15s ease;
+        }
+        .moc {
+            background: var(--bg2);
+            border: 1px solid var(--brd);
+            border-radius: 16px;
+            max-width: 560px;
+            width: 92%;
+            max-height: 85vh;
+            overflow-y: auto;
+            animation: modin .2s ease;
+        }
+        @keyframes fi {
+            from {
+                opacity: 0
+            }
+            to {
+                opacity: 1
+            }
+        }
+        @keyframes modin {
+            from {
+                opacity: 0;
+                transform: scale(.96) translateY(8px)
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0)
+            }
+        }
+
+        /* ===== TOASTS ===== */
+        .tc {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-width: 400px;
+            width: calc(100% - 32px);
+        }
+        .toast {
+            padding: 10px 16px 10px 20px;
+            border-radius: 12px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: tin .3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            backdrop-filter: blur(12px);
+            font-weight: 500;
+            border: 1px solid rgba(255, 255, 255, .06);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, .5);
+        }
+        .toast.success {
+            background: rgba(6, 95, 70, .9);
+            color: #a7f3d0;
+        }
+        .toast.error {
+            background: rgba(127, 29, 29, .9);
+            color: #fca5a5;
+        }
+        .toast.info {
+            background: rgba(30, 58, 95, .9);
+            color: #93c5fd;
+        }
+        .toast .toast-close {
+            background: none;
+            border: none;
+            color: inherit;
+            cursor: pointer;
+            opacity: .4;
+            font-size: 16px;
+            padding: 4px 4px 4px 8px;
+            transition: opacity .15s;
+            line-height: 1;
+            border-radius: 50%;
+        }
+        .toast .toast-close:hover {
+            opacity: 1;
+            background: rgba(0, 0, 0, .15);
+        }
+        @keyframes tin {
+            from {
+                opacity: 0;
+                transform: translateX(40px) scale(.95)
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0) scale(1)
+            }
+        }
+        @keyframes tout {
+            from {
+                opacity: 1;
+                transform: translateX(0) scale(1)
+            }
+            to {
+                opacity: 0;
+                transform: translateX(40px) scale(.95)
+            }
+        }
+
+        /* ===== DROPDOWN ===== */
+        .dd {
+            position: absolute;
+            background: var(--bg2);
+            border: 1px solid var(--brd);
+            border-radius: 10px;
+            padding: 6px;
+            min-width: 180px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, .4);
+            animation: ddin .12s ease;
+            z-index: 50;
+        }
+        @keyframes ddin {
+            from {
+                opacity: 0;
+                transform: translateY(-4px)
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+        .ddi {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--tx2);
+            transition: background .1s;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+        }
+        .ddi:hover {
+            background: var(--bg3);
+            color: var(--tx);
+        }
+        .ddi.dng {
+            color: var(--err);
+        }
+        .ddi.dng:hover {
+            background: rgba(248, 113, 113, .1);
+        }
+        .ddv {
+            height: 1px;
+            background: var(--brd);
+            margin: 4px 0;
+        }
+
+        /* ===== RESULTS ===== */
+        .nc-res {
+            background: var(--acc-g);
+            border: 1px solid rgba(232, 146, 42, .3);
+            border-radius: 12px;
+            padding: 14px;
+            animation: mi .2s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        @keyframes mi {
+            from {
+                opacity: 0;
+                transform: translateY(6px)
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+        .nc-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 6px 0;
+            border-bottom: 1px solid var(--brd);
+        }
+        .nc-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        .nc-row .l {
+            font-size: 12px;
+            color: var(--tx3);
+            font-weight: 500;
+        }
+        .nc-row .v {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--tx);
+            text-align: right;
+            word-break: break-word;
+        }
+        .nc-ib {
+            width: 32px;
+            height: 32px;
+            min-width: 32px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg3);
+            color: var(--tx2);
+            transition: all .15s;
+            font-size: 13px;
+        }
+        .nc-ib:hover {
+            background: var(--acc);
+            color: #fff;
+        }
+        .nc-hi {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px;
+            border-radius: 8px;
+            transition: background .15s;
+        }
+        .nc-hi:hover {
+            background: var(--bg3);
+        }
+        .nc-hi .o {
+            font-size: 11px;
+            color: var(--tx3);
+        }
+        .nc-hi .s {
+            font-size: 13px;
+            color: var(--acc-l);
+            font-weight: 600;
+        }
+
+        .lp {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            background: var(--bg4);
+            border: 1px solid var(--brd2);
+            color: var(--tx);
+            margin-right: 4px;
+            min-width: 32px;
+            text-align: center;
+        }
+        .lp.gold {
+            background: var(--acc-g);
+            border-color: var(--acc);
+            color: var(--acc-l);
+        }
+
+        .lot-game-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            background: var(--bg4);
+            color: var(--tx3);
+            border: 1px solid var(--brd);
+        }
+        .lot-game-badge.dlb {
+            background: rgba(232, 146, 42, .15);
+            color: var(--acc-l);
+            border-color: rgba(232, 146, 42, .25);
+        }
+
+        .pw-box {
+            background: var(--bg3);
+            border: 1px solid var(--brd);
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-family: 'Space Grotesk', monospace;
+            font-size: 17px;
+            font-weight: 600;
+            letter-spacing: .5px;
+            color: var(--acc-l);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            word-break: break-all;
+            gap: 12px;
+        }
+        .pw-box .copy-btn {
+            background: none;
+            border: none;
+            color: var(--tx3);
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: all .15s;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        .pw-box .copy-btn:hover {
+            background: var(--bg4);
+            color: var(--tx);
+        }
+
+        .pw-length-selector {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 4px 0;
+        }
+        .pw-length-selector input[type="range"] {
+            flex: 1;
+            accent-color: var(--acc);
+            height: 6px;
+            border-radius: 3px;
+            background: var(--bg4);
+            outline: none;
+            -webkit-appearance: none;
+        }
+        .pw-length-selector input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--acc);
+            cursor: pointer;
+            border: 2px solid var(--bg2);
+        }
+        .pw-length-selector .length-label {
+            font-weight: 600;
+            min-width: 32px;
+            text-align: center;
+            color: var(--acc-l);
+        }
+
+        .av-upload-wrap {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .av-upload-btn {
+            position: absolute;
+            bottom: -4px;
+            right: -4px;
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--acc);
+            color: #fff;
+            font-size: 12px;
+            border: 2px solid var(--bg2);
+            transition: transform .2s;
+            z-index: 2;
+            box-shadow: 0 2px 8px rgba(232, 146, 42, 0.3);
+        }
+        .av-upload-wrap:hover .av-upload-btn {
+            transform: scale(1.1);
+        }
+
+        .sb-ov {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .5);
+            z-index: 35;
+            backdrop-filter: blur(4px);
+        }
+        .sb-ov.active {
+            display: block;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media(max-width:640px) {
+            .hero-wrap {
+                padding: 20px 12px 20px
+            }
+            .hero-badge {
+                padding: 4px 10px;
+                font-size: 9px;
+                margin-bottom: 12px
+            }
+            .hero-bolt-wrap>div {
+                font-size: 22px
+            }
+            .hero-title-main {
+                font-size: 22px
+            }
+            .hero-tagline {
+                font-size: 10px;
+                letter-spacing: 2px;
+                margin-bottom: 6px
+            }
+            .hero-greeting {
+                font-size: 13px;
+                margin-bottom: 16px
+            }
+            .hero-stats {
+                flex-wrap: wrap;
+                border-radius: 12px;
+                padding: 3px
+            }
+            .hero-stat {
+                flex: 1 1 calc(50% - 2px);
+                min-width: 0;
+                padding: 6px 8px;
+                border-radius: 8px
+            }
+            .hero-stat-val {
+                font-size: 15px
+            }
+            .hero-stat-label {
+                font-size: 8px
+            }
+            .hero-divider {
+                margin-top: 18px;
+                width: 40px
+            }
+            .header-title {
+                font-size: 18px !important
+            }
+            .header-subtitle {
+                font-size: 8px;
+                letter-spacing: 1.5px
+            }
+            .zeta-header {
+                height: 52px;
+                min-height: 52px;
+                padding: 0 12px;
+                gap: 8px
+            }
+            .header-btn {
+                width: 34px;
+                height: 34px;
+                border-radius: 10px;
+                font-size: 13px
+            }
+            .header-divider {
+                display: none
+            }
+            .wc {
+                padding: 16px;
+                border-radius: 12px
+            }
+            .wc-arrow {
+                top: 14px;
+                right: 12px;
+                width: 24px;
+                height: 24px;
+                font-size: 10px
+            }
+            .wc-icon-wrap {
+                width: 34px;
+                height: 34px;
+                border-radius: 8px
+            }
+            .wc-icon-wrap i {
+                font-size: 13px
+            }
+            .wc-title {
+                font-size: 13px
+            }
+            .wc-desc {
+                font-size: 11px
+            }
+            .cat-section {
+                margin-bottom: 20px
+            }
+            .cat-header {
+                gap: 6px;
+                margin-bottom: 8px
+            }
+            .cat-accent {
+                height: 12px
+            }
+            .cat-label {
+                font-size: 9px;
+                letter-spacing: 1.5px
+            }
+            .cat-line {
+                display: none
+            }
+            .cat-count-badge {
+                display: none
+            }
+            .tc {
+                top: 10px;
+                right: 10px;
+                left: 10px;
+                max-width: 100%;
+                width: auto;
+            }
+            .toast {
+                padding: 8px 12px 8px 16px;
+                font-size: 12px;
+                border-radius: 10px;
+                min-width: 0;
+            }
+            .moc {
+                width: 95%;
+                border-radius: 14px;
+            }
+            .moc .p-6 {
+                padding: 16px 14px !important;
+            }
+            .nc-row {
+                flex-wrap: wrap;
+                gap: 2px;
+            }
+            .nc-row .v {
+                text-align: left;
+                width: 100%;
+            }
+            .nc-res {
+                padding: 10px;
+            }
+            .pw-box {
+                font-size: 14px;
+                padding: 10px 12px;
+            }
+            .av-upload-btn {
+                width: 30px;
+                height: 30px;
+                bottom: -4px;
+                right: -4px;
+                border-radius: 10px;
+                font-size: 10px;
+            }
+        }
+
+        @media(min-width:641px) and (max-width:768px) {
+            .hero-wrap {
+                padding: 28px 16px 24px
+            }
+            .hero-stat {
+                padding: 6px 12px
+            }
+            .zeta-header {
+                height: 56px;
+                min-height: 56px;
+            }
+        }
+
+        @media(min-width:1024px) {
+            .hero-wrap {
+                padding: 40px 32px 32px
+            }
+            .hero-stat {
+                padding: 10px 24px
+            }
+            .hero-stat-val {
+                font-size: 19px
+            }
+        }
+
+        @media(prefers-reduced-motion:reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+    <div class="tc" id="toasts"></div>
+    <div id="modal-root"></div>
+
+    <script>
+        // ===== CONFIG =====
+        var CFG = {
+            NIC_API_URL: 'https://hashu-apis-production.up.railway.app/api/nic/decode',
+            NIC_API_KEY: 'hashu_cd4b0a9d325539de660602e7d8d38d61',
+            FX_API_URL: 'https://hashu-apis-production.up.railway.app/api/currency/lkr',
+            FX_API_KEY: 'hashu_cd4b0a9d325539de660602e7d8d38d61',
+            LOTTERY_API_URL: 'https://hashu-apis-production.up.railway.app/api/lottery/dlb',
+            LOTTERY_API_KEY: 'hashu_cd4b0a9d325539de660602e7d8d38d61',
+            PASSWORD_API_URL: 'https://hashu-apis-production.up.railway.app/api/passwordgen',
+            PASSWORD_API_KEY: 'hashu_cd4b0a9d325539de660602e7d8d38d61',
+            NPM_API_URL: 'https://hashu-apis-production.up.railway.app/api/npm/downloads',
+            NPM_API_KEY: 'hashu_cd4b0a9d325539de660602e7d8d38d61',
+            MIME_API_URL: 'https://hashu-apis-production.up.railway.app/api/mimetype',
+            MIME_API_KEY: 'hashu_cd4b0a9d325539de660602e7d8d38d61'
+        };
+
+        // ===== UTILITY =====
+        var U = {
+            id: function() {
+                if (crypto.randomUUID) return crypto.randomUUID();
+                return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                    var r = Math.random() * 16 | 0;
+                    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+                });
+            },
+            now: function() { return new Date().toISOString(); },
+            relTime: function(d) {
+                var s = Math.floor((Date.now() - new Date(d).getTime()) / 1000);
+                if (s < 60) return 'Just now';
+                if (s < 3600) return Math.floor(s / 60) + 'm ago';
+                if (s < 86400) return Math.floor(s / 3600) + 'h ago';
+                if (s < 604800) return Math.floor(s / 86400) + 'd ago';
+                return new Date(d).toLocaleDateString();
+            },
+            esc: function(s) {
+                var d = document.createElement('div');
+                d.textContent = s;
+                return d.innerHTML;
+            },
+            validEmail: function(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); },
+            validPw: function(p) { return p && p.length >= 8; },
+        };
+
+        // ===== DB =====
+        var DB = {
+            _g: function(k) { try { return JSON.parse(localStorage.getItem('z_' + k)); } catch (e) { return null; } },
+            _s: function(k, v) { try { localStorage.setItem('z_' + k, JSON.stringify(v)); } catch (e) {} },
+            _d: function(k) { try { localStorage.removeItem('z_' + k); } catch (e) {} },
+            getUsers: function() { return this._g('users') || []; },
+            saveUsers: function(u) { this._s('users', u); },
+            findUser: function(email) { return this.getUsers().find(function(u) { return u.email === email.toLowerCase(); }); },
+            findUserById: function(id) { return this.getUsers().find(function(u) { return u.id === id; }); },
+            addUser: function(u) { var us = this.getUsers();
+                us.push(u);
+                this.saveUsers(us); return u; },
+            updateUser: function(id, d) {
+                var us = this.getUsers();
+                var i = us.findIndex(function(u) { return u.id === id; });
+                if (i >= 0) { Object.assign(us[i], d);
+                    this.saveUsers(us); return us[i]; }
+                return null;
+            },
+            getSession: function(rem) { return (rem ? this._g('sess') : this._gss()) || null; },
+            setSession: function(s, rem) { if (rem) this._s('sess', s);
+                else this._sss(s); },
+            clearSession: function() { this._d('sess');
+                this._css(); },
+            _gss: function() { try { return JSON.parse(sessionStorage.getItem('z_sess')); } catch (e) { return null; } },
+            _sss: function(s) { try { sessionStorage.setItem('z_sess', JSON.stringify(s)); } catch (e) {} },
+            _css: function() { try { sessionStorage.removeItem('z_sess'); } catch (e) {} },
+            clearAll: function() {
+                var keys = [];
+                for (var i = 0; i < localStorage.length; i++) { var k = localStorage.key(i); if (k && k.indexOf('z_') === 0)
+                    keys.push(k); }
+                keys.forEach(function(k) { localStorage.removeItem(k); });
+                try { sessionStorage.removeItem('z_sess'); } catch (e) {}
+            },
+            getSettings: function(uid) { return this._g('set_' + uid) || { theme: 'dark' }; },
+            saveSettings: function(uid, s) { this._s('set_' + uid, s); },
+            getNicChecks: function(uid) { return this._g('nic_' + uid) || []; },
+            saveNicChecks: function(uid, l) { this._s('nic_' + uid, l); },
+            addNicCheck: function(uid, l) { var ls = this.getNicChecks(uid);
+                ls.unshift(l); if (ls.length > 30) ls = ls.slice(0, 30);
+                this.saveNicChecks(uid, ls); return l; },
+            deleteNicCheck: function(uid, id) { this.saveNicChecks(uid, this.getNicChecks(uid).filter(function(l) { return l
+                        .id !== id; })); },
+            getFxChecks: function(uid) { return this._g('fx_' + uid) || []; },
+            saveFxChecks: function(uid, l) { this._s('fx_' + uid, l); },
+            addFxCheck: function(uid, l) { var ls = this.getFxChecks(uid);
+                ls.unshift(l); if (ls.length > 30) ls = ls.slice(0, 30);
+                this.saveFxChecks(uid, ls); return l; },
+            deleteFxCheck: function(uid, id) { this.saveFxChecks(uid, this.getFxChecks(uid).filter(function(l) { return l
+                        .id !== id; })); },
+            getLotteryChecks: function(uid) { return this._g('lot_' + uid) || []; },
+            saveLotteryChecks: function(uid, l) { this._s('lot_' + uid, l); },
+            addLotteryCheck: function(uid, l) { var ls = this.getLotteryChecks(uid);
+                ls.unshift(l); if (ls.length > 30) ls = ls.slice(0, 30);
+                this.saveLotteryChecks(uid, ls); return l; },
+            deleteLotteryCheck: function(uid, id) { this.saveLotteryChecks(uid, this.getLotteryChecks(uid).filter(
+                function(l) { return l.id !== id; })); },
+            getPasswordEntries: function(uid) { return this._g('pwd_' + uid) || []; },
+            savePasswordEntries: function(uid, l) { this._s('pwd_' + uid, l); },
+            addPasswordEntry: function(uid, l) { var ls = this.getPasswordEntries(uid);
+                ls.unshift(l); if (ls.length > 30) ls = ls.slice(0, 30);
+                this.savePasswordEntries(uid, ls); return l; },
+            deletePasswordEntry: function(uid, id) { this.savePasswordEntries(uid, this.getPasswordEntries(uid).filter(
+                function(l) { return l.id !== id; })); },
+            getNpmChecks: function(uid) { return this._g('npm_' + uid) || []; },
+            saveNpmChecks: function(uid, l) { this._s('npm_' + uid, l); },
+            addNpmCheck: function(uid, l) { var ls = this.getNpmChecks(uid);
+                ls.unshift(l); if (ls.length > 30) ls = ls.slice(0, 30);
+                this.saveNpmChecks(uid, ls); return l; },
+            deleteNpmCheck: function(uid, id) { this.saveNpmChecks(uid, this.getNpmChecks(uid).filter(function(l) { return l
+                        .id !== id; })); },
+            getMimeChecks: function(uid) { return this._g('mime_' + uid) || []; },
+            saveMimeChecks: function(uid, l) { this._s('mime_' + uid, l); },
+            addMimeCheck: function(uid, l) { var ls = this.getMimeChecks(uid);
+                ls.unshift(l); if (ls.length > 30) ls = ls.slice(0, 30);
+                this.saveMimeChecks(uid, ls); return l; },
+            deleteMimeCheck: function(uid, id) { this.saveMimeChecks(uid, this.getMimeChecks(uid).filter(function(l) { return l
+                        .id !== id; })); }
+        };
+
+        // ===== AUTH =====
+        var Auth = {
+            _uid: 'local',
+            getUser: function() {
+                var user = DB.findUserById(this._uid);
+                if (!user) {
+                    user = DB.addUser({
+                        id: this._uid,
+                        name: 'Guest',
+                        profile_image: 'https://ui-avatars.com/api/?name=Guest&background=e8922a&color=fff&size=128&bold=true',
+                        created_at: U.now()
+                    });
+                }
+                return user;
+            }
+        };
+
+        // ===== API HELPERS (shared fetch with timeout) =====
+        function apiFetch(url, onDone, onError) {
+            var ctrl = new AbortController();
+            var timeout = setTimeout(function() { ctrl.abort(); }, 15000);
+            fetch(url, { signal: ctrl.signal })
+                .then(function(res) {
+                    clearTimeout(timeout);
+                    return res.text().then(function(raw) {
+                        var data;
+                        try { data = JSON.parse(raw); } catch (e) { throw new Error(res.ok ? 'BAD_JSON' :
+                            'API_ERR_' + res.status); }
+                        if (!res.ok) throw new Error('API_ERR_' + res.status);
+                        return data;
+                    });
+                })
+                .then(function(data) {
+                    if (data.success === false || data.status === false) throw new Error('API_MSG:' + (data.message ||
+                        data.error || 'Request failed'));
+                    var r = data.results || data.result || data.data || data;
+                    if (!r) throw new Error('EMPTY');
+                    onDone(r);
+                })
+                .catch(function(e) {
+                    clearTimeout(timeout);
+                    if (e.name === 'AbortError') onError('Request timed out.');
+                    else if (e.message === 'EMPTY') onError('Empty response from service.');
+                    else if (e.message === 'BAD_JSON') onError('Unexpected response format.');
+                    else if (e.message.indexOf('API_MSG:') === 0) onError(e.message.slice(8));
+                    else if (e.message.indexOf('API_ERR_402') === 0) onError('Service quota exhausted.');
+                    else if (e.message.indexOf('API_ERR_401') === 0 || e.message.indexOf('API_ERR_403') === 0) onError(
+                        'API key rejected.');
+                    else if (e.message.indexOf('API_ERR_429') === 0) onError('Rate limited. Try again.');
+                    else if (e.message.indexOf('API_ERR') === 0) onError('Service unavailable.');
+                    else if (e.message.indexOf('fetch') >= 0 || e.message.indexOf('Network') >= 0 || e.message.indexOf(
+                            'Failed') >= 0) onError('Network error.');
+                    else onError('Something went wrong.');
+                });
+        }
+
+        function buildUrl(base, params) {
+            var u = new URL(base);
+            for (var k in params) u.searchParams.set(k, params[k]);
+            return u.toString();
+        }
+
+        // ===== TOAST =====
+        var Toast = {
+            show: function(msg, type, dur) {
+                type = type || 'info';
+                dur = dur || 3500;
+                var c = document.getElementById('toasts');
+                var icons = { success: 'fa-circle-check', error: 'fa-circle-xmark', info: 'fa-circle-info' };
+                var el = document.createElement('div');
+                el.className = 'toast ' + type;
+                el.innerHTML = '<i class="fa-solid ' + (icons[type] || icons.info) + '"></i><span>' + U.esc(msg) +
+                    '</span><button class="toast-close" onclick="this.parentElement.remove()"><i class="fa-solid fa-xmark"></i></button>';
+                c.appendChild(el);
+                var timer = setTimeout(function() {
+                    el.style.animation = 'tout .25s ease forwards';
+                    setTimeout(function() { el.remove(); }, 300);
+                }, dur);
+                el.addEventListener('click', function(e) {
+                    if (e.target.closest('.toast-close')) return;
+                    clearTimeout(timer);
+                    el.style.animation = 'tout .25s ease forwards';
+                    setTimeout(function() { el.remove(); }, 300);
+                });
+            }
+        };
+
+        // ===== MODAL =====
+        var Modal = {
+            open: function(html) {
+                document.getElementById('modal-root').innerHTML = '<div class="mo" id="mo"><div class="moc">' + html +
+                    '</div></div>';
+                document.getElementById('mo').addEventListener('click', function(e) {
+                    if (e.target.id === 'mo') Modal.close();
+                });
+            },
+            close: function() { document.getElementById('modal-root').innerHTML = ''; }
+        };
+
+        // ===== STATE =====
+        var Store = { sidebarOpen: false, profileDropdown: false };
+
+        // ===== ROUTER =====
+        var Router = {
+            routes: {},
+            reg: function(p, fn) { this.routes[p] = fn; },
+            go: function(p) { window.location.hash = p; },
+            cur: function() { return window.location.hash.slice(1) || '/dashboard'; },
+            resolve: function() {
+                var p = this.cur();
+                if (this.routes[p]) this.routes[p]();
+                else if (this.routes['/dashboard']) this.routes['/dashboard']();
+            },
+            init: function() {
+                var self = this;
+                window.addEventListener('hashchange', function() { self.resolve(); });
+                this.resolve();
+            }
+        };
+
+        // ===== HELPERS =====
+        function logo(sz) {
+            var s = sz === 'lg' ? 'text-4xl' : sz === 'sm' ? 'text-lg' : 'text-2xl';
+            if (sz === 'lg') return '<span class="font-display ' + s +
+                ' font-bold tracking-tight" style="color:var(--acc)">ZETA</span><span class="font-display ' + s +
+                ' font-light tracking-tight" style="color:var(--tx)"> TOOLS</span>';
+            return '<span class="font-display ' + s +
+                ' font-bold tracking-tight" style="color:var(--acc)">ZETA</span><span class="font-display ' + s +
+                ' font-light tracking-tight" style="color:var(--tx)"> TOOLS</span>';
+        }
+
+        function inp(id, label, type, ph, opts) {
+            opts = opts || {};
+            var isPw = type === 'password';
+            var h = '<div class="mb-3">';
+            if (label) h += '<label class="block text-sm font-medium mb-1.5" style="color:var(--tx2)">' + label +
+                '</label>';
+            h += '<div class="relative"><input id="' + id + '" type="' + (isPw ? 'password' : type) +
+                '" class="ifield ' + (opts.icon ? 'pl-11' : '') + '" placeholder="' + ph + '" autocomplete="' + (opts
+                .ac || 'off') + '">';
+            if (opts.icon) h += '<i class="fa-solid ' + opts.icon +
+                ' absolute left-4 top-1/2 -translate-y-1/2" style="color:var(--tx3);font-size:14px"></i>';
+            if (isPw) h +=
+                '<button type="button" class="absolute right-4 top-1/2 -translate-y-1/2 bg-transparent border-none cursor-pointer" style="color:var(--tx3)" onclick="tpw(\'' +
+                id + '\',this)"><i class="fa-regular fa-eye"></i></button>';
+            h += '</div></div>';
+            return h;
+        }
+
+        function spin(sz) { return '<i class="fa-solid fa-circle-notch fa-spin" style="font-size:' + (sz || 16) +
+                'px"></i>'; }
+
+        function tpw(id, btn) {
+            var el = document.getElementById(id);
+            var ic = btn.querySelector('i');
+            if (el.type === 'password') { el.type = 'text';
+                ic.className = 'fa-regular fa-eye-slash'; } else { el.type = 'password';
+                ic.className = 'fa-regular fa-eye'; }
+        }
+
+        function cpText(t) { navigator.clipboard.writeText(t).then(function() { Toast.show('Copied', 'success'); }); }
+
+        function clsSBM() {
+            if (window.innerWidth < 768) {
+                var s = document.getElementById('sb'),
+                    o = document.getElementById('sb-ov');
+                if (s) s.classList.remove('open');
+                if (o) o.classList.remove('active');
+                Store.sidebarOpen = false;
+            }
+        }
+
+        function togSB() {
+            var s = document.getElementById('sb'),
+                o = document.getElementById('sb-ov');
+            if (s) s.classList.toggle('open');
+            if (o) o.classList.toggle('active');
+            Store.sidebarOpen = !Store.sidebarOpen;
+        }
+
+        function togPM() {
+            Store.profileDropdown = !Store.profileDropdown;
+            var m = document.getElementById('pmenu');
+            if (m) m.classList.toggle('hidden', !Store.profileDropdown);
+        }
+
+        document.addEventListener('click', function(e) {
+            if (Store.profileDropdown && !e.target.closest('#ptrig') && !e.target.closest('#pmenu')) {
+                Store.profileDropdown = false;
+                var m = document.getElementById('pmenu');
+                if (m) m.classList.add('hidden');
+            }
+        });
+
+        function clearAll() {
+            Modal.open(
+                '<div class="p-6 text-center"><div class="mb-4"><i class="fa-solid fa-triangle-exclamation" style="font-size:36px;color:var(--wrn)"></i></div><h3 class="font-display text-lg font-semibold mb-2">Clear All Data</h3><p class="text-sm mb-6" style="color:var(--tx2)">Deletes your profile, tool history, and saved data. Cannot be undone.</p><div class="flex gap-3"><button class="bs flex-1" onclick="Modal.close()">Cancel</button><button class="flex-1 py-3 px-4 rounded-lg font-semibold text-sm border-none cursor-pointer" style="background:var(--err);color:#fff" onclick="doClearAll()">Clear Everything</button></div></div>'
+                );
+        }
+
+        function doClearAll() {
+            DB.clearAll();
+            Modal.close();
+            Toast.show('All data cleared', 'info');
+            Router.go('/dashboard');
+            pgDashboard();
+        }
+
+        // ===== CATEGORY META =====
+        var CAT_META = {
+            'Verification Tools': { icon: 'fa-shield-halved', color: '#3b82f6', bg: 'rgba(59,130,246,0.12)' },
+            'Currency Tools': { icon: 'fa-coins', color: '#22c55e', bg: 'rgba(34,197,94,0.12)' },
+            'Lottery Tools': { icon: 'fa-dice', color: '#e8922a', bg: 'rgba(232,146,42,0.12)' },
+            'Security Tools': { icon: 'fa-fingerprint', color: '#8b5cf6', bg: 'rgba(139,92,246,0.12)' },
+            'Developer Tools': { icon: 'fa-code', color: '#cb3837', bg: 'rgba(203,56,55,0.12)' }
+        };
+
+        var TOOLS = [
+            { category: 'Verification Tools', items: [{ id: 'nic', icon: 'fa-id-card', color: '#3b82f6',
+                    title: 'NIC Checker', desc: 'Decode a Sri Lankan NIC number to get birth date, gender & format.',
+                    action: 'openNicChecker' }] },
+            { category: 'Currency Tools', items: [{ id: 'fx', icon: 'fa-money-bill-transfer', color: '#22c55e',
+                    title: 'LKR Exchange Rate', desc: 'Live exchange rates to Sri Lankan Rupees, with instant amount conversion.',
+                    action: 'openCurrency' }] },
+            { category: 'Lottery Tools', items: [{ id: 'lottery', icon: 'fa-ticket', color: '#e8922a',
+                    title: 'Lottery Checker', desc: 'Check Sri Lankan lottery results by game — draw number, date & winning numbers.',
+                    action: 'openLotteryChecker' }] },
+            { category: 'Security Tools', items: [{ id: 'password', icon: 'fa-key', color: '#8b5cf6',
+                    title: 'Password Generator', desc: 'Generate secure, random passwords with custom length via API.',
+                    action: 'openPasswordGenerator' }] },
+            { category: 'Developer Tools', items: [
+                    { id: 'npm', icon: 'fa-box', color: '#cb3837', title: 'NPM Checker',
+                        desc: 'Check weekly download stats for any NPM package by name.',
+                    action: 'openNpmChecker' },
+                    { id: 'mime', icon: 'fa-file-code', color: '#6c5ce7', title: 'MIME Type Detector',
+                        desc: 'Detect the MIME type and file extension for any given file name or extension.',
+                    action: 'openMimeChecker' }
+                ] }
+        ];
+
+        // ===== DASHBOARD =====
+        function pgDashboard() {
+            var user = Auth.getUser();
+            document.getElementById('app').innerHTML =
+                '<div class="sb-ov' + (Store.sidebarOpen ? ' active' : '') + '" id="sb-ov" onclick="togSB()"></div>' +
+                '<div class="flex h-dvh">' +
+                '<aside class="sidebar' + (Store.sidebarOpen ? ' open' : '') + '" id="sb">' +
+                '<div class="sb-brand"><div class="sb-brand-logo"><div class="sb-brand-icon"><i class="fa-solid fa-bolt"></i></div><div class="sb-brand-text"><div class="sb-brand-name">ZETA TOOLS</div><div class="sb-brand-sub">Sri Lankan Utilities</div></div></div><div class="sb-version-badge"><i class="fa-solid fa-gem" style="font-size:8px"></i> v1.0</div></div>' +
+                '<div class="sb-search"><div class="sb-search-wrap"><input type="text" id="tsearch" placeholder="Search tools..." oninput="filterTools(this.value)"><i class="fa-solid fa-magnifying-glass"></i></div></div>' +
+                '<div class="sb-section-label">Categories</div>' +
+                '<nav class="flex-1 overflow-y-auto px-0 pb-2" id="catnav">' + TOOLS.map(function(cat, idx) {
+                    var meta = CAT_META[cat.category] || { icon: 'fa-folder', color: '#888',
+                        bg: 'rgba(136,136,136,0.1)' };
+                    return '<div class="sb-cat" onclick="scrollToCat(' + idx +
+                        ')"><div class="sb-cat-head"><div class="sb-cat-icon" style="background:' + meta.bg +
+                        ';color:' + meta.color + '"><i class="fa-solid ' + meta.icon +
+                        '"></i></div><div class="sb-cat-info"><div class="sb-cat-name">' + U.esc(cat.category) +
+                        '</div><div class="sb-cat-count">' + cat.items.length + (cat.items.length === 1 ?
+                            ' tool' : ' tools') + '</div></div></div></div>';
+                }).join('') + '</nav>' +
+                '<div class="sb-profile" onclick="togPM()" id="ptrig"><div class="sb-profile-inner"><div class="sb-profile-avatar"><img src="' +
+                U.esc(user.profile_image) +
+                '" onerror="this.onerror=null;this.src=\'https://ui-avatars.com/api/?name=' + encodeURIComponent(
+                    user.name) +
+                '&background=e8922a&color=fff&size=64\'"><div class="sb-profile-dot"></div></div><div style="flex:1;min-width:0"><div class="sb-profile-name">' +
+                U.esc(user.name) +
+                '</div><div class="sb-profile-status">Online</div></div><i class="fa-solid fa-ellipsis-vertical sb-profile-ellipsis"></i></div><div class="dd' +
+                (Store.profileDropdown ? '' : ' hidden') + '" id="pmenu" style="bottom:calc(100% + 8px);left:12px"><button class="ddi" onclick="event.stopPropagation();openProfile()"><i class="fa-regular fa-user w-5 text-center"></i> Profile</button><button class="ddi" onclick="event.stopPropagation();openSettings()"><i class="fa-solid fa-gear w-5 text-center"></i> Settings</button></div></div>' +
+                '</aside>' +
+                '<main class="flex-1 flex flex-col min-w-0 relative" style="background:var(--bg)">' +
+                '<header class="zeta-header"><button onclick="togSB()" class="header-btn md:hidden"><i class="fa-solid fa-bars"></i></button><div class="header-divider hidden md:block"></div><div class="flex-1 flex flex-col items-center justify-center py-1"><div class="header-title">𝗭 𝗘 𝗧 𝗔</div><div class="header-subtitle">Sri Lankan Utilities</div></div><div class="header-divider hidden md:block"></div><button onclick="openSettings()" class="header-btn"><i class="fa-solid fa-gear text-sm"></i></button></header>' +
+                '<div class="flex-1 overflow-y-auto" id="tarea">' + rToolsHub(user) + '</div>' +
+                '</main></div>';
+            Store.sidebarOpen = false;
+            Store.profileDropdown = false;
+        }
+
+        function scrollToCat(idx) {
+            clsSBM();
+            var el = document.getElementById('cat-' + idx);
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function rToolsHub(user) {
+            var first = (user.name || '').split(' ')[0];
+            var totalTools = TOOLS.reduce(function(s, c) { return s + c.items.length; }, 0);
+            var head =
+                '<div class="hero-wrap"><div class="hero-badge"><i class="fa-solid fa-bolt" style="font-size:10px"></i> Premium Utility Suite</div><div class="hero-bolt-wrap"><div style="color:var(--acc);font-size:28px;position:relative;z-index:1"><i class="fa-solid fa-bolt"></i></div></div><div class="hero-title-main"><span class="hero-title-zeta">ZETA</span> <span class="hero-title-tools">TOOLS</span></div><div class="hero-tagline">Sri Lankan Utilities</div><div class="hero-greeting">' +
+                (first ? 'Welcome back, <strong style="color:var(--acc-l)">' + U.esc(first) + '</strong>. ' : '') +
+                'What would you like to do today?</div><div class="hero-stats"><div class="hero-stat"><span class="hero-stat-val">' +
+                totalTools +
+                '</span><span class="hero-stat-label">Tools</span></div><div class="hero-stat"><span class="hero-stat-val">LKR</span><span class="hero-stat-label">Live FX</span></div><div class="hero-stat"><span class="hero-stat-val">DLB</span><span class="hero-stat-label">Lottery</span></div><div class="hero-stat"><span class="hero-stat-val">NIC</span><span class="hero-stat-label">Verify</span></div></div><div class="hero-divider"></div></div>';
+            var body = '<div class="px-4 md:px-8 pb-12 max-w-5xl mx-auto w-full relative" style="z-index:1" id="toolsList">' +
+                TOOLS.map(rCatSection).join('') + '</div>';
+            return head + body;
+        }
+
+        var _cardIdx = 0;
+
+        function rCatSection(cat, idx) {
+            _cardIdx = 0;
+            var meta = CAT_META[cat.category] || { color: '#888' };
+            return '<div class="cat-section" id="cat-' + idx + '" data-cat="' + U.esc(cat.category).toLowerCase() +
+                '"><div class="cat-header"><div class="cat-accent" style="background:' + meta.color +
+                '"></div><span class="cat-label">' + U.esc(cat.category) +
+                '</span><div class="cat-line"></div><span class="cat-count-badge">' + cat.items.length +
+                '</span></div><div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">' + cat.items
+                .map(rToolCard).join('') + '</div></div>';
+        }
+
+        function rToolCard(t) {
+            var delay = _cardIdx * 0.06;
+            _cardIdx++;
+            var c = t.color;
+            var cLight = c + '30';
+            var cMid = c + '18';
+            return '<div class="wc" data-t="' + U.esc(t.title).toLowerCase() + '" onclick="' + t.action +
+                '()" style="animation-delay:' + delay +
+                's"><div class="wc-arrow"><i class="fa-solid fa-arrow-right"></i></div><div class="flex items-center gap-3 mb-3"><div class="wc-icon-wrap" style="background:linear-gradient(135deg,' +
+                cLight + ',' + cMid + ');color:' + c + ';border:1px solid ' + c +
+                '25"><i class="fa-solid ' + t.icon + '" style="font-size:15px"></i></div><span class="wc-title">' +
+                U.esc(t.title) + '</span></div><p class="wc-desc">' + U.esc(t.desc) + '</p></div>';
+        }
+
+        // ===== FILTER =====
+        var _filterTimeout = 0;
+
+        function filterTools(q) {
+            clearTimeout(_filterTimeout);
+            _filterTimeout = setTimeout(function() {
+                var qs = q.toLowerCase();
+                var wcs = document.querySelectorAll('#toolsList .wc');
+                var secs = document.querySelectorAll('#toolsList [data-cat]');
+                var visible = {};
+                for (var i = 0; i < wcs.length; i++) {
+                    var w = wcs[i];
+                    var show = (w.dataset.t || '').indexOf(qs) >= 0;
+                    w.style.display = show ? '' : 'none';
+                    var sec = w.closest('[data-cat]');
+                    if (sec) visible[sec.id] = visible[sec.id] || show;
+                }
+                for (var j = 0; j < secs.length; j++) {
+                    secs[j].style.display = visible[secs[j].id] ? '' : 'none';
+                }
+            }, 80);
+        }
+
+        // ===== PROFILE =====
+        var _pendingAvatar = null;
+
+        function openProfile() {
+            Store.profileDropdown = false;
+            var m = document.getElementById('pmenu');
+            if (m) m.classList.add('hidden');
+            var user = Auth.getUser();
+            if (!user) return;
+            _pendingAvatar = null;
+            Modal.open(
+                '<div class="p-6"><div class="flex items-center justify-between mb-6"><h3 class="font-display text-lg font-semibold">Profile Settings</h3><button onclick="Modal.close()" class="w-8 h-8 rounded-lg flex items-center justify-center border-none cursor-pointer" style="background:var(--bg3);color:var(--tx2)"><i class="fa-solid fa-xmark"></i></button></div><div class="flex flex-col items-center mb-6"><div class="av-upload-wrap" id="avUploadWrap" onclick="document.getElementById(\'avfile\').click()"><img src="' +
+                U.esc(user.profile_image) +
+                '" id="pprev" class="w-20 h-20 rounded-2xl object-cover" style="border:2px solid var(--brd)" onerror="this.onerror=null;this.src=\'https://ui-avatars.com/api/?name=' +
+                encodeURIComponent(user.name) +
+                '&background=e8922a&color=fff&size=128\'"><div class="av-upload-btn"><i class="fa-solid fa-camera"></i></div></div><input type="file" id="avfile" accept="image/*" class="sr-file" onchange="avPicked(this)"><p class="text-xs mt-3" style="color:var(--tx3)">Tap the camera icon to change photo</p></div><form onsubmit="saveProf(event)">' +
+                inp('pname', 'Name', 'text', user.name, { icon: 'fa-user' }) +
+                '<button type="submit" class="bp w-full" id="psbtn">Save Changes</button></form></div>'
+            );
+        }
+
+        function avPicked(inp) {
+            var f = inp.files[0];
+            if (!f) return;
+            if (f.size > 2097152) { Toast.show('Image must be under 2MB', 'error');
+                inp.value = ''; return; }
+            var reader = new FileReader();
+            reader.onload = function(e) { var prev = document.getElementById('pprev'); if (prev) prev.src = e.target
+                    .result;
+                _pendingAvatar = e.target.result; };
+            reader.onerror = function() { Toast.show('Failed to read image', 'error');
+                inp.value = ''; };
+            reader.readAsDataURL(f);
+        }
+
+        function saveProf(e) {
+            e.preventDefault();
+            var btn = document.getElementById('psbtn');
+            var n = document.getElementById('pname').value.trim();
+            if (!n) { Toast.show('Name is required', 'error'); return; }
+            btn.disabled = true;
+            btn.innerHTML = spin() + ' Saving...';
+            setTimeout(function() {
+                var up = { name: n };
+                if (_pendingAvatar) up.profile_image = _pendingAvatar;
+                DB.updateUser(Auth.getUser().id, up);
+                _pendingAvatar = null;
+                Toast.show('Profile updated', 'success');
+                Modal.close();
+                pgDashboard();
+            }, 350);
+        }
+
+        // ===== NIC CHECKER =====
+        function openNicChecker() {
+            Store.profileDropdown = false;
+            var m = document.getElementById('pmenu');
+            if (m) m.classList.add('hidden');
+            var user = Auth.getUser();
+            if (!user) return;
+            var checks = DB.getNicChecks(user.id);
+            Modal.open(
+                '<div class="p-6"><div class="flex items-center justify-between mb-5"><h3 class="font-display text-lg font-semibold"><i class="fa-solid fa-id-card mr-2" style="color:var(--acc)"></i>NIC Checker</h3><button onclick="Modal.close()" class="w-8 h-8 rounded-lg flex items-center justify-center border-none cursor-pointer" style="background:var(--bg3);color:var(--tx2)"><i class="fa-solid fa-xmark"></i></button></div><p class="text-sm mb-4" style="color:var(--tx2)">Enter a Sri Lankan NIC number to decode birth date, gender, and format.</p><div class="flex flex-col sm:flex-row gap-2 mb-2"><input type="text" id="ncin" class="ifield" placeholder="e.g. 705693323V or 200012345678" onkeydown="if(event.key===\'Enter\'){event.preventDefault();doNicCheck();}"><button class="bp sm:w-auto" id="ncbtn" style="padding:10px 18px" onclick="doNicCheck()"><i class="fa-solid fa-magnifying-glass"></i></button></div><div id="ncres" class="mt-4"></div>' +
+                (checks.length ?
+                    '<div class="mt-5"><div class="text-xs font-medium mb-2" style="color:var(--tx3)">RECENT</div><div id="nclist" class="flex flex-col gap-1 max-h-56 overflow-y-auto">' +
+                    checks.map(rNCI).join('') + '</div></div>' : '<div id="nclist"></div>') + '</div>'
+            );
+            setTimeout(function() { var i = document.getElementById('ncin'); if (i) i.focus(); }, 50);
+        }
+
+        function doNicCheck() {
+            var inp = document.getElementById('ncin'),
+                btn = document.getElementById('ncbtn'),
+                res = document.getElementById('ncres');
+            var nic = inp.value.trim();
+            if (!nic) { Toast.show('Enter a NIC number first', 'error'); return; }
+            if (!/^\d{9}[vVxX]$|^\d{12}$/.test(nic)) { Toast.show('Enter a valid NIC (9 digits + V, or 12 digits)',
+                    'error'); return; }
+            btn.disabled = true;
+            var orig = btn.innerHTML;
+            btn.innerHTML = spin(14);
+            var url = buildUrl(CFG.NIC_API_URL, { apiKey: CFG.NIC_API_KEY, text: nic });
+            apiFetch(url,
+                function(r) {
+                    btn.disabled = false;
+                    btn.innerHTML = orig;
+                    res.innerHTML = rNCResult(r);
+                    var user = Auth.getUser();
+                    var entry = { id: U.id(), nic: r.nic, gender: r.gender, birthDate: r.birthDate,
+                    created_at: U.now() };
+                    DB.addNicCheck(user.id, entry);
+                    var list = document.getElementById('nclist');
+                    if (list) list.innerHTML = DB.getNicChecks(user.id).map(rNCI).join('');
+                    inp.value = '';
+                    Toast.show('NIC decoded', 'success');
+                },
+                function(err) { btn.disabled = false;
+                    btn.innerHTML = orig;
+                    Toast.show(err, 'error'); }
+            );
+        }
+
+        function rNCResult(r) {
+            return '<div class="nc-res"><div class="nc-row"><span class="l">NIC</span><span class="v">' + U.esc(r
+                .nic) + '</span></div><div class="nc-row"><span class="l">Format</span><span class="v">' + U.esc(r
+                    .format || '-') + '</span></div><div class="nc-row"><span class="l">Gender</span><span class="v">' +
+                U.esc(r.gender || '-') + '</span></div><div class="nc-row"><span class="l">Birth Date</span><span class="v">' +
+                U.esc(r.birthDate || '-') + '</span></div><div class="nc-row"><span class="l">Birth Year</span><span class="v">' +
+                U.esc(String(r.birthYear || '-')) + '</span></div></div>';
+        }
+
+        function rNCI(l) {
+            return '<div class="nc-hi"><i class="fa-solid fa-id-card" style="color:var(--tx3);font-size:12px;min-width:12px"></i><div class="flex-1 min-w-0"><div class="s">' +
+                U.esc(l.nic) + '</div><div class="o">' + U.esc(l.gender || '') + (l.birthDate ? ' &bull; ' + U.esc(l
+                    .birthDate) : '') +
+                '</div></div><button class="nc-ib" title="Copy" onclick="cpText(\'' + U.esc(l.nic).replace(/'/g,
+                    "\\'") +
+                '\')"><i class="fa-regular fa-copy"></i></button><button class="nc-ib" title="Delete" onclick="delNC(\'' +
+                l.id + '\')"><i class="fa-solid fa-xmark"></i></button></div>';
+        }
+
+        function delNC(id) { var user = Auth.getUser(); if (!user) return;
+            DB.deleteNicCheck(user.id, id); var list = document.getElementById('nclist'); if (list) list.innerHTML =
+                DB.getNicChecks(user.id).map(rNCI).join(''); }
+
+        // ===== CURRENCY =====
+        var FX_CODES = [{ c: 'USD', n: 'US Dollar' }, { c: 'GBP', n: 'British Pound' }, { c: 'EUR', n: 'Euro' },
+        { c: 'AUD', n: 'Australian Dollar' }, { c: 'CAD', n: 'Canadian Dollar' }, { c: 'JPY', n: 'Japanese Yen' },
+        { c: 'INR', n: 'Indian Rupee' }, { c: 'AED', n: 'UAE Dirham' }, { c: 'SAR', n: 'Saudi Riyal' },
+        { c: 'SGD', n: 'Singapore Dollar' }, { c: 'CHF', n: 'Swiss Franc' }, { c: 'CNY', n: 'Chinese Yuan' }];
+
+        function openCurrency() {
+            Store.profileDropdown = false;
+            var m = document.getElementById('pmenu');
+            if (m) m.classList.add('hidden');
+            var user = Auth.getUser();
+            if (!user) return;
+            var checks = DB.getFxChecks(user.id);
+            Modal.open(
+                '<div class="p-6"><div class="flex items-center justify-between mb-5"><h3 class="font-display text-lg font-semibold"><i class="fa-solid fa-money-bill-transfer mr-2" style="color:var(--acc)"></i>LKR Exchange Rate</h3><button onclick="Modal.close()" class="w-8 h-8 rounded-lg flex items-center justify-center border-none cursor-pointer" style="background:var(--bg3);color:var(--tx2)"><i class="fa-solid fa-xmark"></i></button></div><p class="text-sm mb-4" style="color:var(--tx2)">Check the live rate for any currency against the Sri Lankan Rupee.</p><div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2"><div><label class="block text-xs font-medium mb-1" style="color:var(--tx3)">CURRENCY</label><select id="fxcode" class="ifield" style="padding:10px">' +
+                FX_CODES.map(function(f) { return '<option value="' + f.c + '">' + f.c + ' — ' + f.n +
+                    '</option>'; }).join('') +
+                '</select></div><div><label class="block text-xs font-medium mb-1" style="color:var(--tx3)">AMOUNT</label><input type="number" id="fxamt" class="ifield" value="1" min="0" step="any" onkeydown="if(event.key===\'Enter\'){event.preventDefault();doFxCheck();}"></div></div><button class="bp w-full mt-1" id="fxbtn" onclick="doFxCheck()"><i class="fa-solid fa-arrow-right-arrow-left"></i> Get Rate</button><div id="fxres" class="mt-4"></div>' +
+                (checks.length ?
+                    '<div class="mt-5"><div class="text-xs font-medium mb-2" style="color:var(--tx3)">RECENT</div><div id="fxlist" class="flex flex-col gap-1 max-h-56 overflow-y-auto">' +
+                    checks.map(rFXI).join('') + '</div></div>' : '<div id="fxlist"></div>') + '</div>'
+            );
+        }
+
+        function doFxCheck() {
+            var sel = document.getElementById('fxcode'),
+                amtIn = document.getElementById('fxamt'),
+                btn = document.getElementById('fxbtn'),
+                res = document.getElementById('fxres');
+            var code = sel.value;
+            var amt = parseFloat(amtIn.value);
+            if (isNaN(amt) || amt < 0) { Toast.show('Enter a valid amount', 'error'); return; }
+            btn.disabled = true;
+            var orig = btn.innerHTML;
+            btn.innerHTML = spin(14);
+            var url = buildUrl(CFG.FX_API_URL, { apiKey: CFG.FX_API_KEY, text: code });
+            apiFetch(url,
+                function(r) {
+                    btn.disabled = false;
+                    btn.innerHTML = orig;
+                    res.innerHTML = rFXResult(r, amt);
+                    var user = Auth.getUser();
+                    var entry = { id: U.id(), code: r.from, rate: r.rate, amount: amt, converted: amt * r.rate,
+                        created_at: U.now() };
+                    DB.addFxCheck(user.id, entry);
+                    var list = document.getElementById('fxlist');
+                    if (list) list.innerHTML = DB.getFxChecks(user.id).map(rFXI).join('');
+                    Toast.show('Rate updated', 'success');
+                },
+                function(err) { btn.disabled = false;
+                    btn.innerHTML = orig;
+                    Toast.show(err, 'error'); }
+            );
+        }
+
+        function rFXResult(r, amt) {
+            var converted = (amt * r.rate).toLocaleString('en-LK', { maximumFractionDigits: 2 });
+            var updated = r.last_updated_utc ? U.relTime(r.last_updated_utc) : '-';
+            return '<div class="nc-res"><div class="text-center mb-1" style="padding:6px 0"><div class="text-2xl font-display font-bold" style="color:var(--acc)">Rs. ' +
+                converted + '</div><div class="text-xs mt-1" style="color:var(--tx3)">' + U.esc(String(amt)) + ' ' +
+                U.esc(r.from) + ' converted to LKR</div></div><div class="nc-row"><span class="l">Rate (1 ' + U.esc(r
+                    .from) + ')</span><span class="v">Rs. ' + U.esc(String(r.rate)) +
+                '</span></div><div class="nc-row"><span class="l">Inverse Rate</span><span class="v">' + U.esc(String(
+                    r.inverse_rate || '-')) +
+                '</span></div><div class="nc-row"><span class="l">Last Updated</span><span class="v">' + U.esc(
+                    updated) + '</span></div><div class="nc-row"><span class="l">Source</span><span class="v">' +
+                U.esc(r.source || '-') + '</span></div></div>';
+        }
+
+        function rFXI(l) {
+            var conv = (l.converted || 0).toLocaleString('en-LK', { maximumFractionDigits: 2 });
+            return '<div class="nc-hi"><i class="fa-solid fa-money-bill-transfer" style="color:var(--tx3);font-size:12px;min-width:12px"></i><div class="flex-1 min-w-0"><div class="s">' +
+                U.esc(String(l.amount)) + ' ' + U.esc(l.code) + ' &rarr; Rs. ' + conv +
+                '</div><div class="o">Rate: ' + U.esc(String(l.rate)) + ' &bull; ' + U.esc(U.relTime(l
+                .created_at)) +
+                '</div></div><button class="nc-ib" title="Copy" onclick="cpText(\'' + conv.replace(/'/g, "\\'") +
+                '\')"><i class="fa-regular fa-copy"></i></button><button class="nc-ib" title="Delete" onclick="delFX(\'' +
+                l.id + '\')"><i class="fa-solid fa-xmark"></i></button></div>';
+        }
+
+        function delFX(id) { var user = Auth.getUser(); if (!user) return;
+            DB.deleteFxCheck(user.id, id); var list = document.getElementById('fxlist'); if (list) list.innerHTML =
+                DB.getFxChecks(user.id).map(rFXI).join(''); }
+
+        // ===== LOTTERY =====
+        var LOTTERY_GAMES = [{ label: 'Sasiri', value: 'sasiri' }];
+
+        function openLotteryChecker() {
+            Store.profileDropdown = false;
+            var m = document.getElementById('pmenu');
+            if (m) m.classList.add('hidden');
+            var user = Auth.getUser();
+            if (!user) return;
+            var checks = DB.getLotteryChecks(user.id);
+            var pills = LOTTERY_GAMES.map(function(g) {
+                return '<button class="text-xs px-3 py-1.5 rounded-full border border-[var(--brd)] hover:border-[var(--acc)] hover:bg-[var(--acc-g)] transition-all" style="color:var(--tx2)" onclick="document.getElementById(\'lotgame\').value=\'' +
+                    g.value + '\';doLotteryCheck();">' + U.esc(g.label) + '</button>';
+            }).join('');
+            Modal.open(
+                '<div class="p-6"><div class="flex items-center justify-between mb-5"><h3 class="font-display text-lg font-semibold"><i class="fa-solid fa-ticket mr-2" style="color:var(--acc)"></i>Lottery Checker</h3><button onclick="Modal.close()" class="w-8 h-8 rounded-lg flex items-center justify-center border-none cursor-pointer" style="background:var(--bg3);color:var(--tx2)"><i class="fa-solid fa-xmark"></i></button></div><p class="text-sm mb-4" style="color:var(--tx2)">Enter a Sri Lankan lottery game name (e.g. <strong>sasiri</strong>) to get the latest draw results.</p><div class="flex flex-wrap gap-2 mb-3">' +
+                pills +
+                '</div><div class="flex flex-col sm:flex-row gap-2"><input type="text" id="lotgame" class="ifield" placeholder="Game name…" onkeydown="if(event.key===\'Enter\'){event.preventDefault();doLotteryCheck();}"><button class="bp sm:w-auto" id="lotbtn" style="padding:10px 18px" onclick="doLotteryCheck()"><i class="fa-solid fa-magnifying-glass"></i></button></div><div id="lotres" class="mt-4"></div>' +
+                (checks.length ?
+                    '<div class="mt-5"><div class="text-xs font-medium mb-2" style="color:var(--tx3)">RECENT</div><div id="lotlist" class="flex flex-col gap-1 max-h-56 overflow-y-auto">' +
+                    checks.map(rLotteryItem).join('') + '</div></div>' : '<div id="lotlist"></div>') + '</div>'
+            );
+            setTimeout(function() { var i = document.getElementById('lotgame'); if (i) i.focus(); }, 50);
+        }
+
+        function doLotteryCheck() {
+            var inp = document.getElementById('lotgame'),
+                btn = document.getElementById('lotbtn'),
+                res = document.getElementById('lotres');
+            var game = inp.value.trim();
+            if (!game) { Toast.show('Enter a lottery game name', 'error'); return; }
+            btn.disabled = true;
+            var orig = btn.innerHTML;
+            btn.innerHTML = spin(14);
+            var url = buildUrl(CFG.LOTTERY_API_URL, { apiKey: CFG.LOTTERY_API_KEY, text: game });
+            apiFetch(url,
+                function(r) {
+                    btn.disabled = false;
+                    btn.innerHTML = orig;
+                    res.innerHTML = rLotteryResult(r);
+                    var user = Auth.getUser();
+                    var entry = { id: U.id(), game: r.game, board: r.board || 'DLB', draw_number: r
+                            .draw_number || '-', date: r.date || '-', numbers: r.numbers || [],
+                        source_url: r.source_url || '', disclaimer: r.disclaimer || '',
+                    created_at: U.now() };
+                    DB.addLotteryCheck(user.id, entry);
+                    var list = document.getElementById('lotlist');
+                    if (list) list.innerHTML = DB.getLotteryChecks(user.id).map(rLotteryItem).join('');
+                    Toast.show('Lottery results loaded', 'success');
+                },
+                function(err) { btn.disabled = false;
+                    btn.innerHTML = orig;
+                    Toast.show(err, 'error'); }
+            );
+        }
+
+        function rLotteryResult(r) {
+            var nums = (r.numbers || []).map(function(n) { return '<span class="lp gold">' + U.esc(String(n)) +
+                    '</span>'; }).join('');
+            var boardClass = (r.board || '').toLowerCase() === 'dlb' ? 'dlb' : '';
+            return '<div class="nc-res"><div class="text-center mb-1" style="padding:2px 0"><span class="lot-game-badge ' +
+                boardClass + '">' + U.esc(r.board || 'DLB') +
+                '</span></div><div class="nc-row"><span class="l">Game</span><span class="v" style="text-transform:capitalize">' +
+                U.esc(r.game || '-') +
+                '</span></div><div class="nc-row"><span class="l">Draw Number</span><span class="v">' + U.esc(r
+                    .draw_number || '-') +
+                '</span></div><div class="nc-row"><span class="l">Date</span><span class="v">' + U.esc(r.date || '-') +
+                '</span></div><div class="nc-row" style="flex-wrap:wrap"><span class="l">Winning Numbers</span><span class="v" style="flex-wrap:wrap;display:flex;gap:4px;justify-content:flex-end">' +
+                nums + '</span></div>' + (r.source_url ?
+                    '<div class="nc-row"><span class="l">Source</span><span class="v"><a href="' + U.esc(r
+                        .source_url) +
+                    '" target="_blank" rel="noopener noreferrer" style="color:var(--acc-l);text-decoration:underline;font-size:13px">results.govdoc.lk</a></span></div>'
+                    : '') + (r.disclaimer ?
+                    '<div class="mt-2 text-xs" style="color:var(--tx3);line-height:1.4">' + U.esc(r.disclaimer) +
+                    '</div>' : '') + '</div>';
+        }
+
+        function rLotteryItem(l) {
+            var nums = (l.numbers || []).slice(0, 3).map(function(n) { return U.esc(String(n)); }).join(' ');
+            var suffix = (l.numbers || []).length > 3 ? ' …' : '';
+            var boardLabel = (l.board || 'DLB').toUpperCase();
+            return '<div class="nc-hi"><i class="fa-solid fa-ticket" style="color:var(--tx3);font-size:12px;min-width:12px"></i><div class="flex-1 min-w-0"><div class="s">' +
+                U.esc(l.game) + ' #' + U.esc(l.draw_number || '-') + ' — ' + nums + suffix +
+                '</div><div class="o">' + boardLabel + ' &bull; ' + U.esc(l.date || '') + ' &bull; ' + U.esc(U
+                    .relTime(l.created_at)) +
+                '</div></div><button class="nc-ib" title="Copy" onclick="cpText(\'' + (l.numbers || []).join(' ')
+                .replace(/'/g, "\\'") +
+                '\')"><i class="fa-regular fa-copy"></i></button><button class="nc-ib" title="Delete" onclick="delLot(\'' +
+                l.id + '\')"><i class="fa-solid fa-xmark"></i></button></div>';
+        }
+
+        function delLot(id) { var user = Auth.getUser(); if (!user) return;
+            DB.deleteLotteryCheck(user.id, id); var list = document.getElementById('lotlist'); if (list) list
+                .innerHTML = DB.getLotteryChecks(user.id).map(rLotteryItem).join(''); }
+
+        // ===== PASSWORD GENERATOR =====
+        function openPasswordGenerator() {
+            Store.profileDropdown = false;
+            var m = document.getElementById('pmenu');
+            if (m) m.classList.add('hidden');
+            var user = Auth.getUser();
+            if (!user) return;
+            var entries = DB.getPasswordEntries(user.id);
+            Modal.open(
+                '<div class="p-6"><div class="flex items-center justify-between mb-5"><h3 class="font-display text-lg font-semibold"><i class="fa-solid fa-key mr-2" style="color:var(--acc)"></i>Password Generator</h3><button onclick="Modal.close()" class="w-8 h-8 rounded-lg flex items-center justify-center border-none cursor-pointer" style="background:var(--bg3);color:var(--tx2)"><i class="fa-solid fa-xmark"></i></button></div><p class="text-sm mb-4" style="color:var(--tx2)">Generate a secure, random password with a custom length.</p><div class="mb-4"><label class="block text-xs font-medium mb-1" style="color:var(--tx3)">PASSWORD LENGTH</label><div class="pw-length-selector"><input type="range" id="pwrange" class="ri" min="6" max="32" value="16" oninput="document.getElementById(\'pwlen\').textContent=this.value"><span class="length-label" id="pwlen">16</span></div></div><button class="bp w-full" id="pwbtn" onclick="doGeneratePassword()"><i class="fa-solid fa-rotate"></i> Generate Password</button><div id="pwres" class="mt-4"></div>' +
+                (entries.length ?
+                    '<div class="mt-5"><div class="text-xs font-medium mb-2" style="color:var(--tx3)">RECENT</div><div id="pwlist" class="flex flex-col gap-1 max-h-56 overflow-y-auto">' +
+                    entries.map(rPasswordItem).join('') + '</div></div>' : '<div id="pwlist"></div>') + '</div>'
+            );
+            setTimeout(function() { doGeneratePassword(); }, 80);
+        }
+
+        function doGeneratePassword() {
+            var range = document.getElementById('pwrange'),
+                btn = document.getElementById('pwbtn'),
+                res = document.getElementById('pwres');
+            var length = parseInt(range.value, 10);
+            if (isNaN(length) || length < 6 || length > 32) { Toast.show('Select a length between 6 and 32',
+                    'error'); return; }
+            btn.disabled = true;
+            var orig = btn.innerHTML;
+            btn.innerHTML = spin(14);
+            var url = buildUrl(CFG.PASSWORD_API_URL, { apiKey: CFG.PASSWORD_API_KEY, length: String(length) });
+            apiFetch(url,
+                function(r) {
+                    btn.disabled = false;
+                    btn.innerHTML = orig;
+                    res.innerHTML = rPasswordResult(r);
+                    var user = Auth.getUser();
+                    var entry = { id: U.id(), password: r.password, length: r.length, created_at: U.now() };
+                    DB.addPasswordEntry(user.id, entry);
+                    var list = document.getElementById('pwlist');
+                    if (list) list.innerHTML = DB.getPasswordEntries(user.id).map(rPasswordItem).join('');
+                    Toast.show('Password generated', 'success');
+                },
+                function(err) { btn.disabled = false;
+                    btn.innerHTML = orig;
+                    Toast.show(err, 'error'); }
+            );
+        }
+
+        function rPasswordResult(r) {
+            var pw = U.esc(r.password);
+            return '<div class="nc-res"><div class="pw-box"><span class="font-mono tracking-wide">' + pw +
+                '</span><button class="copy-btn" onclick="cpText(\'' + pw.replace(/'/g, "\\'") +
+                '\')" title="Copy"><i class="fa-regular fa-copy"></i></button></div><div class="nc-row"><span class="l">Length</span><span class="v">' +
+                U.esc(String(r.length)) + '</span></div></div>';
+        }
+
+        function rPasswordItem(l) {
+            var pw = U.esc(l.password);
+            return '<div class="nc-hi"><i class="fa-solid fa-key" style="color:var(--tx3);font-size:12px;min-width:12px"></i><div class="flex-1 min-w-0"><div class="s font-mono text-sm tracking-wide">' +
+                pw + '</div><div class="o">Length ' + U.esc(String(l.length)) + ' &bull; ' + U.esc(U.relTime(l
+                    .created_at)) +
+                '</div></div><button class="nc-ib" title="Copy" onclick="cpText(\'' + pw.replace(/'/g, "\\'") +
+                '\')"><i class="fa-regular fa-copy"></i></button><button class="nc-ib" title="Delete" onclick="delPw(\'' +
+                l.id + '\')"><i class="fa-solid fa-xmark"></i></button></div>';
+        }
+
+        function delPw(id) { var user = Auth.getUser(); if (!user) return;
+            DB.deletePasswordEntry(user.id, id); var list = document.getElementById('pwlist'); if (list) list
+                .innerHTML = DB.getPasswordEntries(user.id).map(rPasswordItem).join(''); }
+
+        // ===== NPM CHECKER =====
+        function openNpmChecker() {
+            Store.profileDropdown = false;
+            var m = document.getElementById('pmenu');
+            if (m) m.classList.add('hidden');
+            var user = Auth.getUser();
+            if (!user) return;
+            var checks = DB.getNpmChecks(user.id);
+            Modal.open(
+                '<div class="p-6"><div class="flex items-center justify-between mb-5"><h3 class="font-display text-lg font-semibold"><i class="fa-solid fa-box mr-2" style="color:var(--acc)"></i>NPM Checker</h3><button onclick="Modal.close()" class="w-8 h-8 rounded-lg flex items-center justify-center border-none cursor-pointer" style="background:var(--bg3);color:var(--tx2)"><i class="fa-solid fa-xmark"></i></button></div><p class="text-sm mb-4" style="color:var(--tx2)">Enter an NPM package name (e.g. <strong>express</strong>) to get its weekly download count.</p><div class="flex flex-col sm:flex-row gap-2"><input type="text" id="npmpkg" class="ifield" placeholder="Package name…" onkeydown="if(event.key===\'Enter\'){event.preventDefault();doNpmCheck();}"><button class="bp sm:w-auto" id="npmbtn" style="padding:10px 18px" onclick="doNpmCheck()"><i class="fa-solid fa-magnifying-glass"></i></button></div><div id="npmres" class="mt-4"></div>' +
+                (checks.length ?
+                    '<div class="mt-5"><div class="text-xs font-medium mb-2" style="color:var(--tx3)">RECENT</div><div id="npmlist" class="flex flex-col gap-1 max-h-56 overflow-y-auto">' +
+                    checks.map(rNpmItem).join('') + '</div></div>' : '<div id="npmlist"></div>') + '</div>'
+            );
+            setTimeout(function() { var i = document.getElementById('npmpkg'); if (i) i.focus(); }, 50);
+        }
+
+        function doNpmCheck() {
+            var inp = document.getElementById('npmpkg'),
+                btn = document.getElementById('npmbtn'),
+                res = document.getElementById('npmres');
+            var pkg = inp.value.trim();
+            if (!pkg) { Toast.show('Enter an NPM package name', 'error'); return; }
+            btn.disabled = true;
+            var orig = btn.innerHTML;
+            btn.innerHTML = spin(14);
+            var url = buildUrl(CFG.NPM_API_URL, { apiKey: CFG.NPM_API_KEY, text: pkg });
+            apiFetch(url,
+                function(r) {
+                    btn.disabled = false;
+                    btn.innerHTML = orig;
+                    res.innerHTML = rNpmResult(r);
+                    var user = Auth.getUser();
+                    var entry = { id: U.id(), package: r.package || pkg, downloads: r.downloads, start: r
+                            .start || '-', end: r.end || '-', created_at: U.now() };
+                    DB.addNpmCheck(user.id, entry);
+                    var list = document.getElementById('npmlist');
+                    if (list) list.innerHTML = DB.getNpmChecks(user.id).map(rNpmItem).join('');
+                    Toast.show('Download stats loaded', 'success');
+                },
+                function(err) { btn.disabled = false;
+                    btn.innerHTML = orig;
+                    Toast.show(err, 'error'); }
+            );
+        }
+
+        function rNpmResult(r) {
+            var dl = (r.downloads || 0).toLocaleString('en-US');
+            return '<div class="nc-res"><div class="text-center mb-1" style="padding:6px 0"><div class="text-2xl font-display font-bold" style="color:var(--acc)">' +
+                dl + '</div><div class="text-xs mt-1" style="color:var(--tx3)">downloads for ' + U.esc(r
+                    .package || '-') +
+                '</div></div><div class="nc-row"><span class="l">Package</span><span class="v">' + U.esc(r
+                    .package || '-') +
+                '</span></div><div class="nc-row"><span class="l">Period</span><span class="v">' + U.esc(r.start ||
+                    '-') + ' &rarr; ' + U.esc(r.end || '-') + '</span></div></div>';
+        }
+
+        function rNpmItem(l) {
+            var dl = (l.downloads || 0).toLocaleString('en-US');
+            return '<div class="nc-hi"><i class="fa-solid fa-box" style="color:var(--tx3);font-size:12px;min-width:12px"></i><div class="flex-1 min-w-0"><div class="s">' +
+                U.esc(l.package) + ' — ' + dl +
+                ' dl</div><div class="o">' + U.esc(l.start || '') + ' &rarr; ' + U.esc(l.end || '') + ' &bull; ' +
+                U.esc(U.relTime(l.created_at)) +
+                '</div></div><button class="nc-ib" title="Copy" onclick="cpText(\'' + String(l.downloads || 0)
+                .replace(/'/g, "\\'") +
+                '\')"><i class="fa-regular fa-copy"></i></button><button class="nc-ib" title="Delete" onclick="delNpm(\'' +
+                l.id + '\')"><i class="fa-solid fa-xmark"></i></button></div>';
+        }
+
+        function delNpm(id) { var user = Auth.getUser(); if (!user) return;
+            DB.deleteNpmCheck(user.id, id); var list = document.getElementById('npmlist'); if (list) list.innerHTML =
+                DB.getNpmChecks(user.id).map(rNpmItem).join(''); }
+
+        // ===== MIME TYPE DETECTOR =====
+        function openMimeChecker() {
+            Store.profileDropdown = false;
+            var m = document.getElementById('pmenu');
+            if (m) m.classList.add('hidden');
+            var user = Auth.getUser();
+            if (!user) return;
+            var checks = DB.getMimeChecks(user.id);
+            Modal.open(
+                '<div class="p-6"><div class="flex items-center justify-between mb-5"><h3 class="font-display text-lg font-semibold"><i class="fa-solid fa-file-code mr-2" style="color:var(--acc)"></i>MIME Type Detector</h3><button onclick="Modal.close()" class="w-8 h-8 rounded-lg flex items-center justify-center border-none cursor-pointer" style="background:var(--bg3);color:var(--tx2)"><i class="fa-solid fa-xmark"></i></button></div><p class="text-sm mb-4" style="color:var(--tx2)">Enter a file name or extension to detect its MIME type and extension.</p><div class="flex flex-col sm:flex-row gap-2"><input type="text" id="mimein" class="ifield" placeholder="e.g. image.png or pdf" onkeydown="if(event.key===\'Enter\'){event.preventDefault();doMimeCheck();}"><button class="bp sm:w-auto" id="mimebtn" style="padding:10px 18px" onclick="doMimeCheck()"><i class="fa-solid fa-magnifying-glass"></i></button></div><div id="mimeres" class="mt-4"></div>' +
+                (checks.length ?
+                    '<div class="mt-5"><div class="text-xs font-medium mb-2" style="color:var(--tx3)">RECENT</div><div id="mimelist" class="flex flex-col gap-1 max-h-56 overflow-y-auto">' +
+                    checks.map(rMimeItem).join('') + '</div></div>' : '<div id="mimelist"></div>') + '</div>'
+            );
+            setTimeout(function() { var i = document.getElementById('mimein'); if (i) i.focus(); }, 50);
+        }
+
+        function doMimeCheck() {
+            var inp = document.getElementById('mimein'),
+                btn = document.getElementById('mimebtn'),
+                res = document.getElementById('mimeres');
+            var query = inp.value.trim();
+            if (!query) { Toast.show('Enter a file name or extension', 'error'); return; }
+            btn.disabled = true;
+            var orig = btn.innerHTML;
+            btn.innerHTML = spin(14);
+            var url = buildUrl(CFG.MIME_API_URL, { apiKey: CFG.MIME_API_KEY, text: query });
+            apiFetch(url,
+                function(r) {
+                    btn.disabled = false;
+                    btn.innerHTML = orig;
+                    res.innerHTML = rMimeResult(r);
+                    var user = Auth.getUser();
+                    var entry = { id: U.id(), query: query, extension: r.extension || '-', mime_type: r
+                            .mime_type || '-', created_at: U.now() };
+                    DB.addMimeCheck(user.id, entry);
+                    var list = document.getElementById('mimelist');
+                    if (list) list.innerHTML = DB.getMimeChecks(user.id).map(rMimeItem).join('');
+                    inp.value = '';
+                    Toast.show('MIME type detected', 'success');
+                },
+                function(err) { btn.disabled = false;
+                    btn.innerHTML = orig;
+                    Toast.show(err, 'error'); }
+            );
+        }
+
+        function rMimeResult(r) {
+            return '<div class="nc-res"><div class="nc-row"><span class="l">Extension</span><span class="v">' + U
+                .esc(r.extension || '-') + '</span></div><div class="nc-row"><span class="l">MIME Type</span><span class="v">' +
+                U.esc(r.mime_type || '-') + '</span></div></div>';
+        }
+
+        function rMimeItem(l) {
+            return '<div class="nc-hi"><i class="fa-solid fa-file-code" style="color:var(--tx3);font-size:12px;min-width:12px"></i><div class="flex-1 min-w-0"><div class="s">' +
+                U.esc(l.query) + '</div><div class="o">' + U.esc(l.extension || '') + ' &bull; ' + U.esc(l
+                    .mime_type || '') + ' &bull; ' + U.esc(U.relTime(l.created_at)) +
+                '</div></div><button class="nc-ib" title="Copy" onclick="cpText(\'' + U.esc(l.mime_type || '')
+                .replace(/'/g, "\\'") +
+                '\')"><i class="fa-regular fa-copy"></i></button><button class="nc-ib" title="Delete" onclick="delMime(\'' +
+                l.id + '\')"><i class="fa-solid fa-xmark"></i></button></div>';
+        }
+
+        function delMime(id) { var user = Auth.getUser(); if (!user) return;
+            DB.deleteMimeCheck(user.id, id); var list = document.getElementById('mimelist'); if (list) list.innerHTML =
+                DB.getMimeChecks(user.id).map(rMimeItem).join(''); }
+
+        // ===== SETTINGS =====
+        function openSettings() {
+            Store.profileDropdown = false;
+            var m = document.getElementById('pmenu');
+            if (m) m.classList.add('hidden');
+            var user = Auth.getUser();
+            if (!user) return;
+            Modal.open(
+                '<div class="p-6"><div class="flex items-center justify-between mb-6"><h3 class="font-display text-lg font-semibold">Settings</h3><button onclick="Modal.close()" class="w-8 h-8 rounded-lg flex items-center justify-center border-none cursor-pointer" style="background:var(--bg3);color:var(--tx2)"><i class="fa-solid fa-xmark"></i></button></div><div class="flex items-center gap-3 p-4 rounded-lg mb-4" style="background:var(--bg3)"><i class="fa-solid fa-moon" style="color:var(--acc)"></i><div><div class="text-sm font-medium">Dark Mode</div><div class="text-xs" style="color:var(--tx3)">Always on for this app</div></div></div><button class="bs w-full" onclick="clearAll()"><i class="fa-solid fa-trash-can"></i> Clear all data</button></div>'
+                );
+        }
+
+        // ===== ROUTER INIT =====
+        Router.reg('/dashboard', pgDashboard);
+        Router.reg('/settings', function() { pgDashboard();
+            setTimeout(openSettings, 120); });
+
+        (function() {
+            document.documentElement.classList.add('dark');
+            if (!Router.cur() || Router.cur() === '/login' || Router.cur() === '/register') Router.go('/dashboard');
+            Router.init();
+        })();
+
+        // Tab hidden throttle
+        (function() {
+            function sync() { document.body.classList.toggle('tab-hidden', document.hidden); }
+            document.addEventListener('visibilitychange', sync);
+            sync();
+        })();
+    </script>
+</body>
+</html>
