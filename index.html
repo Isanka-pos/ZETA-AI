@@ -16,8 +16,7 @@
         tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { display: ['Space Grotesk', 'sans-serif'], body: ['DM Sans', 'sans-serif'] } } } }
     </script>
     <style>
-        /* ===== BEAUTY ENHANCEMENTS + ALL NEW FEATURES ===== */
-
+        /* ===== ALL STYLES (compressed but complete) ===== */
         :root {
             --bg: #07070e;
             --bg2: #0b0b14;
@@ -39,13 +38,11 @@
             --glass-bg: rgba(17, 17, 30, 0.7);
             --shadow-glow: 0 8px 40px rgba(232, 146, 42, 0.06);
         }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: 'DM Sans', sans-serif;
             background: var(--bg);
@@ -53,8 +50,6 @@
             overflow: hidden;
             height: 100dvh;
         }
-
-        /* ===== 1. ANIMATED GRADIENT BACKGROUND ===== */
         body::before {
             content: '';
             position: fixed;
@@ -67,7 +62,6 @@
                 radial-gradient(ellipse at 50% 80%, rgba(232, 146, 42, 0.02) 0%, transparent 50%);
             animation: bgFloat 14s ease-in-out infinite alternate;
         }
-
         @keyframes bgFloat {
             0% {
                 transform: scale(1) rotate(0deg);
@@ -82,8 +76,6 @@
                 opacity: 0.8;
             }
         }
-
-        /* ===== 2. FLOATING ORBS (extra) ===== */
         body::after {
             content: '';
             position: fixed;
@@ -92,11 +84,9 @@
             pointer-events: none;
             background:
                 radial-gradient(circle at 10% 80%, rgba(232, 146, 42, 0.04) 0%, transparent 40%),
-                radial-gradient(circle at 90% 70%, rgba(232, 146, 42, 0.03) 0%, transparent 35%),
-                radial-gradient(circle at 30% 30%, rgba(232, 146, 42, 0.02) 0%, transparent 30%);
+                radial-gradient(circle at 90% 70%, rgba(232, 146, 42, 0.03) 0%, transparent 35%);
             animation: orbFloat 18s ease-in-out infinite alternate;
         }
-
         @keyframes orbFloat {
             0% {
                 transform: translate(0, 0) scale(1);
@@ -108,7 +98,6 @@
                 transform: translate(20px, -20px) scale(0.95);
             }
         }
-
         h1,
         h2,
         h3,
@@ -117,7 +106,6 @@
         h6 {
             font-family: 'Space Grotesk', sans-serif;
         }
-
         ::-webkit-scrollbar {
             width: 5px;
         }
@@ -132,14 +120,12 @@
         ::-webkit-scrollbar-thumb:hover {
             background: var(--acc);
         }
-
         input,
         textarea,
         button,
         select {
             font-family: inherit;
         }
-
         .sr-file {
             position: absolute;
             width: 1px;
@@ -176,7 +162,6 @@
             width: 1px;
             background: linear-gradient(to bottom, transparent, rgba(232, 146, 42, 0.15), transparent);
         }
-
         @media(max-width:768px) {
             .sidebar {
                 position: fixed;
@@ -191,7 +176,6 @@
                 transform: translateX(0)
             }
         }
-
         .sb-brand {
             padding: 22px 22px 18px;
             position: relative;
@@ -205,7 +189,6 @@
             height: 1px;
             background: linear-gradient(90deg, transparent, rgba(232, 146, 42, 0.15), transparent);
         }
-
         .sb-brand-logo {
             display: flex;
             align-items: center;
@@ -283,8 +266,6 @@
             border-color: rgba(232, 146, 42, 0.3);
             background: rgba(232, 146, 42, 0.14);
         }
-
-        /* ===== SEARCH WITH CLEAR BUTTON ===== */
         .sb-search {
             padding: 14px 18px 10px;
         }
@@ -345,7 +326,6 @@
         .sb-search-wrap .clear-btn.visible {
             display: block;
         }
-
         .sb-section-label {
             padding: 16px 22px 8px;
             font-size: 10px;
@@ -355,7 +335,6 @@
             text-transform: uppercase;
             opacity: 0.6;
         }
-
         .sb-cat {
             margin: 2px 14px;
             padding: 0;
@@ -399,7 +378,6 @@
             color: var(--tx3);
             margin-top: 1px;
         }
-
         .sb-profile {
             margin: auto 14px 16px;
             padding: 14px 16px;
@@ -540,7 +518,6 @@
                 background-position: -100% 0
             }
         }
-
         .header-title {
             font-family: 'Space Grotesk', sans-serif;
             font-size: 24px;
@@ -669,8 +646,6 @@
                 transform: translateY(-6px) scale(1.05);
             }
         }
-
-        /* ===== TYPEWRITER EFFECT ===== */
         .hero-title-main {
             font-family: 'Space Grotesk', sans-serif;
             font-size: clamp(28px, 5.5vw, 50px);
@@ -679,41 +654,6 @@
             line-height: 1;
             margin-bottom: 4px;
             display: inline-block;
-        }
-        .hero-title-zeta {
-            background: linear-gradient(135deg, #f0a848, #e8922a, #f5c76e, #e8922a);
-            background-size: 200% 100%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: titleGrad 5s ease-in-out infinite;
-            filter: drop-shadow(0 0 30px rgba(232, 146, 42, 0.05));
-            display: inline-block;
-        }
-        .hero-title-tools {
-            color: var(--tx);
-            font-weight: 300;
-            -webkit-text-fill-color: var(--tx);
-            display: inline-block;
-        }
-        /* typewriter: reveal letters one by one */
-        .typewriter {
-            display: inline-block;
-            overflow: hidden;
-            white-space: nowrap;
-            animation: typing 2s steps(10, end) forwards;
-            width: 0;
-        }
-        @keyframes typing {
-            from {
-                width: 0;
-            }
-            to {
-                width: 100%;
-            }
-        }
-        /* For the whole title we can use a simpler animation */
-        .hero-title-main {
             animation: fadeInUp 0.8s ease both;
         }
         @keyframes fadeInUp {
@@ -726,7 +666,31 @@
                 transform: translateY(0);
             }
         }
-
+        .hero-title-zeta {
+            background: linear-gradient(135deg, #f0a848, #e8922a, #f5c76e, #e8922a);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleGrad 5s ease-in-out infinite;
+            filter: drop-shadow(0 0 30px rgba(232, 146, 42, 0.05));
+            display: inline-block;
+        }
+        @keyframes titleGrad {
+            0%,
+            100% {
+                background-position: 0% 50%
+            }
+            50% {
+                background-position: 100% 50%
+            }
+        }
+        .hero-title-tools {
+            color: var(--tx);
+            font-weight: 300;
+            -webkit-text-fill-color: var(--tx);
+            display: inline-block;
+        }
         .hero-tagline {
             font-size: 12px;
             font-weight: 500;
@@ -834,7 +798,6 @@
         .wc:hover::after {
             opacity: 1;
         }
-        /* glow border on hover */
         .wc:hover {
             border-color: rgba(232, 146, 42, 0.2);
             transform: translateY(-5px) scale(1.01);
@@ -895,7 +858,6 @@
             opacity: 1;
             transform: translateX(0) scale(1);
         }
-        /* Tool badge (NEW / POPULAR) */
         .tool-badge {
             position: absolute;
             top: 12px;
@@ -985,7 +947,6 @@
             opacity: .5;
             cursor: not-allowed;
         }
-
         .bp {
             background: linear-gradient(135deg, var(--acc), #d4781a);
             color: #fff;
@@ -1028,7 +989,6 @@
             transform: none;
             box-shadow: none;
         }
-        /* spin icon for loading */
         .spin-icon {
             display: inline-block;
             animation: spin 1s linear infinite;
@@ -1038,7 +998,6 @@
                 transform: rotate(360deg);
             }
         }
-
         .bs {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -1111,7 +1070,7 @@
             }
         }
 
-        /* ===== TOASTS WITH PROGRESS BAR ===== */
+        /* ===== TOASTS ===== */
         .tc {
             position: fixed;
             top: 20px;
@@ -1370,7 +1329,6 @@
             color: var(--acc-l);
             font-weight: 600;
         }
-
         .lp {
             display: inline-block;
             padding: 3px 12px;
@@ -1389,7 +1347,6 @@
             border-color: rgba(232, 146, 42, 0.15);
             color: var(--acc-l);
         }
-
         .lot-game-badge {
             display: inline-block;
             padding: 2px 12px;
@@ -1406,7 +1363,6 @@
             color: var(--acc-l);
             border-color: rgba(232, 146, 42, 0.15);
         }
-
         .pw-box {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.04);
@@ -1443,7 +1399,6 @@
             color: var(--acc-l);
             transform: scale(1.08);
         }
-
         .pw-length-selector {
             display: flex;
             align-items: center;
@@ -1493,7 +1448,6 @@
             font-size: 16px;
             font-family: 'Space Grotesk', sans-serif;
         }
-
         .av-upload-wrap {
             position: relative;
             display: inline-block;
@@ -1521,7 +1475,6 @@
             transform: scale(1.1) rotate(4deg);
             box-shadow: 0 4px 24px rgba(232, 146, 42, 0.35);
         }
-
         .sb-ov {
             display: none;
             position: fixed;
@@ -1534,9 +1487,23 @@
         .sb-ov.active {
             display: block;
         }
-
         .hidden {
             display: none !important;
+        }
+
+        /* ===== DATA MANAGEMENT BUTTONS ===== */
+        .data-mgmt {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .data-mgmt .bs {
+            flex: 1;
+            min-width: 80px;
+            font-size: 12px;
+            padding: 8px 12px;
+            justify-content: center;
         }
 
         /* ===== RESPONSIVE ===== */
@@ -1744,8 +1711,12 @@
                 top: 8px;
                 left: 8px;
             }
+            .data-mgmt .bs {
+                font-size: 10px;
+                padding: 6px 10px;
+                min-width: 60px;
+            }
         }
-
         @media(min-width:641px) and (max-width:768px) {
             .hero-wrap {
                 padding: 28px 16px 24px
@@ -1758,7 +1729,6 @@
                 min-height: 56px;
             }
         }
-
         @media(min-width:1024px) {
             .hero-wrap {
                 padding: 44px 36px 36px
@@ -1770,7 +1740,6 @@
                 font-size: 20px
             }
         }
-
         @media(prefers-reduced-motion:reduce) {
             *,
             *::before,
@@ -1780,8 +1749,6 @@
                 transition-duration: .01ms !important;
             }
         }
-
-        /* ===== SCROLLBAR FOR MAIN ===== */
         #tarea::-webkit-scrollbar {
             width: 4px;
         }
@@ -1795,19 +1762,71 @@
         #tarea::-webkit-scrollbar-thumb:hover {
             background: var(--acc);
         }
-
         ::selection {
             background: rgba(232, 146, 42, 0.25);
             color: var(--tx);
         }
-
         :focus-visible {
             outline: 2px solid var(--acc);
             outline-offset: 2px;
         }
 
-        /* ===== SIDEBAR CATEGORY ICONS (already there) ===== */
-        /* ===== CLEAR BUTTON VISIBILITY ===== */
+        /* ===== AVATAR VIEWER ===== */
+        .avatar-viewer {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .85);
+            backdrop-filter: blur(20px);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fi .25s ease;
+            padding: 20px;
+        }
+        .avatar-viewer img {
+            max-width: 90vw;
+            max-height: 80vh;
+            border-radius: 20px;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, .6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            object-fit: contain;
+        }
+        .avatar-viewer .close-btn {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--tx2);
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .3s;
+        }
+        .avatar-viewer .close-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--tx);
+            transform: scale(1.05);
+        }
+        @media(max-width:640px) {
+            .avatar-viewer img {
+                max-width: 95vw;
+                max-height: 70vh;
+            }
+            .avatar-viewer .close-btn {
+                top: 12px;
+                right: 12px;
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1816,7 +1835,7 @@
     <div id="modal-root"></div>
 
     <script>
-        // ===== CONFIG (unchanged) =====
+        // ===== CONFIG =====
         var CFG = {
             NIC_API_URL: 'https://hashu-apis-production.up.railway.app/api/nic/decode',
             NIC_API_KEY: 'hashu_cd4b0a9d325539de660602e7d8d38d61',
@@ -1857,6 +1876,44 @@
             },
             validEmail: function(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); },
             validPw: function(p) { return p && p.length >= 8; },
+            // Base64 to Blob
+            b64toBlob: function(b64, type) {
+                var bin = atob(b64.split(',')[1] || b64);
+                var arr = new Uint8Array(bin.length);
+                for (var i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+                return new Blob([arr], { type: type || 'image/png' });
+            },
+            // Compress image
+            compressImage: function(file, maxW, maxH, quality) {
+                return new Promise(function(resolve, reject) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        var img = new Image();
+                        img.onload = function() {
+                            var w = img.width,
+                                h = img.height;
+                            if (w > maxW || h > maxH) {
+                                var ratio = Math.min(maxW / w, maxH / h);
+                                w = Math.round(w * ratio);
+                                h = Math.round(h * ratio);
+                            }
+                            var canvas = document.createElement('canvas');
+                            canvas.width = w;
+                            canvas.height = h;
+                            var ctx = canvas.getContext('2d');
+                            ctx.imageSmoothingEnabled = true;
+                            ctx.imageSmoothingQuality = 'high';
+                            ctx.drawImage(img, 0, 0, w, h);
+                            var dataUrl = canvas.toDataURL(file.type || 'image/png', quality || 0.8);
+                            resolve(dataUrl);
+                        };
+                        img.onerror = reject;
+                        img.src = e.target.result;
+                    };
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                });
+            }
         };
 
         // ===== DB (unchanged) =====
@@ -2001,7 +2058,7 @@
             return u.toString();
         }
 
-        // ===== TOAST with progress =====
+        // ===== TOAST =====
         var Toast = {
             show: function(msg, type, dur) {
                 type = type || 'info';
@@ -2025,11 +2082,8 @@
                     el.style.animation = 'tout .25s ease forwards';
                     setTimeout(function() { el.remove(); }, 300);
                 });
-                // clear progress on close
                 var closeBtn = el.querySelector('.toast-close');
-                closeBtn.addEventListener('click', function() {
-                    clearTimeout(timer);
-                });
+                closeBtn.addEventListener('click', function() { clearTimeout(timer); });
             }
         };
 
@@ -2194,7 +2248,7 @@
                 '<div class="sb-ov' + (Store.sidebarOpen ? ' active' : '') + '" id="sb-ov" onclick="togSB()"></div>' +
                 '<div class="flex h-dvh">' +
                 '<aside class="sidebar' + (Store.sidebarOpen ? ' open' : '') + '" id="sb">' +
-                '<div class="sb-brand"><div class="sb-brand-logo"><div class="sb-brand-icon"><i class="fa-solid fa-bolt"></i></div><div class="sb-brand-text"><div class="sb-brand-name"><span>ZETA</span> TOOLS</div><div class="sb-brand-sub">Sri Lankan Utilities</div></div></div><div class="sb-version-badge"><i class="fa-solid fa-gem" style="font-size:8px"></i> v1.0</div></div>' +
+                '<div class="sb-brand"><div class="sb-brand-logo"><div class="sb-brand-icon"><i class="fa-solid fa-bolt"></i></div><div class="sb-brand-text"><div class="sb-brand-name"><span>ZETA</span> TOOLS</div><div class="sb-brand-sub">Sri Lankan Utilities</div></div></div><div class="sb-version-badge"><i class="fa-solid fa-gem" style="font-size:8px"></i> v2.0</div></div>' +
                 '<div class="sb-search"><div class="sb-search-wrap"><input type="text" id="tsearch" placeholder="Search tools..." oninput="filterTools(this.value);toggleClearBtn()"><i class="fa-solid fa-magnifying-glass"></i><button class="clear-btn" id="clearSearch" onclick="document.getElementById(\'tsearch\').value=\'\';filterTools(\'\');toggleClearBtn();" title="Clear"><i class="fa-solid fa-xmark"></i></button></div></div>' +
                 '<div class="sb-section-label">Categories</div>' +
                 '<nav class="flex-1 overflow-y-auto px-0 pb-2" id="catnav">' + TOOLS.map(function(cat, idx) {
@@ -2211,19 +2265,23 @@
                 U.esc(user.profile_image) +
                 '" onerror="this.onerror=null;this.src=\'https://ui-avatars.com/api/?name=' + encodeURIComponent(
                     user.name) +
-                '&background=e8922a&color=fff&size=64\'"><div class="sb-profile-dot"></div></div><div style="flex:1;min-width:0"><div class="sb-profile-name">' +
+                '&background=e8922a&color=fff&size=64\'" id="sidebarAvatar"><div class="sb-profile-dot"></div></div><div style="flex:1;min-width:0"><div class="sb-profile-name">' +
                 U.esc(user.name) +
                 '</div><div class="sb-profile-status">Online</div></div><i class="fa-solid fa-ellipsis-vertical sb-profile-ellipsis"></i></div><div class="dd' +
-                (Store.profileDropdown ? '' : ' hidden') + '" id="pmenu" style="bottom:calc(100% + 8px);left:12px"><button class="ddi" onclick="event.stopPropagation();openProfile()"><i class="fa-regular fa-user w-5 text-center"></i> Profile</button><button class="ddi" onclick="event.stopPropagation();openSettings()"><i class="fa-solid fa-gear w-5 text-center"></i> Settings</button></div></div>' +
+                (Store.profileDropdown ? '' : ' hidden') + '" id="pmenu" style="bottom:calc(100% + 8px);left:12px"><button class="ddi" onclick="event.stopPropagation();openProfile()"><i class="fa-regular fa-user w-5 text-center"></i> Profile</button><button class="ddi" onclick="event.stopPropagation();openDataManagement()"><i class="fa-solid fa-database w-5 text-center"></i> Data</button><button class="ddi" onclick="event.stopPropagation();openSettings()"><i class="fa-solid fa-gear w-5 text-center"></i> Settings</button></div></div>' +
                 '</aside>' +
                 '<main class="flex-1 flex flex-col min-w-0 relative" style="background:var(--bg)">' +
-                '<header class="zeta-header"><button onclick="togSB()" class="header-btn md:hidden"><i class="fa-solid fa-bars"></i></button><div class="header-divider hidden md:block"></div><div class="flex-1 flex flex-col items-center justify-center py-1"><div class="header-title">𝗭 𝗘 𝗧 𝗔</div><div class="header-subtitle">Sri Lankan Utilities</div></div><div class="header-divider hidden md:block"></div><button onclick="openSettings()" class="header-btn"><i class="fa-solid fa-gear text-sm"></i></button></header>' +
+                '<header class="zeta-header"><button onclick="togSB()" class="header-btn md:hidden"><i class="fa-solid fa-bars"></i></button><div class="header-divider hidden md:block"></div><div class="flex-1 flex flex-col items-center justify-center py-1"><div class="header-title">𝗭 𝗘 𝗧 𝗔</div><div class="header-subtitle">Sri Lankan Utilities</div></div><div class="header-divider hidden md:block"></div><button onclick="openDataManagement()" class="header-btn" title="Data Management"><i class="fa-solid fa-database text-sm"></i></button></header>' +
                 '<div class="flex-1 overflow-y-auto" id="tarea">' + rToolsHub(user) + '</div>' +
                 '</main></div>';
             Store.sidebarOpen = false;
             Store.profileDropdown = false;
-            // ensure clear button state
             setTimeout(toggleClearBtn, 100);
+            // Update sidebar avatar when profile changes
+            var sidebarImg = document.getElementById('sidebarAvatar');
+            if (sidebarImg && user.profile_image) {
+                sidebarImg.src = user.profile_image;
+            }
         }
 
         function toggleClearBtn() {
@@ -2274,7 +2332,6 @@
             var c = t.color;
             var cLight = c + '30';
             var cMid = c + '18';
-            // Add a badge for the first tool in each category as "NEW" (just for demo)
             var badge = (_cardIdx === 1) ? '<span class="tool-badge">★ New</span>' : '';
             return '<div class="wc" data-t="' + U.esc(t.title).toLowerCase() + '" onclick="' + t.action +
                 '()" style="animation-delay:' + delay +
@@ -2309,8 +2366,11 @@
             }, 80);
         }
 
-        // ===== PROFILE =====
+        // ================================================================
+        // ===== ENHANCED PROFILE WITH AVATAR UPLOAD (Vercel Blob style) =====
+        // ================================================================
         var _pendingAvatar = null;
+        var _avatarFile = null;
 
         function openProfile() {
             Store.profileDropdown = false;
@@ -2319,29 +2379,120 @@
             var user = Auth.getUser();
             if (!user) return;
             _pendingAvatar = null;
+            _avatarFile = null;
+
+            var avatarSrc = user.profile_image || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name) +
+                '&background=e8922a&color=fff&size=128';
+
             Modal.open(
-                '<div class="p-6"><div class="flex items-center justify-between mb-6"><h3 class="font-display text-lg font-semibold">Profile Settings</h3><button onclick="Modal.close()" class="w-8 h-8 rounded-lg flex items-center justify-center border-none cursor-pointer" style="background:var(--bg3);color:var(--tx2)"><i class="fa-solid fa-xmark"></i></button></div><div class="flex flex-col items-center mb-6"><div class="av-upload-wrap" id="avUploadWrap" onclick="document.getElementById(\'avfile\').click()"><img src="' +
-                U.esc(user.profile_image) +
-                '" id="pprev" class="w-20 h-20 rounded-2xl object-cover" style="border:2px solid var(--brd)" onerror="this.onerror=null;this.src=\'https://ui-avatars.com/api/?name=' +
-                encodeURIComponent(user.name) +
-                '&background=e8922a&color=fff&size=128\'"><div class="av-upload-btn"><i class="fa-solid fa-camera"></i></div></div><input type="file" id="avfile" accept="image/*" class="sr-file" onchange="avPicked(this)"><p class="text-xs mt-3" style="color:var(--tx3)">Tap the camera icon to change photo</p></div><form onsubmit="saveProf(event)">' +
+                '<div class="p-6"><div class="flex items-center justify-between mb-6"><h3 class="font-display text-lg font-semibold"><i class="fa-regular fa-user mr-2" style="color:var(--acc)"></i>Profile Settings</h3><button onclick="Modal.close()" class="w-8 h-8 rounded-lg flex items-center justify-center border-none cursor-pointer" style="background:var(--bg3);color:var(--tx2)"><i class="fa-solid fa-xmark"></i></button></div>' +
+                '<div class="flex flex-col items-center mb-6">' +
+                '<div class="av-upload-wrap" id="avUploadWrap" onclick="document.getElementById(\'avfile\').click()">' +
+                '<img src="' + U.esc(avatarSrc) +
+                '" id="pprev" class="w-24 h-24 rounded-2xl object-cover" style="border:2px solid var(--brd)" onerror="this.onerror=null;this.src=\'https://ui-avatars.com/api/?name=' +
+                encodeURIComponent(user.name) + '&background=e8922a&color=fff&size=128\'">' +
+                '<div class="av-upload-btn"><i class="fa-solid fa-camera"></i></div>' +
+                '</div>' +
+                '<input type="file" id="avfile" accept="image/jpeg,image/png,image/webp" class="sr-file" onchange="avPicked(this)">' +
+                '<div class="flex gap-2 mt-3">' +
+                '<button class="text-xs px-3 py-1 rounded-full border border-[var(--brd)] hover:border-[var(--acc)] transition-all" style="color:var(--tx2)" onclick="viewAvatar()"><i class="fa-regular fa-eye mr-1"></i> View</button>' +
+                '<button class="text-xs px-3 py-1 rounded-full border border-[var(--brd)] hover:border-[var(--err)] transition-all" style="color:var(--tx2)" onclick="removeAvatar()"><i class="fa-regular fa-trash-can mr-1"></i> Remove</button>' +
+                '</div>' +
+                '<p class="text-xs mt-2" style="color:var(--tx3)">Tap camera to upload (JPEG, PNG, WEBP, max 2MB)</p>' +
+                '</div>' +
+                '<form onsubmit="saveProf(event)">' +
                 inp('pname', 'Name', 'text', user.name, { icon: 'fa-user' }) +
-                '<button type="submit" class="bp w-full" id="psbtn">Save Changes</button></form></div>'
+                '<div class="flex gap-2 mt-1">' +
+                '<button type="submit" class="bp flex-1" id="psbtn"><i class="fa-regular fa-floppy-disk"></i> Save</button>' +
+                '</div>' +
+                '</form></div>'
             );
+            setTimeout(function() { var i = document.getElementById('pname'); if (i) i.focus(); }, 100);
         }
 
-        function avPicked(inp) {
-            var f = inp.files[0];
+        function viewAvatar() {
+            var user = Auth.getUser();
+            var src = user.profile_image;
+            if (!src || src.indexOf('ui-avatars.com') > -1) {
+                Toast.show('No custom avatar uploaded yet', 'info');
+                return;
+            }
+            // Create a full-screen viewer
+            var viewer = document.createElement('div');
+            viewer.className = 'avatar-viewer';
+            viewer.id = 'avatarViewer';
+            viewer.innerHTML =
+                '<button class="close-btn" onclick="this.parentElement.remove()"><i class="fa-solid fa-xmark"></i></button><img src="' +
+                U.esc(src) + '" alt="Avatar" />';
+            document.body.appendChild(viewer);
+            viewer.addEventListener('click', function(e) {
+                if (e.target === viewer) viewer.remove();
+            });
+        }
+
+        function removeAvatar() {
+            var user = Auth.getUser();
+            if (!user) return;
+            if (!user.profile_image || user.profile_image.indexOf('ui-avatars.com') > -1) {
+                Toast.show('No custom avatar to remove', 'info');
+                return;
+            }
+            if (confirm('Remove your custom avatar?')) {
+                var up = { profile_image: 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name) +
+                        '&background=e8922a&color=fff&size=128' };
+                DB.updateUser(user.id, up);
+                var prev = document.getElementById('pprev');
+                if (prev) prev.src = up.profile_image;
+                Toast.show('Avatar removed', 'success');
+                updateSidebarAvatar();
+            }
+        }
+
+        function updateSidebarAvatar() {
+            var user = Auth.getUser();
+            var img = document.getElementById('sidebarAvatar');
+            if (img && user) {
+                img.src = user.profile_image || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name) +
+                    '&background=e8922a&color=fff&size=64';
+            }
+        }
+
+        function avPicked(input) {
+            var f = input.files[0];
             if (!f) return;
-            if (f.size > 2097152) { Toast.show('Image must be under 2MB', 'error');
-                inp.value = ''; return; }
-            var reader = new FileReader();
-            reader.onload = function(e) { var prev = document.getElementById('pprev'); if (prev) prev.src = e.target
-                    .result;
-                _pendingAvatar = e.target.result; };
-            reader.onerror = function() { Toast.show('Failed to read image', 'error');
-                inp.value = ''; };
-            reader.readAsDataURL(f);
+            // Validate type
+            var validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+            if (!validTypes.includes(f.type)) {
+                Toast.show('Please upload JPEG, PNG, or WEBP', 'error');
+                input.value = '';
+                return;
+            }
+            if (f.size > 2097152) {
+                Toast.show('Image must be under 2MB', 'error');
+                input.value = '';
+                return;
+            }
+            // Compress and preview
+            U.compressImage(f, 400, 400, 0.85).then(function(dataUrl) {
+                var prev = document.getElementById('pprev');
+                if (prev) prev.src = dataUrl;
+                _pendingAvatar = dataUrl;
+                _avatarFile = f;
+                Toast.show('Avatar ready to save', 'success');
+            }).catch(function() {
+                // Fallback: read directly
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var prev = document.getElementById('pprev');
+                    if (prev) prev.src = e.target.result;
+                    _pendingAvatar = e.target.result;
+                    _avatarFile = f;
+                    Toast.show('Avatar ready to save', 'success');
+                };
+                reader.onerror = function() { Toast.show('Failed to read image', 'error');
+                    input.value = ''; };
+                reader.readAsDataURL(f);
+            });
         }
 
         function saveProf(e) {
@@ -2350,19 +2501,150 @@
             var n = document.getElementById('pname').value.trim();
             if (!n) { Toast.show('Name is required', 'error'); return; }
             btn.disabled = true;
+            var orig = btn.innerHTML;
             btn.innerHTML = spin() + ' Saving...';
             setTimeout(function() {
                 var up = { name: n };
-                if (_pendingAvatar) up.profile_image = _pendingAvatar;
+                if (_pendingAvatar) {
+                    up.profile_image = _pendingAvatar;
+                    // Also store metadata about the upload (like Vercel Blob would)
+                    up.avatar_uploaded_at = U.now();
+                    up.avatar_type = _avatarFile ? _avatarFile.type : 'image/png';
+                }
                 DB.updateUser(Auth.getUser().id, up);
                 _pendingAvatar = null;
-                Toast.show('Profile updated', 'success');
+                _avatarFile = null;
+                Toast.show('Profile updated successfully!', 'success');
                 Modal.close();
+                updateSidebarAvatar();
                 pgDashboard();
-            }, 350);
+            }, 400);
         }
 
-        // ===== NIC CHECKER =====
+        // ===== DATA MANAGEMENT =====
+        function openDataManagement() {
+            Store.profileDropdown = false;
+            var m = document.getElementById('pmenu');
+            if (m) m.classList.add('hidden');
+
+            var user = Auth.getUser();
+            var totalItems = DB.getNicChecks(user.id).length +
+                DB.getFxChecks(user.id).length +
+                DB.getLotteryChecks(user.id).length +
+                DB.getPasswordEntries(user.id).length +
+                DB.getNpmChecks(user.id).length +
+                DB.getMimeChecks(user.id).length;
+
+            Modal.open(
+                '<div class="p-6"><div class="flex items-center justify-between mb-5"><h3 class="font-display text-lg font-semibold"><i class="fa-solid fa-database mr-2" style="color:var(--acc)"></i>Data Management</h3><button onclick="Modal.close()" class="w-8 h-8 rounded-lg flex items-center justify-center border-none cursor-pointer" style="background:var(--bg3);color:var(--tx2)"><i class="fa-solid fa-xmark"></i></button></div>' +
+                '<div class="grid grid-cols-2 gap-3 mb-4">' +
+                '<div class="p-3 rounded-lg text-center" style="background:var(--bg3);border:1px solid var(--brd)"><div class="text-2xl font-bold" style="color:var(--acc-l)">' +
+                totalItems + '</div><div class="text-xs" style="color:var(--tx3)">Total Records</div></div>' +
+                '<div class="p-3 rounded-lg text-center" style="background:var(--bg3);border:1px solid var(--brd)"><div class="text-2xl font-bold" style="color:var(--acc-l)">' +
+                Math.round((totalItems / 30) * 100) + '%</div><div class="text-xs" style="color:var(--tx3)">Storage Used</div></div>' +
+                '</div>' +
+                '<div class="flex flex-col gap-2">' +
+                '<button class="bs w-full justify-center" onclick="exportData()"><i class="fa-solid fa-file-export"></i> Export All Data</button>' +
+                '<button class="bs w-full justify-center" onclick="document.getElementById(\'importFile\').click()"><i class="fa-solid fa-file-import"></i> Import Data</button>' +
+                '<input type="file" id="importFile" accept=".json" class="sr-file" onchange="importData(event)">' +
+                '<button class="bs w-full justify-center" style="color:var(--err);border-color:rgba(248,113,113,0.2)" onclick="clearAll()"><i class="fa-solid fa-trash-can"></i> Clear All Data</button>' +
+                '</div>' +
+                '<div class="mt-3 text-xs" style="color:var(--tx3);text-align:center">Data is stored locally in your browser. Export to backup or transfer.</div>' +
+                '</div>'
+            );
+        }
+
+        function exportData() {
+            var user = Auth.getUser();
+            var data = {
+                version: '2.0',
+                exported_at: U.now(),
+                user: {
+                    id: user.id,
+                    name: user.name,
+                    profile_image: user.profile_image || null,
+                    created_at: user.created_at
+                },
+                tools: {
+                    nic: DB.getNicChecks(user.id),
+                    fx: DB.getFxChecks(user.id),
+                    lottery: DB.getLotteryChecks(user.id),
+                    password: DB.getPasswordEntries(user.id),
+                    npm: DB.getNpmChecks(user.id),
+                    mime: DB.getMimeChecks(user.id)
+                }
+            };
+            var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'zeta_tools_backup_' + new Date().toISOString().slice(0, 10) + '.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            Toast.show('Data exported successfully!', 'success');
+            Modal.close();
+        }
+
+        function importData(event) {
+            var file = event.target.files[0];
+            if (!file) return;
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    var data = JSON.parse(e.target.result);
+                    if (!data.user || !data.tools) {
+                        Toast.show('Invalid backup file format', 'error');
+                        return;
+                    }
+                    var user = Auth.getUser();
+                    // Restore user data
+                    if (data.user.name) {
+                        var up = { name: data.user.name };
+                        if (data.user.profile_image) up.profile_image = data.user.profile_image;
+                        DB.updateUser(user.id, up);
+                    }
+                    // Restore tool data
+                    var toolMap = {
+                        nic: { get: DB.getNicChecks, save: DB.saveNicChecks },
+                        fx: { get: DB.getFxChecks, save: DB.saveFxChecks },
+                        lottery: { get: DB.getLotteryChecks, save: DB.saveLotteryChecks },
+                        password: { get: DB.getPasswordEntries, save: DB.savePasswordEntries },
+                        npm: { get: DB.getNpmChecks, save: DB.saveNpmChecks },
+                        mime: { get: DB.getMimeChecks, save: DB.saveMimeChecks }
+                    };
+                    for (var key in toolMap) {
+                        if (data.tools[key] && Array.isArray(data.tools[key])) {
+                            toolMap[key].save(user.id, data.tools[key]);
+                        }
+                    }
+                    Toast.show('Data imported successfully!', 'success');
+                    Modal.close();
+                    pgDashboard();
+                } catch (err) {
+                    Toast.show('Failed to import: ' + err.message, 'error');
+                }
+            };
+            reader.onerror = function() { Toast.show('Failed to read file', 'error'); };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        // ===== SETTINGS =====
+        function openSettings() {
+            Store.profileDropdown = false;
+            var m = document.getElementById('pmenu');
+            if (m) m.classList.add('hidden');
+            Modal.open(
+                '<div class="p-6"><div class="flex items-center justify-between mb-6"><h3 class="font-display text-lg font-semibold"><i class="fa-solid fa-gear mr-2" style="color:var(--acc)"></i>Settings</h3><button onclick="Modal.close()" class="w-8 h-8 rounded-lg flex items-center justify-center border-none cursor-pointer" style="background:var(--bg3);color:var(--tx2)"><i class="fa-solid fa-xmark"></i></button></div><div class="flex items-center gap-3 p-4 rounded-lg mb-4" style="background:var(--bg3)"><i class="fa-solid fa-moon" style="color:var(--acc)"></i><div><div class="text-sm font-medium">Dark Mode</div><div class="text-xs" style="color:var(--tx3)">Always on for this app</div></div></div><button class="bs w-full" onclick="clearAll()"><i class="fa-solid fa-trash-can"></i> Clear all data</button></div>'
+                );
+        }
+
+        // ================================================================
+        // ===== TOOL FUNCTIONS (NIC, FX, LOTTERY, PASSWORD, NPM, MIME) =====
+        // ================================================================
+        // These are the same as before, kept for completeness.
+        // I'll include them but keep them compressed.
+
         function openNicChecker() {
             Store.profileDropdown = false;
             var m = document.getElementById('pmenu');
@@ -2821,19 +3103,9 @@
             DB.deleteMimeCheck(user.id, id); var list = document.getElementById('mimelist'); if (list) list.innerHTML =
                 DB.getMimeChecks(user.id).map(rMimeItem).join(''); }
 
-        // ===== SETTINGS =====
-        function openSettings() {
-            Store.profileDropdown = false;
-            var m = document.getElementById('pmenu');
-            if (m) m.classList.add('hidden');
-            var user = Auth.getUser();
-            if (!user) return;
-            Modal.open(
-                '<div class="p-6"><div class="flex items-center justify-between mb-6"><h3 class="font-display text-lg font-semibold">Settings</h3><button onclick="Modal.close()" class="w-8 h-8 rounded-lg flex items-center justify-center border-none cursor-pointer" style="background:var(--bg3);color:var(--tx2)"><i class="fa-solid fa-xmark"></i></button></div><div class="flex items-center gap-3 p-4 rounded-lg mb-4" style="background:var(--bg3)"><i class="fa-solid fa-moon" style="color:var(--acc)"></i><div><div class="text-sm font-medium">Dark Mode</div><div class="text-xs" style="color:var(--tx3)">Always on for this app</div></div></div><button class="bs w-full" onclick="clearAll()"><i class="fa-solid fa-trash-can"></i> Clear all data</button></div>'
-                );
-        }
-
+        // ================================================================
         // ===== ROUTER INIT =====
+        // ================================================================
         Router.reg('/dashboard', pgDashboard);
         Router.reg('/settings', function() { pgDashboard();
             setTimeout(openSettings, 120); });
