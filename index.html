@@ -1,0 +1,2020 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ZETA TOOLS — Sri Lankan Utility Suite</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['Space Grotesk', 'sans-serif'],
+                        body: ['DM Sans', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --bg: #09090f;
+            --bg2: #111118;
+            --bg3: #1a1a24;
+            --bg4: #22222e;
+            --brd: #2a2a38;
+            --brd2: #35354a;
+            --tx: #eaeaf0;
+            --tx2: #9898b0;
+            --tx3: #68688a;
+            --acc: #e8922a;
+            --acc-l: #f0a848;
+            --acc-g: rgba(232, 146, 42, 0.15);
+            --ok: #4ade80;
+            --err: #f87171;
+            --wrn: #fbbf24
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--tx);
+            overflow: hidden;
+            height: 100dvh
+        }
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Space Grotesk', sans-serif
+        }
+        ::-webkit-scrollbar {
+            width: 6px
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--brd2);
+            border-radius: 3px
+        }
+        input,
+        textarea,
+        button,
+        select {
+            font-family: inherit
+        }
+        .auth-bg {
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            overflow: hidden;
+            z-index: 0
+        }
+        .auth-bg .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: .22;
+            animation: bf 20s ease-in-out infinite
+        }
+        .auth-bg .blob:nth-child(1) {
+            width: 500px;
+            height: 500px;
+            background: var(--acc);
+            top: -10%;
+            left: -10%
+        }
+        .auth-bg .blob:nth-child(2) {
+            width: 400px;
+            height: 400px;
+            background: #6366f1;
+            bottom: -10%;
+            right: -10%;
+            animation-delay: -7s
+        }
+        .auth-bg .blob:nth-child(3) {
+            width: 300px;
+            height: 300px;
+            background: #ec4899;
+            top: 50%;
+            left: 50%;
+            animation-delay: -14s
+        }
+        @keyframes bf {
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1)
+            }
+            25% {
+                transform: translate(50px, -50px) scale(1.1)
+            }
+            50% {
+                transform: translate(-30px, 60px) scale(.9)
+            }
+            75% {
+                transform: translate(40px, 30px) scale(1.05)
+            }
+        }
+        .glass {
+            background: rgba(17, 17, 24, .6);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--brd)
+        }
+        .ifield {
+            background: var(--bg3);
+            border: 1px solid var(--brd);
+            color: var(--tx);
+            border-radius: 10px;
+            padding: 12px 16px;
+            width: 100%;
+            font-size: 14px;
+            transition: all .2s;
+            outline: none
+        }
+        .ifield:focus {
+            border-color: var(--acc);
+            box-shadow: 0 0 0 3px var(--acc-g)
+        }
+        .ifield::placeholder {
+            color: var(--tx3)
+        }
+        .ifield:disabled {
+            opacity: .5;
+            cursor: not-allowed
+        }
+        .bp {
+            background: linear-gradient(135deg, var(--acc), var(--acc-l));
+            color: #fff;
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all .2s;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px
+        }
+        .bp:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(232, 146, 42, .3)
+        }
+        .bp:active {
+            transform: translateY(0)
+        }
+        .bp:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none
+        }
+        .bs {
+            background: var(--bg3);
+            border: 1px solid var(--brd);
+            color: var(--tx);
+            font-weight: 500;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all .2s;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px
+        }
+        .bs:hover {
+            border-color: var(--brd2);
+            background: var(--bg4)
+        }
+        .sidebar {
+            width: 280px;
+            min-width: 280px;
+            height: 100dvh;
+            background: var(--bg2);
+            border-right: 1px solid var(--brd);
+            display: flex;
+            flex-direction: column;
+            transition: transform .3s cubic-bezier(.4, 0, .2, 1);
+            z-index: 40
+        }
+        @media(max-width:768px) {
+            .sidebar {
+                position: fixed;
+                left: 0;
+                top: 0;
+                transform: translateX(-100%)
+            }
+            .sidebar.open {
+                transform: translateX(0)
+            }
+        }
+        .sb-ov {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .5);
+            z-index: 35;
+            backdrop-filter: blur(4px)
+        }
+        .sb-ov.active {
+            display: block
+        }
+        .ci {
+            padding: 10px 14px;
+            margin: 2px 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all .15s;
+            position: relative;
+            overflow: hidden
+        }
+        .ci:hover {
+            background: var(--bg3)
+        }
+        .ci.act {
+            background: var(--acc-g);
+            border: 1px solid rgba(232, 146, 42, .2)
+        }
+        .ci .db {
+            opacity: 0;
+            transition: opacity .15s;
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--bg4);
+            border: none;
+            color: var(--tx3);
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px
+        }
+        .ci:hover .db {
+            opacity: 1
+        }
+        .ci .db:hover {
+            color: var(--err);
+            background: rgba(248, 113, 113, .1)
+        }
+        .mc {
+            display: flex;
+            gap: 16px;
+            padding: 24px 0;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+            animation: mi .3s ease
+        }
+        @keyframes mi {
+            from {
+                opacity: 0;
+                transform: translateY(10px)
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+        .ma {
+            width: 32px;
+            height: 32px;
+            min-width: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600
+        }
+        .mu .ma {
+            background: linear-gradient(135deg, var(--acc), var(--acc-l));
+            color: #fff
+        }
+        .mai .ma {
+            background: var(--bg4);
+            color: var(--acc);
+            border: 1px solid var(--brd)
+        }
+        .mt {
+            flex: 1;
+            min-width: 0
+        }
+        .mt .mn {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px
+        }
+        .mt .mtime {
+            font-size: 11px;
+            color: var(--tx3);
+            margin-bottom: 8px
+        }
+        .mt .mx {
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--tx);
+            word-break: break-word
+        }
+        .mt .mx p {
+            margin-bottom: 12px
+        }
+        .mt .mx p:last-child {
+            margin-bottom: 0
+        }
+        .mt .mx h1,
+        .mt .mx h2,
+        .mt .mx h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            margin: 20px 0 10px;
+            font-weight: 600
+        }
+        .mt .mx h1 {
+            font-size: 1.5em
+        }
+        .mt .mx h2 {
+            font-size: 1.25em
+        }
+        .mt .mx h3 {
+            font-size: 1.1em
+        }
+        .mt .mx ul,
+        .mt .mx ol {
+            padding-left: 20px;
+            margin: 8px 0 12px
+        }
+        .mt .mx li {
+            margin: 4px 0
+        }
+        .mt .mx blockquote {
+            border-left: 3px solid var(--acc);
+            padding: 8px 16px;
+            margin: 12px 0;
+            background: var(--acc-g);
+            border-radius: 0 8px 8px 0
+        }
+        .mt .mx a {
+            color: var(--acc-l);
+            text-decoration: underline
+        }
+        .mt .mx table {
+            border-collapse: collapse;
+            margin: 12px 0;
+            width: 100%
+        }
+        .mt .mx th,
+        .mt .mx td {
+            border: 1px solid var(--brd);
+            padding: 8px 12px;
+            text-align: left;
+            font-size: 14px
+        }
+        .mt .mx th {
+            background: var(--bg3);
+            font-weight: 600
+        }
+        .mt .mx code:not(pre code) {
+            background: var(--bg4);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 13px;
+            color: var(--acc-l)
+        }
+        .mt .mx pre {
+            margin: 12px 0;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--brd)
+        }
+        .cbh {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 16px;
+            background: var(--bg3);
+            border-bottom: 1px solid var(--brd);
+            font-size: 12px;
+            color: var(--tx3)
+        }
+        .ccb {
+            background: none;
+            border: none;
+            color: var(--tx3);
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            transition: all .15s
+        }
+        .ccb:hover {
+            color: var(--tx);
+            background: var(--bg4)
+        }
+        .mact {
+            display: flex;
+            gap: 4px;
+            margin-top: 8px;
+            opacity: 0;
+            transition: opacity .15s
+        }
+        .mc:hover .mact {
+            opacity: 1
+        }
+        .mab {
+            background: none;
+            border: 1px solid transparent;
+            color: var(--tx3);
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all .15s
+        }
+        .mab:hover {
+            color: var(--tx);
+            background: var(--bg3);
+            border-color: var(--brd)
+        }
+        .ciw {
+            padding: 16px 24px 24px;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%
+        }
+        .cib {
+            background: var(--bg3);
+            border: 1px solid var(--brd);
+            border-radius: 16px;
+            display: flex;
+            align-items: flex-end;
+            padding: 8px;
+            transition: all .2s
+        }
+        .cib:focus-within {
+            border-color: var(--acc);
+            box-shadow: 0 0 0 3px var(--acc-g)
+        }
+        .cib textarea {
+            flex: 1;
+            background: none;
+            border: none;
+            color: var(--tx);
+            font-size: 15px;
+            padding: 8px 12px;
+            resize: none;
+            outline: none;
+            max-height: 200px;
+            line-height: 1.5
+        }
+        .cib textarea::placeholder {
+            color: var(--tx3)
+        }
+        .sbtn {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            border-radius: 10px;
+            border: none;
+            background: var(--acc);
+            color: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .2s;
+            font-size: 16px
+        }
+        .sbtn:hover {
+            background: var(--acc-l);
+            transform: scale(1.05)
+        }
+        .sbtn:disabled {
+            opacity: .3;
+            cursor: not-allowed;
+            transform: none
+        }
+        .ti {
+            display: flex;
+            gap: 4px;
+            padding: 4px 0
+        }
+        .ti span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--tx3);
+            animation: tb 1.4s infinite
+        }
+        .ti span:nth-child(2) {
+            animation-delay: .2s
+        }
+        .ti span:nth-child(3) {
+            animation-delay: .4s
+        }
+        @keyframes tb {
+            0%,
+            60%,
+            100% {
+                transform: translateY(0);
+                opacity: .4
+            }
+            30% {
+                transform: translateY(-8px);
+                opacity: 1
+            }
+        }
+        .tc {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px
+        }
+
+        /* --- ENHANCED TOAST (PILL SHAPE + GLASS) --- */
+        .toast {
+            padding: 12px 20px 12px 24px;
+            border-radius: 100px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: tin .4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            min-width: 200px;
+            max-width: 420px;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            font-weight: 500;
+            letter-spacing: 0.2px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            transition: all .2s;
+            cursor: default;
+        }
+        .toast.success {
+            background: rgba(6, 95, 70, 0.85);
+            color: #a7f3d0;
+            border-color: rgba(16, 185, 129, 0.25);
+            box-shadow: 0 8px 32px rgba(16, 185, 129, 0.15);
+        }
+        .toast.error {
+            background: rgba(127, 29, 29, 0.85);
+            color: #fca5a5;
+            border-color: rgba(239, 68, 68, 0.25);
+            box-shadow: 0 8px 32px rgba(239, 68, 68, 0.15);
+        }
+        .toast.info {
+            background: rgba(30, 58, 95, 0.85);
+            color: #93c5fd;
+            border-color: rgba(59, 130, 246, 0.25);
+            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.15);
+        }
+        .toast .toast-close {
+            background: none;
+            border: none;
+            color: inherit;
+            cursor: pointer;
+            opacity: 0.4;
+            font-size: 16px;
+            padding: 4px 4px 4px 8px;
+            transition: opacity .15s;
+            line-height: 1;
+            border-radius: 50%;
+        }
+        .toast .toast-close:hover {
+            opacity: 1;
+            background: rgba(0, 0, 0, 0.15);
+        }
+        .toast i:first-child {
+            font-size: 16px;
+        }
+        .toast span {
+            flex: 1;
+        }
+
+        @keyframes tin {
+            from {
+                opacity: 0;
+                transform: translateX(50px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+        }
+        @keyframes tout {
+            from {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(50px) scale(0.95);
+            }
+        }
+
+        /* -------- MODAL & OTHERS -------- */
+        .mo {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .6);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+            animation: fi .2s ease
+        }
+        .moc {
+            background: var(--bg2);
+            border: 1px solid var(--brd);
+            border-radius: 16px;
+            max-width: 560px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            animation: modin .3s ease
+        }
+        @keyframes fi {
+            from {
+                opacity: 0
+            }
+            to {
+                opacity: 1
+            }
+        }
+        @keyframes modin {
+            from {
+                opacity: 0;
+                transform: scale(.95) translateY(10px)
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0)
+            }
+        }
+        .wc {
+            background: var(--bg3);
+            border: 1px solid var(--brd);
+            border-radius: 14px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all .2s
+        }
+        .wc:hover {
+            border-color: var(--acc);
+            background: var(--acc-g);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(232, 146, 42, .1)
+        }
+        .dd {
+            position: absolute;
+            background: var(--bg2);
+            border: 1px solid var(--brd);
+            border-radius: 10px;
+            padding: 6px;
+            min-width: 200px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, .4);
+            animation: ddin .15s ease;
+            z-index: 50
+        }
+        @keyframes ddin {
+            from {
+                opacity: 0;
+                transform: translateY(-4px)
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+        .ddi {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--tx2);
+            transition: all .1s;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left
+        }
+        .ddi:hover {
+            background: var(--bg3);
+            color: var(--tx)
+        }
+        .ddi.dng {
+            color: var(--err)
+        }
+        .ddi.dng:hover {
+            background: rgba(248, 113, 113, .1)
+        }
+        .ddv {
+            height: 1px;
+            background: var(--brd);
+            margin: 4px 0
+        }
+        .tt {
+            width: 44px;
+            height: 24px;
+            border-radius: 12px;
+            background: var(--bg4);
+            border: 1px solid var(--brd);
+            cursor: pointer;
+            position: relative;
+            transition: all .2s
+        }
+        .tt.on {
+            background: var(--acc);
+            border-color: var(--acc)
+        }
+        .tth {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #fff;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: transform .2s
+        }
+        .tt.on .tth {
+            transform: translateX(20px)
+        }
+        .ri {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--bg4);
+            outline: none
+        }
+        .ri::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--acc);
+            cursor: pointer;
+            border: 2px solid var(--bg2)
+        }
+        .nc-res {
+            background: var(--acc-g);
+            border: 1px solid rgba(232, 146, 42, .3);
+            border-radius: 12px;
+            padding: 16px;
+            animation: mi .25s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 10px
+        }
+        .nc-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--brd)
+        }
+        .nc-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0
+        }
+        .nc-row .l {
+            font-size: 12px;
+            color: var(--tx3);
+            font-weight: 500
+        }
+        .nc-row .v {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--tx)
+        }
+        .nc-ib {
+            width: 34px;
+            height: 34px;
+            min-width: 34px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg3);
+            color: var(--tx2);
+            transition: all .15s;
+            font-size: 13px
+        }
+        .nc-ib:hover {
+            background: var(--acc);
+            color: #fff
+        }
+        .nc-hi {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            transition: background .15s
+        }
+        .nc-hi:hover {
+            background: var(--bg3)
+        }
+        .nc-hi .o {
+            font-size: 12px;
+            color: var(--tx3)
+        }
+        .nc-hi .s {
+            font-size: 13px;
+            color: var(--acc-l);
+            font-weight: 600
+        }
+        .lp {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            background: var(--bg4);
+            border: 1px solid var(--brd2);
+            color: var(--tx);
+            margin-right: 6px;
+            min-width: 36px;
+            text-align: center
+        }
+        .lp.gold {
+            background: var(--acc-g);
+            border-color: var(--acc);
+            color: var(--acc-l)
+        }
+        .lot-game-badge {
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            background: var(--bg4);
+            color: var(--tx3);
+            border: 1px solid var(--brd)
+        }
+        .lot-game-badge.dlb {
+            background: rgba(232, 146, 42, .15);
+            color: var(--acc-l);
+            border-color: rgba(232, 146, 42, .25)
+        }
+        .pw-box {
+            background: var(--bg3);
+            border: 1px solid var(--brd);
+            border-radius: 10px;
+            padding: 14px 18px;
+            font-family: 'Space Grotesk', monospace;
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: var(--acc-l);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            word-break: break-all;
+            gap: 12px
+        }
+        .pw-box .copy-btn {
+            background: none;
+            border: none;
+            color: var(--tx3);
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 6px;
+            transition: all .15s;
+            font-size: 16px;
+            flex-shrink: 0
+        }
+        .pw-box .copy-btn:hover {
+            background: var(--bg4);
+            color: var(--tx)
+        }
+        .pw-length-selector {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 4px 0
+        }
+        .pw-length-selector input[type="range"] {
+            flex: 1;
+            accent-color: var(--acc)
+        }
+        .pw-length-selector .length-label {
+            font-weight: 600;
+            min-width: 36px;
+            text-align: center;
+            color: var(--acc-l)
+        }
+        @media(prefers-reduced-motion:reduce) {
+            * {
+                animation-duration: .01ms !important;
+                transition-duration: .01ms !important
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+    <div class="tc" id="toasts"></div>
+    <div id="modal-root"></div>
+
+    <script>
+        /* ===== CONFIG ===== */
+        var CFG = {
+            NIC_API_URL: 'https://hashu-apis-production.up.railway.app/api/nic/decode',
+            NIC_API_KEY: 'hashu_cd4b0a9d325539de660602e7d8d38d61',
+            FX_API_URL: 'https://hashu-apis-production.up.railway.app/api/currency/lkr',
+            FX_API_KEY: 'hashu_cd4b0a9d325539de660602e7d8d38d61',
+            LOTTERY_API_URL: 'https://hashu-apis-production.up.railway.app/api/lottery/dlb',
+            LOTTERY_API_KEY: 'hashu_cd4b0a9d325539de660602e7d8d38d61',
+            PASSWORD_API_URL: 'https://hashu-apis-production.up.railway.app/api/passwordgen',
+            PASSWORD_API_KEY: 'hashu_cd4b0a9d325539de660602e7d8d38d61'
+        };
+
+        /* ===== UTILS ===== */
+        var U = {
+            id: function() {
+                if (crypto.randomUUID) return crypto.randomUUID();
+                return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                    var r = Math.random() * 16 | 0;
+                    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+                });
+            },
+            now: function() { return new Date().toISOString(); },
+            relTime: function(d) {
+                var s = Math.floor((Date.now() - new Date(d).getTime()) / 1000);
+                if (s < 60) return 'Just now';
+                if (s < 3600) return Math.floor(s / 60) + 'm ago';
+                if (s < 86400) return Math.floor(s / 3600) + 'h ago';
+                if (s < 604800) return Math.floor(s / 86400) + 'd ago';
+                return new Date(d).toLocaleDateString();
+            },
+            fmtTime: function(d) { return new Date(d).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); },
+            esc: function(s) { var d = document.createElement('div');
+                d.textContent = s; return d.innerHTML; },
+            hashPw: function(pw) {
+                var str = pw + '_zeta_salt_zeta_2024_xK9mQ';
+                var h1 = 0xdeadbeef,
+                    h2 = 0x41c6ce57;
+                for (var i = 0; i < str.length; i++) {
+                    var ch = str.charCodeAt(i);
+                    h1 = Math.imul(h1 ^ ch, 2654435761);
+                    h2 = Math.imul(h2 ^ ch, 1597334677);
+                }
+                h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507);
+                h1 ^= Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+                h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507);
+                h2 ^= Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+                var result = (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16);
+                for (var r = 0; r < 1000; r++) {
+                    h1 = 0xdeadbeef;
+                    h2 = 0x41c6ce57;
+                    for (var j = 0; j < result.length; j++) {
+                        var c2 = result.charCodeAt(j);
+                        h1 = Math.imul(h1 ^ c2, 2654435761);
+                        h2 = Math.imul(h2 ^ c2, 1597334677);
+                    }
+                    h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507);
+                    h1 ^= Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+                    h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507);
+                    h2 ^= Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+                    result = (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16);
+                }
+                return result;
+            },
+            validEmail: function(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); },
+            validPw: function(p) { return p && p.length >= 8; },
+            sanitize: function(s) { return s.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, ''); }
+        };
+
+        /* ===== DATABASE ===== */
+        var DB = {
+            _g: function(k) { try { return JSON.parse(localStorage.getItem('z_' + k)); } catch (e) { return null; } },
+            _s: function(k, v) { try { localStorage.setItem('z_' + k, JSON.stringify(v)); } catch (e) {} },
+            _d: function(k) { try { localStorage.removeItem('z_' + k); } catch (e) {} },
+            getUsers: function() { return this._g('users') || []; },
+            saveUsers: function(u) { this._s('users', u); },
+            findUser: function(email) { return this.getUsers().find(function(u) { return u.email === email
+                .toLowerCase(); }); },
+            findUserById: function(id) { return this.getUsers().find(function(u) { return u.id === id; }); },
+            addUser: function(u) { var us = this.getUsers();
+                us.push(u);
+                this.saveUsers(us); return u; },
+            updateUser: function(id, d) { var us = this.getUsers();
+                var i = us.findIndex(function(u) { return u.id === id; }); if (i >= 0) { Object.assign(us[i], d);
+                    this.saveUsers(us); return us[i]; } return null; },
+            getSession: function(rem) { return (rem ? this._g('sess') : this._gss()) || null; },
+            setSession: function(s, rem) { if (rem) this._s('sess', s);
+                else this._sss(s); },
+            clearSession: function() { this._d('sess');
+                this._css(); },
+            _gss: function() { try { return JSON.parse(sessionStorage.getItem('z_sess')); } catch (e) { return null; } },
+            _sss: function(s) { try { sessionStorage.setItem('z_sess', JSON.stringify(s)); } catch (e) {} },
+            _css: function() { try { sessionStorage.removeItem('z_sess'); } catch (e) {} },
+            clearAll: function() { var keys = []; for (var i = 0; i < localStorage.length; i++) { var k = localStorage
+                    .key(i); if (k && k.indexOf('z_') === 0) keys.push(k); } keys.forEach(function(k) { localStorage
+                        .removeItem(k); }); try { sessionStorage.removeItem('z_sess'); } catch (e) {} },
+            getSettings: function(uid) { return this._g('set_' + uid) || { theme: 'dark' }; },
+            saveSettings: function(uid, s) { this._s('set_' + uid, s); },
+
+            // NIC
+            getNicChecks: function(uid) { return this._g('nic_' + uid) || []; },
+            saveNicChecks: function(uid, l) { this._s('nic_' + uid, l); },
+            addNicCheck: function(uid, l) { var ls = this.getNicChecks(uid);
+                ls.unshift(l); if (ls.length > 30) ls = ls.slice(0, 30);
+                this.saveNicChecks(uid, ls); return l; },
+            deleteNicCheck: function(uid, id) { this.saveNicChecks(uid, this.getNicChecks(uid).filter(function(l) {
+                    return l.id !== id; })); },
+
+            // FX
+            getFxChecks: function(uid) { return this._g('fx_' + uid) || []; },
+            saveFxChecks: function(uid, l) { this._s('fx_' + uid, l); },
+            addFxCheck: function(uid, l) { var ls = this.getFxChecks(uid);
+                ls.unshift(l); if (ls.length > 30) ls = ls.slice(0, 30);
+                this.saveFxChecks(uid, ls); return l; },
+            deleteFxCheck: function(uid, id) { this.saveFxChecks(uid, this.getFxChecks(uid).filter(function(l) {
+                    return l.id !== id; })); },
+
+            // LOTTERY
+            getLotteryChecks: function(uid) { return this._g('lot_' + uid) || []; },
+            saveLotteryChecks: function(uid, l) { this._s('lot_' + uid, l); },
+            addLotteryCheck: function(uid, l) { var ls = this.getLotteryChecks(uid);
+                ls.unshift(l); if (ls.length > 30) ls = ls.slice(0, 30);
+                this.saveLotteryChecks(uid, ls); return l; },
+            deleteLotteryCheck: function(uid, id) { this.saveLotteryChecks(uid, this.getLotteryChecks(uid).filter(
+                function(l) { return l.id !== id; })); },
+
+            // PASSWORD
+            getPasswordEntries: function(uid) { return this._g('pwd_' + uid) || []; },
+            savePasswordEntries: function(uid, l) { this._s('pwd_' + uid, l); },
+            addPasswordEntry: function(uid, l) { var ls = this.getPasswordEntries(uid);
+                ls.unshift(l); if (ls.length > 30) ls = ls.slice(0, 30);
+                this.savePasswordEntries(uid, ls); return l; },
+            deletePasswordEntry: function(uid, id) { this.savePasswordEntries(uid, this.getPasswordEntries(uid)
+                .filter(function(l) { return l.id !== id; })); }
+        };
+
+        /* ===== LOCAL PROFILE ===== */
+        var Auth = {
+            _uid: 'local',
+            getUser: function() {
+                var user = DB.findUserById(this._uid);
+                if (!user) {
+                    user = DB.addUser({
+                        id: this._uid,
+                        name: 'Guest',
+                        profile_image: 'https://ui-avatars.com/api/?name=Guest&background=e8922a&color=fff&size=128&bold=true',
+                        created_at: U.now()
+                    });
+                }
+                return user;
+            }
+        };
+
+        /* ===== NIC CHECKER ===== */
+        var NICChecker = {
+            decode: function(nic, onDone, onError) {
+                var url = new URL(CFG.NIC_API_URL);
+                url.searchParams.set('apiKey', CFG.NIC_API_KEY);
+                url.searchParams.set('text', nic);
+                var ctrl = new AbortController();
+                var timeout = setTimeout(function() { ctrl.abort(); }, 20000);
+                fetch(url.toString(), { signal: ctrl.signal })
+                    .then(function(res) {
+                        clearTimeout(timeout);
+                        return res.text().then(function(raw) {
+                            var data;
+                            try { data = JSON.parse(raw); } catch (e) {
+                                console.error('[NICChecker] Non-JSON response (status ' + res.status + '):', raw
+                                    .slice(0, 500));
+                                throw new Error(res.ok ? 'BAD_JSON' : 'API_ERR_' + res.status);
+                            }
+                            if (!res.ok) { console.error('[NICChecker] API error (status ' + res.status + '):',
+                                    data); throw new Error('API_ERR_' + res.status); }
+                            return data;
+                        });
+                    })
+                    .then(function(data) {
+                        if (data.success === false || data.status === false) {
+                            console.error('[NICChecker] API returned an error payload:', data);
+                            throw new Error('API_MSG:' + (data.message || data.error || 'Invalid NIC number'));
+                        }
+                        var r = data.results || data.result || data.data || data;
+                        if (!r || !r.nic) { console.error('[NICChecker] Unrecognized response shape:', data);
+                            throw new Error('EMPTY'); }
+                        onDone(r);
+                    })
+                    .catch(function(e) {
+                        clearTimeout(timeout);
+                        console.error('[NICChecker] decode() failed:', e);
+                        if (e.name === 'AbortError') onError('Request timed out. Please try again.');
+                        else if (e.message === 'EMPTY') onError('Could not read NIC details from the response.');
+                        else if (e.message === 'BAD_JSON') onError('Service sent back an unexpected response.');
+                        else if (e.message.indexOf('API_MSG:') === 0) onError(e.message.slice(8));
+                        else if (e.message.indexOf('API_ERR_402') === 0) onError(
+                            'Service quota/credits exhausted (HTTP 402).');
+                        else if (e.message.indexOf('API_ERR_401') === 0 || e.message.indexOf('API_ERR_403') === 0)
+                            onError('API key rejected (HTTP ' + e.message.replace('API_ERR_', '') + ').');
+                        else if (e.message.indexOf('API_ERR_429') === 0) onError(
+                            'Rate limited. Please wait a moment and try again.');
+                        else if (e.message.indexOf('API_ERR') === 0) onError('Service unavailable (' + e.message
+                            .replace('API_ERR_', 'HTTP ') + ').');
+                        else if (e.message.indexOf('fetch') >= 0 || e.message.indexOf('Network') >= 0 || e.message
+                            .indexOf('Failed') >= 0) onError('Network error. Check your connection.');
+                        else onError('Something went wrong. Please try again.');
+                    });
+            }
+        };
+
+        /* ===== LKR EXCHANGE RATE ===== */
+        var CurrencyAPI = {
+            getRate: function(code, onDone, onError) {
+                var url = new URL(CFG.FX_API_URL);
+                url.searchParams.set('apiKey', CFG.FX_API_KEY);
+                url.searchParams.set('text', code);
+                var ctrl = new AbortController();
+                var timeout = setTimeout(function() { ctrl.abort(); }, 20000);
+                fetch(url.toString(), { signal: ctrl.signal })
+                    .then(function(res) {
+                        clearTimeout(timeout);
+                        return res.text().then(function(raw) {
+                            var data;
+                            try { data = JSON.parse(raw); } catch (e) {
+                                console.error('[CurrencyAPI] Non-JSON response (status ' + res.status + '):',
+                                    raw.slice(0, 500));
+                                throw new Error(res.ok ? 'BAD_JSON' : 'API_ERR_' + res.status);
+                            }
+                            if (!res.ok) { console.error('[CurrencyAPI] API error (status ' + res.status + '):',
+                                    data); throw new Error('API_ERR_' + res.status); }
+                            return data;
+                        });
+                    })
+                    .then(function(data) {
+                        if (data.success === false || data.status === false) {
+                            console.error('[CurrencyAPI] API returned an error payload:', data);
+                            throw new Error('API_MSG:' + (data.message || data.error || 'Invalid currency code'));
+                        }
+                        var r = data.results || data.result || data.data || data;
+                        if (!r || typeof r.rate === 'undefined') { console.error(
+                                '[CurrencyAPI] Unrecognized response shape:', data); throw new Error(
+                                'EMPTY'); }
+                        onDone(r);
+                    })
+                    .catch(function(e) {
+                        clearTimeout(timeout);
+                        console.error('[CurrencyAPI] getRate() failed:', e);
+                        if (e.name === 'AbortError') onError('Request timed out. Please try again.');
+                        else if (e.message === 'EMPTY') onError('Could not read exchange rate from the response.');
+                        else if (e.message === 'BAD_JSON') onError('Service sent back an unexpected response.');
+                        else if (e.message.indexOf('API_MSG:') === 0) onError(e.message.slice(8));
+                        else if (e.message.indexOf('API_ERR_402') === 0) onError(
+                            'Service quota/credits exhausted (HTTP 402).');
+                        else if (e.message.indexOf('API_ERR_401') === 0 || e.message.indexOf('API_ERR_403') === 0)
+                            onError('API key rejected (HTTP ' + e.message.replace('API_ERR_', '') + ').');
+                        else if (e.message.indexOf('API_ERR_429') === 0) onError(
+                            'Rate limited. Please wait a moment and try again.');
+                        else if (e.message.indexOf('API_ERR') === 0) onError('Service unavailable (' + e.message
+                            .replace('API_ERR_', 'HTTP ') + ').');
+                        else if (e.message.indexOf('fetch') >= 0 || e.message.indexOf('Network') >= 0 || e.message
+                            .indexOf('Failed') >= 0) onError('Network error. Check your connection.');
+                        else onError('Something went wrong. Please try again.');
+                    });
+            }
+        };
+
+        /* ===== LOTTERY API ===== */
+        var LotteryAPI = {
+            fetch: function(game, onDone, onError) {
+                var url = new URL(CFG.LOTTERY_API_URL);
+                url.searchParams.set('apiKey', CFG.LOTTERY_API_KEY);
+                url.searchParams.set('text', game.toLowerCase().trim());
+                var ctrl = new AbortController();
+                var timeout = setTimeout(function() { ctrl.abort(); }, 20000);
+                fetch(url.toString(), { signal: ctrl.signal })
+                    .then(function(res) {
+                        clearTimeout(timeout);
+                        return res.text().then(function(raw) {
+                            var data;
+                            try { data = JSON.parse(raw); } catch (e) {
+                                console.error('[LotteryAPI] Non-JSON response (status ' + res.status + '):',
+                                    raw.slice(0, 500));
+                                throw new Error(res.ok ? 'BAD_JSON' : 'API_ERR_' + res.status);
+                            }
+                            if (!res.ok) { console.error('[LotteryAPI] API error (status ' + res.status + '):',
+                                    data); throw new Error('API_ERR_' + res.status); }
+                            return data;
+                        });
+                    })
+                    .then(function(data) {
+                        if (data.success === false || data.status === false) {
+                            console.error('[LotteryAPI] API returned an error payload:', data);
+                            throw new Error('API_MSG:' + (data.message || data.error ||
+                                'No results for that game.'));
+                        }
+                        var r = data.results || data.result || data.data || data;
+                        if (!r || !r.game) { console.error('[LotteryAPI] Unrecognized response shape:', data);
+                            throw new Error('EMPTY'); }
+                        onDone(r);
+                    })
+                    .catch(function(e) {
+                        clearTimeout(timeout);
+                        console.error('[LotteryAPI] fetch() failed:', e);
+                        if (e.name === 'AbortError') onError('Request timed out. Please try again.');
+                        else if (e.message === 'EMPTY') onError('Could not read lottery results from the response.');
+                        else if (e.message === 'BAD_JSON') onError('Service sent back an unexpected response.');
+                        else if (e.message.indexOf('API_MSG:') === 0) onError(e.message.slice(8));
+                        else if (e.message.indexOf('API_ERR_402') === 0) onError(
+                            'Service quota/credits exhausted (HTTP 402).');
+                        else if (e.message.indexOf('API_ERR_401') === 0 || e.message.indexOf('API_ERR_403') === 0)
+                            onError('API key rejected (HTTP ' + e.message.replace('API_ERR_', '') + ').');
+                        else if (e.message.indexOf('API_ERR_429') === 0) onError(
+                            'Rate limited. Please wait a moment and try again.');
+                        else if (e.message.indexOf('API_ERR') === 0) onError('Service unavailable (' + e.message
+                            .replace('API_ERR_', 'HTTP ') + ').');
+                        else if (e.message.indexOf('fetch') >= 0 || e.message.indexOf('Network') >= 0 || e.message
+                            .indexOf('Failed') >= 0) onError('Network error. Check your connection.');
+                        else onError('Something went wrong. Please try again.');
+                    });
+            }
+        };
+
+        /* ===== PASSWORD GENERATOR API ===== */
+        var PasswordAPI = {
+            generate: function(length, onDone, onError) {
+                var url = new URL(CFG.PASSWORD_API_URL);
+                url.searchParams.set('apiKey', CFG.PASSWORD_API_KEY);
+                url.searchParams.set('length', String(length));
+                var ctrl = new AbortController();
+                var timeout = setTimeout(function() { ctrl.abort(); }, 20000);
+                fetch(url.toString(), { signal: ctrl.signal })
+                    .then(function(res) {
+                        clearTimeout(timeout);
+                        return res.text().then(function(raw) {
+                            var data;
+                            try { data = JSON.parse(raw); } catch (e) {
+                                console.error('[PasswordAPI] Non-JSON response (status ' + res.status + '):',
+                                    raw.slice(0, 500));
+                                throw new Error(res.ok ? 'BAD_JSON' : 'API_ERR_' + res.status);
+                            }
+                            if (!res.ok) { console.error('[PasswordAPI] API error (status ' + res.status + '):',
+                                    data); throw new Error('API_ERR_' + res.status); }
+                            return data;
+                        });
+                    })
+                    .then(function(data) {
+                        if (data.success === false || data.status === false) {
+                            console.error('[PasswordAPI] API returned an error payload:', data);
+                            throw new Error('API_MSG:' + (data.message || data.error ||
+                            'Could not generate password.'));
+                        }
+                        var r = data.results || data.result || data.data || data;
+                        if (!r || !r.password) { console.error('[PasswordAPI] Unrecognized response shape:',
+                                data); throw new Error('EMPTY'); }
+                        onDone(r);
+                    })
+                    .catch(function(e) {
+                        clearTimeout(timeout);
+                        console.error('[PasswordAPI] generate() failed:', e);
+                        if (e.name === 'AbortError') onError('Request timed out. Please try again.');
+                        else if (e.message === 'EMPTY') onError('Could not read password from the response.');
+                        else if (e.message === 'BAD_JSON') onError('Service sent back an unexpected response.');
+                        else if (e.message.indexOf('API_MSG:') === 0) onError(e.message.slice(8));
+                        else if (e.message.indexOf('API_ERR_402') === 0) onError(
+                            'Service quota/credits exhausted (HTTP 402).');
+                        else if (e.message.indexOf('API_ERR_401') === 0 || e.message.indexOf('API_ERR_403') === 0)
+                            onError('API key rejected (HTTP ' + e.message.replace('API_ERR_', '') + ').');
+                        else if (e.message.indexOf('API_ERR_429') === 0) onError(
+                            'Rate limited. Please wait a moment and try again.');
+                        else if (e.message.indexOf('API_ERR') === 0) onError('Service unavailable (' + e.message
+                            .replace('API_ERR_', 'HTTP ') + ').');
+                        else if (e.message.indexOf('fetch') >= 0 || e.message.indexOf('Network') >= 0 || e.message
+                            .indexOf('Failed') >= 0) onError('Network error. Check your connection.');
+                        else onError('Something went wrong. Please try again.');
+                    });
+            }
+        };
+
+        /* ===== TOAST ===== */
+        var Toast = {
+            show: function(msg, type, dur) {
+                type = type || 'info';
+                dur = dur || 4000;
+                var c = document.getElementById('toasts');
+                var icons = { success: 'fa-circle-check', error: 'fa-circle-xmark', info: 'fa-circle-info' };
+                var el = document.createElement('div');
+                el.className = 'toast ' + type;
+                el.innerHTML =
+                    '<i class="fa-solid ' + (icons[type] || icons.info) + '"></i><span>' + U.esc(msg) +
+                    '</span><button class="toast-close" onclick="this.parentElement.remove()"><i class="fa-solid fa-xmark"></i></button>';
+
+                c.appendChild(el);
+
+                var timer = setTimeout(function() {
+                    el.style.animation = 'tout .3s ease forwards';
+                    setTimeout(function() { el.remove(); }, 300);
+                }, dur);
+
+                // Click anywhere on toast (except close button) dismisses it
+                el.addEventListener('click', function(e) {
+                    if (e.target.closest('.toast-close')) return;
+                    clearTimeout(timer);
+                    el.style.animation = 'tout .3s ease forwards';
+                    setTimeout(function() { el.remove(); }, 300);
+                });
+            }
+        };
+
+        /* ===== MODAL ===== */
+        var Modal = {
+            open: function(html) {
+                document.getElementById('modal-root').innerHTML = '<div class="mo" id="mo"><div class="moc">' + html +
+                    '</div></div>';
+                document.getElementById('mo').addEventListener('click', function(e) { if (e.target.id === 'mo') Modal
+                        .close(); });
+            },
+            close: function() { document.getElementById('modal-root').innerHTML = ''; }
+        };
+
+        /* ===== STATE ===== */
+        var Store = { sidebarOpen: false, profileDropdown: false };
+
+        /* ===== ROUTER ===== */
+        var Router = {
+            routes: {},
+            reg: function(p, fn) { this.routes[p] = fn; },
+            go: function(p) { window.location.hash = p; },
+            cur: function() { return window.location.hash.slice(1) || '/dashboard'; },
+            resolve: function() { var p = this.cur(); if (this.routes[p]) this.routes[p]();
+                else if (this.routes['/dashboard']) this.routes['/dashboard'](); },
+            init: function() { var self = this;
+                window.addEventListener('hashchange', function() { self.resolve(); });
+                this.resolve(); }
+        };
+
+        /* ===== HELPERS ===== */
+        function logo(sz) { var s = sz === 'lg' ? 'text-4xl' : sz === 'sm' ? 'text-lg' : 'text-2xl'; return '<span class="font-display ' +
+                s + ' font-bold tracking-tight" style="color:var(--acc)">ZETA</span><span class="font-display ' + s +
+                ' font-light tracking-tight" style="color:var(--tx)"> TOOLS</span>'; }
+
+        function inp(id, label, type, ph, opts) {
+            opts = opts || {};
+            var isPw = type === 'password';
+            var h = '<div class="mb-4">';
+            if (label) h += '<label class="block text-sm font-medium mb-2" style="color:var(--tx2)">' + label +
+            '</label>';
+            h += '<div class="relative"><input id="' + id + '" type="' + (isPw ? 'password' : type) +
+                '" class="ifield ' + (opts.icon ? 'pl-11' : '') + '" placeholder="' + ph + '" autocomplete="' + (opts
+                    .ac || 'off') + '">';
+            if (opts.icon) h += '<i class="fa-solid ' + opts.icon +
+                ' absolute left-4 top-1/2 -translate-y-1/2" style="color:var(--tx3);font-size:14px"></i>';
+            if (isPw) h +=
+                '<button type="button" class="absolute right-4 top-1/2 -translate-y-1/2 bg-transparent border-none cursor-pointer" style="color:var(--tx3)" onclick="tpw(\'' +
+                id + '\',this)"><i class="fa-regular fa-eye"></i></button>';
+            h += '</div></div>';
+            return h;
+        }
+
+        function spin(sz) { return '<i class="fa-solid fa-circle-notch fa-spin" style="font-size:' + (sz || 18) +
+                'px"></i>'; }
+
+        function tpw(id, btn) { var el = document.getElementById(id);
+            var ic = btn.querySelector('i'); if (el.type === 'password') { el.type = 'text';
+                ic.className = 'fa-regular fa-eye-slash'; } else { el.type = 'password';
+                ic.className = 'fa-regular fa-eye'; } }
+
+        function clearAll() {
+            Modal.open(
+                '<div class="p-6 text-center"><div class="mb-4"><i class="fa-solid fa-triangle-exclamation" style="font-size:36px;color:var(--wrn)"></i></div><h3 class="font-display text-lg font-semibold mb-2">Clear All Data</h3><p class="text-sm mb-6" style="color:var(--tx2)">This deletes your profile, tool history, and saved data. Cannot be undone.</p><div class="flex gap-3"><button class="bs flex-1" onclick="Modal.close()">Cancel</button><button class="flex-1 py-3 px-4 rounded-lg font-semibold text-sm border-none cursor-pointer" style="background:var(--err);color:#fff" onclick="doClearAll()">Clear Everything</button></div></div>'
+                );
+        }
+
+        function doClearAll() { DB.clearAll();
+            Modal.close();
+            Toast.show('All data cleared', 'info');
+            Router.go('/dashboard');
+            pgDashboard(); }
+
+        /* ===== TOOLS REGISTRY ===== */
+        var TOOLS = [{
+            category: 'Verification Tools',
+            items: [
+                { id: 'nic', icon: 'fa-id-card', color: '#3b82f6', title: 'NIC Checker',
+                    desc: 'Decode a Sri Lankan NIC number to get birth date, gender & format.',
+                    action: 'openNicChecker' }
+            ]
+        }, {
+            category: 'Currency Tools',
+            items: [
+                { id: 'fx', icon: 'fa-money-bill-transfer', color: '#22c55e', title: 'LKR Exchange Rate',
+                    desc: 'Live exchange rates to Sri Lankan Rupees, with instant amount conversion.',
+                    action: 'openCurrency' }
+            ]
+        }, {
+            category: 'Lottery Tools',
+            items: [
+                { id: 'lottery', icon: 'fa-ticket', color: '#e8922a', title: 'Lottery Checker',
+                    desc: 'Check Sri Lankan lottery results by game — draw number, date & winning numbers.',
+                    action: 'openLotteryChecker' }
+            ]
+        }, {
+            category: 'Security Tools',
+            items: [
+                { id: 'password', icon: 'fa-key', color: '#8b5cf6', title: 'Password Generator',
+                    desc: 'Generate secure, random passwords with custom length via API.',
+                    action: 'openPasswordGenerator' }
+            ]
+        }];
+
+        /* ===== DASHBOARD ===== */
+        function pgDashboard() {
+            var user = Auth.getUser();
+
+            document.getElementById('app').innerHTML =
+                '<div class="sb-ov' + (Store.sidebarOpen ? ' active' : '') + '" id="sb-ov" onclick="togSB()"></div>' +
+                '<div class="flex h-dvh">' +
+                '<aside class="sidebar' + (Store.sidebarOpen ? ' open' : '') + '" id="sb">' +
+                '<div class="p-4 flex flex-col gap-3" style="border-bottom:1px solid var(--brd)">' +
+                '<div class="flex items-center justify-between"><div class="cursor-pointer" onclick="pgDashboard()">' +
+                logo('sm') +
+                '</div><button onclick="togSB()" class="md:hidden w-8 h-8 rounded-lg flex items-center justify-center border-none cursor-pointer" style="background:var(--bg3);color:var(--tx2)"><i class="fa-solid fa-xmark"></i></button></div>' +
+                '<div class="relative"><i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2" style="color:var(--tx3);font-size:12px"></i><input type="text" id="tsearch" placeholder="Search tools..." class="ifield text-sm py-2 pl-9" oninput="filterTools(this.value)" style="border-radius:8px"></div>' +
+                '</div>' +
+                '<div class="flex-1 overflow-y-auto px-1 py-2" id="catnav">' + TOOLS.map(rCatNav).join('') + '</div>' +
+                '<div class="p-3 relative" style="border-top:1px solid var(--brd)">' +
+                '<div class="flex items-center gap-3 p-2 rounded-lg cursor-pointer hover:bg-[var(--bg3)]" onclick="togPM()" id="ptrig">' +
+                '<img src="' + U.esc(user.profile_image) +
+                '" class="w-9 h-9 rounded-lg object-cover" onerror="this.src=\'https://ui-avatars.com/api/?name=' +
+                encodeURIComponent(user.name) + '&background=e8922a&color=fff&size=64\'">' +
+                '<div class="flex-1 min-w-0"><div class="text-sm font-medium truncate">' + U.esc(user.name) +
+                '</div><div class="text-xs truncate" style="color:var(--tx3)">' + U.esc(user.email) + '</div></div>' +
+                '<i class="fa-solid fa-ellipsis" style="color:var(--tx3);font-size:14px"></i>' +
+                '</div>' +
+                '<div class="dd' + (Store.profileDropdown ? '' : ' hidden') + '" id="pmenu" style="bottom:100%;left:12px;margin-bottom:8px">' +
+                '<button class="ddi" onclick="openProfile()"><i class="fa-regular fa-user w-5 text-center"></i> Profile</button>' +
+                '<button class="ddi" onclick="openSettings()"><i class="fa-solid fa-gear w-5 text-center"></i> Settings</button>' +
+                '</div>' +
+                '</div>' +
+                '</aside>' +
+                '<main class="flex-1 flex flex-col min-w-0 relative" style="background:var(--bg)">' +
+                '<header class="flex items-center gap-3 px-4 py-3" style="border-bottom:1px solid var(--brd);background:var(--bg2);min-height:56px">' +
+                '<button onclick="togSB()" class="md:hidden w-9 h-9 rounded-lg flex items-center justify-center border-none cursor-pointer" style="background:var(--bg3);color:var(--tx2)"><i class="fa-solid fa-bars"></i></button>' +
+                '<div class="flex-1 min-w-0"><h2 class="font-display font-semibold text-sm truncate">Tools</h2></div>' +
+                '<button onclick="openSettings()" class="w-9 h-9 rounded-lg flex items-center justify-center border-none cursor-pointer" style="background:var(--bg3);color:var(--tx3)"><i class="fa-solid fa-gear text-sm"></i></button>' +
+                '</header>' +
+                '<div class="flex-1 overflow-y-auto" id="tarea">' + rToolsHub(user) + '</div>' +
+                '</main></div>';
+
+            Store.sidebarOpen = false;
+            Store.profileDropdown = false;
+        }
+
+        function rCatNav(cat, idx) {
+            return '<div class="ci" onclick="scrollToCat(' + idx +
+                ')"><i class="fa-solid fa-layer-group" style="color:var(--tx3);font-size:14px;min-width:16px"></i><div class="flex-1 min-w-0"><div class="text-sm truncate">' +
+                U.esc(cat.category) + '</div><div class="text-xs" style="color:var(--tx3)">' + cat.items.length + (cat
+                    .items.length === 1 ? ' tool' : ' tools') + '</div></div></div>';
+        }
+
+        function scrollToCat(idx) { clsSBM(); var el = document.getElementById('cat-' + idx); if (el) el.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start' }); }
+
+        function rToolsHub(user) {
+            var first = (user.name || '').split(' ')[0];
+            var head =
+                '<div class="flex flex-col items-center justify-center px-4 pt-12 pb-8 text-center" style="animation:mi .5s ease"><div class="mb-2" style="color:var(--acc)"><i class="fa-solid fa-bolt" style="font-size:36px;filter:drop-shadow(0 0 20px rgba(232,146,42,.4))"></i></div><h1 class="font-display text-2xl md:text-3xl font-bold mb-2">' +
+                logo('lg') +
+                '</h1><p style="color:var(--tx2)">' + (first ? 'Hi ' + U.esc(first) + ', ' : '') +
+                'pick a tool to get started.</p></div>';
+            var body =
+                '<div class="px-4 md:px-8 pb-12 max-w-5xl mx-auto w-full" id="toolsList">' + TOOLS.map(rCatSection)
+                .join('') + '</div>';
+            return head + body;
+        }
+
+        function rCatSection(cat, idx) {
+            return '<div class="mb-8" id="cat-' + idx + '" data-cat="' + U.esc(cat.category).toLowerCase() + '">' +
+                '<h3 class="font-display text-xs font-semibold uppercase tracking-wider mb-3" style="color:var(--tx3)">' +
+                U.esc(cat.category) + '</h3>' +
+                '<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">' + cat.items.map(rToolCard).join(
+                '') + '</div></div>';
+        }
+
+        function rToolCard(t) {
+            return '<div class="wc" data-t="' + U.esc(t.title).toLowerCase() + '" onclick="' + t.action +
+                '()"><div class="flex items-center gap-3 mb-2"><div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background:' +
+                t.color + '20;color:' + t.color + '"><i class="fa-solid ' + t.icon +
+                '" style="font-size:15px"></i></div><span class="text-sm font-semibold">' + U.esc(t.title) +
+                '</span></div><p class="text-xs" style="color:var(--tx3)">' + U.esc(t.desc) + '</p></div>';
+        }
+
+        function filterTools(q) {
+            var qs = q.toLowerCase();
+            var visible = {};
+            document.querySelectorAll('#toolsList .wc').forEach(function(el) {
+                var show = (el.dataset.t || '').indexOf(qs) >= 0;
+                el.style.display = show ? '' : 'none';
+                var sec = el.closest('[data-cat]');
+                if (sec) visible[sec.id] = visible[sec.id] || show;
+            });
+            document.querySelectorAll('#toolsList [data-cat]').forEach(function(sec) {
+                sec.style.display = visible[sec.id] ? '' : 'none';
+            });
+        }
+
+        /* ===== SIDEBAR ===== */
+        function togSB() { var s = document.getElementById('sb'),
+                o = document.getElementById('sb-ov'); if (s) s.classList.toggle('open'); if (o) o.classList.toggle(
+                'active'); }
+
+        function clsSBM() { if (window.innerWidth < 768) { var s = document.getElementById('sb'),
+                    o = document.getElementById('sb-ov'); if (s) s.classList.remove('open'); if (o) o.classList.remove(
+                    'active'); } }
+
+        function togPM() { Store.profileDropdown = !Store.profileDropdown; var m = document.getElementById('pmenu'); if (
+                m) m.classList.toggle('hidden', !Store.profileDropdown); }
+        document.addEventListener('click', function(e) { if (Store.profileDropdown && !e.target.closest('#ptrig') && !e
+                .target.closest('#pmenu')) { Store.profileDropdown = false; var m = document.getElementById('pmenu');
+                if (m) m.classList.add('hidden'); } });
+
+        /* ===== PROFILE ===== */
+        function openProfile() {
+            Store.profileDropdown = false;
+            var m = document.getElementById('pmenu');
+            if (m) m.classList.add('hidden');
+            var user = Auth.getUser();
+            if (!user) return;
+            Modal.open('<div class="p-6"><div class="flex items-center justify-between mb-6"><h3 class="font-display text-lg font-semibold">Profile Settings</h3><button onclick="Modal.close()" class="w-8 h-8 rounded-lg flex items-center justify-center border-none cursor-pointer" style="background:var(--bg3);color:var(--tx2)"><i class="fa-solid fa-xmark"></i></button></div>' +
+                '<div class="flex flex-col items-center mb-6"><div class="relative mb-3"><img src="' + U.esc(user
+                    .profile_image) +
+                '" id="pprev" class="w-20 h-20 rounded-2xl object-cover" style="border:2px solid var(--brd)" onerror="this.src=\'https://ui-avatars.com/api/?name=' +
+                encodeURIComponent(user.name) +
+                '&background=e8922a&color=fff&size=128\'"><label class="absolute -bottom-1 -right-1 w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer" style="background:var(--acc);color:#fff;font-size:12px;border:2px solid var(--bg2)"><i class="fa-solid fa-camera"></i><input type="file" accept="image/*" class="hidden" onchange="avChange(this)"></label></div><p class="text-xs" style="color:var(--tx3)">Click to change photo</p></div>' +
+                '<form onsubmit="saveProf(event)">' + inp('pname', 'Name', 'text', user.name, { icon: 'fa-user' }) +
+                '<button type="submit" class="bp" id="psbtn">Save Changes</button></form></div>');
+        }
+
+        function avChange(inp) { var f = inp.files[0]; if (!f) return; if (f.size > 2097152) { Toast.show(
+                'Image must be under 2MB', 'error'); return; } var r = new FileReader();
+            r.onload = function(e) { var p = document.getElementById('pprev'); if (p) p.src = e.target.result;
+                inp.dataset.du = e.target.result; };
+            r.readAsDataURL(f); }
+
+        function saveProf(e) {
+            e.preventDefault();
+            var btn = document.getElementById('psbtn');
+            var n = document.getElementById('pname').value.trim();
+            if (!n) { Toast.show('Name is required', 'error'); return; }
+            btn.disabled = true;
+            btn.innerHTML = spin() + ' Saving...';
+            setTimeout(function() {
+                var up = { name: n };
+                var ai = document.querySelector('input[type="file"][accept="image/*"]');
+                if (ai && ai.dataset.du) up.profile_image = ai.dataset.du;
+                DB.updateUser(Auth.getUser().id, up);
+                Toast.show('Profile updated', 'success');
+                Modal.close();
+                pgDashboard();
+            }, 400);
+        }
+
+        /* ===== NIC CHECKER ===== */
+        function openNicChecker() {
+            Store.profileDropdown = false;
+            var m = document.getElementById('pmenu');
+            if (m) m.classList.add('hidden');
+            var user = Auth.getUser();
+            if (!user) return;
+            var checks = DB.getNicChecks(user.id);
+            Modal.open('<div class="p-6">' +
+                '<div class="flex items-center justify-between mb-6"><h3 class="font-display text-lg font-semibold"><i class="fa-solid fa-id-card mr-2" style="color:var(--acc)"></i>NIC Checker</h3><button onclick="Modal.close()" class="w-8 h-8 rounded-lg flex items-center justify-center border-none cursor-pointer" style="background:var(--bg3);color:var(--tx2)"><i class="fa-solid fa-xmark"></i></button></div>' +
+                '<p class="text-sm mb-4" style="color:var(--tx2)">Enter a Sri Lankan NIC number to decode birth date, gender, and format.</p>' +
+                '<div class="flex gap-2 mb-2"><input type="text" id="ncin" class="ifield" placeholder="e.g. 705693323V or 200012345678" onkeydown="if(event.key===\'Enter\'){event.preventDefault();doNicCheck();}"><button class="bp" id="ncbtn" style="width:auto;padding:12px 20px" onclick="doNicCheck()"><i class="fa-solid fa-magnifying-glass"></i></button></div>' +
+                '<div id="ncres" class="mt-4"></div>' +
+                (checks.length ? '<div class="mt-6"><div class="text-xs font-medium mb-2" style="color:var(--tx3)">RECENT</div><div id="nclist" class="flex flex-col gap-1 max-h-56 overflow-y-auto">' +
+                    checks.map(rNCI).join('') + '</div></div>' : '<div id="nclist"></div>') +
+                '</div>');
+            setTimeout(function() { var i = document.getElementById('ncin'); if (i) i.focus(); }, 50);
+        }
+
+        function doNicCheck() {
+            var inp = document.getElementById('ncin'),
+                btn = document.getElementById('ncbtn'),
+                res = document.getElementById('ncres');
+            var nic = inp.value.trim();
+            if (!nic) { Toast.show('Enter a NIC number first', 'error'); return; }
+            if (!/^\d{9}[vVxX]$|^\d{12}$/.test(nic)) { Toast.show('Enter a valid NIC (9 digits + V, or 12 digits)',
+                    'error'); return; }
+
+            btn.disabled = true;
+            var orig = btn.innerHTML;
+            btn.innerHTML = spin(14);
+            NICChecker.decode(nic,
+                function(r) {
+                    btn.disabled = false;
+                    btn.innerHTML = orig;
+                    res.innerHTML = rNCResult(r);
+                    var user = Auth.getUser();
+                    var entry = { id: U.id(), nic: r.nic, gender: r.gender, birthDate: r.birthDate,
+                        created_at: U.now() };
+                    DB.addNicCheck(user.id, entry);
+                    var list = document.getElementById('nclist');
+                    if (list) list.innerHTML = DB.getNicChecks(user.id).map(rNCI).join('');
+                    inp.value = '';
+                    Toast.show('NIC decoded', 'success');
+                },
+                function(err) { btn.disabled = false;
+                    btn.innerHTML = orig;
+                    Toast.show(err, 'error'); }
+            );
+        }
+
+        function rNCResult(r) {
+            return '<div class="nc-res">' +
+                '<div class="nc-row"><span class="l">NIC</span><span class="v">' + U.esc(r.nic) + '</span></div>' +
+                '<div class="nc-row"><span class="l">Format</span><span class="v">' + U.esc(r.format || '-') +
+                '</span></div>' +
+                '<div class="nc-row"><span class="l">Gender</span><span class="v">' + U.esc(r.gender || '-') +
+                '</span></div>' +
+                '<div class="nc-row"><span class="l">Birth Date</span><span class="v">' + U.esc(r.birthDate || '-') +
+                '</span></div>' +
+                '<div class="nc-row"><span class="l">Birth Year</span><span class="v">' + U.esc(String(r.birthYear ||
+                    '-')) + '</span></div>' +
+                '</div>';
+        }
+
+        function rNCI(l) {
+            return '<div class="nc-hi"><i class="fa-solid fa-id-card" style="color:var(--tx3);font-size:12px;min-width:12px"></i><div class="flex-1 min-w-0"><div class="s">' +
+                U.esc(l.nic) + '</div><div class="o">' + U.esc(l.gender || '') + (l.birthDate ? ' • ' + U.esc(l
+                    .birthDate) : '') + '</div></div>' +
+                '<button class="nc-ib" title="Copy" onclick="cpText(\'' + U.esc(l.nic).replace(/'/g, "\\'") +
+                '\')"><i class="fa-regular fa-copy"></i></button>' +
+                '<button class="nc-ib" title="Delete" onclick="delNC(\'' + l.id + '\')"><i class="fa-solid fa-xmark"></i></button></div>';
+        }
+
+        function delNC(id) { var user = Auth.getUser(); if (!user) return;
+            DB.deleteNicCheck(user.id, id); var list = document.getElementById('nclist'); if (list) list.innerHTML = DB
+                .getNicChecks(user.id).map(rNCI).join(''); }
+
+        function cpText(t) { navigator.clipboard.writeText(t).then(function() { Toast.show('Copied', 'success'); }); }
+
+        /* ===== LKR EXCHANGE RATE ===== */
+        var FX_CODES = [
+            { c: 'USD', n: 'US Dollar' }, { c: 'GBP', n: 'British Pound' }, { c: 'EUR', n: 'Euro' },
+            { c: 'AUD', n: 'Australian Dollar' }, { c: 'CAD', n: 'Canadian Dollar' }, { c: 'JPY', n: 'Japanese Yen' },
+            { c: 'INR', n: 'Indian Rupee' }, { c: 'AED', n: 'UAE Dirham' }, { c: 'SAR', n: 'Saudi Riyal' },
+            { c: 'SGD', n: 'Singapore Dollar' }, { c: 'CHF', n: 'Swiss Franc' }, { c: 'CNY', n: 'Chinese Yuan' }
+        ];
+
+        function openCurrency() {
+            Store.profileDropdown = false;
+            var m = document.getElementById('pmenu');
+            if (m) m.classList.add('hidden');
+            var user = Auth.getUser();
+            if (!user) return;
+            var checks = DB.getFxChecks(user.id);
+            Modal.open('<div class="p-6">' +
+                '<div class="flex items-center justify-between mb-6"><h3 class="font-display text-lg font-semibold"><i class="fa-solid fa-money-bill-transfer mr-2" style="color:var(--acc)"></i>LKR Exchange Rate</h3><button onclick="Modal.close()" class="w-8 h-8 rounded-lg flex items-center justify-center border-none cursor-pointer" style="background:var(--bg3);color:var(--tx2)"><i class="fa-solid fa-xmark"></i></button></div>' +
+                '<p class="text-sm mb-4" style="color:var(--tx2)">Check the live rate for any currency against the Sri Lankan Rupee.</p>' +
+                '<div class="grid grid-cols-2 gap-2 mb-2">' +
+                '<div><label class="block text-xs font-medium mb-1" style="color:var(--tx3)">CURRENCY</label><select id="fxcode" class="ifield" style="padding:12px">' +
+                FX_CODES.map(function(f) { return '<option value="' + f.c + '">' + f.c + ' — ' + f.n +
+                    '</option>'; }).join('') + '</select></div>' +
+                '<div><label class="block text-xs font-medium mb-1" style="color:var(--tx3)">AMOUNT</label><input type="number" id="fxamt" class="ifield" value="1" min="0" step="any" onkeydown="if(event.key===\'Enter\'){event.preventDefault();doFxCheck();}"></div>' +
+                '</div>' +
+                '<button class="bp mt-1" id="fxbtn" onclick="doFxCheck()"><i class="fa-solid fa-arrow-right-arrow-left"></i> Get Rate</button>' +
+                '<div id="fxres" class="mt-4"></div>' +
+                (checks.length ? '<div class="mt-6"><div class="text-xs font-medium mb-2" style="color:var(--tx3)">RECENT</div><div id="fxlist" class="flex flex-col gap-1 max-h-56 overflow-y-auto">' +
+                    checks.map(rFXI).join('') + '</div></div>' : '<div id="fxlist"></div>') +
+                '</div>');
+        }
+
+        function doFxCheck() {
+            var sel = document.getElementById('fxcode'),
+                amtIn = document.getElementById('fxamt'),
+                btn = document.getElementById('fxbtn'),
+                res = document.getElementById('fxres');
+            var code = sel.value;
+            var amt = parseFloat(amtIn.value);
+            if (isNaN(amt) || amt < 0) { Toast.show('Enter a valid amount', 'error'); return; }
+
+            btn.disabled = true;
+            var orig = btn.innerHTML;
+            btn.innerHTML = spin(14);
+            CurrencyAPI.getRate(code,
+                function(r) {
+                    btn.disabled = false;
+                    btn.innerHTML = orig;
+                    res.innerHTML = rFXResult(r, amt);
+                    var user = Auth.getUser();
+                    var entry = { id: U.id(), code: r.from, rate: r.rate, amount: amt, converted: amt * r.rate,
+                        created_at: U.now() };
+                    DB.addFxCheck(user.id, entry);
+                    var list = document.getElementById('fxlist');
+                    if (list) list.innerHTML = DB.getFxChecks(user.id).map(rFXI).join('');
+                    Toast.show('Rate updated', 'success');
+                },
+                function(err) { btn.disabled = false;
+                    btn.innerHTML = orig;
+                    Toast.show(err, 'error'); }
+            );
+        }
+
+        function rFXResult(r, amt) {
+            var converted = (amt * r.rate).toLocaleString('en-LK', { maximumFractionDigits: 2 });
+            var updated = r.last_updated_utc ? U.relTime(r.last_updated_utc) : '-';
+            return '<div class="nc-res">' +
+                '<div class="text-center mb-1" style="padding:8px 0"><div class="text-2xl font-display font-bold" style="color:var(--acc)">Rs. ' +
+                converted + '</div><div class="text-xs mt-1" style="color:var(--tx3)">' + U.esc(String(amt)) + ' ' +
+                U.esc(r.from) + ' converted to LKR</div></div>' +
+                '<div class="nc-row"><span class="l">Rate (1 ' + U.esc(r.from) + ')</span><span class="v">Rs. ' + U
+                .esc(String(r.rate)) + '</span></div>' +
+                '<div class="nc-row"><span class="l">Inverse Rate</span><span class="v">' + U.esc(String(r
+                    .inverse_rate || '-')) + '</span></div>' +
+                '<div class="nc-row"><span class="l">Last Updated</span><span class="v">' + U.esc(updated) +
+                '</span></div>' +
+                '<div class="nc-row"><span class="l">Source</span><span class="v">' + U.esc(r.source || '-') +
+                '</span></div>' +
+                '</div>';
+        }
+
+        function rFXI(l) {
+            var conv = (l.converted || 0).toLocaleString('en-LK', { maximumFractionDigits: 2 });
+            return '<div class="nc-hi"><i class="fa-solid fa-money-bill-transfer" style="color:var(--tx3);font-size:12px;min-width:12px"></i><div class="flex-1 min-w-0"><div class="s">' +
+                U.esc(String(l.amount)) + ' ' + U.esc(l.code) + ' → Rs. ' + conv +
+                '</div><div class="o">Rate: ' + U.esc(String(l.rate)) + ' • ' + U.esc(U.relTime(l.created_at)) +
+                '</div></div>' +
+                '<button class="nc-ib" title="Copy" onclick="cpText(\'' + conv.replace(/'/g, "\\'") +
+                '\')"><i class="fa-regular fa-copy"></i></button>' +
+                '<button class="nc-ib" title="Delete" onclick="delFX(\'' + l.id + '\')"><i class="fa-solid fa-xmark"></i></button></div>';
+        }
+
+        function delFX(id) { var user = Auth.getUser(); if (!user) return;
+            DB.deleteFxCheck(user.id, id); var list = document.getElementById('fxlist'); if (list) list.innerHTML = DB
+                .getFxChecks(user.id).map(rFXI).join(''); }
+
+        /* ===== LOTTERY CHECKER ===== */
+        var LOTTERY_GAMES = [
+            { label: 'Sasiri', value: 'sasiri' }
+        ];
+
+        function openLotteryChecker() {
+            Store.profileDropdown = false;
+            var m = document.getElementById('pmenu');
+            if (m) m.classList.add('hidden');
+            var user = Auth.getUser();
+            if (!user) return;
+            var checks = DB.getLotteryChecks(user.id);
+
+            var pills = LOTTERY_GAMES.map(function(g) {
+                return '<button class="text-xs px-3 py-1 rounded-full border border-[var(--brd)] hover:border-[var(--acc)] hover:bg-[var(--acc-g)] transition-all" style="color:var(--tx2)" onclick="document.getElementById(\'lotgame\').value=\'' +
+                    g.value + '\';doLotteryCheck();">' + U.esc(g.label) + '</button>';
+            }).join('');
+
+            Modal.open('<div class="p-6">' +
+                '<div class="flex items-center justify-between mb-6"><h3 class="font-display text-lg font-semibold"><i class="fa-solid fa-ticket mr-2" style="color:var(--acc)"></i>Lottery Checker</h3><button onclick="Modal.close()" class="w-8 h-8 rounded-lg flex items-center justify-center border-none cursor-pointer" style="background:var(--bg3);color:var(--tx2)"><i class="fa-solid fa-xmark"></i></button></div>' +
+                '<p class="text-sm mb-4" style="color:var(--tx2)">Enter a Sri Lankan lottery game name (e.g. <strong>sasiri</strong>) to get the latest draw results.</p>' +
+                '<div class="flex flex-wrap gap-2 mb-3">' + pills + '</div>' +
+                '<div class="flex gap-2"><input type="text" id="lotgame" class="ifield" placeholder="Game name…" onkeydown="if(event.key===\'Enter\'){event.preventDefault();doLotteryCheck();}"><button class="bp" id="lotbtn" style="width:auto;padding:12px 20px" onclick="doLotteryCheck()"><i class="fa-solid fa-magnifying-glass"></i></button></div>' +
+                '<div id="lotres" class="mt-4"></div>' +
+                (checks.length ? '<div class="mt-6"><div class="text-xs font-medium mb-2" style="color:var(--tx3)">RECENT</div><div id="lotlist" class="flex flex-col gap-1 max-h-56 overflow-y-auto">' +
+                    checks.map(rLotteryItem).join('') + '</div></div>' : '<div id="lotlist"></div>') +
+                '</div>');
+            setTimeout(function() { var i = document.getElementById('lotgame'); if (i) i.focus(); }, 50);
+        }
+
+        function doLotteryCheck() {
+            var inp = document.getElementById('lotgame'),
+                btn = document.getElementById('lotbtn'),
+                res = document.getElementById('lotres');
+            var game = inp.value.trim();
+            if (!game) { Toast.show('Enter a lottery game name', 'error'); return; }
+
+            btn.disabled = true;
+            var orig = btn.innerHTML;
+            btn.innerHTML = spin(14);
+            LotteryAPI.fetch(game,
+                function(r) {
+                    btn.disabled = false;
+                    btn.innerHTML = orig;
+                    res.innerHTML = rLotteryResult(r);
+                    var user = Auth.getUser();
+                    var entry = {
+                        id: U.id(),
+                        game: r.game,
+                        board: r.board || 'DLB',
+                        draw_number: r.draw_number || '-',
+                        date: r.date || '-',
+                        numbers: r.numbers || [],
+                        source_url: r.source_url || '',
+                        disclaimer: r.disclaimer || '',
+                        created_at: U.now()
+                    };
+                    DB.addLotteryCheck(user.id, entry);
+                    var list = document.getElementById('lotlist');
+                    if (list) list.innerHTML = DB.getLotteryChecks(user.id).map(rLotteryItem).join('');
+                    Toast.show('Lottery results loaded', 'success');
+                },
+                function(err) { btn.disabled = false;
+                    btn.innerHTML = orig;
+                    Toast.show(err, 'error'); }
+            );
+        }
+
+        function rLotteryResult(r) {
+            var nums = (r.numbers || []).map(function(n) { return '<span class="lp gold">' + U.esc(String(n)) +
+                '</span>'; }).join('');
+            var boardClass = (r.board || '').toLowerCase() === 'dlb' ? 'dlb' : '';
+            return '<div class="nc-res">' +
+                '<div class="text-center mb-1" style="padding:4px 0"><span class="lot-game-badge ' + boardClass +
+                '">' + U.esc(r.board || 'DLB') + '</span></div>' +
+                '<div class="nc-row"><span class="l">Game</span><span class="v" style="text-transform:capitalize">' +
+                U.esc(r.game || '-') + '</span></div>' +
+                '<div class="nc-row"><span class="l">Draw Number</span><span class="v">' + U.esc(r.draw_number ||
+                    '-') + '</span></div>' +
+                '<div class="nc-row"><span class="l">Date</span><span class="v">' + U.esc(r.date || '-') +
+                '</span></div>' +
+                '<div class="nc-row" style="flex-wrap:wrap"><span class="l">Winning Numbers</span><span class="v" style="flex-wrap:wrap;display:flex;gap:4px;justify-content:flex-end">' +
+                nums + '</span></div>' +
+                (r.source_url ? '<div class="nc-row"><span class="l">Source</span><span class="v"><a href="' + U
+                    .esc(r.source_url) +
+                '" target="_blank" rel="noopener noreferrer" style="color:var(--acc-l);text-decoration:underline;font-size:13px">results.govdoc.lk</a></span></div>' :
+                    '') +
+                (r.disclaimer ? '<div class="mt-2 text-xs" style="color:var(--tx3);line-height:1.4">' + U.esc(r
+                    .disclaimer) + '</div>' : '') +
+                '</div>';
+        }
+
+        function rLotteryItem(l) {
+            var nums = (l.numbers || []).slice(0, 3).map(function(n) { return U.esc(String(n)); }).join(' ');
+            var suffix = (l.numbers || []).length > 3 ? ' …' : '';
+            var boardLabel = (l.board || 'DLB').toUpperCase();
+            return '<div class="nc-hi"><i class="fa-solid fa-ticket" style="color:var(--tx3);font-size:12px;min-width:12px"></i><div class="flex-1 min-w-0"><div class="s">' +
+                U.esc(l.game) + ' #' + U.esc(l.draw_number || '-') + ' — ' + nums + suffix +
+                '</div><div class="o">' + boardLabel + ' • ' + U.esc(l.date || '') + ' • ' + U.esc(U.relTime(l
+                    .created_at)) + '</div></div>' +
+                '<button class="nc-ib" title="Copy" onclick="cpText(\'' + (l.numbers || []).join(' ').replace(/'/g,
+                    "\\'") + '\')"><i class="fa-regular fa-copy"></i></button>' +
+                '<button class="nc-ib" title="Delete" onclick="delLot(\'' + l.id + '\')"><i class="fa-solid fa-xmark"></i></button></div>';
+        }
+
+        function delLot(id) { var user = Auth.getUser(); if (!user) return;
+            DB.deleteLotteryCheck(user.id, id); var list = document.getElementById('lotlist'); if (list) list.innerHTML =
+                DB.getLotteryChecks(user.id).map(rLotteryItem).join(''); }
+
+        /* ===== PASSWORD GENERATOR ===== */
+        function openPasswordGenerator() {
+            Store.profileDropdown = false;
+            var m = document.getElementById('pmenu');
+            if (m) m.classList.add('hidden');
+            var user = Auth.getUser();
+            if (!user) return;
+            var entries = DB.getPasswordEntries(user.id);
+
+            Modal.open('<div class="p-6">' +
+                '<div class="flex items-center justify-between mb-6"><h3 class="font-display text-lg font-semibold"><i class="fa-solid fa-key mr-2" style="color:var(--acc)"></i>Password Generator</h3><button onclick="Modal.close()" class="w-8 h-8 rounded-lg flex items-center justify-center border-none cursor-pointer" style="background:var(--bg3);color:var(--tx2)"><i class="fa-solid fa-xmark"></i></button></div>' +
+                '<p class="text-sm mb-4" style="color:var(--tx2)">Generate a secure, random password with a custom length.</p>' +
+                '<div class="mb-4">' +
+                '<label class="block text-xs font-medium mb-1" style="color:var(--tx3)">PASSWORD LENGTH</label>' +
+                '<div class="pw-length-selector">' +
+                '<input type="range" id="pwrange" class="ri" min="6" max="32" value="16" oninput="document.getElementById(\'pwlen\').textContent=this.value">' +
+                '<span class="length-label" id="pwlen">16</span>' +
+                '</div>' +
+                '</div>' +
+                '<button class="bp" id="pwbtn" onclick="doGeneratePassword()"><i class="fa-solid fa-rotate"></i> Generate Password</button>' +
+                '<div id="pwres" class="mt-4"></div>' +
+                (entries.length ? '<div class="mt-6"><div class="text-xs font-medium mb-2" style="color:var(--tx3)">RECENT</div><div id="pwlist" class="flex flex-col gap-1 max-h-56 overflow-y-auto">' +
+                    entries.map(rPasswordItem).join('') + '</div></div>' : '<div id="pwlist"></div>') +
+                '</div>');
+            setTimeout(function() { doGeneratePassword(); }, 100);
+        }
+
+        function doGeneratePassword() {
+            var range = document.getElementById('pwrange');
+            var btn = document.getElementById('pwbtn');
+            var res = document.getElementById('pwres');
+            var length = parseInt(range.value, 10);
+            if (isNaN(length) || length < 6 || length > 32) { Toast.show('Please select a length between 6 and 32',
+                    'error'); return; }
+
+            btn.disabled = true;
+            var orig = btn.innerHTML;
+            btn.innerHTML = spin(14);
+            PasswordAPI.generate(length,
+                function(r) {
+                    btn.disabled = false;
+                    btn.innerHTML = orig;
+                    res.innerHTML = rPasswordResult(r);
+                    var user = Auth.getUser();
+                    var entry = { id: U.id(), password: r.password, length: r.length, created_at: U.now() };
+                    DB.addPasswordEntry(user.id, entry);
+                    var list = document.getElementById('pwlist');
+                    if (list) list.innerHTML = DB.getPasswordEntries(user.id).map(rPasswordItem).join('');
+                    Toast.show('Password generated', 'success');
+                },
+                function(err) {
+                    btn.disabled = false;
+                    btn.innerHTML = orig;
+                    Toast.show(err, 'error');
+                }
+            );
+        }
+
+        function rPasswordResult(r) {
+            var pw = U.esc(r.password);
+            return '<div class="nc-res">' +
+                '<div class="pw-box">' +
+                '<span class="font-mono tracking-wide">' + pw + '</span>' +
+                '<button class="copy-btn" onclick="cpText(\'' + pw.replace(/'/g, "\\'") +
+                '\')" title="Copy to clipboard"><i class="fa-regular fa-copy"></i></button>' +
+                '</div>' +
+                '<div class="nc-row"><span class="l">Length</span><span class="v">' + U.esc(String(r.length)) +
+                '</span></div>' +
+                '</div>';
+        }
+
+        function rPasswordItem(l) {
+            var pw = U.esc(l.password);
+            return '<div class="nc-hi"><i class="fa-solid fa-key" style="color:var(--tx3);font-size:12px;min-width:12px"></i><div class="flex-1 min-w-0"><div class="s font-mono text-sm tracking-wide">' +
+                pw + '</div><div class="o">Length ' + U.esc(String(l.length)) + ' • ' + U.esc(U.relTime(l
+                    .created_at)) + '</div></div>' +
+                '<button class="nc-ib" title="Copy" onclick="cpText(\'' + pw.replace(/'/g, "\\'") +
+                '\')"><i class="fa-regular fa-copy"></i></button>' +
+                '<button class="nc-ib" title="Delete" onclick="delPw(\'' + l.id + '\')"><i class="fa-solid fa-xmark"></i></button></div>';
+        }
+
+        function delPw(id) { var user = Auth.getUser(); if (!user) return;
+            DB.deletePasswordEntry(user.id, id); var list = document.getElementById('pwlist'); if (list) list.innerHTML =
+                DB.getPasswordEntries(user.id).map(rPasswordItem).join(''); }
+
+        /* ===== SETTINGS ===== */
+        function openSettings() {
+            Store.profileDropdown = false;
+            var m = document.getElementById('pmenu');
+            if (m) m.classList.add('hidden');
+            var user = Auth.getUser();
+            if (!user) return;
+            Modal.open('<div class="p-6"><div class="flex items-center justify-between mb-6"><h3 class="font-display text-lg font-semibold">Settings</h3><button onclick="Modal.close()" class="w-8 h-8 rounded-lg flex items-center justify-center border-none cursor-pointer" style="background:var(--bg3);color:var(--tx2)"><i class="fa-solid fa-xmark"></i></button></div>' +
+                '<div class="flex items-center gap-3 p-4 rounded-lg mb-4" style="background:var(--bg3)"><i class="fa-solid fa-moon" style="color:var(--acc)"></i><div><div class="text-sm font-medium">Dark Mode</div><div class="text-xs" style="color:var(--tx3)">Always on for this app</div></div></div>' +
+                '<button class="bs" onclick="clearAll()"><i class="fa-solid fa-trash-can"></i> Clear all data</button></div>'
+                );
+        }
+
+        /* ===== ROUTES ===== */
+        Router.reg('/dashboard', pgDashboard);
+        Router.reg('/settings', function() { pgDashboard();
+            setTimeout(openSettings, 100); });
+
+        /* ===== INIT ===== */
+        (function() {
+            document.documentElement.classList.add('dark');
+            document.documentElement.classList.remove('light');
+            if (!Router.cur() || Router.cur() === '/login' || Router.cur() === '/register') Router.go('/dashboard');
+            Router.init();
+        })();
+    </script>
+</body>
+</html>
