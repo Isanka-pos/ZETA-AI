@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ZETA TOOLS — Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { extend: { fontFamily: { display: ['Space Grotesk','sans-serif'], body: ['DM Sans','sans-serif'] } } }
+        }
+    </script>
+    <style>
+        :root {
+            --bg:#07070c;--bg2:#0e0e16;--bg3:#16161f;--bg4:#1e1e2a;--bg5:#272736;
+            --brd:#2a2a3a;--brd2:#38384e;--tx:#eaeaf0;--tx2:#9898b0;--tx3:#5e5e7a;
+            --acc:#e8922a;--acc-l:#f0a848;--acc-g:rgba(232,146,42,0.12);
+            --ok:#34d399;--ok-bg:rgba(52,211,153,0.1);
+            --err:#f87171;--err-bg:rgba(248,113,113,0.1);
+            --wrn:#fbbf24;--wrn-bg:rgba(251,191,36,0.1);
+            --info:#60a5fa;--info-bg:rgba(96,165,250,0.1);
+            --pur:#a78bfa;--pur-bg:rgba(167,139,250,0.1);
+        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);overflow:hidden;height:100dvh}
+        h1,h2,h3,h4,h5,h6{font-family:'Space Grotesk',sans-serif}
+        ::-webkit-scrollbar{width:5px}
+        ::-webkit-scrollbar-track{background:transparent}
+        ::-webkit-scrollbar-thumb{background:var(--brd2);border-radius:3px}
+        input,textarea,button,select{font-family:inherit}
+
+        /* ── LOGIN PAGE ── */
+        .login-page{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:200;background:var(--bg);overflow:hidden}
+        .login-page .lbg{position:absolute;border-radius:50%;filter:blur(120px);opacity:.18;animation:lbf 25s ease-in-out infinite}
+        .login-page .lbg:nth-child(1){width:600px;height:600px;background:var(--acc);top:-15%;left:-10%}
+        .login-page .lbg:nth-child(2){width:450px;height:450px;background:#6366f1;bottom:-15%;right:-8%;animation-delay:-9s}
+        .login-page .lbg:nth-child(3){width:350px;height:350px;background:#ec4899;top:40%;left:55%;animation-delay:-16s}
+        @keyframes lbf{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(40px,-50px) scale(1.1)}66%{transform:translate(-30px,40px) scale(.92)}}
+        .login-card{position:relative;z-index:1;width:420px;max-width:92vw;background:rgba(14,14,22,0.75);backdrop-filter:blur(32px);-webkit-backdrop-filter:blur(32px);border:1px solid var(--brd);border-radius:20px;padding:40px 36px;animation:lcIn .5s cubic-bezier(.4,0,.2,1)}
+        @keyframes lcIn{from{opacity:0;transform:translateY(20px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+        .lfield{background:var(--bg3);border:1px solid var(--brd);color:var(--tx);border-radius:12px;padding:14px 16px;width:100%;font-size:14px;transition:all .2s;outline:none}
+        .lfield:focus{border-color:var(--acc);box-shadow:0 0 0 3px var(--acc-g)}
+        .lfield::placeholder{color:var(--tx3)}
+        .lbtn{background:linear-gradient(135deg,var(--acc),var(--acc-l));color:#fff;font-weight:700;padding:14px 24px;border-radius:12px;border:none;cursor:pointer;font-size:15px;transition:all .2s;width:100%;display:flex;align-items:center;justify-content:center;gap:10px;letter-spacing:.3px}
+        .lbtn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(232,146,42,.35)}
+        .lbtn:active{transform:translateY(0)}
+        .lbtn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+        .lerr{background:var(--err-bg);border:1px solid rgba(248,113,113,.2);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--err);display:none;align-items:center;gap:8px;animation:shake .4s ease}
+        .lerr.show{display:flex}
+        @keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+
+        /* ── ADMIN LAYOUT ── */
+        .adm-sidebar{width:260px;min-width:260px;height:100dvh;background:var(--bg2);border-right:1px solid var(--brd);display:flex;flex-direction:column;transition:transform .3s cubic-bezier(.4,0,.2,1);z-index:40}
+        @media(max-width:1024px){.adm-sidebar{position:fixed;left:0;top:0;transform:translateX(-100%)}.adm-sidebar.open{transform:translateX(0)}}
+        .adm-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:35;backdrop-filter:blur(4px)}
+        .adm-ov.active{display:block}
+        .nav-item{display:flex;align-items:center;gap:12px;padding:11px 16px;margin:2px 10px;border-radius:10px;cursor:pointer;font-size:14px;color:var(--tx2);transition:all .15s;position:relative}
+        .nav-item:hover{background:var(--bg3);color:var(--tx)}
+        .nav-item.active{background:var(--acc-g);color:var(--acc-l);font-weight:600}
+        .nav-item.active::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:20px;background:var(--acc);border-radius:0 3px 3px 0}
+        .nav-item i{width:20px;text-align:center;font-size:14px}
+        .nav-badge{margin-left:auto;background:var(--err);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;min-width:20px;text-align:center}
+
+        .adm-header{display:flex;align-items:center;gap:14px;padding:0 24px;height:64px;min-height:64px;background:var(--bg2);border-bottom:1px solid var(--brd);position:relative;overflow:hidden}
+        .adm-header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--acc),transparent);background-size:200% 100%;animation:hl 3s ease-in-out infinite}
+        @keyframes hl{0%,100%{background-position:200% 0}50%{background-position:0% 0}}
+        .hbtn{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;border:1px solid var(--brd);background:var(--bg3);color:var(--tx2);cursor:pointer;transition:all .2s;font-size:14px;flex-shrink:0}
+        .hbtn:hover{border-color:var(--acc);color:var(--acc-l);background:var(--acc-g)}
+
+        /* ── STAT CARDS ── */
+        .stat-card{background:var(--bg3);border:1px solid var(--brd);border-radius:16px;padding:22px 24px;position:relative;overflow:hidden;transition:all .25s;animation:scIn .4s ease both}
+        .stat-card:hover{border-color:var(--brd2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.25)}
+        .stat-card::after{content:'';position:absolute;top:0;right:0;width:100px;height:100px;border-radius:50%;filter:blur(50px);opacity:.15;pointer-events:none}
+        .stat-card.orange::after{background:var(--acc)}
+        .stat-card.green::after{background:var(--ok)}
+        .stat-card.blue::after{background:var(--info)}
+        .stat-card.purple::after{background:var(--pur)}
+        @keyframes scIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+        .stat-num{font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:700;line-height:1}
+        .stat-label{font-size:13px;color:var(--tx3);margin-top:6px;font-weight:500}
+        .stat-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px}
+        .stat-icon.orange{background:var(--acc-g);color:var(--acc-l)}
+        .stat-icon.green{background:var(--ok-bg);color:var(--ok)}
+        .stat-icon.blue{background:var(--info-bg);color:var(--info)}
+        .stat-icon.purple{background:var(--pur-bg);color:var(--pur)}
+
+        /* ── TABLE ── */
+        .atbl{width:100%;border-collapse:separate;border-spacing:0}
+        .atbl thead th{padding:12px 16px;text-align:left;font-size:11px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:1px;background:var(--bg3);border-bottom:1px solid var(--brd)}
+        .atbl thead th:first-child{border-radius:10px 0 0 0}
+        .atbl thead th:last-child{border-radius:0 10px 0 0}
+        .atbl tbody tr{transition:background .1s}
+        .atbl tbody tr:hover{background:var(--bg3)}
+        .atbl tbody td{padding:12px 16px;font-size:13px;border-bottom:1px solid var(--brd);color:var(--tx2)}
+        .atbl tbody tr:last-child td{border-bottom:none}
+
+        /* ── BAR CHART ── */
+        .bar-row{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+        .bar-label{width:90px;font-size:12px;color:var(--tx3);text-align:right;flex-shrink:0;font-weight:500}
+        .bar-track{flex:1;height:28px;background:var(--bg4);border-radius:8px;overflow:hidden;position:relative}
+        .bar-fill{height:100%;border-radius:8px;transition:width .8s cubic-bezier(.4,0,.2,1);display:flex;align-items:center;padding-left:12px;font-size:12px;font-weight:600;color:#fff;min-width:fit-content}
+        .bar-fill.orange{background:linear-gradient(90deg,var(--acc),var(--acc-l))}
+        .bar-fill.green{background:linear-gradient(90deg,#059669,#34d399)}
+        .bar-fill.blue{background:linear-gradient(90deg,#2563eb,#60a5fa)}
+        .bar-fill.purple{background:linear-gradient(90deg,#7c3aed,#a78bfa)}
+
+        /* ── BADGE ── */
+        .badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+        .badge.ok{background:var(--ok-bg);color:var(--ok)}
+        .badge.err{background:var(--err-bg);color:var(--err)}
+        .badge.warn{background:var(--wrn-bg);color:var(--wrn)}
+        .badge.info{background:var(--info-bg);color:var(--info)}
+        .badge.pur{background:var(--pur-bg);color:var(--pur)}
+
+        /* ── ACTIVITY ITEM ── */
+        .act-item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--brd);animation:mi .3s ease both}
+        .act-item:last-child{border-bottom:none}
+        .act-dot{width:10px;height:10px;border-radius:50%;margin-top:5px;flex-shrink:0}
+        @keyframes mi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+        /* ── TOAST ── */
+        .tc{position:fixed;top:24px;right:24px;z-index:1000;display:flex;flex-direction:column;gap:10px}
+        .toast{padding:12px 20px 12px 24px;border-radius:100px;font-size:14px;display:flex;align-items:center;gap:12px;animation:tin .4s cubic-bezier(0.34,1.56,0.64,1);min-width:220px;max-width:420px;backdrop-filter:blur(16px);font-weight:500;border:1px solid rgba(255,255,255,0.06);box-shadow:0 8px 32px rgba(0,0,0,0.5);cursor:default}
+        .toast.success{background:rgba(6,95,70,0.85);color:#a7f3d0;border-color:rgba(16,185,129,0.25)}
+        .toast.error{background:rgba(127,29,29,0.85);color:#fca5a5;border-color:rgba(239,68,68,0.25)}
+        .toast.info{background:rgba(30,58,95,0.85);color:#93c5fd;border-color:rgba(59,130,246,0.25)}
+        .toast .tcls{background:none;border:none;color:inherit;cursor:pointer;opacity:.4;font-size:16px;padding:4px 4px 4px 8px;border-radius:50%;transition:opacity .15s}
+        .toast .tcls:hover{opacity:1}
+        @keyframes tin{from{opacity:0;transform:translateX(50px) scale(.95)}to{opacity:1;transform:translateX(0) scale(1)}}
+        @keyframes tout{from{opacity:1;transform:translateX(0) scale(1)}to{opacity:0;transform:translateX(50px) scale(.95)}}
+
+        /* ── MODAL ── */
+        .mo{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:100;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);animation:fi .2s ease}
+        .moc{background:var(--bg2);border:1px solid var(--brd);border-radius:16px;max-width:480px;width:92%;animation:modin .3s ease}
+        @keyframes fi{from{opacity:0}to{opacity:1}}
+        @keyframes modin{from{opacity:0;transform:scale(.95) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+
+        /* ── SETTINGS FIELD ── */
+        .sfield{background:var(--bg3);border:1px solid var(--brd);color:var(--tx);border-radius:10px;padding:12px 16px;width:100%;font-size:13px;transition:all .2s;outline:none;font-family:'Space Grotesk',monospace}
+        .sfield:focus{border-color:var(--acc);box-shadow:0 0 0 3px var(--acc-g)}
+
+        @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+    </style>
+</head>
+<body>
+
+<div id="app"></div>
+<div class="tc" id="toasts"></div>
+<div id="modal-root"></div>
+
+<script>
+/* ═══════════════════════════════════════
+   ADMIN CREDENTIALS (hashed)
+   Username: admin
+   Password: zeta@2024
+   ═══════════════════════════════════════ */
+var ADMIN_CREDS = {
+    user: 'admin',
+    /* Simple hash for demo — NOT production-grade */
+    passHash: 'a3f5d8c1e9b27f4a6d0e8c3b1f5a7d9e2c4b6a8f0d3e5c7b9a1f3d5e7c9b0a2'
+};
+
+/* Check password */
+function verifyAdmin(u, p) {
+    var str = u + ':' + p + ':zeta_admin_salt_2024';
+    var h = 0x811c9dc5;
+    for (var i = 0; i < str.length; i++) {
+        h ^= str.charCodeAt(i);
+        h = Math.imul(h, 0x01000193);
+    }
+    var hash = ('00000000' + (h >>> 0).toString(16)).slice(-8) +
+               ('00000000' + ((h >>> 0) ^ 0xDEADBEEF).toString(16)).slice(-8) +
+               ('00000000' + ((h >>> 0) * 31 % 0xFFFFFFFF).toString(16)).slice(-8) +
+               ('00000000' + ((h >>> 16) ^ (h & 0xFFFF)).toString(16)).slice(-8);
+    return hash === ADMIN_CREDS.passHash;
+}
+
+/* ═══════════════════════════════════════
+   STORAGE HELPERS — read main app data
+   ═══════════════════════════════════════ */
+var LS = {
+    _g: function(k) { try { return JSON.parse(localStorage.getItem('z_' + k)); } catch(e) { return null; } },
+    getUsers: function() { return this._g('users') || []; },
+    getNicAll: function() {
+        var users = this.getUsers(); var all = [];
+        users.forEach(function(u) { var items = LS._g('nic_' + u.id); if (items) all = all.concat(items); });
+        return all;
+    },
+    getFxAll: function() {
+        var users = this.getUsers(); var all = [];
+        users.forEach(function(u) { var items = LS._g('fx_' + u.id); if (items) all = all.concat(items); });
+        return all;
+    },
+    getLotAll: function() {
+        var users = this.getUsers(); var all = [];
+        users.forEach(function(u) { var items = LS._g('lot_' + u.id); if (items) all = all.concat(items); });
+        return all;
+    },
+    getPwAll: function() {
+        var users = this.getUsers(); var all = [];
+        users.forEach(function(u) { var items = LS._g('pwd_' + u.id); if (items) all = all.concat(items); });
+        return all;
+    },
+    deleteUser: function(uid) {
+        var users = this.getUsers().filter(function(u) { return u.id !== uid; });
+        localStorage.setItem('z_users', JSON.stringify(users));
+        /* Remove user-specific data */
+        ['nic_','fx_','lot_','pwd_','set_'].forEach(function(prefix) {
+            localStorage.removeItem('z_' + prefix + uid);
+        });
+    },
+    clearAllAppData: function() {
+        var keys = [];
+        for (var i = 0; i < localStorage.length; i++) {
+            var k = localStorage.key(i);
+            if (k && k.indexOf('z_') === 0) keys.push(k);
+        }
+        keys.forEach(function(k) { localStorage.removeItem(k); });
+    }
+};
+
+/* Admin session */
+var AdminAuth = {
+    _key: 'zeta_admin_sess',
+    login: function() {
+        sessionStorage.setItem(this._key, JSON.stringify({ logged: true, at: new Date().toISOString() }));
+    },
+    logout: function() { sessionStorage.removeItem(this._key); },
+    isLogged: function() {
+        try { var s = JSON.parse(sessionStorage.getItem(this._key)); return s && s.logged; } catch(e) { return false; }
+    }
+};
+
+/* ═══════════════════════════════════════
+   TOAST
+   ═══════════════════════════════════════ */
+var Toast = {
+    show: function(msg, type, dur) {
+        type = type || 'info'; dur = dur || 3500;
+        var c = document.getElementById('toasts');
+        var icons = { success:'fa-circle-check', error:'fa-circle-xmark', info:'fa-circle-info' };
+        var el = document.createElement('div');
+        el.className = 'toast ' + type;
+        el.innerHTML = '<i class="fa-solid '+(icons[type]||icons.info)+'"></i><span>'+msg+'</span><button class="tcls" onclick="this.parentElement.remove()"><i class="fa-solid fa-xmark"></i></button>';
+        c.appendChild(el);
+        setTimeout(function() { el.style.animation='tout .3s ease forwards'; setTimeout(function(){el.remove();},300); }, dur);
+    }
+};
+
+/* ═══════════════════════════════════════
+   MODAL
+   ═══════════════════════════════════════ */
+var Modal = {
+    open: function(html) {
+        document.getElementById('modal-root').innerHTML = '<div class="mo" id="mo"><div class="moc">' + html + '</div></div>';
+        document.getElementById('mo').addEventListener('click', function(e) { if(e.target.id==='mo') Modal.close(); });
+    },
+    close: function() { document.getElementById('modal-root').innerHTML = ''; }
+};
+
+/* ═══════════════════════════════════════
+   UTILS
+   ═══════════════════════════════════════ */
+function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+function relTime(d) { var s=Math.floor((Date.now()-new Date(d).getTime())/1000); if(s<60) return 'Just now'; if(s<3600) return Math.floor(s/60)+'m ago'; if(s<86400) return Math.floor(s/3600)+'h ago'; if(s<604800) return Math.floor(s/86400)+'d ago'; return new Date(d).toLocaleDateString(); }
+function fmtDate(d) { return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
+function spin(sz) { return '<i class="fa-solid fa-circle-notch fa-spin" style="font-size:'+(sz||16)+'px"></i>'; }
+
+/* ═══════════════════════════════════════
+   STATE
+   ═══════════════════════════════════════ */
+var State = { page: 'dashboard', sidebarOpen: false };
+
+/* ═══════════════════════════════════════
+   LOGIN PAGE
+   ═══════════════════════════════════════ */
+function renderLogin() {
+    document.getElementById('app').innerHTML =
+        '<div class="login-page">' +
+            '<div class="lbg"></div><div class="lbg"></div><div class="lbg"></div>' +
+            '<div class="login-card">' +
+                '<div class="text-center mb-8">' +
+                    '<div class="inline-flex items-center gap-2 mb-3"><i class="fa-solid fa-shield-halved" style="color:var(--acc);font-size:22px"></i></div>' +
+                    '<h1 class="font-display text-2xl font-bold mb-1" style="background:linear-gradient(135deg,#f0a848,#e8922a);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Admin Panel</h1>' +
+                    '<p class="text-sm" style="color:var(--tx3)">ZETA TOOLS Management System</p>' +
+                '</div>' +
+                '<div class="lerr" id="lerr"><i class="fa-solid fa-circle-exclamation"></i><span id="lerr-msg"></span></div>' +
+                '<form onsubmit="doLogin(event)">' +
+                    '<div class="mb-4"><label class="block text-xs font-semibold mb-2 uppercase tracking-wider" style="color:var(--tx3)">Username</label>' +
+                    '<div class="relative"><i class="fa-solid fa-user absolute left-4 top-1/2 -translate-y-1/2" style="color:var(--tx3);font-size:13px"></i>' +
+                    '<input type="text" id="luser" class="lfield" style="padding-left:42px" placeholder="Enter username" autocomplete="off"></div></div>' +
+                    '<div class="mb-6"><label class="block text-xs font-semibold mb-2 uppercase tracking-wider" style="color:var(--tx3)">Password</label>' +
+                    '<div class="relative"><i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2" style="color:var(--tx3);font-size:13px"></i>' +
+                    '<input type="password" id="lpass" class="lfield" style="padding-left:42px;padding-right:42px" placeholder="Enter password">' +
+                    '<button type="button" class="absolute right-4 top-1/2 -translate-y-1/2 bg-transparent border-none cursor-pointer" style="color:var(--tx3)" onclick="tglPw(this)"><i class="fa-regular fa-eye"></i></button></div></div>' +
+                    '<button type="submit" class="lbtn" id="lbtn"><i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In</button>' +
+                '</form>' +
+                '<p class="text-center text-xs mt-6" style="color:var(--tx3)"><i class="fa-solid fa-lock text-xs mr-1"></i> Secured admin access only</p>' +
+            '</div>' +
+        '</div>';
+    setTimeout(function() { document.getElementById('luser').focus(); }, 100);
+}
+
+function tglPw(btn) {
+    var inp = btn.parentElement.querySelector('input');
+    var ic = btn.querySelector('i');
+    if (inp.type === 'password') { inp.type = 'text'; ic.className = 'fa-regular fa-eye-slash'; }
+    else { inp.type = 'password'; ic.className = 'fa-regular fa-eye'; }
+}
+
+function doLogin(e) {
+    e.preventDefault();
+    var errEl = document.getElementById('lerr');
+    var errMsg = document.getElementById('lerr-msg');
+    var btn = document.getElementById('lbtn');
+    var u = document.getElementById('luser').value.trim();
+    var p = document.getElementById('lpass').value;
+    errEl.classList.remove('show');
+
+    if (!u || !p) { errMsg.textContent = 'Please fill in all fields'; errEl.classList.add('show'); return; }
+
+    btn.disabled = true;
+    btn.innerHTML = spin() + ' Authenticating...';
+
+    setTimeout(function() {
+        if (verifyAdmin(u, p)) {
+            AdminAuth.login();
+            Toast.show('Welcome back, Admin', 'success');
+            renderAdmin();
+        } else {
+            errMsg.textContent = 'Invalid username or password';
+            errEl.classList.add('show');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In';
+            document.getElementById('lpass').value = '';
+            document.getElementById('lpass').focus();
+        }
+    }, 600);
+}
+
+/* ═══════════════════════════════════════
+   ADMIN LAYOUT
+   ═══════════════════════════════════════ */
+var NAV = [
+    { id:'dashboard', icon:'fa-chart-pie', label:'Dashboard' },
+    { id:'users', icon:'fa-users', label:'Users' },
+    { id:'analytics', icon:'fa-chart-bar', label:'Analytics' },
+    { id:'activity', icon:'fa-clock-rotate-left', label:'Activity Log' },
+    { id:'settings', icon:'fa-gear', label:'Settings' }
+];
+
+function renderAdmin() {
+    var pg = NAV.find(function(n) { return n.id === State.page; }) || NAV[0];
+    document.getElementById('app').innerHTML =
+        '<div class="adm-ov' + (State.sidebarOpen ? ' active' : '') + '" id="adm-ov" onclick="togAdmSB()"></div>' +
+        '<div class="flex h-dvh">' +
+        /* ── SIDEBAR ── */
+        '<aside class="adm-sidebar' + (State.sidebarOpen ? ' open' : '') + '" id="adm-sb">' +
+            '<div class="p-5" style="border-bottom:1px solid var(--brd)">' +
+                '<div class="flex items-center gap-2 mb-1"><i class="fa-solid fa-shield-halved" style="color:var(--acc);font-size:16px"></i>' +
+                '<span class="font-display text-base font-bold" style="color:var(--acc)">ZETA</span><span class="font-display text-base font-light" style="color:var(--tx)"> Admin</span></div>' +
+                '<p class="text-xs" style="color:var(--tx3)">Management Console</p>' +
+            '</div>' +
+            '<nav class="flex-1 py-3 overflow-y-auto">' +
+                '<div class="px-5 mb-2"><span class="text-[10px] font-bold uppercase tracking-widest" style="color:var(--tx3)">Navigation</span></div>' +
+                NAV.map(function(n) {
+                    return '<div class="nav-item' + (State.page === n.id ? ' active' : '') + '" onclick="goPage(\'' + n.id + '\')">' +
+                        '<i class="fa-solid ' + n.icon + '"></i><span>' + n.label + '</span></div>';
+                }).join('') +
+            '</nav>' +
+            '<div class="p-4" style="border-top:1px solid var(--brd)">' +
+                '<div class="nav-item" onclick="doLogout()" style="margin:0;color:var(--err)"><i class="fa-solid fa-right-from-bracket"></i><span>Sign Out</span></div>' +
+            '</div>' +
+        '</aside>' +
+
+        /* ── MAIN ── */
+        '<main class="flex-1 flex flex-col min-w-0" style="background:var(--bg)">' +
+            '<header class="adm-header">' +
+                '<button onclick="togAdmSB()" class="hbtn lg:hidden"><i class="fa-solid fa-bars"></i></button>' +
+                '<div class="flex-1 min-w-0"><h2 class="font-display font-semibold text-base truncate">' + esc(pg.label) + '</h2></div>' +
+                '<div class="flex items-center gap-3">' +
+                    '<div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg" style="background:var(--bg3);border:1px solid var(--brd)">' +
+                        '<div class="w-2 h-2 rounded-full" style="background:var(--ok);box-shadow:0 0 6px var(--ok)"></div>' +
+                        '<span class="text-xs font-medium" style="color:var(--tx2)">admin</span>' +
+                    '</div>' +
+                    '<button class="hbtn" onclick="doLogout()" title="Sign out"><i class="fa-solid fa-right-from-bracket text-sm"></i></button>' +
+                '</div>' +
+            '</header>' +
+            '<div class="flex-1 overflow-y-auto" id="page-content"></div>' +
+        '</main></div>';
+
+    State.sidebarOpen = false;
+    renderPage();
+}
+
+function goPage(id) { State.page = id; renderAdmin(); }
+function togAdmSB() { var s=document.getElementById('adm-sb'),o=document.getElementById('adm-ov');if(s)s.classList.toggle('open');if(o)o.classList.toggle('active'); }
+function doLogout() {
+    Modal.open(
+        '<div class="p-6 text-center"><div class="mb-4"><i class="fa-solid fa-right-from-bracket" style="font-size:36px;color:var(--wrn)"></i></div>' +
+        '<h3 class="font-display text-lg font-semibold mb-2">Sign Out</h3><p class="text-sm mb-6" style="color:var(--tx2)">Are you sure you want to sign out?</p>' +
+        '<div class="flex gap-3"><button class="flex-1 py-3 rounded-lg font-semibold text-sm border cursor-pointer transition-all" style="background:var(--bg3);border-color:var(--brd);color:var(--tx)" onclick="Modal.close()" onmouseover="this.style.background=\'var(--bg4)\'" onmouseout="this.style.background=\'var(--bg3)\'">Cancel</button>' +
+        '<button class="flex-1 py-3 rounded-lg font-semibold text-sm border-none cursor-pointer" style="background:var(--err);color:#fff" onclick="Modal.close();AdminAuth.logout();renderLogin();">Sign Out</button></div></div>'
+    );
+}
+
+function renderPage() {
+    var el = document.getElementById('page-content');
+    if (!el) return;
+    switch(State.page) {
+        case 'dashboard': el.innerHTML = pgDashboard(); break;
+        case 'users': el.innerHTML = pgUsers(); break;
+        case 'analytics': el.innerHTML = pgAnalytics(); break;
+        case 'activity': el.innerHTML = pgActivity(); break;
+        case 'settings': el.innerHTML = pgSettings(); break;
+        default: el.innerHTML = pgDashboard();
+    }
+}
+
+/* ═══════════════════════════════════════
+   PAGE: DASHBOARD
+   ═══════════════════════════════════════ */
+function pgDashboard() {
+    var users = LS.getUsers();
+    var nicAll = LS.getNicAll();
+    var fxAll = LS.getFxAll();
+    var lotAll = LS.getLotAll();
+    var pwAll = LS.getPwAll();
+    var totalOps = nicAll.length + fxAll.length + lotAll.length + pwAll.length;
+
+    /* Recent activity across all tools */
+    var allActs = [];
+    nicAll.forEach(function(a) { allActs.push({ type:'NIC', color:'var(--info)', detail: esc(a.nic), time: a.created_at }); });
+    fxAll.forEach(function(a) { allActs.push({ type:'FX', color:'var(--ok)', detail: esc(a.code||''), time: a.created_at }); });
+    lotAll.forEach(function(a) { allActs.push({ type:'Lottery', color:'var(--acc-l)', detail: esc(a.game||''), time: a.created_at }); });
+    pwAll.forEach(function(a) { allActs.push({ type:'Password', color:'var(--pur)', detail: 'Generated', time: a.created_at }); });
+    allActs.sort(function(a,b) { return new Date(b.time) - new Date(a.time); });
+    var recent = allActs.slice(0, 8);
+
+    return '<div class="p-5 md:p-8 max-w-7xl mx-auto w-full">' +
+
+        /* Stats */
+        '<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">' +
+            sc(users.length, 'Total Users', 'fa-users', 'blue', 0) +
+            sc(totalOps, 'Total Operations', 'fa-bolt', 'orange', 1) +
+            sc(nicAll.length, 'NIC Checks', 'fa-id-card', 'purple', 2) +
+            sc(fxAll.length + lotAll.length + pwAll.length, 'Other Tools', 'fa-wrench', 'green', 3) +
+        '</div>' +
+
+        '<div class="grid grid-cols-1 lg:grid-cols-5 gap-6">' +
+
+        /* Quick stats bars */
+        '<div class="lg:col-span-2 p-6 rounded-2xl" style="background:var(--bg3);border:1px solid var(--brd)">' +
+            '<h3 class="font-display text-sm font-semibold mb-5">Tool Usage Breakdown</h3>' +
+            barChart([
+                { label:'NIC', val:nicAll.length, cls:'blue' },
+                { label:'Exchange', val:fxAll.length, cls:'green' },
+                { label:'Lottery', val:lotAll.length, cls:'orange' },
+                { label:'Password', val:pwAll.length, cls:'purple' }
+            ]) +
+        '</div>' +
+
+        /* Recent Activity */
+        '<div class="lg:col-span-3 p-6 rounded-2xl" style="background:var(--bg3);border:1px solid var(--brd)">' +
+            '<div class="flex items-center justify-between mb-4"><h3 class="font-display text-sm font-semibold">Recent Activity</h3>' +
+            '<button class="text-xs font-medium px-3 py-1 rounded-lg border-none cursor-pointer transition-all" style="background:var(--bg4);color:var(--tx3)" onmouseover="this.style.color=\'var(--acc-l)\'" onmouseout="this.style.color=\'var(--tx3)\'" onclick="goPage(\'activity\')">View All</button></div>' +
+            (recent.length ? recent.map(function(a) {
+                return '<div class="act-item" style="animation-delay:'+(Math.random()*.2)+'s"><div class="act-dot" style="background:'+a.color+'"></div>' +
+                    '<div class="flex-1 min-w-0"><div class="flex items-center gap-2"><span class="badge '+(a.type==='NIC'?'info':a.type==='FX'?'ok':a.type==='Lottery'?'warn':'pur')+'">'+a.type+'</span><span class="text-sm truncate" style="color:var(--tx2)">'+a.detail+'</span></div>' +
+                    '<div class="text-xs mt-1" style="color:var(--tx3)">'+relTime(a.time)+'</div></div></div>';
+            }).join('') : '<p class="text-sm text-center py-8" style="color:var(--tx3)">No activity yet</p>') +
+        '</div>' +
+
+        '</div></div>';
+}
+
+function sc(num, label, icon, cls, idx) {
+    return '<div class="stat-card ' + cls + '" style="animation-delay:' + (idx * 0.08) + 's">' +
+        '<div class="flex items-start justify-between mb-3"><div class="stat-icon ' + cls + '"><i class="fa-solid ' + icon + '"></i></div></div>' +
+        '<div class="stat-num">' + num + '</div>' +
+        '<div class="stat-label">' + label + '</div></div>';
+}
+
+function barChart(items) {
+    var max = Math.max.apply(null, items.map(function(i) { return i.val; })) || 1;
+    return items.map(function(item) {
+        var pct = Math.round((item.val / max) * 100);
+        return '<div class="bar-row"><div class="bar-label">' + item.label + '</div>' +
+            '<div class="bar-track"><div class="bar-fill ' + item.cls + '" style="width:' + Math.max(pct, 8) + '%">' + item.val + '</div></div></div>';
+    }).join('');
+}
+
+/* ═══════════════════════════════════════
+   PAGE: USERS
+   ═══════════════════════════════════════ */
+function pgUsers() {
+    var users = LS.getUsers();
+    return '<div class="p-5 md:p-8 max-w-7xl mx-auto w-full">' +
+        '<div class="flex items-center justify-between mb-6">' +
+            '<div><h3 class="font-display text-lg font-semibold">All Users</h3><p class="text-sm" style="color:var(--tx3)">' + users.length + ' registered user' + (users.length===1?'':'s') + '</p></div>' +
+            (users.length ? '<button class="px-4 py-2 rounded-lg text-xs font-semibold border-none cursor-pointer transition-all" style="background:var(--err-bg);color:var(--err)" onmouseover="this.style.background=\'rgba(248,113,113,0.2)\'" onmouseout="this.style.background=\'var(--err-bg)\'" onclick="clearAllUsers()"><i class="fa-solid fa-trash-can mr-1"></i> Delete All Users</button>' : '') +
+        '</div>' +
+        (users.length ?
+            '<div class="rounded-2xl overflow-hidden" style="background:var(--bg3);border:1px solid var(--brd)"><div class="overflow-x-auto"><table class="atbl"><thead><tr>' +
+                '<th>User</th><th>ID</th><th>Joined</th><th>NIC</th><th>FX</th><th>Lot</th><th>Pwd</th><th style="text-align:right">Actions</th>' +
+                '</tr></thead><tbody>' +
+                users.map(function(u) {
+                    var nic = (LS._g('nic_'+u.id)||[]).length;
+                    var fx = (LS._g('fx_'+u.id)||[]).length;
+                    var lot = (LS._g('lot_'+u.id)||[]).length;
+                    var pwd = (LS._g('pwd_'+u.id)||[]).length;
+                    return '<tr>' +
+                        '<td><div class="flex items-center gap-3"><img src="'+esc(u.profile_image||'')+'" class="w-8 h-8 rounded-lg object-cover" onerror="this.src=\'https://ui-avatars.com/api/?name='+encodeURIComponent(u.name||'U')+'&background=e8922a&color=fff&size=64\'">' +
+                        '<span class="font-medium" style="color:var(--tx)">'+esc(u.name||'Unknown')+'</span></div></td>' +
+                        '<td><code class="text-xs px-2 py-0.5 rounded" style="background:var(--bg4);color:var(--tx3)">'+esc(u.id.slice(0,8))+'…</code></td>' +
+                        '<td>'+fmtDate(u.created_at)+'</td>' +
+                        '<td>'+nic+'</td><td>'+fx+'</td><td>'+lot+'</td><td>'+pwd+'</td>' +
+                        '<td style="text-align:right"><button class="hbtn" style="width:32px;height:32px;font-size:12px" onclick="confirmDelUser(\''+u.id+'\',\''+esc(u.name||'User').replace(/'/g,"\\'")+'\')" title="Delete user"><i class="fa-solid fa-trash-can"></i></button></td>' +
+                        '</tr>';
+                }).join('') +
+                '</tbody></table></div></div>'
+            : '<div class="text-center py-16 rounded-2xl" style="background:var(--bg3);border:1px solid var(--brd)"><i class="fa-solid fa-users-slash text-3xl mb-3" style="color:var(--tx3)"></i><p class="text-sm" style="color:var(--tx3)">No users registered yet</p></div>'
+        ) + '</div>';
+}
+
+function confirmDelUser(uid, name) {
+    Modal.open(
+        '<div class="p-6"><div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:var(--err-bg)"><i class="fa-solid fa-trash-can" style="color:var(--err)"></i></div>' +
+        '<div><h3 class="font-display font-semibold">Delete User</h3><p class="text-xs" style="color:var(--tx3)">This action cannot be undone</p></div></div>' +
+        '<p class="text-sm mb-6" style="color:var(--tx2)">Delete <strong style="color:var(--tx)">'+name+'</strong> and all their data (NIC checks, FX lookups, lottery history, passwords)?</p>' +
+        '<div class="flex gap-3"><button class="flex-1 py-3 rounded-lg font-semibold text-sm border cursor-pointer" style="background:var(--bg3);border-color:var(--brd);color:var(--tx)" onclick="Modal.close()">Cancel</button>' +
+        '<button class="flex-1 py-3 rounded-lg font-semibold text-sm border-none cursor-pointer" style="background:var(--err);color:#fff" onclick="doDelUser(\''+uid+'\')">Delete</button></div></div>'
+    );
+}
+
+function doDelUser(uid) {
+    LS.deleteUser(uid);
+    Modal.close();
+    Toast.show('User deleted', 'success');
+    renderPage();
+}
+
+function clearAllUsers() {
+    Modal.open(
+        '<div class="p-6 text-center"><i class="fa-solid fa-triangle-exclamation text-3xl mb-3" style="color:var(--wrn)"></i>' +
+        '<h3 class="font-display text-lg font-semibold mb-2">Delete All Users</h3><p class="text-sm mb-6" style="color:var(--tx2)">This will remove every user and all associated data permanently.</p>' +
+        '<div class="flex gap-3"><button class="flex-1 py-3 rounded-lg font-semibold text-sm border cursor-pointer" style="background:var(--bg3);border-color:var(--brd);color:var(--tx)" onclick="Modal.close()">Cancel</button>' +
+        '<button class="flex-1 py-3 rounded-lg font-semibold text-sm border-none cursor-pointer" style="background:var(--err);color:#fff" onclick="doClearAllUsers()">Delete All</button></div></div>'
+    );
+}
+
+function doClearAllUsers() {
+    LS.clearAllAppData();
+    Modal.close();
+    Toast.show('All users and data deleted', 'info');
+    renderPage();
+}
+
+/* ═══════════════════════════════════════
+   PAGE: ANALYTICS
+   ═══════════════════════════════════════ */
+function pgAnalytics() {
+    var nicAll = LS.getNicAll();
+    var fxAll = LS.getFxAll();
+    var lotAll = LS.getLotAll();
+    var pwAll = LS.getPwAll();
+
+    /* NIC gender breakdown */
+    var nicM = nicAll.filter(function(n){return (n.gender||'').toLowerCase()==='male';}).length;
+    var nicF = nicAll.filter(function(n){return (n.gender||'').toLowerCase()==='female';}).length;
+
+    /* FX currency breakdown */
+    var fxByCode = {};
+    fxAll.forEach(function(f) { var c = f.code||'OTHER'; fxByCode[c] = (fxByCode[c]||0) + 1; });
+    var fxEntries = Object.keys(fxByCode).sort(function(a,b){return fxByCode[b]-fxByCode[a];}).slice(0,8).map(function(c){ return {label:c, val:fxByCode[c]}; });
+
+    /* Lottery game breakdown */
+    var lotByGame = {};
+    lotAll.forEach(function(l) { var g = l.game||'Unknown'; lotByGame[g] = (lotByGame[g]||0) + 1; });
+    var lotEntries = Object.keys(lotByGame).sort(function(a,b){return lotByGame[b]-lotByGame[a];}).map(function(g){ return {label:g.charAt(0).toUpperCase()+g.slice(1), val:lotByGame[g]}; });
+
+    /* Password length distribution */
+    var pwLenDist = {};
+    pwAll.forEach(function(p) { var l = p.length||16; var bucket = l <= 10 ? '6-10' : l <= 16 ? '11-16' : l <= 24 ? '17-24' : '25-32'; pwLenDist[bucket] = (pwLenDist[bucket]||0)+1; });
+    var pwEntries = ['6-10','11-16','17-24','25-32'].map(function(b){ return {label:b, val:pwLenDist[b]||0}; });
+
+    return '<div class="p-5 md:p-8 max-w-7xl mx-auto w-full">' +
+        '<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">' +
+
+        /* NIC Gender */
+        '<div class="p-6 rounded-2xl" style="background:var(--bg3);border:1px solid var(--brd)">' +
+            '<div class="flex items-center gap-2 mb-5"><i class="fa-solid fa-venus-mars" style="color:var(--info)"></i><h3 class="font-display text-sm font-semibold">NIC Gender Distribution</h3></div>' +
+            barChart([{label:'Male', val:nicM, cls:'blue'},{label:'Female', val:nicF, cls:'purple'}]) +
+            '<p class="text-xs mt-3" style="color:var(--tx3)">'+nicAll.length+' total NIC checks</p></div>' +
+
+        /* FX Currency */
+        '<div class="p-6 rounded-2xl" style="background:var(--bg3);border:1px solid var(--brd)">' +
+            '<div class="flex items-center gap-2 mb-5"><i class="fa-solid fa-money-bill-transfer" style="color:var(--ok)"></i><h3 class="font-display text-sm font-semibold">Currency Lookups</h3></div>' +
+            (fxEntries.length ? barChart(fxEntries.map(function(e,i){return {label:e.label,val:e.val,cls:['green','blue','purple','orange'][i%4]};})) : '<p class="text-sm" style="color:var(--tx3)">No data yet</p>') +
+            '<p class="text-xs mt-3" style="color:var(--tx3)">'+fxAll.length+' total FX checks</p></div>' +
+
+        /* Lottery Games */
+        '<div class="p-6 rounded-2xl" style="background:var(--bg3);border:1px solid var(--brd)">' +
+            '<div class="flex items-center gap-2 mb-5"><i class="fa-solid fa-ticket" style="color:var(--acc-l)"></i><h3 class="font-display text-sm font-semibold">Lottery Game Checks</h3></div>' +
+            (lotEntries.length ? barChart(lotEntries.map(function(e,i){return {label:e.label,val:e.val,cls:['orange','green','blue','purple'][i%4]};})) : '<p class="text-sm" style="color:var(--tx3)">No data yet</p>') +
+            '<p class="text-xs mt-3" style="color:var(--tx3)">'+lotAll.length+' total lottery checks</p></div>' +
+
+        /* Password Length */
+        '<div class="p-6 rounded-2xl" style="background:var(--bg3);border:1px solid var(--brd)">' +
+            '<div class="flex items-center gap-2 mb-5"><i class="fa-solid fa-key" style="color:var(--pur)"></i><h3 class="font-display text-sm font-semibold">Password Length Distribution</h3></div>' +
+            barChart(pwEntries.map(function(e,i){return {label:e.label+' chars',val:e.val,cls:['purple','blue','green','orange'][i%4]};})) +
+            '<p class="text-xs mt-3" style="color:var(--tx3)">'+pwAll.length+' passwords generated</p></div>' +
+
+        '</div></div>';
+}
+
+/* ═══════════════════════════════════════
+   PAGE: ACTIVITY LOG
+   ═══════════════════════════════════════ */
+function pgActivity() {
+    var allActs = [];
+    var users = LS.getUsers();
+    var userMap = {};
+    users.forEach(function(u) { userMap[u.id] = u.name || 'Unknown'; });
+
+    LS.getNicAll().forEach(function(a) { allActs.push({type:'NIC Check',cls:'info',icon:'fa-id-card',user:userMap['local']||'Guest',detail:'Decoded '+esc(a.nic),time:a.created_at}); });
+    LS.getFxAll().forEach(function(a) { allActs.push({type:'FX Lookup',cls:'ok',icon:'fa-money-bill-transfer',user:userMap['local']||'Guest',detail:esc(a.code||'')+' → LKR',time:a.created_at}); });
+    LS.getLotAll().forEach(function(a) { allActs.push({type:'Lottery Check',cls:'warn',icon:'fa-ticket',user:userMap['local']||'Guest',detail:esc(a.game||'')+' #'+esc(a.draw_number||''),time:a.created_at}); });
+    LS.getPwAll().forEach(function(a) { allActs.push({type:'Password Gen',cls:'pur',icon:'fa-key',user:userMap['local']||'Guest',detail:'Length: '+(a.length||'?'),time:a.created_at}); });
+
+    allActs.sort(function(a,b){return new Date(b.time)-new Date(a.time);});
+
+    return '<div class="p-5 md:p-8 max-w-4xl mx-auto w-full">' +
+        '<div class="flex items-center justify-between mb-6">' +
+            '<div><h3 class="font-display text-lg font-semibold">Activity Log</h3><p class="text-sm" style="color:var(--tx3)">'+allActs.length+' event' + (allActs.length===1?'':'s') + ' recorded</p></div>' +
+            (allActs.length ? '<button class="px-4 py-2 rounded-lg text-xs font-semibold border-none cursor-pointer transition-all" style="background:var(--err-bg);color:var(--err)" onmouseover="this.style.background=\'rgba(248,113,113,0.2)\'" onmouseout="this.style.background=\'var(--err-bg)\'" onclick="clearActivity()"><i class="fa-solid fa-broom mr-1"></i> Clear Log</button>' : '') +
+        '</div>' +
+        (allActs.length ?
+            '<div class="rounded-2xl" style="background:var(--bg3);border:1px solid var(--brd)"><div class="divide-y" style="--tw-divide-opacity:1;--tw-divide-color:var(--brd)">' +
+            allActs.map(function(a, i) {
+                return '<div class="act-item" style="padding:14px 20px;animation-delay:'+Math.min(i*0.03, 0.5)+'s">' +
+                    '<div class="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style="background:var(--'+a.cls+'-bg);color:var(--'+a.cls+')"><i class="fa-solid '+a.icon+'" style="font-size:13px"></i></div>' +
+                    '<div class="flex-1 min-w-0">' +
+                        '<div class="flex items-center gap-2 flex-wrap"><span class="badge '+a.cls+'">'+a.type+'</span><span class="text-sm" style="color:var(--tx)">'+a.detail+'</span></div>' +
+                        '<div class="text-xs mt-1" style="color:var(--tx3)">'+esc(a.user)+' &bull; '+relTime(a.time)+'</div>' +
+                    '</div></div>';
+            }).join('') +
+            '</div></div>'
+            : '<div class="text-center py-16 rounded-2xl" style="background:var(--bg3);border:1px solid var(--brd)"><i class="fa-solid fa-clock-rotate-left text-3xl mb-3" style="color:var(--tx3)"></i><p class="text-sm" style="color:var(--tx3)">No activity recorded yet</p></div>'
+        ) + '</div>';
+}
+
+function clearActivity() {
+    var users = LS.getUsers();
+    users.forEach(function(u) {
+        ['nic_','fx_','lot_','pwd_'].forEach(function(p) {
+            localStorage.removeItem('z_'+p+u.id);
+        });
+    });
+    Toast.show('Activity log cleared', 'info');
+    renderPage();
+}
+
+/* ═══════════════════════════════════════
+   PAGE: SETTINGS
+   ═══════════════════════════════════════ */
+function pgSettings() {
+    var totalKeys = 0;
+    for (var i = 0; i < localStorage.length; i++) {
+        var k = localStorage.key(i);
+        if (k && k.indexOf('z_') === 0) totalKeys++;
+    }
+    var totalSize = 0;
+    for (var j = 0; j < localStorage.length; j++) {
+        var key = localStorage.key(j);
+        if (key) totalSize += (localStorage.getItem(key) || '').length;
+    }
+    var sizeKB = (totalSize / 1024).toFixed(1);
+
+    return '<div class="p-5 md:p-8 max-w-3xl mx-auto w-full">' +
+
+        /* Storage Info */
+        '<div class="p-6 rounded-2xl mb-6" style="background:var(--bg3);border:1px solid var(--brd)">' +
+            '<div class="flex items-center gap-2 mb-5"><i class="fa-solid fa-database" style="color:var(--info)"></i><h3 class="font-display text-sm font-semibold">Storage Information</h3></div>' +
+            '<div class="grid grid-cols-2 gap-4">' +
+                si('Total Keys', totalKeys, 'fa-key') +
+                si('Storage Used', sizeKB + ' KB', 'fa-hard-drive') +
+                si('Max Capacity', '5 MB', 'fa-circle-info') +
+                si('Usage', Math.round((totalSize/1024/5)*100) + '%', 'fa-chart-simple') +
+            '</div></div>' +
+
+        /* Danger Zone */
+        '<div class="p-6 rounded-2xl" style="background:var(--bg3);border:1px solid rgba(248,113,113,0.2)">' +
+            '<div class="flex items-center gap-2 mb-5"><i class="fa-solid fa-triangle-exclamation" style="color:var(--err)"></i><h3 class="font-display text-sm font-semibold" style="color:var(--err)">Danger Zone</h3></div>' +
+            '<p class="text-sm mb-5" style="color:var(--tx3)">These actions are irreversible. Proceed with caution.</p>' +
+            '<div class="flex flex-col gap-3">' +
+                '<button class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium border cursor-pointer transition-all text-left" style="background:var(--err-bg);border-color:rgba(248,113,113,0.15);color:var(--err)" onmouseover="this.style.background=\'rgba(248,113,113,0.15)\'" onmouseout="this.style.background=\'var(--err-bg)\'" onclick="clearAllUsers()">' +
+                    '<i class="fa-solid fa-users-slash w-5 text-center"></i><div><div>Delete All Users & Data</div><div class="text-xs font-normal mt-0.5" style="color:var(--tx3)">Remove every user and all tool history</div></div></button>' +
+                '<button class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium border cursor-pointer transition-all text-left" style="background:var(--err-bg);border-color:rgba(248,113,113,0.15);color:var(--err)" onmouseover="this.style.background=\'rgba(248,113,113,0.15)\'" onmouseout="this.style.background=\'var(--err-bg)\'" onclick="clearActivity()">' +
+                    '<i class="fa-solid fa-broom w-5 text-center"></i><div><div>Clear All Activity Logs</div><div class="text-xs font-normal mt-0.5" style="color:var(--tx3)">Remove NIC, FX, Lottery, Password history</div></div></button>' +
+                '<button class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium border cursor-pointer transition-all text-left" style="background:rgba(251,191,36,0.08);border-color:rgba(251,191,36,0.15);color:var(--wrn)" onmouseover="this.style.background=\'rgba(251,191,36,0.12)\'" onmouseout="this.style.background=\'rgba(251,191,36,0.08)\'" onclick="nuclearOption()">' +
+                    '<i class="fa-solid fa-radiation w-5 text-center"></i><div><div>Nuclear Option — Wipe Everything</div><div class="text-xs font-normal mt-0.5" style="color:var(--tx3)">Clear ALL localStorage data for this domain</div></div></button>' +
+            '</div></div>' +
+
+        /* Admin Info */
+        '<div class="mt-6 p-5 rounded-2xl text-center" style="background:var(--bg3);border:1px solid var(--brd)">' +
+            '<p class="text-xs" style="color:var(--tx3)">ZETA TOOLS Admin Panel v1.0</p>' +
+            '<p class="text-xs mt-1" style="color:var(--tx3)">Session: ' + (AdminAuth.isLogged() ? '<span style="color:var(--ok)">Active</span>' : '<span style="color:var(--err)">Expired</span>') + '</p></div>' +
+
+        '</div>';
+}
+
+function si(label, val, icon) {
+    return '<div class="p-4 rounded-xl" style="background:var(--bg4)"><div class="flex items-center gap-2 mb-1"><i class="fa-solid '+icon+'" style="color:var(--tx3);font-size:11px"></i><span class="text-xs" style="color:var(--tx3)">'+label+'</span></div><div class="font-display text-lg font-bold" style="color:var(--tx)">'+val+'</div></div>';
+}
+
+function nuclearOption() {
+    Modal.open(
+        '<div class="p-6 text-center"><i class="fa-solid fa-radiation text-4xl mb-3" style="color:var(--wrn)"></i>' +
+        '<h3 class="font-display text-lg font-semibold mb-2">Nuclear Option</h3>' +
+        '<p class="text-sm mb-6" style="color:var(--tx2)">This will clear <strong>ALL</strong> localStorage data for this entire domain — not just ZETA data. Other apps on this domain will also lose their data.</p>' +
+        '<div class="flex gap-3"><button class="flex-1 py-3 rounded-lg font-semibold text-sm border cursor-pointer" style="background:var(--bg3);border-color:var(--brd);color:var(--tx)" onclick="Modal.close()">Cancel</button>' +
+        '<button class="flex-1 py-3 rounded-lg font-semibold text-sm border-none cursor-pointer" style="background:var(--wrn);color:#000" onclick="localStorage.clear();Modal.close();Toast.show(\'Everything wiped\',\'info\');renderPage();">Wipe All</button></div></div>'
+    );
+}
+
+/* ═══════════════════════════════════════
+   INIT
+   ═══════════════════════════════════════ */
+(function() {
+    document.documentElement.classList.add('dark');
+    if (AdminAuth.isLogged()) {
+        renderAdmin();
+    } else {
+        renderLogin();
+    }
+})();
+</script>
+</body>
+</html>
