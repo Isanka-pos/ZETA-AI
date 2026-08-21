@@ -15,8 +15,8 @@
     </script>
     <style>
         /* ============================================================
-               ROOT VARIABLES
-               ============================================================ */
+           ROOT VARIABLES
+           ============================================================ */
         :root {
             --bg-base: #04060C;
             --bg-surface: #080B14;
@@ -50,8 +50,8 @@
         }
 
         /* ============================================================
-               RESET & BASE
-               ============================================================ */
+           RESET & BASE
+           ============================================================ */
         *,
         *::before,
         *::after {
@@ -93,8 +93,8 @@
         }
 
         /* ============================================================
-               TOAST
-               ============================================================ */
+           TOAST
+           ============================================================ */
         .toast-container {
             position: fixed;
             top: 64px;
@@ -212,8 +212,8 @@
         }
 
         /* ============================================================
-               NAVBAR
-               ============================================================ */
+           NAVBAR
+           ============================================================ */
         .top-nav {
             position: fixed;
             top: 0;
@@ -312,49 +312,12 @@
             font-weight: 500;
             font-size: 13px;
         }
-        .nav-search-wrap {
-            flex: 1;
-            max-width: 480px;
-            position: relative;
-            display: none;
-        }
-        @media(min-width:768px) {
-            .nav-search-wrap {
-                display: block;
-            }
-        }
-        .nav-search {
-            width: 100%;
-            padding: 7px 14px 7px 36px;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border-subtle);
-            background: rgba(255, 255, 255, 0.02);
-            color: var(--text-primary);
-            font-size: 12.5px;
-            transition: all var(--transition-fast);
-            outline: none;
-        }
-        .nav-search:focus {
-            border-color: rgba(79, 125, 247, 0.3);
-            background: rgba(255, 255, 255, 0.04);
-            box-shadow: 0 0 0 3px rgba(79, 125, 247, 0.06);
-        }
-        .nav-search::placeholder {
-            color: var(--text-tertiary);
-        }
-        .nav-search-icon {
-            position: absolute;
-            left: 11px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-tertiary);
-            font-size: 11px;
-        }
         .nav-actions {
             display: flex;
             align-items: center;
             gap: 4px;
             flex-shrink: 0;
+            margin-left: auto;
         }
         .nav-btn {
             padding: 6px 12px;
@@ -498,8 +461,8 @@
         }
 
         /* ============================================================
-               SIDEBAR (mobile)
-               ============================================================ */
+           SIDEBAR (mobile)
+           ============================================================ */
         .sidebar {
             width: 260px;
             min-width: 260px;
@@ -766,8 +729,8 @@
         }
 
         /* ============================================================
-               MODAL
-               ============================================================ */
+           MODAL
+           ============================================================ */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -810,8 +773,8 @@
         }
 
         /* ============================================================
-               BUTTONS & INPUTS
-               ============================================================ */
+           BUTTONS & INPUTS
+           ============================================================ */
         .btn-glass {
             background: rgba(255, 255, 255, 0.025);
             border: 1px solid var(--border-default);
@@ -947,8 +910,8 @@
         }
 
         /* ============================================================
-               HERO
-               ============================================================ */
+           HERO
+           ============================================================ */
         .hero-section {
             position: relative;
             padding: 76px 20px 40px;
@@ -1064,38 +1027,6 @@
             line-height: 1.7;
             font-weight: 400;
         }
-        .hero-search {
-            max-width: 440px;
-            margin: 0 auto 28px;
-            position: relative;
-        }
-        .hero-search input {
-            width: 100%;
-            padding: 11px 16px 11px 42px;
-            border-radius: var(--radius-md);
-            border: 1px solid var(--border-default);
-            background: rgba(255, 255, 255, 0.03);
-            color: var(--text-primary);
-            font-size: 14px;
-            transition: all var(--transition-base);
-            outline: none;
-        }
-        .hero-search input:focus {
-            border-color: rgba(79, 125, 247, 0.3);
-            background: rgba(255, 255, 255, 0.06);
-            box-shadow: 0 0 0 4px rgba(79, 125, 247, 0.06);
-        }
-        .hero-search input::placeholder {
-            color: var(--text-tertiary);
-        }
-        .hero-search i {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-tertiary);
-            font-size: 13px;
-        }
         .hero-actions {
             display: flex;
             align-items: center;
@@ -1133,8 +1064,8 @@
         }
 
         /* ============================================================
-               SECTIONS
-               ============================================================ */
+           SECTIONS
+           ============================================================ */
         .section-eyebrow {
             display: inline-flex;
             align-items: center;
@@ -1164,8 +1095,8 @@
         }
 
         /* ============================================================
-               CATEGORIES
-               ============================================================ */
+           CATEGORIES
+           ============================================================ */
         .categories-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -1253,8 +1184,8 @@
         }
 
         /* ============================================================
-               APP CARDS
-               ============================================================ */
+           APP CARDS
+           ============================================================ */
         .app-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -1311,6 +1242,7 @@
             font-size: 20px;
             color: #fff;
             transition: transform var(--transition-base);
+            position: relative;
         }
         .app-card:hover .app-card-icon {
             transform: scale(1.04) rotate(-1deg);
@@ -1362,9 +1294,6 @@
                 transform: scale(1.2) rotate(12deg);
                 opacity: .7
             }
-        }
-        .app-card-icon {
-            position: relative;
         }
         .app-card-info {
             flex: 1;
@@ -1547,8 +1476,8 @@
         }
 
         /* ============================================================
-               APP DETAILS PAGE
-               ============================================================ */
+           APP DETAILS PAGE
+           ============================================================ */
         .detail-hero {
             position: relative;
             padding: 24px 20px 28px;
@@ -1793,8 +1722,8 @@
         }
 
         /* ============================================================
-               REVIEWS
-               ============================================================ */
+           REVIEWS
+           ============================================================ */
         .review-item {
             background: rgba(255, 255, 255, 0.015);
             border: 1px solid var(--border-subtle);
@@ -1840,8 +1769,8 @@
         }
 
         /* ============================================================
-               RELATED APPS
-               ============================================================ */
+           RELATED APPS
+           ============================================================ */
         .related-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -1909,8 +1838,8 @@
         }
 
         /* ============================================================
-               STATS
-               ============================================================ */
+           STATS
+           ============================================================ */
         .stats-section {
             padding: 36px 20px;
             border-top: 1px solid var(--border-subtle);
@@ -1943,8 +1872,8 @@
         }
 
         /* ============================================================
-               FOOTER
-               ============================================================ */
+           FOOTER
+           ============================================================ */
         .site-footer {
             padding: 32px 20px 18px;
             border-top: 1px solid var(--border-subtle);
@@ -2025,8 +1954,8 @@
         }
 
         /* ============================================================
-               REVEAL ANIMATIONS
-               ============================================================ */
+           REVEAL ANIMATIONS
+           ============================================================ */
         .reveal {
             opacity: 0;
             transform: translateY(16px);
@@ -2050,8 +1979,8 @@
         }
 
         /* ============================================================
-               RESPONSIVE
-               ============================================================ */
+           RESPONSIVE
+           ============================================================ */
         @media(max-width:767px) {
             .top-nav {
                 height: 48px;
@@ -2265,8 +2194,8 @@
         }
 
         /* ============================================================
-               UTILITY
-               ============================================================ */
+           UTILITY
+           ============================================================ */
         .hidden {
             display: none !important;
         }
@@ -2484,7 +2413,6 @@
                 e) { return null; } },
             _set: function(k, v) { try { localStorage.setItem('z_' + k, JSON.stringify(v)); } catch (e) {} },
 
-            // Apps
             getApps: function() { return this._get('apps') || []; },
             saveApps: function(a) { this._set('apps', a); },
             getApp: function(id) { return this.getApps().find(a => a.id === id) || null; },
@@ -2505,7 +2433,6 @@
             getLatestApps: function(limit) { return this.getApps().sort((a, b) => new Date(b.created_at) - new Date(a
                 .created_at)).slice(0, limit || 6); },
 
-            // Users
             getUsers: function() { return this._get('users') || []; },
             saveUsers: function(u) { this._set('users', u); },
             getUser: function(id) { return this.getUsers().find(u => u.id === id) || null; },
@@ -2521,7 +2448,6 @@
                 this.saveUsers(users);
                 return users[idx]; },
 
-            // Reviews
             getReviews: function() { return this._get('reviews') || []; },
             saveReviews: function(r) { this._set('reviews', r); },
             getReviewsForApp: function(appId) { return this.getReviews().filter(r => r.app_id === appId); },
@@ -2532,7 +2458,6 @@
             deleteReview: function(id) { const reviews = this.getReviews().filter(r => r.id !== id);
                 this.saveReviews(reviews); },
 
-            // Downloads
             getDownloads: function() { return this._get('downloads') || []; },
             saveDownloads: function(d) { this._set('downloads', d); },
             addDownload: function(d) { const downloads = this.getDownloads();
@@ -2542,7 +2467,6 @@
             getDownloadsForApp: function(appId) { return this.getDownloads().filter(d => d.app_id === appId); },
             getDownloadCount: function(appId) { return this.getDownloadsForApp(appId).length; },
 
-            // Categories
             getCategories: function() {
                 const apps = this.getApps();
                 const map = {};
@@ -2558,7 +2482,6 @@
                 return cats.map(c => ({ ...c, count: map[c.id] || 0 }));
             },
 
-            // Seed
             seed: function() {
                 if (this._get('apps') !== null) return;
                 const now = U.now();
@@ -2589,7 +2512,7 @@
                     size: '42.8 MB',
                     downloads: 5123,
                     description: 'Fast, secure messaging with premium features unlocked. No ads, faster downloads, and exclusive stickers.',
-                    icon: 'fa-telegram',
+                    icon: 'fa-grav',
                     color: 'blue',
                     apk_url: 'https://www.mediafire.com/file/qcrh2cr3zncbret/Telegram_Premium_by_Fianz.apk',
                     virus_status: 'clean',
@@ -2608,7 +2531,7 @@
                     size: '68.4 MB',
                     downloads: 8932,
                     description: 'Ad-free YouTube experience with background play, downloads, and YouTube Music included.',
-                    icon: 'fa-youtube',
+                    icon: 'fa-grav',
                     color: 'red',
                     apk_url: 'https://www.mediafire.com/file/9nu3kqo9blp2h59/Youtube_Premium_RVX_v19_16_39_Cli_v5_0_1_Patches_v5_0_3_signed.apk/file',
                     virus_status: 'clean',
@@ -2627,7 +2550,7 @@
                     size: '52.1 MB',
                     downloads: 6540,
                     description: 'Watch movies, TV shows, and originals in 4K HDR with premium access. All content unlocked.',
-                    icon: 'fa-netflix',
+                    icon: 'fa-grav',
                     color: 'red',
                     apk_url: 'https://www.mediafire.com/file/fp0oagpc4yjdbtz/Netflix_Premium_by_Fianz.apk/file',
                     virus_status: 'clean',
@@ -2646,7 +2569,7 @@
                     size: '24.6 MB',
                     downloads: 4102,
                     description: 'Next-generation AI assistant from Google. Get help with writing, coding, learning, and more.',
-                    icon: 'fa-robot',
+                    icon: 'fa-grav',
                     color: 'purple',
                     apk_url: 'https://www.mediafire.com/file/xobx85ada107n7n/Gemini_AI_Premiuk_Zeta.apk/file',
                     virus_status: 'clean',
@@ -2665,7 +2588,7 @@
                     size: '8.7 MB',
                     downloads: 3260,
                     description: 'Powerful file manager and APK editor with advanced features. Modify apps, extract resources, and more.',
-                    icon: 'fa-folder-open',
+                    icon: 'fa-grav-open',
                     color: 'orange',
                     apk_url: 'https://www.mediafire.com/file/fels3jj2hdirlj7/Mt_Manager_%2528BiyuOffc%2529.apk/file',
                     virus_status: 'clean',
@@ -2676,47 +2599,8 @@
                     created_at: now,
                     updated_at: now,
                     developer: 'Bin.MT'
-                }, {
-                    id: U.id(),
-                    name: 'Spotify Premium',
-                    version: '8.9.2',
-                    category: 'entertainment',
-                    size: '36.2 MB',
-                    downloads: 7210,
-                    description: 'Unlimited music streaming with no ads, offline playback, and unlimited skips.',
-                    icon: 'fa-spotify',
-                    color: 'green',
-                    apk_url: 'https://www.mediafire.com/file/spotify_premium_mod.apk/file',
-                    virus_status: 'clean',
-                    screenshots: [],
-                    features: ['No Ads', 'Unlimited Skips', 'Offline Playback', 'High Quality Audio'],
-                    requirements: ['Android 6.0+', '2GB RAM', '80MB Storage'],
-                    changelog: '<strong>v8.9.2</strong> — Updated to latest mod, improved stability.',
-                    created_at: now,
-                    updated_at: now,
-                    developer: 'Spotify AB'
-                }, {
-                    id: U.id(),
-                    name: 'WhatsApp Plus',
-                    version: '2.23.4',
-                    category: 'communication',
-                    size: '48.3 MB',
-                    downloads: 5890,
-                    description: 'Enhanced WhatsApp with more privacy, customization, and features not available in the official app.',
-                    icon: 'fa-whatsapp',
-                    color: 'green',
-                    apk_url: 'https://www.mediafire.com/file/whatsapp_plus_mod.apk/file',
-                    virus_status: 'clean',
-                    screenshots: [],
-                    features: ['Custom Themes', 'Privacy Features', 'Hide Online Status', 'Extended Media Sharing'],
-                    requirements: ['Android 6.0+', '2GB RAM', '100MB Storage'],
-                    changelog: '<strong>v2.23.4</strong> — New themes, improved privacy controls.',
-                    created_at: now,
-                    updated_at: now,
-                    developer: 'WhatsApp Plus Team'
-                }, ];
+                }];
                 this.saveApps(apps);
-                // Seed users
                 if (this._get('users') === null) {
                     this.saveUsers([{
                         id: 'guest',
@@ -2879,9 +2763,7 @@
                 if (this.current === 'home') app.innerHTML = renderHome();
                 else if (this.current === 'detail') app.innerHTML = renderDetail(this.params.id);
                 else app.innerHTML = renderHome();
-                // Re-run reveal after render
                 requestAnimationFrame(() => initReveal());
-                // Close sidebar on navigation
                 closeSidebar();
             }
         };
@@ -2890,7 +2772,6 @@
         //  RENDER FUNCTIONS
         // ================================================================
 
-        // --- Navbar ---
         function renderNav() {
             const user = Auth.getUser();
             const isLoggedIn = Auth.isLoggedIn();
@@ -2903,11 +2784,6 @@
                     <div class="nav-brand" onclick="Router.navigate('home')">
                         <div class="nav-brand-mark"><i class="fa-solid fa-bolt"></i></div>
                         <div class="nav-brand-text"><span class="nav-brand-zeta">Zeta</span> <span class="nav-brand-tools">Store</span></div>
-                    </div>
-
-                    <div class="nav-search-wrap">
-                        <i class="fa-solid fa-search nav-search-icon"></i>
-                        <input class="nav-search" type="text" placeholder="Search apps..." id="globalSearch" oninput="handleGlobalSearch(this.value)" />
                     </div>
 
                     <div class="nav-actions">
@@ -2924,7 +2800,6 @@
                             </div>
                         </div>
                         <button class="nav-btn" onclick="Router.navigate('home');scrollToSection('trending')"><i class="fa-solid fa-fire" style="color:var(--status-warning)"></i> Trending</button>
-                        <a href="https://t.me/zetatools" target="_blank" class="nav-btn"><i class="fa-brands fa-telegram" style="color:var(--accent-blue)"></i> Telegram</a>
                         ${isLoggedIn ? `
                             <img src="${av}" class="nav-avatar hidden sm:block" onclick="openProfileModal()" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=4F7DF7&color=fff&size=64'" title="Profile" />
                             <img src="${av}" class="nav-avatar sm:hidden" onclick="toggleSidebar()" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=4F7DF7&color=fff&size=64'" />
@@ -2938,7 +2813,6 @@
             `;
         }
 
-        // --- Sidebar ---
         function renderSidebar() {
             const user = Auth.getUser();
             const isLoggedIn = Auth.isLoggedIn();
@@ -2994,7 +2868,6 @@
             `;
         }
 
-        // --- Home Page ---
         function renderHome() {
             const apps = DB.getApps();
             const trending = DB.getTrendingApps(6);
@@ -3002,8 +2875,6 @@
             const cats = DB.getCategories();
             const totalDownloads = DB.getDownloads().length;
             const totalApps = apps.length;
-
-            // Featured apps for hero slider (top 3 trending)
             const featured = trending.slice(0, 3);
 
             return `
@@ -3019,13 +2890,9 @@
                             <div class="hero-badge"><i class="fa-solid fa-bolt"></i> Premium APK Store</div>
                             <h1 class="hero-heading">Discover <span class="hero-heading-accent">Premium</span> Android Apps</h1>
                             <p class="hero-desc">Curated collection of the best premium applications, delivered securely and directly to your device.</p>
-                            <div class="hero-search">
-                                <i class="fa-solid fa-search"></i>
-                                <input type="text" placeholder="Search for apps..." id="heroSearch" oninput="handleGlobalSearch(this.value)" />
-                            </div>
                             <div class="hero-actions">
-                                <button class="btn-primary" onclick="document.getElementById('heroSearch').focus()"><i class="fa-solid fa-magnifying-glass" style="font-size:11px"></i> Search Apps</button>
-                                <button class="btn-secondary" onclick="scrollToSection('trending')"><i class="fa-solid fa-fire" style="font-size:10px;color:var(--status-warning)"></i> Trending</button>
+                                <button class="btn-primary" onclick="scrollToSection('trending')"><i class="fa-solid fa-fire" style="font-size:11px;color:var(--status-warning)"></i> Trending Apps</button>
+                                <button class="btn-secondary" onclick="scrollToSection('categories')"><i class="fa-solid fa-th-list" style="font-size:10px"></i> Browse Categories</button>
                             </div>
                             ${featured.length ? `
                             <div style="margin-top:28px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
@@ -3100,7 +2967,6 @@
             `;
         }
 
-        // --- App Card ---
         function renderAppCard(app, index) {
             const color = app.color || 'violet';
             const icon = app.icon || 'fa-box';
@@ -3136,7 +3002,6 @@
             `;
         }
 
-        // --- Detail Page ---
         function renderDetail(appId) {
             const app = DB.getApp(appId);
             if (!app) {
@@ -3162,12 +3027,10 @@
                 ${renderNav()}
                 ${renderSidebar()}
                 <main style="height:100dvh;padding-top:56px;overflow-y:auto" id="appScroll">
-                    <!-- Back -->
                     <div style="padding:12px 20px 0;max-width:720px;margin:0 auto">
                         <button class="nav-btn" onclick="Router.navigate('home')" style="font-size:12px"><i class="fa-solid fa-arrow-left"></i> Back to Store</button>
                     </div>
 
-                    <!-- Detail Hero -->
                     <div class="detail-hero">
                         <div class="detail-hero-inner">
                             <div class="detail-icon ${color}"><i class="fa-brands ${icon}"></i><span class="sp"><i class="fa-solid fa-sparkles"></i></span></div>
@@ -3189,15 +3052,12 @@
                         </div>
                     </div>
 
-                    <!-- Detail Body -->
                     <div class="detail-body">
-                        <!-- Description -->
                         <div class="detail-section">
                             <div class="detail-section-title"><i class="fa-solid fa-align-left"></i> Description</div>
                             <p>${desc}</p>
                         </div>
 
-                        <!-- Features -->
                         <div class="detail-section">
                             <div class="detail-section-title"><i class="fa-solid fa-list-check"></i> Features</div>
                             <ul>
@@ -3205,7 +3065,6 @@
                             </ul>
                         </div>
 
-                        <!-- Requirements -->
                         <div class="detail-section">
                             <div class="detail-section-title"><i class="fa-solid fa-microchip"></i> Requirements</div>
                             <div class="detail-requirements-grid">
@@ -3215,13 +3074,11 @@
                             </div>
                         </div>
 
-                        <!-- Changelog -->
                         <div class="detail-section">
                             <div class="detail-section-title"><i class="fa-solid fa-clock-rotate-left"></i> Changelog</div>
                             <div class="detail-changelog">${changelog}</div>
                         </div>
 
-                        <!-- Reviews -->
                         <div class="detail-section" id="reviews">
                             <div class="detail-section-title"><i class="fa-regular fa-star"></i> Reviews (${reviews.length})</div>
                             ${reviews.length ? reviews.map(r => {
@@ -3242,7 +3099,6 @@
                             `}
                         </div>
 
-                        <!-- Related Apps -->
                         ${related.length ? `
                         <div class="detail-section">
                             <div class="detail-section-title"><i class="fa-solid fa-link"></i> Related Apps</div>
@@ -3261,13 +3117,11 @@
                         ` : ''}
                     </div>
 
-                    <!-- Footer -->
                     ${renderFooter()}
                 </main>
             `;
         }
 
-        // --- Footer ---
         function renderFooter() {
             return `
                 <footer class="site-footer">
@@ -3276,7 +3130,6 @@
                             <div class="footer-brand">ZETA STORE</div>
                             <p class="footer-desc">Premium Android application platform. Curated, secure, and direct downloads for premium APK files.</p>
                             <div class="footer-social">
-                                <a href="https://t.me/zetatools" target="_blank" title="Telegram"><i class="fa-brands fa-telegram"></i></a>
                                 <a href="#" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
                                 <a href="#" title="Twitter"><i class="fa-brands fa-twitter"></i></a>
                                 <a href="#" title="GitHub"><i class="fa-brands fa-github"></i></a>
@@ -3356,44 +3209,6 @@
             }, 200);
         }
 
-        let searchTimeout = null;
-
-        function handleGlobalSearch(query) {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(() => {
-                const q = query.trim().toLowerCase();
-                if (!q) {
-                    Router.navigate('home');
-                    return;
-                }
-                const results = DB.getApps().filter(a =>
-                    a.name.toLowerCase().includes(q) ||
-                    a.description.toLowerCase().includes(q) ||
-                    a.category.toLowerCase().includes(q)
-                );
-                if (results.length) {
-                    // Show search results in a modal or navigate to filtered view
-                    // For simplicity, we navigate home and highlight
-                    Router.navigate('home');
-                    setTimeout(() => {
-                        const appCards = document.querySelectorAll('.app-card');
-                        appCards.forEach(card => {
-                            const title = card.querySelector('.app-card-title');
-                            if (title) {
-                                const text = title.textContent.toLowerCase();
-                                if (!text.includes(q)) card.style.display = 'none';
-                                else card.style.display = '';
-                            }
-                        });
-                        Toast.show(`Found ${results.length} results for "${query}"`, 'info', 2000);
-                    }, 300);
-                } else {
-                    Router.navigate('home');
-                    Toast.show('No apps found for "' + query + '"', 'info', 2000);
-                }
-            }, 400);
-        }
-
         function filterByCategory(cat) {
             Router.navigate('home');
             setTimeout(() => {
@@ -3402,22 +3217,9 @@
                 appCards.forEach(card => {
                     if (cat === 'all') { card.style.display = '';
                         count++; return; }
-                    // Check if the card belongs to this category via its data or text
-                    const meta = card.querySelector('.app-card-meta');
-                    if (meta) {
-                        const badges = meta.querySelectorAll('.app-card-badge');
-                        // We use the category from the app data - we need to store it
-                        // Since we don't have data attr, we use a different approach
-                        // We'll just show all if no filtering is possible
-                        card.style.display = '';
-                        count++;
-                    } else {
-                        card.style.display = '';
-                        count++;
-                    }
+                    card.style.display = '';
+                    count++;
                 });
-                // Better approach: re-render with filter
-                // For now, just show all and notify
                 Toast.show(cat === 'all' ? 'Showing all apps' : `Showing ${cat} category`, 'info', 1500);
             }, 300);
         }
@@ -3430,7 +3232,6 @@
                 user_id: user.id,
                 timestamp: U.now()
             });
-            // Update app download count
             const app = DB.getApp(appId);
             if (app) {
                 const current = app.downloads || 0;
@@ -3575,7 +3376,6 @@
                         el.innerHTML = '<i class="fa-regular fa-star"></i>'; }
                 });
             };
-            // Set default 5 stars
             setTimeout(() => window.setStarRating(5), 50);
 
             setTimeout(() => {
@@ -3696,39 +3496,29 @@
             document.documentElement.classList.add('dark');
             DB.seed();
 
-            // Check if user is logged in
             const hasLoggedIn = localStorage.getItem('z_has_logged_in');
             const isLoggedIn = Auth.isLoggedIn();
             const hasSeenModal = sessionStorage.getItem('z_auto_modal_shown');
 
-            // Render initial page
             handleHash();
 
-            // Auto-show login modal for first-time visitors
             if (!isLoggedIn && !hasLoggedIn && !hasSeenModal) {
                 sessionStorage.setItem('z_auto_modal_shown', 'true');
                 setTimeout(() => openAuthModal('login'), 800);
             }
 
-            // Close sidebar on resize to desktop
             window.addEventListener('resize', () => {
                 if (window.innerWidth >= 768) closeSidebar();
             });
 
-            // Keyboard shortcut: Ctrl+K to focus search
             document.addEventListener('keydown', e => {
-                if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-                    e.preventDefault();
-                    const search = document.getElementById('globalSearch') || document.getElementById('heroSearch');
-                    if (search) search.focus();
-                }
                 if (e.key === 'Escape') {
                     Modal.close();
                     closeSidebar();
                 }
             });
 
-            console.log('🚀 ZETA STORE v2.0 loaded');
+            console.log('🚀 ZETA STORE v2.0 loaded (WhatsApp & Spotify removed)');
             console.log(`📦 ${DB.getApps().length} apps, ${DB.getReviews().length} reviews, ${DB.getDownloads().length} downloads`);
         })();
     </script>
