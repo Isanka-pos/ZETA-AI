@@ -340,7 +340,7 @@
         }
 
         /* ============================================================
-           SIDEBAR — FIXED: full height, scrollable, responsive
+           SIDEBAR — fixed: full height, scrollable, responsive
            ============================================================ */
         .sidebar {
             width: 280px;
@@ -408,7 +408,6 @@
             }
         }
 
-        /* Sidebar header — fixed at top */
         .sb-head {
             flex-shrink: 0;
             padding: 16px 18px 12px;
@@ -451,7 +450,6 @@
             margin-top: 2px;
         }
 
-        /* Sidebar nav — scrollable middle */
         .sb-nav {
             flex: 1;
             overflow-y: auto;
@@ -507,7 +505,6 @@
             flex-shrink: 0;
         }
 
-        /* Sidebar profile — fixed at bottom */
         .sb-profile {
             flex-shrink: 0;
             margin: 6px 10px 14px;
@@ -2350,7 +2347,6 @@
             .nav-mobile-login {
                 display: flex !important;
             }
-            /* Fix sidebar width on very small screens */
             @media(max-width:380px) {
                 .sidebar {
                     width: 240px;
@@ -2570,13 +2566,6 @@
             },
             plural: (n, w) => n === 1 ? w : w + 's',
             truncate: (s, n) => s.length > n ? s.substring(0, n) + '…' : s,
-        };
-
-        // ================================================================
-        //  TOAST (REMOVED)
-        // ================================================================
-        const Toast = {
-            show: function() { /* removed */ }
         };
 
         // ================================================================
