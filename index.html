@@ -329,7 +329,6 @@
             padding: 0 7px;
             border-radius: 4px;
         }
-
         @keyframes dropIn {
             from {
                 opacity: 0;
@@ -342,7 +341,7 @@
         }
 
         /* ============================================================
-           SIDEBAR (mobile)
+           SIDEBAR
            ============================================================ */
         .sidebar {
             width: 260px;
@@ -622,6 +621,7 @@
             align-items: center;
             justify-content: center;
             animation: fadeIn .2s ease;
+            padding: 16px;
         }
         .modal-content {
             background: var(--bg-elevated);
@@ -629,7 +629,7 @@
             border: 1px solid var(--border-default);
             border-radius: var(--radius-xl);
             max-width: 460px;
-            width: 92%;
+            width: 100%;
             max-height: 85vh;
             overflow-y: auto;
             animation: modalIn .3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -1832,6 +1832,7 @@
             align-items: center;
             gap: 6px;
             margin-top: 1px;
+            flex-wrap: wrap;
         }
         .doc-sub i {
             font-size: 9px;
@@ -2302,6 +2303,14 @@
                 flex-direction: column;
                 align-items: stretch;
             }
+            .modal-overlay {
+                padding: 12px;
+            }
+            .modal-content {
+                border-radius: var(--radius-lg);
+                max-width: 100%;
+                margin: 0 4px;
+            }
         }
         @media(min-width:768px) and (max-width:1023px) {
             .categories-grid {
@@ -2760,6 +2769,7 @@
             _seedDocument: function() {
                 if (this._get('documents') !== null) return;
                 const now = U.now();
+                // Document about WhatsApp Ban Method — kept as a separate guide (not an APK).
                 const doc = {
                     id: 'doc_whatsapp_ban',
                     title: 'WhatsApp Ban Method',
@@ -2925,8 +2935,17 @@
                 else app.innerHTML = renderHome();
                 requestAnimationFrame(() => initReveal());
                 closeSidebar();
+                // Close cat menu on render
+                catMenuOpen = false;
+                const cm = document.getElementById('catMenu');
+                if (cm) cm.classList.remove('open');
             }
         };
+
+        // ================================================================
+        //  FILTER STATE
+        // ================================================================
+        let currentCategoryFilter = 'all';
 
         // ================================================================
         //  RENDER FUNCTIONS
@@ -3030,12 +3049,22 @@
 
         function renderHome() {
             const allApps = DB.getApps().sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
+            // Apply category filter
+            const filteredApps = currentCategoryFilter === 'all' ?
+                allApps :
+                allApps.filter(a => a.category === currentCategoryFilter);
+
             const cats = DB.getCategories();
             const totalDownloads = DB.getDownloads().length;
             const totalApps = allApps.length;
             const featured = allApps.slice(0, 3);
             const doc = DB.getDocument('doc_whatsapp_ban');
             const isUnlocked = sessionStorage.getItem('z_doc_unlocked') === 'true';
+
+            // Build category filter indicator
+            const filterLabel = currentCategoryFilter === 'all' ?
+                'All Apps' :
+                (cats.find(c => c.id === currentCategoryFilter)?.label || currentCategoryFilter);
 
             return `
                 ${renderNav()}
@@ -3087,15 +3116,22 @@
                         </div>
                     </section>
 
-                    <!-- MOST POPULAR (All Apps) -->
+                    <!-- MOST POPULAR (Filtered) -->
                     <section style="padding:20px 20px 32px;max-width:720px;margin:0 auto" id="trending">
                         <div class="reveal">
                             <div class="section-eyebrow"><i class="fa-solid fa-fire" style="color:var(--status-warning)"></i> Most Popular</div>
-                            <h2 class="section-heading">All Premium Apps</h2>
-                            <p class="section-sub">The complete collection of premium applications available for download.</p>
+                            <h2 class="section-heading">${filterLabel} <span style="font-size:14px;font-weight:400;color:var(--text-tertiary)">(${filteredApps.length})</span></h2>
+                            <p class="section-sub">${currentCategoryFilter === 'all' ? 'The complete collection of premium applications available for download.' : 'Showing apps in the "' + filterLabel + '" category.'}</p>
+                            ${currentCategoryFilter !== 'all' ? `<button class="btn-glass" onclick="filterByCategory('all')" style="font-size:11px;padding:4px 12px;margin-bottom:12px"><i class="fa-solid fa-xmark"></i> Clear filter</button>` : ''}
                         </div>
                         <div class="app-grid">
-                            ${allApps.map((a,i) => renderAppCard(a, i)).join('')}
+                            ${filteredApps.length ? filteredApps.map((a,i) => renderAppCard(a, i)).join('') : `
+                                <div style="text-align:center;padding:40px 20px;color:var(--text-tertiary);font-size:13px;border:1px dashed var(--border-subtle);border-radius:var(--radius-xl)">
+                                    <i class="fa-regular fa-folder-open" style="font-size:28px;display:block;margin-bottom:12px;color:var(--text-tertiary)"></i>
+                                    No apps found in this category.
+                                    <button class="btn-glass" onclick="filterByCategory('all')" style="display:inline-flex;margin-top:12px;font-size:11px;padding:4px 14px">Show all apps</button>
+                                </div>
+                            `}
                         </div>
                     </section>
 
@@ -3428,26 +3464,40 @@
         }
 
         function scrollToSection(id) {
-            setTimeout(() => {
+            const maxAttempts = 12;
+            let attempts = 0;
+            const tryScroll = () => {
                 const el = document.getElementById(id);
-                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 200);
+                if (el) {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    return;
+                }
+                attempts++;
+                if (attempts < maxAttempts) {
+                    setTimeout(tryScroll, 120);
+                }
+            };
+            // Wait a beat for DOM to settle
+            setTimeout(tryScroll, 80);
         }
 
+        // ================================================================
+        //  FILTER
+        // ================================================================
         function filterByCategory(cat) {
+            currentCategoryFilter = cat || 'all';
+            // Close any open dropdowns
+            catMenuOpen = false;
+            const cm = document.getElementById('catMenu');
+            if (cm) cm.classList.remove('open');
             Router.navigate('home');
-            setTimeout(() => {
-                const appCards = document.querySelectorAll('.app-card');
-                let count = 0;
-                appCards.forEach(card => {
-                    if (cat === 'all') { card.style.display = '';
-                        count++; return; }
-                    card.style.display = '';
-                    count++;
-                });
-            }, 300);
+            // After render, scroll to trending section
+            setTimeout(() => scrollToSection('trending'), 120);
         }
 
+        // ================================================================
+        //  TRACK DOWNLOADS
+        // ================================================================
         function trackDownload(appId) {
             const user = Auth.getUser();
             DB.addDownload({
@@ -3484,6 +3534,8 @@
                 sessionStorage.setItem('z_doc_unlocked', 'true');
                 if (errorEl) errorEl.textContent = '';
                 Router.render();
+                // After render, scroll to documents
+                setTimeout(() => scrollToSection('documents'), 150);
             } else {
                 if (errorEl) errorEl.textContent = 'Incorrect password. Please try again.';
                 input.value = '';
@@ -3702,6 +3754,7 @@
             sessionStorage.removeItem('z_doc_unlocked');
             Modal.close();
             DB.seed();
+            currentCategoryFilter = 'all';
             Router.render();
         }
 
@@ -3778,6 +3831,7 @@
             console.log('🚀 ZETA STORE v2.0 (WhatsApp Plus & Spotify Premium REMOVED)');
             console.log(`📦 ${DB.getApps().length} apps, ${DB.getReviews().length} reviews, ${DB.getDownloads().length} downloads`);
             console.log(`📄 Documents: ${DB.getDocuments().length}`);
+            console.log(`🔍 Current filter: ${currentCategoryFilter}`);
         })();
     </script>
 </body>
