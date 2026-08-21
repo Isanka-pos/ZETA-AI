@@ -1872,6 +1872,257 @@
         }
 
         /* ============================================================
+           DOCUMENTS SECTION
+           ============================================================ */
+        .documents-section {
+            padding: 32px 20px;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+        .doc-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            transition: all var(--transition-base);
+            position: relative;
+        }
+        .doc-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: var(--radius-xl);
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(255, 200, 0, 0.10), transparent 50%, rgba(255, 100, 0, 0.06));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity var(--transition-base);
+        }
+        .doc-card:hover::before {
+            opacity: 1;
+        }
+        .doc-card-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 18px 20px 14px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .doc-icon {
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            background: rgba(245, 200, 66, 0.08);
+            color: #F5C842;
+            border: 1px solid rgba(245, 200, 66, 0.10);
+        }
+        .doc-icon.locked {
+            background: rgba(255, 70, 70, 0.08);
+            color: #FF4D6D;
+            border-color: rgba(255, 70, 70, 0.10);
+        }
+        .doc-icon.unlocked {
+            background: rgba(34, 201, 144, 0.08);
+            color: var(--status-success);
+            border-color: rgba(34, 201, 144, 0.10);
+        }
+        .doc-header-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .doc-title {
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            color: var(--text-primary);
+        }
+        .doc-sub {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 1px;
+        }
+        .doc-sub i {
+            font-size: 9px;
+        }
+        .doc-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 10px;
+            border-radius: 100px;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            flex-shrink: 0;
+        }
+        .doc-status-badge.locked {
+            background: rgba(255, 70, 70, 0.08);
+            color: #FF4D6D;
+            border: 1px solid rgba(255, 70, 70, 0.10);
+        }
+        .doc-status-badge.unlocked {
+            background: rgba(34, 201, 144, 0.08);
+            color: var(--status-success);
+            border: 1px solid rgba(34, 201, 144, 0.10);
+        }
+        .doc-body {
+            padding: 16px 20px 20px;
+        }
+        .doc-locked {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .doc-locked .lock-msg {
+            font-size: 13px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .doc-locked .lock-msg i {
+            color: var(--status-warning);
+            font-size: 14px;
+        }
+        .doc-password-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .doc-password-row .auth-input {
+            flex: 1;
+            min-width: 140px;
+            font-size: 13px;
+            padding: 8px 12px;
+        }
+        .doc-password-row .btn-unlock {
+            padding: 8px 18px;
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 600;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            background: linear-gradient(135deg, #F5A623, #E8920C);
+            box-shadow: 0 2px 10px rgba(245, 166, 35, 0.18);
+            transition: all var(--transition-base);
+            white-space: nowrap;
+        }
+        .doc-password-row .btn-unlock:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 18px rgba(245, 166, 35, 0.28);
+        }
+        .doc-password-row .btn-unlock:active {
+            transform: scale(.98);
+        }
+        .doc-password-hint {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            padding: 6px 10px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 6px;
+            border: 1px dashed var(--border-subtle);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .doc-password-hint i {
+            color: var(--accent-blue);
+            font-size: 10px;
+        }
+        .doc-error {
+            color: var(--status-error);
+            font-size: 12px;
+            min-height: 18px;
+        }
+        .doc-unlocked {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            animation: fadeIn .3s ease;
+        }
+        .doc-unlocked .doc-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        .doc-unlocked .doc-desc strong {
+            color: var(--text-primary);
+        }
+        .doc-unlocked .doc-meta-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 10px 14px;
+            font-size: 12px;
+        }
+        .doc-unlocked .doc-meta-grid .label {
+            color: var(--text-tertiary);
+        }
+        .doc-unlocked .doc-meta-grid .value {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        .doc-unlocked .doc-dl-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 22px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(135deg, #F5A623, #E8920C);
+            box-shadow: 0 2px 14px rgba(245, 166, 35, 0.2);
+            text-decoration: none;
+            transition: all var(--transition-base);
+            align-self: flex-start;
+        }
+        .doc-unlocked .doc-dl-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 24px rgba(245, 166, 35, 0.3);
+        }
+        .doc-unlocked .doc-dl-link:active {
+            transform: scale(.97);
+        }
+        .doc-unlocked .doc-dl-link i {
+            font-size: 14px;
+        }
+
+        @media(max-width:767px) {
+            .doc-meta-grid {
+                grid-template-columns: 1fr !important;
+            }
+            .doc-password-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .doc-password-row .auth-input {
+                min-width: unset;
+            }
+            .doc-unlocked .doc-dl-link {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* ============================================================
            FOOTER
            ============================================================ */
         .site-footer {
@@ -2155,6 +2406,20 @@
             }
             .related-grid {
                 grid-template-columns: 1fr;
+            }
+            .documents-section {
+                padding: 24px 16px;
+            }
+            .doc-card-header {
+                padding: 14px 16px 12px;
+                flex-wrap: wrap;
+            }
+            .doc-body {
+                padding: 14px 16px 16px;
+            }
+            .doc-password-row {
+                flex-direction: column;
+                align-items: stretch;
             }
         }
         @media(min-width:768px) and (max-width:1023px) {
@@ -2467,6 +2732,20 @@
             getDownloadsForApp: function(appId) { return this.getDownloads().filter(d => d.app_id === appId); },
             getDownloadCount: function(appId) { return this.getDownloadsForApp(appId).length; },
 
+            // ======= DOCUMENTS =======
+            getDocuments: function() { return this._get('documents') || []; },
+            saveDocuments: function(d) { this._set('documents', d); },
+            getDocument: function(id) { return this.getDocuments().find(d => d.id === id) || null; },
+            addDocument: function(d) { const docs = this.getDocuments();
+                docs.push(d);
+                this.saveDocuments(docs);
+                return d; },
+            updateDocument: function(id, data) { const docs = this.getDocuments();
+                const idx = docs.findIndex(d => d.id === id); if (idx === -1) return null;
+                docs[idx] = { ...docs[idx], ...data };
+                this.saveDocuments(docs);
+                return docs[idx]; },
+
             getCategories: function() {
                 const apps = this.getApps();
                 const map = {};
@@ -2483,7 +2762,11 @@
             },
 
             seed: function() {
-                if (this._get('apps') !== null) return;
+                if (this._get('apps') !== null) {
+                    // ensure document exists even if apps already seeded
+                    this._seedDocument();
+                    return;
+                }
                 const now = U.now();
                 const apps = [{
                     id: U.id(),
@@ -2612,6 +2895,45 @@
                 }
                 if (this._get('reviews') === null) this.saveReviews([]);
                 if (this._get('downloads') === null) this.saveDownloads([]);
+                this._seedDocument();
+            },
+
+            _seedDocument: function() {
+                if (this._get('documents') !== null) return;
+                const now = U.now();
+                // Password: proxarmy
+                // We'll store a hashed version with salt
+                // For simplicity, we'll use a pre-computed hash or compute it dynamically
+                // Using a fixed salt + password: "proxarmy"
+                const salt = 'doc_salt_2024';
+                const password = 'proxarmy';
+                // We'll compute the hash in the init, but for seed we can store raw and hash on access
+                // Better: store the hash and salt
+                // We'll use a simple approach: store the password hash + salt
+                // Since we can't compute async here easily, we'll store a pre-computed hash
+                // Or we can compute it synchronously using a simple hash
+                // Let's use a simple SHA-256 via crypto.subtle is async, so we'll use a different approach
+                // We'll store the password in plain text for simplicity but with a note
+                // Actually, let's use the same hashPassword function but we need to handle async
+                // Since this runs in the browser, we'll compute it at init time
+                // For seed, we'll store a temporary value and replace it later
+                // Let's store the password in a way that's not directly visible
+                // Use a simple base64 encoding for the password "proxarmy"
+                // This is not secure but better than plaintext for demo purposes
+                // In production, use proper hashing
+                const doc = {
+                    id: 'doc_whatsapp_ban',
+                    title: 'WhatsApp Ban Method',
+                    description: 'New working method for WhatsApp channel ban. Learn how to ban WhatsApp channels using this method. This guide provides step-by-step instructions to effectively block unwanted channels on WhatsApp.',
+                    link: 'https://www.mediafire.com/file/i6iyt3yue1l7vve/WHATSAPP_CHANNEL_BAN_METHOD_NEW_WORKING_%25F0%259F%2592%25AF_METHOD_BY_PROxARMY_TEAM.zip/file',
+                    password: 'proxarmy', // stored in plain text for demo (in real app, hash this)
+                    salt: 'doc_salt_2024',
+                    created_at: now,
+                    updated_at: now,
+                    file_size: '2.4 MB',
+                    author: 'PROxARMY Team'
+                };
+                this.saveDocuments([doc]);
             }
         };
 
@@ -2836,6 +3158,7 @@
                         <button class="sb-nav-item" onclick="Router.navigate('home');closeSidebar()"><i class="fa-solid fa-house"></i> Home</button>
                         <button class="sb-nav-item" onclick="Router.navigate('home');closeSidebar();scrollToSection('trending')"><i class="fa-solid fa-fire" style="color:var(--status-warning)"></i> Most Popular</button>
                         <button class="sb-nav-item" onclick="Router.navigate('home');closeSidebar();scrollToSection('categories')"><i class="fa-solid fa-th-list"></i> Categories</button>
+                        <button class="sb-nav-item" onclick="Router.navigate('home');closeSidebar();scrollToSection('documents')"><i class="fa-solid fa-file-lines"></i> Documents</button>
                         <div style="height:1px;background:var(--border-subtle);margin:4px 8px"></div>
                         ${cats.map(c => `
                             <button class="sb-nav-item" onclick="filterByCategory('${c.id}');closeSidebar()">
@@ -2868,12 +3191,13 @@
         }
 
         function renderHome() {
-            // Get all apps sorted by downloads (Most Popular)
             const allApps = DB.getApps().sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
             const cats = DB.getCategories();
             const totalDownloads = DB.getDownloads().length;
             const totalApps = allApps.length;
             const featured = allApps.slice(0, 3);
+            const doc = DB.getDocument('doc_whatsapp_ban');
+            const isUnlocked = sessionStorage.getItem('z_doc_unlocked') === 'true';
 
             return `
                 ${renderNav()}
@@ -2896,7 +3220,7 @@
                             <div style="margin-top:28px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
                                 ${featured.map((a,i) => `
                                     <div style="background:rgba(255,255,255,0.02);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:8px 14px;display:flex;align-items:center;gap:8px;cursor:pointer;transition:all var(--transition-fast)" onclick="Router.navigate('detail',{id:'${a.id}')" onmouseover="this.style.borderColor='var(--border-hover)';this.style.background='rgba(255,255,255,0.04)'" onmouseout="this.style.borderColor='var(--border-subtle)';this.style.background='rgba(255,255,255,0.02)'">
-                                        <div class="app-card-icon ${a.color}" style="width:28px;height:28px;min-width:28px;font-size:11px;border-radius:6px"><i class="fa-brands ${a.icon || 'fa-grav'}"></i></div>
+                                        <div class="app-card-icon ${a.color}" style="width:28px;height:28px;min-width:28px;font-size:11px;border-radius:6px"><i class="fa-brands fa-grav"></i></div>
                                         <span style="font-size:12px;font-weight:600;color:var(--text-primary)">${U.esc(a.name)}</span>
                                         <span style="font-size:10px;color:var(--text-tertiary)"><i class="fa-solid fa-download" style="font-size:8px"></i> ${a.downloads || 0}</span>
                                     </div>
@@ -2937,6 +3261,9 @@
                         </div>
                     </section>
 
+                    <!-- DOCUMENTS SECTION (below APKs) -->
+                    ${doc ? renderDocumentSection(doc, isUnlocked) : ''}
+
                     <!-- STATS -->
                     <section class="stats-section">
                         <div class="stats-grid">
@@ -2953,9 +3280,84 @@
             `;
         }
 
+        function renderDocumentSection(doc, isUnlocked) {
+            const title = U.esc(doc.title);
+            const desc = U.esc(doc.description);
+            const link = U.esc(doc.link);
+            const author = U.esc(doc.author || 'PROxARMY Team');
+            const fileSize = U.esc(doc.file_size || '2.4 MB');
+            const created = U.relTime(doc.created_at);
+
+            return `
+                <section class="documents-section" id="documents">
+                    <div class="reveal">
+                        <div class="section-eyebrow"><i class="fa-solid fa-file-lines"></i> Premium Document</div>
+                        <h2 class="section-heading">Exclusive Guide</h2>
+                        <p class="section-sub">Access premium resources and guides from our community.</p>
+                    </div>
+                    <div class="doc-card reveal reveal-d1">
+                        <div class="doc-card-header">
+                            <div class="doc-icon ${isUnlocked ? 'unlocked' : 'locked'}">
+                                <i class="fa-solid ${isUnlocked ? 'fa-lock-open' : 'fa-lock'}"></i>
+                            </div>
+                            <div class="doc-header-info">
+                                <div class="doc-title">${title}</div>
+                                <div class="doc-sub">
+                                    <i class="fa-regular fa-user"></i> ${author}
+                                    <span style="opacity:0.3">·</span>
+                                    <i class="fa-regular fa-clock"></i> ${created}
+                                    <span style="opacity:0.3">·</span>
+                                    <i class="fa-regular fa-hdd"></i> ${fileSize}
+                                </div>
+                            </div>
+                            <div class="doc-status-badge ${isUnlocked ? 'unlocked' : 'locked'}">
+                                <i class="fa-solid ${isUnlocked ? 'fa-check-circle' : 'fa-lock'}"></i>
+                                ${isUnlocked ? 'Unlocked' : 'Protected'}
+                            </div>
+                        </div>
+                        <div class="doc-body">
+                            ${isUnlocked ? `
+                                <div class="doc-unlocked">
+                                    <div class="doc-desc">
+                                        <strong>${title}</strong> — ${desc}
+                                    </div>
+                                    <div class="doc-meta-grid">
+                                        <div><span class="label">Author</span><br/><span class="value">${author}</span></div>
+                                        <div><span class="label">File Size</span><br/><span class="value">${fileSize}</span></div>
+                                        <div><span class="label">Published</span><br/><span class="value">${created}</span></div>
+                                        <div><span class="label">Type</span><br/><span class="value">Guide / Method</span></div>
+                                    </div>
+                                    <a href="${link}" target="_blank" rel="noopener noreferrer" class="doc-dl-link" onclick="Toast.show('Downloading document...','success',1500)">
+                                        <i class="fa-solid fa-download"></i> Download Document
+                                    </a>
+                                </div>
+                            ` : `
+                                <div class="doc-locked">
+                                    <div class="lock-msg">
+                                        <i class="fa-solid fa-lock"></i>
+                                        This document is password protected. Enter the password to access the full guide.
+                                    </div>
+                                    <div class="doc-password-row">
+                                        <input type="password" id="docPasswordInput" class="auth-input" placeholder="Enter document password" autocomplete="off" />
+                                        <button class="btn-unlock" onclick="unlockDocument()">
+                                            <i class="fa-solid fa-key"></i> Unlock
+                                        </button>
+                                    </div>
+                                    <div class="doc-password-hint">
+                                        <i class="fa-solid fa-lightbulb"></i> Hint: team name (lowercase)
+                                    </div>
+                                    <div id="docError" class="doc-error"></div>
+                                </div>
+                            `}
+                        </div>
+                    </div>
+                </section>
+            `;
+        }
+
         function renderAppCard(app, index) {
             const color = app.color || 'violet';
-            const icon = app.icon || 'fa-grav'; // Default to fa-grav
+            const icon = 'fa-grav';
             const name = U.esc(app.name);
             const desc = U.esc(app.description);
             const badge = 'Premium';
@@ -2997,7 +3399,7 @@
             }
 
             const color = app.color || 'violet';
-            const icon = app.icon || 'fa-grav';
+            const icon = 'fa-grav';
             const name = U.esc(app.name);
             const desc = U.esc(app.description);
             const dlCount = DB.getDownloadCount(app.id);
@@ -3091,7 +3493,7 @@
                             <div class="related-grid">
                                 ${related.map(a => `
                                     <div class="related-item" onclick="Router.navigate('detail',{id:'${a.id}')">
-                                        <div class="related-item-icon ${a.color}"><i class="fa-brands ${a.icon || 'fa-grav'}"></i></div>
+                                        <div class="related-item-icon ${a.color}"><i class="fa-brands fa-grav"></i></div>
                                         <div class="related-item-info">
                                             <div class="related-item-name">${U.esc(a.name)}</div>
                                             <div class="related-item-meta">${U.esc(a.size)} · ${U.relTime(a.created_at)}</div>
@@ -3125,6 +3527,7 @@
                             <div class="footer-col-title">Quick Links</div>
                             <button class="footer-link" onclick="Router.navigate('home');scrollToSection('trending')">Most Popular</button>
                             <button class="footer-link" onclick="Router.navigate('home');scrollToSection('categories')">Categories</button>
+                            <button class="footer-link" onclick="Router.navigate('home');scrollToSection('documents')">Documents</button>
                         </div>
                         <div>
                             <div class="footer-col-title">Info</div>
@@ -3224,6 +3627,46 @@
             }
             Toast.show('Download started!', 'success', 2000);
         }
+
+        // ================================================================
+        //  DOCUMENT UNLOCK
+        // ================================================================
+        function unlockDocument() {
+            const input = document.getElementById('docPasswordInput');
+            const errorEl = document.getElementById('docError');
+            if (!input) return;
+            const entered = input.value.trim();
+            if (!entered) {
+                if (errorEl) errorEl.textContent = 'Please enter the password.';
+                return;
+            }
+            const doc = DB.getDocument('doc_whatsapp_ban');
+            if (!doc) {
+                if (errorEl) errorEl.textContent = 'Document not found.';
+                return;
+            }
+            // Check password (plain text for demo)
+            if (entered === doc.password) {
+                sessionStorage.setItem('z_doc_unlocked', 'true');
+                if (errorEl) errorEl.textContent = '';
+                Toast.show('Document unlocked!', 'success', 1500);
+                Router.render();
+            } else {
+                if (errorEl) errorEl.textContent = 'Incorrect password. Please try again.';
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        // Allow Enter key on password input
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const input = document.getElementById('docPasswordInput');
+                if (input && document.activeElement === input) {
+                    unlockDocument();
+                }
+            }
+        });
 
         // ================================================================
         //  MODAL FUNCTIONS
@@ -3405,6 +3848,7 @@
                         <div>Apps: ${DB.getApps().length}</div>
                         <div>Reviews: ${DB.getReviews().length}</div>
                         <div>Downloads: ${DB.getDownloads().length}</div>
+                        <div>Documents: ${DB.getDocuments().length}</div>
                     </div>
                 </div>
             `);
@@ -3425,8 +3869,9 @@
         }
 
         function doClearAll() {
-            ['apps', 'users', 'reviews', 'downloads', 'login_attempts', 'session'].forEach(k => localStorage.removeItem('z_' +
-                k));
+            ['apps', 'users', 'reviews', 'downloads', 'documents', 'login_attempts', 'session'].forEach(k =>
+                localStorage.removeItem('z_' + k));
+            sessionStorage.removeItem('z_doc_unlocked');
             Modal.close();
             Toast.show('All data cleared', 'info');
             DB.seed();
@@ -3503,8 +3948,9 @@
                 }
             });
 
-            console.log('🚀 ZETA STORE v2.0 (All icons fa-grav, New Arrivals removed)');
+            console.log('🚀 ZETA STORE v2.0 (WhatsApp & Spotify removed, all icons fa-grav)');
             console.log(`📦 ${DB.getApps().length} apps, ${DB.getReviews().length} reviews, ${DB.getDownloads().length} downloads`);
+            console.log(`📄 Documents: ${DB.getDocuments().length}`);
         })();
     </script>
 </body>
