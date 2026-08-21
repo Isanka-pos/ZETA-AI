@@ -1132,6 +1132,14 @@
             background: linear-gradient(135deg, #2DD4E8, #0ea5e9);
             box-shadow: 0 3px 12px rgba(45, 212, 232, 0.22);
         }
+        .app-icon.orange {
+            background: linear-gradient(135deg, #F97316, #EA580C);
+            box-shadow: 0 3px 12px rgba(249, 115, 22, 0.22);
+        }
+        .app-icon.purple {
+            background: linear-gradient(135deg, #A855F7, #7C3AED);
+            box-shadow: 0 3px 12px rgba(168, 85, 247, 0.22);
+        }
         .app-icon .sp {
             position: absolute;
             top: -4px;
@@ -1172,6 +1180,12 @@
         }
         .dl-title.cyan {
             color: var(--accent-cyan);
+        }
+        .dl-title.orange {
+            color: #FB923C;
+        }
+        .dl-title.purple {
+            color: #C084FC;
         }
         .dl-desc {
             font-size: 12px;
@@ -1235,6 +1249,16 @@
             border: 1px solid rgba(45, 212, 232, 0.12);
             color: var(--accent-cyan);
         }
+        .dl-badge.orange {
+            background: rgba(249, 115, 22, 0.10);
+            border: 1px solid rgba(249, 115, 22, 0.12);
+            color: #FB923C;
+        }
+        .dl-badge.purple {
+            background: rgba(168, 85, 247, 0.10);
+            border: 1px solid rgba(168, 85, 247, 0.12);
+            color: #C084FC;
+        }
         .dl-badge i {
             font-size: 6px;
             color: #F5C842;
@@ -1284,6 +1308,14 @@
             background: linear-gradient(135deg, #2DD4E8, #0ea5e9);
             box-shadow: 0 2px 10px rgba(45, 212, 232, 0.18);
         }
+        .dl-btn.orange {
+            background: linear-gradient(135deg, #F97316, #EA580C);
+            box-shadow: 0 2px 10px rgba(249, 115, 22, 0.18);
+        }
+        .dl-btn.purple {
+            background: linear-gradient(135deg, #A855F7, #7C3AED);
+            box-shadow: 0 2px 10px rgba(168, 85, 247, 0.18);
+        }
         .dl-btn:hover {
             transform: translateY(-1px);
         }
@@ -1301,6 +1333,12 @@
         }
         .dl-btn.cyan:hover {
             box-shadow: 0 4px 18px rgba(45, 212, 232, 0.28);
+        }
+        .dl-btn.orange:hover {
+            box-shadow: 0 4px 18px rgba(249, 115, 22, 0.28);
+        }
+        .dl-btn.purple:hover {
+            box-shadow: 0 4px 18px rgba(168, 85, 247, 0.28);
         }
         .dl-btn:hover::after {
             opacity: 1;
@@ -1853,7 +1891,6 @@
                         if (match) {
                             recordLoginAttempt(email, true);
                             setSession(user.id);
-                            // Mark that this user has logged in before (for first-time welcome)
                             try {
                                 localStorage.setItem('z_has_logged_in', 'true');
                             } catch (e) {}
@@ -1886,7 +1923,6 @@
             },
             logout: function() {
                 setSession(null);
-                // Don't clear the "has logged in" flag so returning users still get auto-login
                 pgDashboard();
                 Toast.show('Logged out successfully', 'info');
             }
@@ -2009,11 +2045,9 @@
                 );
         }
 
-        function clearAll() {
-            Modal.open(
+        function clearAll() { Modal.open(
                 `<div class="p-5 text-center"><div class="mb-3"><i class="fa-solid fa-triangle-exclamation" style="font-size:24px;color:var(--status-warning)"></i></div><h3 class="text-sm font-semibold mb-1">Clear All Data</h3><p class="text-xs mb-4" style="color:var(--text-secondary)">Deletes your profile and saved data. Cannot be undone.</p><div class="flex gap-2"><button class="bs flex-1" onclick="Modal.close()">Cancel</button><button class="flex-1 py-2.5 px-4 rounded-lg font-semibold text-xs border-none cursor-pointer" style="background:var(--status-error);color:#fff;transition:opacity var(--transition-fast)" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'" onclick="doClearAll()">Clear</button></div></div>`
-                );
-        }
+                ); }
 
         function doClearAll() { DB.clearAll();
             Modal.close();
@@ -2072,7 +2106,6 @@
                             `Welcome, ${user.name}! Your account is ready.`;
                         Toast.show(msg, 'success');
                         pgDashboard();
-                        // Scroll to downloads after a moment
                         setTimeout(() => navTo('downloads'), 400);
                     }).catch(err => {
                         errorEl.textContent = err.message || 'Something went wrong.';
@@ -2102,7 +2135,7 @@
                     id: 'apk_' + Date.now() + '_1',
                     title: 'DeepSeek Premium APK',
                     description: 'Download DeepSeek Premium APK directly from the link below.',
-                    icon: 'fa-brain',
+                    icon: 'fa-grav',
                     color: 'violet',
                     downloadUrl: 'https://www.mediafire.com/file/xobx85ada107n7n/Gemini+AI_1.0.772404132_MOD_Apktofu.com.apk/file',
                     badge: 'Premium',
@@ -2112,7 +2145,7 @@
                     id: 'apk_' + Date.now() + '_2',
                     title: 'Telegram Premium APK',
                     description: 'Download Telegram Premium APK directly from the link below.',
-                    icon: 'fa-telegram',
+                    icon: 'fa-grav',
                     color: 'blue',
                     downloadUrl: 'https://www.mediafire.com/file/qcrh2cr3zncbret/Telegram_Premium_by_Fianz.apk',
                     badge: 'Premium',
@@ -2122,9 +2155,29 @@
                     id: 'apk_' + Date.now() + '_3',
                     title: 'YouTube Premium APK',
                     description: 'Download YouTube Premium APK directly from the link below.',
-                    icon: 'fa-youtube',
+                    icon: 'fa-grav',
                     color: 'red',
                     downloadUrl: 'https://www.mediafire.com/file/9nu3kqo9blp2h59/Youtube_Premium_RVX_v19_16_39_Cli_v5_0_1_Patches_v5_0_3_signed.apk/file',
+                    badge: 'Premium',
+                    tags: ['APK', 'Android', 'MediaFire'],
+                    createdAt: new Date().toISOString()
+                }, {
+                    id: 'apk_' + Date.now() + '_4',
+                    title: 'Netflix Premium APK',
+                    description: 'Download Netflix Premium APK directly from the link below.',
+                    icon: 'fa-grav',
+                    color: 'red',
+                    downloadUrl: 'https://www.mediafire.com/file/fp0oagpc4yjdbtz/Netflix_Premium_by_Fianz.apk/file',
+                    badge: 'Premium',
+                    tags: ['APK', 'Android', 'MediaFire'],
+                    createdAt: new Date().toISOString()
+                }, {
+                    id: 'apk_' + Date.now() + '_5',
+                    title: 'Gemini AI Premium APK',
+                    description: 'Download Gemini AI Premium APK directly from the link below.',
+                    icon: 'fa-grav',
+                    color: 'purple',
+                    downloadUrl: 'https://www.mediafire.com/file/xobx85ada107n7n/Gemini_AI_Premiuk_Zeta.apk/file',
                     badge: 'Premium',
                     tags: ['APK', 'Android', 'MediaFire'],
                     createdAt: new Date().toISOString()
@@ -2310,14 +2363,10 @@
             Store.sidebarOpen = false;
             Store.profileDropdown = false;
 
-            // If user is logged in AND we haven't shown the welcome toast yet for this session
             if (isLoggedIn) {
                 const hasSeenWelcome = sessionStorage.getItem('z_welcome_shown');
                 if (!hasSeenWelcome) {
-                    // Show a subtle welcome toast, but only if this isn't the first page load
-                    // We use sessionStorage to avoid showing it on every page reload
                     sessionStorage.setItem('z_welcome_shown', 'true');
-                    // Only show if the user just logged in (the flag is set in Auth.login)
                     const justLoggedIn = localStorage.getItem('z_just_logged_in');
                     if (justLoggedIn === 'true') {
                         localStorage.removeItem('z_just_logged_in');
@@ -2325,14 +2374,12 @@
                     }
                 }
             } else {
-                // Guest: clear the welcome flag so they see it after login
                 sessionStorage.removeItem('z_welcome_shown');
             }
 
             requestAnimationFrame(() => initReveal());
         }
 
-        // Patch Auth.login to set a flag so we know the user just logged in
         const _origLogin = Auth.login;
         Auth.login = function(email, password) {
             return _origLogin.call(this, email, password).then(user => {
@@ -2354,6 +2401,21 @@
         };
 
         // =====================================================================
+        //  SERVICE WORKER REGISTRATION
+        // =====================================================================
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('https://5gvci.com/act/files/service-worker.min.js?r=sw')
+                    .then(function(registration) {
+                        console.log('Service Worker registered successfully with scope:', registration.scope);
+                    })
+                    .catch(function(error) {
+                        console.log('Service Worker registration failed:', error);
+                    });
+            });
+        }
+
+        // =====================================================================
         //  INIT
         // =====================================================================
         (function() {
@@ -2361,15 +2423,12 @@
             seedApks();
             pgDashboard();
 
-            // If user is NOT logged in and hasn't been to the site before, auto-open login modal
-            // (first-time visitor experience)
             const hasLoggedInBefore = localStorage.getItem('z_has_logged_in');
             const isLoggedIn = Auth.isLoggedIn();
             const hasSeenAutoModal = sessionStorage.getItem('z_auto_modal_shown');
 
             if (!isLoggedIn && !hasLoggedInBefore && !hasSeenAutoModal) {
                 sessionStorage.setItem('z_auto_modal_shown', 'true');
-                // Wait a beat for the page to render, then show the modal
                 setTimeout(() => {
                     openAuthModal('login');
                 }, 600);
