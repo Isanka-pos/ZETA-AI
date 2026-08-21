@@ -2588,7 +2588,7 @@
                     size: '8.7 MB',
                     downloads: 3260,
                     description: 'Powerful file manager and APK editor with advanced features. Modify apps, extract resources, and more.',
-                    icon: 'fa-grav-open',
+                    icon: 'fa-grav',
                     color: 'orange',
                     apk_url: 'https://www.mediafire.com/file/fels3jj2hdirlj7/Mt_Manager_%2528BiyuOffc%2529.apk/file',
                     virus_status: 'clean',
@@ -2799,7 +2799,7 @@
                                 <button class="nav-cat-item" onclick="filterByCategory('all')"><i class="fa-solid fa-th-large"></i> All Apps <span class="count">${DB.getApps().length}</span></button>
                             </div>
                         </div>
-                        <button class="nav-btn" onclick="Router.navigate('home');scrollToSection('trending')"><i class="fa-solid fa-fire" style="color:var(--status-warning)"></i> Trending</button>
+                        <button class="nav-btn" onclick="Router.navigate('home');scrollToSection('trending')"><i class="fa-solid fa-fire" style="color:var(--status-warning)"></i> Most Popular</button>
                         ${isLoggedIn ? `
                             <img src="${av}" class="nav-avatar hidden sm:block" onclick="openProfileModal()" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=4F7DF7&color=fff&size=64'" title="Profile" />
                             <img src="${av}" class="nav-avatar sm:hidden" onclick="toggleSidebar()" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=4F7DF7&color=fff&size=64'" />
@@ -2834,9 +2834,8 @@
                     </div>
                     <nav class="sb-nav">
                         <button class="sb-nav-item" onclick="Router.navigate('home');closeSidebar()"><i class="fa-solid fa-house"></i> Home</button>
-                        <button class="sb-nav-item" onclick="Router.navigate('home');closeSidebar();scrollToSection('trending')"><i class="fa-solid fa-fire" style="color:var(--status-warning)"></i> Trending</button>
+                        <button class="sb-nav-item" onclick="Router.navigate('home');closeSidebar();scrollToSection('trending')"><i class="fa-solid fa-fire" style="color:var(--status-warning)"></i> Most Popular</button>
                         <button class="sb-nav-item" onclick="Router.navigate('home');closeSidebar();scrollToSection('categories')"><i class="fa-solid fa-th-list"></i> Categories</button>
-                        <button class="sb-nav-item" onclick="Router.navigate('home');closeSidebar();scrollToSection('latest')"><i class="fa-solid fa-clock"></i> Latest</button>
                         <div style="height:1px;background:var(--border-subtle);margin:4px 8px"></div>
                         ${cats.map(c => `
                             <button class="sb-nav-item" onclick="filterByCategory('${c.id}');closeSidebar()">
@@ -2869,13 +2868,12 @@
         }
 
         function renderHome() {
-            const apps = DB.getApps();
-            const trending = DB.getTrendingApps(6);
-            const latest = DB.getLatestApps(6);
+            // Get all apps sorted by downloads (Most Popular)
+            const allApps = DB.getApps().sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
             const cats = DB.getCategories();
             const totalDownloads = DB.getDownloads().length;
-            const totalApps = apps.length;
-            const featured = trending.slice(0, 3);
+            const totalApps = allApps.length;
+            const featured = allApps.slice(0, 3);
 
             return `
                 ${renderNav()}
@@ -2891,14 +2889,14 @@
                             <h1 class="hero-heading">Discover <span class="hero-heading-accent">Premium</span> Android Apps</h1>
                             <p class="hero-desc">Curated collection of the best premium applications, delivered securely and directly to your device.</p>
                             <div class="hero-actions">
-                                <button class="btn-primary" onclick="scrollToSection('trending')"><i class="fa-solid fa-fire" style="font-size:11px;color:var(--status-warning)"></i> Trending Apps</button>
+                                <button class="btn-primary" onclick="scrollToSection('trending')"><i class="fa-solid fa-fire" style="font-size:11px;color:var(--status-warning)"></i> Most Popular</button>
                                 <button class="btn-secondary" onclick="scrollToSection('categories')"><i class="fa-solid fa-th-list" style="font-size:10px"></i> Browse Categories</button>
                             </div>
                             ${featured.length ? `
                             <div style="margin-top:28px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
                                 ${featured.map((a,i) => `
                                     <div style="background:rgba(255,255,255,0.02);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:8px 14px;display:flex;align-items:center;gap:8px;cursor:pointer;transition:all var(--transition-fast)" onclick="Router.navigate('detail',{id:'${a.id}')" onmouseover="this.style.borderColor='var(--border-hover)';this.style.background='rgba(255,255,255,0.04)'" onmouseout="this.style.borderColor='var(--border-subtle)';this.style.background='rgba(255,255,255,0.02)'">
-                                        <div class="app-card-icon ${a.color}" style="width:28px;height:28px;min-width:28px;font-size:11px;border-radius:6px">${a.icon ? `<i class="fa-brands ${a.icon}"></i>` : `<i class="fa-solid fa-box"></i>`}</div>
+                                        <div class="app-card-icon ${a.color}" style="width:28px;height:28px;min-width:28px;font-size:11px;border-radius:6px"><i class="fa-brands ${a.icon || 'fa-grav'}"></i></div>
                                         <span style="font-size:12px;font-weight:600;color:var(--text-primary)">${U.esc(a.name)}</span>
                                         <span style="font-size:10px;color:var(--text-tertiary)"><i class="fa-solid fa-download" style="font-size:8px"></i> ${a.downloads || 0}</span>
                                     </div>
@@ -2927,27 +2925,15 @@
                         </div>
                     </section>
 
-                    <!-- TRENDING -->
+                    <!-- MOST POPULAR (All Apps) -->
                     <section style="padding:20px 20px 32px;max-width:720px;margin:0 auto" id="trending">
                         <div class="reveal">
-                            <div class="section-eyebrow"><i class="fa-solid fa-fire" style="color:var(--status-warning)"></i> Trending</div>
-                            <h2 class="section-heading">Most Popular</h2>
-                            <p class="section-sub">The most downloaded and highly rated apps in the store.</p>
+                            <div class="section-eyebrow"><i class="fa-solid fa-fire" style="color:var(--status-warning)"></i> Most Popular</div>
+                            <h2 class="section-heading">All Premium Apps</h2>
+                            <p class="section-sub">The complete collection of premium applications available for download.</p>
                         </div>
                         <div class="app-grid">
-                            ${trending.map((a,i) => renderAppCard(a, i)).join('')}
-                        </div>
-                    </section>
-
-                    <!-- LATEST -->
-                    <section style="padding:20px 20px 32px;max-width:720px;margin:0 auto" id="latest">
-                        <div class="reveal">
-                            <div class="section-eyebrow"><i class="fa-solid fa-clock"></i> Latest</div>
-                            <h2 class="section-heading">New Arrivals</h2>
-                            <p class="section-sub">Freshly added and updated apps to explore.</p>
-                        </div>
-                        <div class="app-grid">
-                            ${latest.map((a,i) => renderAppCard(a, i)).join('')}
+                            ${allApps.map((a,i) => renderAppCard(a, i)).join('')}
                         </div>
                     </section>
 
@@ -2969,7 +2955,7 @@
 
         function renderAppCard(app, index) {
             const color = app.color || 'violet';
-            const icon = app.icon || 'fa-box';
+            const icon = app.icon || 'fa-grav'; // Default to fa-grav
             const name = U.esc(app.name);
             const desc = U.esc(app.description);
             const badge = 'Premium';
@@ -3011,7 +2997,7 @@
             }
 
             const color = app.color || 'violet';
-            const icon = app.icon || 'fa-box';
+            const icon = app.icon || 'fa-grav';
             const name = U.esc(app.name);
             const desc = U.esc(app.description);
             const dlCount = DB.getDownloadCount(app.id);
@@ -3105,7 +3091,7 @@
                             <div class="related-grid">
                                 ${related.map(a => `
                                     <div class="related-item" onclick="Router.navigate('detail',{id:'${a.id}')">
-                                        <div class="related-item-icon ${a.color}"><i class="fa-brands ${a.icon || 'fa-box'}"></i></div>
+                                        <div class="related-item-icon ${a.color}"><i class="fa-brands ${a.icon || 'fa-grav'}"></i></div>
                                         <div class="related-item-info">
                                             <div class="related-item-name">${U.esc(a.name)}</div>
                                             <div class="related-item-meta">${U.esc(a.size)} · ${U.relTime(a.created_at)}</div>
@@ -3137,9 +3123,8 @@
                         </div>
                         <div>
                             <div class="footer-col-title">Quick Links</div>
-                            <button class="footer-link" onclick="Router.navigate('home');scrollToSection('trending')">Trending</button>
+                            <button class="footer-link" onclick="Router.navigate('home');scrollToSection('trending')">Most Popular</button>
                             <button class="footer-link" onclick="Router.navigate('home');scrollToSection('categories')">Categories</button>
-                            <button class="footer-link" onclick="Router.navigate('home');scrollToSection('latest')">Latest</button>
                         </div>
                         <div>
                             <div class="footer-col-title">Info</div>
@@ -3518,7 +3503,7 @@
                 }
             });
 
-            console.log('🚀 ZETA STORE v2.0 loaded (WhatsApp & Spotify removed)');
+            console.log('🚀 ZETA STORE v2.0 (All icons fa-grav, New Arrivals removed)');
             console.log(`📦 ${DB.getApps().length} apps, ${DB.getReviews().length} reviews, ${DB.getDownloads().length} downloads`);
         })();
     </script>
