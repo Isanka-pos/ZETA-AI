@@ -1664,7 +1664,7 @@
 
     <script>
         // =====================================================================
-        //  UTILITY & ORIGINAL DB (unchanged)
+        //  UTILITY & ORIGINAL DB
         // =====================================================================
         const U = {
             esc: s => { const d = document.createElement('div');
@@ -1699,7 +1699,7 @@
         };
 
         // =====================================================================
-        //  AUTH SYSTEM (unchanged)
+        //  AUTH SYSTEM
         // =====================================================================
         async function hashPassword(password, salt) {
             const encoder = new TextEncoder();
@@ -1853,6 +1853,10 @@
                         if (match) {
                             recordLoginAttempt(email, true);
                             setSession(user.id);
+                            // Mark that this user has logged in before (for first-time welcome)
+                            try {
+                                localStorage.setItem('z_has_logged_in', 'true');
+                            } catch (e) {}
                             resolve(user);
                         } else {
                             recordLoginAttempt(email, false);
@@ -1873,19 +1877,23 @@
                     }
                     createUser(email, password, name).then(user => {
                         setSession(user.id);
+                        try {
+                            localStorage.setItem('z_has_logged_in', 'true');
+                        } catch (e) {}
                         resolve(user);
                     }).catch(reject);
                 });
             },
             logout: function() {
                 setSession(null);
+                // Don't clear the "has logged in" flag so returning users still get auto-login
                 pgDashboard();
                 Toast.show('Logged out successfully', 'info');
             }
         };
 
         // =====================================================================
-        //  TOAST, MODAL, STORE (unchanged)
+        //  TOAST, MODAL, STORE
         // =====================================================================
         const Toast = {
             show: function(msg, type, dur) {
@@ -1918,7 +1926,7 @@
         const Store = { sidebarOpen: false, profileDropdown: false };
 
         // =====================================================================
-        //  NAVIGATION HELPERS (unchanged)
+        //  NAVIGATION HELPERS
         // =====================================================================
         function togSB() {
             const s = document.getElementById('sb'),
@@ -1958,8 +1966,7 @@
         }
 
         // =====================================================================
-        //  MODAL FUNCTIONS (openProfile, openDataManagement, openSettings)
-        //  (unchanged except openProfile uses Auth)
+        //  MODAL FUNCTIONS
         // =====================================================================
         function openProfile() {
             const user = Auth.getUser();
@@ -2014,7 +2021,7 @@
             pgDashboard(); }
 
         // =====================================================================
-        //  NEW: LOGIN / REGISTER MODAL (unchanged)
+        //  LOGIN / REGISTER MODAL
         // =====================================================================
         function openAuthModal(mode) {
             mode = mode || 'login';
@@ -2061,9 +2068,12 @@
                     const action = isLogin ? Auth.login(email, password) : Auth.register(email, password, name);
                     action.then(user => {
                         Modal.close();
-                        Toast.show(isLogin ? 'Login successful!' : 'Account created! You are now logged in.',
-                            'success');
+                        const msg = isLogin ? `Welcome back, ${user.name}!` :
+                            `Welcome, ${user.name}! Your account is ready.`;
+                        Toast.show(msg, 'success');
                         pgDashboard();
+                        // Scroll to downloads after a moment
+                        setTimeout(() => navTo('downloads'), 400);
                     }).catch(err => {
                         errorEl.textContent = err.message || 'Something went wrong.';
                         submitBtn.disabled = false;
@@ -2074,7 +2084,7 @@
         }
 
         // =====================================================================
-        //  APK STORAGE FUNCTIONS (NEW)
+        //  APK STORAGE FUNCTIONS
         // =====================================================================
         function getApks() {
             try {
@@ -2162,7 +2172,7 @@
         //  PAGE CONTENT
         // =====================================================================
         function rAPKPage() {
-            seedApks(); // ensure seed data exists
+            seedApks();
             return `
                 <section class="hero">
                     <div class="hero-glow hero-glow-1"></div>
@@ -2215,7 +2225,7 @@
         }
 
         // =====================================================================
-        //  RENDER FUNCTIONS (modified)
+        //  RENDER FUNCTIONS
         // =====================================================================
         function initReveal() {
             const obs = new IntersectionObserver((entries) => {
@@ -2299,16 +2309,71 @@
             `;
             Store.sidebarOpen = false;
             Store.profileDropdown = false;
+
+            // If user is logged in AND we haven't shown the welcome toast yet for this session
+            if (isLoggedIn) {
+                const hasSeenWelcome = sessionStorage.getItem('z_welcome_shown');
+                if (!hasSeenWelcome) {
+                    // Show a subtle welcome toast, but only if this isn't the first page load
+                    // We use sessionStorage to avoid showing it on every page reload
+                    sessionStorage.setItem('z_welcome_shown', 'true');
+                    // Only show if the user just logged in (the flag is set in Auth.login)
+                    const justLoggedIn = localStorage.getItem('z_just_logged_in');
+                    if (justLoggedIn === 'true') {
+                        localStorage.removeItem('z_just_logged_in');
+                        Toast.show(`Welcome back, ${user.name}!`, 'success');
+                    }
+                }
+            } else {
+                // Guest: clear the welcome flag so they see it after login
+                sessionStorage.removeItem('z_welcome_shown');
+            }
+
             requestAnimationFrame(() => initReveal());
         }
+
+        // Patch Auth.login to set a flag so we know the user just logged in
+        const _origLogin = Auth.login;
+        Auth.login = function(email, password) {
+            return _origLogin.call(this, email, password).then(user => {
+                try {
+                    localStorage.setItem('z_just_logged_in', 'true');
+                } catch (e) {}
+                return user;
+            });
+        };
+
+        const _origRegister = Auth.register;
+        Auth.register = function(email, password, name) {
+            return _origRegister.call(this, email, password, name).then(user => {
+                try {
+                    localStorage.setItem('z_just_logged_in', 'true');
+                } catch (e) {}
+                return user;
+            });
+        };
 
         // =====================================================================
         //  INIT
         // =====================================================================
         (function() {
             document.documentElement.classList.add('dark');
-            seedApks(); // ensure APK data exists
+            seedApks();
             pgDashboard();
+
+            // If user is NOT logged in and hasn't been to the site before, auto-open login modal
+            // (first-time visitor experience)
+            const hasLoggedInBefore = localStorage.getItem('z_has_logged_in');
+            const isLoggedIn = Auth.isLoggedIn();
+            const hasSeenAutoModal = sessionStorage.getItem('z_auto_modal_shown');
+
+            if (!isLoggedIn && !hasLoggedInBefore && !hasSeenAutoModal) {
+                sessionStorage.setItem('z_auto_modal_shown', 'true');
+                // Wait a beat for the page to render, then show the modal
+                setTimeout(() => {
+                    openAuthModal('login');
+                }, 600);
+            }
         })();
     </script>
 </body>
