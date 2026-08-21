@@ -93,125 +93,6 @@
         }
 
         /* ============================================================
-           TOAST
-           ============================================================ */
-        .toast-container {
-            position: fixed;
-            top: 64px;
-            right: 12px;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            max-width: 340px;
-            width: calc(100% - 24px);
-            pointer-events: none;
-        }
-        .toast-container>* {
-            pointer-events: auto;
-        }
-        .toast {
-            padding: 10px 14px;
-            border-radius: var(--radius-md);
-            font-size: 12.5px;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            animation: toastIn .3s cubic-bezier(0.16, 1, 0.3, 1);
-            backdrop-filter: blur(16px);
-            font-weight: 500;
-            border: 1px solid var(--border-subtle);
-            box-shadow: var(--shadow-elevated);
-            position: relative;
-            overflow: hidden;
-        }
-        .toast .toast-content {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .toast .progress-bar {
-            width: 100%;
-            height: 2px;
-            background: rgba(255, 255, 255, 0.06);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-        .toast .progress-fill {
-            height: 100%;
-            width: 100%;
-            background: currentColor;
-            border-radius: 2px;
-            animation: shrinkBar 3.5s linear forwards;
-        }
-        @keyframes shrinkBar {
-            from {
-                width: 100%
-            }
-            to {
-                width: 0%
-            }
-        }
-        .toast.success {
-            background: rgba(6, 60, 42, 0.92);
-            color: #86EFAC;
-        }
-        .toast.success i {
-            color: var(--status-success);
-        }
-        .toast.error {
-            background: rgba(80, 20, 20, 0.92);
-            color: #FCA5A5;
-        }
-        .toast.error i {
-            color: var(--status-error);
-        }
-        .toast.info {
-            background: rgba(20, 40, 80, 0.92);
-            color: #93C5FD;
-        }
-        .toast.info i {
-            color: var(--accent-blue);
-        }
-        .toast-close {
-            background: none;
-            border: none;
-            color: inherit;
-            cursor: pointer;
-            opacity: .25;
-            font-size: 12px;
-            padding: 3px 3px 3px 8px;
-            transition: all var(--transition-fast);
-            border-radius: 50%;
-            margin-left: auto;
-            line-height: 1;
-        }
-        .toast-close:hover {
-            opacity: .8;
-            background: rgba(0, 0, 0, 0.15);
-        }
-        @keyframes toastIn {
-            from {
-                opacity: 0;
-                transform: translateX(30px) scale(.95)
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0) scale(1)
-            }
-        }
-        @keyframes toastOut {
-            from {
-                opacity: 1;
-                transform: translateX(0) scale(1)
-            }
-            to {
-                opacity: 0;
-                transform: translateX(30px) scale(.95)
-            }
-        }
-
-        /* ============================================================
            NAVBAR
            ============================================================ */
         .top-nav {
@@ -2597,11 +2478,6 @@
     <div id="app-root"></div>
 
     <!-- ============================================================
-    TOAST CONTAINER
-    ============================================================ -->
-    <div class="toast-container" id="toastContainer"></div>
-
-    <!-- ============================================================
     MODAL ROOT
     ============================================================ -->
     <div id="modalRoot"></div>
@@ -2634,27 +2510,10 @@
         };
 
         // ================================================================
-        //  TOAST
+        //  TOAST (REMOVED)
         // ================================================================
         const Toast = {
-            show: function(msg, type, dur) {
-                type = type || 'info';
-                dur = dur || 3500;
-                const c = document.getElementById('toastContainer');
-                const icons = { success: 'fa-circle-check', error: 'fa-circle-xmark', info: 'fa-circle-info' };
-                const el = document.createElement('div');
-                el.className = 'toast ' + type;
-                el.innerHTML =
-                    `<div class="toast-content"><i class="fa-solid ${icons[type]||icons.info}"></i><span>${U.esc(msg)}</span><button class="toast-close" onclick="this.closest('.toast').remove()"><i class="fa-solid fa-xmark"></i></button></div><div class="progress-bar"><div class="progress-fill"></div></div>`;
-                c.appendChild(el);
-                const timer = setTimeout(() => { el.style.animation = 'toastOut .25s ease forwards';
-                    setTimeout(() => el.remove(), 300); }, dur);
-                el.addEventListener('click', e => { if (e.target.closest('.toast-close')) return;
-                    clearTimeout(timer);
-                    el.style.animation = 'toastOut .25s ease forwards';
-                    setTimeout(() => el.remove(), 300); });
-                el.querySelector('.toast-close').addEventListener('click', () => clearTimeout(timer));
-            }
+            show: function() { /* removed */ }
         };
 
         // ================================================================
@@ -2763,11 +2622,11 @@
 
             seed: function() {
                 if (this._get('apps') !== null) {
-                    // ensure document exists even if apps already seeded
                     this._seedDocument();
                     return;
                 }
                 const now = U.now();
+                // WhatsApp Plus and Spotify Premium are REMOVED.
                 const apps = [{
                     id: U.id(),
                     name: 'DeepSeek Premium',
@@ -2901,32 +2760,12 @@
             _seedDocument: function() {
                 if (this._get('documents') !== null) return;
                 const now = U.now();
-                // Password: proxarmy
-                // We'll store a hashed version with salt
-                // For simplicity, we'll use a pre-computed hash or compute it dynamically
-                // Using a fixed salt + password: "proxarmy"
-                const salt = 'doc_salt_2024';
-                const password = 'proxarmy';
-                // We'll compute the hash in the init, but for seed we can store raw and hash on access
-                // Better: store the hash and salt
-                // We'll use a simple approach: store the password hash + salt
-                // Since we can't compute async here easily, we'll store a pre-computed hash
-                // Or we can compute it synchronously using a simple hash
-                // Let's use a simple SHA-256 via crypto.subtle is async, so we'll use a different approach
-                // We'll store the password in plain text for simplicity but with a note
-                // Actually, let's use the same hashPassword function but we need to handle async
-                // Since this runs in the browser, we'll compute it at init time
-                // For seed, we'll store a temporary value and replace it later
-                // Let's store the password in a way that's not directly visible
-                // Use a simple base64 encoding for the password "proxarmy"
-                // This is not secure but better than plaintext for demo purposes
-                // In production, use proper hashing
                 const doc = {
                     id: 'doc_whatsapp_ban',
                     title: 'WhatsApp Ban Method',
                     description: 'New working method for WhatsApp channel ban. Learn how to ban WhatsApp channels using this method. This guide provides step-by-step instructions to effectively block unwanted channels on WhatsApp.',
                     link: 'https://www.mediafire.com/file/i6iyt3yue1l7vve/WHATSAPP_CHANNEL_BAN_METHOD_NEW_WORKING_%25F0%259F%2592%25AF_METHOD_BY_PROxARMY_TEAM.zip/file',
-                    password: 'proxarmy', // stored in plain text for demo (in real app, hash this)
+                    password: 'proxarmy',
                     salt: 'doc_salt_2024',
                     created_at: now,
                     updated_at: now,
@@ -3062,7 +2901,6 @@
             logout: function() {
                 setSession(null);
                 Router.navigate('home');
-                Toast.show('Logged out successfully', 'info');
             }
         };
 
@@ -3327,7 +3165,7 @@
                                         <div><span class="label">Published</span><br/><span class="value">${created}</span></div>
                                         <div><span class="label">Type</span><br/><span class="value">Guide / Method</span></div>
                                     </div>
-                                    <a href="${link}" target="_blank" rel="noopener noreferrer" class="doc-dl-link" onclick="Toast.show('Downloading document...','success',1500)">
+                                    <a href="${link}" target="_blank" rel="noopener noreferrer" class="doc-dl-link">
                                         <i class="fa-solid fa-download"></i> Download Document
                                     </a>
                                 </div>
@@ -3393,7 +3231,6 @@
         function renderDetail(appId) {
             const app = DB.getApp(appId);
             if (!app) {
-                Toast.show('App not found', 'error');
                 Router.navigate('home');
                 return '';
             }
@@ -3608,7 +3445,6 @@
                     card.style.display = '';
                     count++;
                 });
-                Toast.show(cat === 'all' ? 'Showing all apps' : `Showing ${cat} category`, 'info', 1500);
             }, 300);
         }
 
@@ -3625,7 +3461,6 @@
                 const current = app.downloads || 0;
                 DB.updateApp(appId, { downloads: current + 1 });
             }
-            Toast.show('Download started!', 'success', 2000);
         }
 
         // ================================================================
@@ -3645,11 +3480,9 @@
                 if (errorEl) errorEl.textContent = 'Document not found.';
                 return;
             }
-            // Check password (plain text for demo)
             if (entered === doc.password) {
                 sessionStorage.setItem('z_doc_unlocked', 'true');
                 if (errorEl) errorEl.textContent = '';
-                Toast.show('Document unlocked!', 'success', 1500);
                 Router.render();
             } else {
                 if (errorEl) errorEl.textContent = 'Incorrect password. Please try again.';
@@ -3658,7 +3491,6 @@
             }
         }
 
-        // Allow Enter key on password input
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 const input = document.getElementById('docPasswordInput');
@@ -3715,8 +3547,6 @@
                     name);
                     action.then(user => {
                         Modal.close();
-                        Toast.show(isLogin ? `Welcome back, ${user.name}!` :
-                            `Welcome, ${user.name}!`, 'success');
                         Router.render();
                     }).catch(err => {
                         errorEl.textContent = err.message || 'Something went wrong.';
@@ -3762,7 +3592,6 @@
         function openReviewModal(appId) {
             const user = Auth.getUser();
             if (!Auth.isLoggedIn()) {
-                Toast.show('Please login to leave a review', 'info');
                 Modal.close();
                 openAuthModal('login');
                 return;
@@ -3829,7 +3658,6 @@
                         created_at: U.now()
                     });
                     Modal.close();
-                    Toast.show('Review submitted!', 'success');
                     Router.render();
                 });
             }, 50);
@@ -3842,7 +3670,7 @@
                     <p class="text-xs mb-3 text-secondary">Manage your stored data and history.</p>
                     <div style="display:flex;flex-wrap:wrap;gap:8px">
                         <button class="btn-glass flex-1" onclick="clearAllData()" style="border-color:var(--status-error);color:var(--status-error)"><i class="fa-solid fa-trash-can mr-1"></i> Clear All Data</button>
-                        <button class="btn-glass flex-1" onclick="Modal.close();Toast.show('Data refreshed','success')"><i class="fa-solid fa-rotate mr-1"></i> Refresh</button>
+                        <button class="btn-glass flex-1" onclick="Modal.close();"><i class="fa-solid fa-rotate mr-1"></i> Refresh</button>
                     </div>
                     <div style="margin-top:12px;background:rgba(255,255,255,0.02);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:8px 12px;font-size:11px;color:var(--text-tertiary)">
                         <div>Apps: ${DB.getApps().length}</div>
@@ -3873,7 +3701,6 @@
                 localStorage.removeItem('z_' + k));
             sessionStorage.removeItem('z_doc_unlocked');
             Modal.close();
-            Toast.show('All data cleared', 'info');
             DB.seed();
             Router.render();
         }
@@ -3948,7 +3775,7 @@
                 }
             });
 
-            console.log('🚀 ZETA STORE v2.0 (WhatsApp & Spotify removed, all icons fa-grav)');
+            console.log('🚀 ZETA STORE v2.0 (WhatsApp Plus & Spotify Premium REMOVED)');
             console.log(`📦 ${DB.getApps().length} apps, ${DB.getReviews().length} reviews, ${DB.getDownloads().length} downloads`);
             console.log(`📄 Documents: ${DB.getDocuments().length}`);
         })();
