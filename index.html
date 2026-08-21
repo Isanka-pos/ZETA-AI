@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ZETA STORE — Premium APK Downloads</title>
+    <title>ZETA TOOLS — Premium APK Downloads</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
@@ -93,19 +93,19 @@
         }
 
         /* ============================================================
-           NAVBAR
+           NAVBAR — clean, icon‑free, responsive
            ============================================================ */
         .top-nav {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            height: 56px;
+            height: 60px;
             display: flex;
             align-items: center;
-            padding: 0 16px;
-            gap: 10px;
-            background: rgba(4, 6, 12, 0.78);
+            padding: 0 18px;
+            gap: 12px;
+            background: rgba(4, 6, 12, 0.82);
             backdrop-filter: blur(20px) saturate(1.2);
             -webkit-backdrop-filter: blur(20px) saturate(1.2);
             border-bottom: 1px solid var(--border-subtle);
@@ -120,66 +120,31 @@
             height: 1px;
             background: linear-gradient(90deg, transparent 5%, rgba(79, 125, 247, 0.2) 35%, rgba(124, 92, 252, 0.12) 65%, transparent 95%);
         }
+
+        /* Brand — ZETA TOOLS */
         .nav-brand {
             display: flex;
             align-items: center;
-            gap: 9px;
             text-decoration: none;
             flex-shrink: 0;
             cursor: pointer;
-        }
-        .nav-brand-mark {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-violet));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-size: 13px;
-            flex-shrink: 0;
-            box-shadow: 0 2px 10px rgba(79, 125, 247, 0.2);
-            transition: transform var(--transition-base), box-shadow var(--transition-base);
-            position: relative;
-        }
-        .nav-brand-mark::after {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-violet));
-            opacity: 0.12;
-            z-index: -1;
-            filter: blur(6px);
-            transition: opacity var(--transition-base);
-        }
-        .nav-brand:hover .nav-brand-mark {
-            transform: scale(1.05);
-            box-shadow: 0 3px 16px rgba(79, 125, 247, 0.28);
-        }
-        .nav-brand:hover .nav-brand-mark::after {
-            opacity: 0.25;
+            gap: 0;
+            padding: 4px 0;
         }
         .nav-brand-text {
-            font-size: 15px;
-            font-weight: 700;
-            letter-spacing: -0.3px;
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.4px;
             line-height: 1;
-            display: flex;
-            align-items: baseline;
-            gap: 3px;
-            white-space: nowrap;
-        }
-        .nav-brand-zeta {
-            background: linear-gradient(135deg, #6B9BFA, #4F7DF7, #8B7DF8);
+            background: linear-gradient(135deg, #8BB4FA 0%, #4F7DF7 40%, #8B7DF8 80%, #6B9BFA 100%);
             background-size: 200% 100%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: logoShift 6s ease-in-out infinite;
+            animation: brandShift 8s ease-in-out infinite;
+            white-space: nowrap;
         }
-        @keyframes logoShift {
+        @keyframes brandShift {
             0%,
             100% {
                 background-position: 0% 50%
@@ -188,11 +153,20 @@
                 background-position: 100% 50%
             }
         }
-        .nav-brand-tools {
-            -webkit-text-fill-color: var(--text-tertiary);
-            font-weight: 500;
-            font-size: 13px;
+        /* responsive brand */
+        @media(max-width:480px) {
+            .nav-brand-text {
+                font-size: 16px;
+                letter-spacing: -0.2px;
+            }
         }
+        @media(min-width:481px) and (max-width:767px) {
+            .nav-brand-text {
+                font-size: 18px;
+            }
+        }
+
+        /* Nav actions */
         .nav-actions {
             display: flex;
             align-items: center;
@@ -200,10 +174,12 @@
             flex-shrink: 0;
             margin-left: auto;
         }
+
+        /* Text buttons — no icons */
         .nav-btn {
-            padding: 6px 12px;
-            border-radius: 7px;
-            font-size: 12px;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 13px;
             font-weight: 500;
             color: var(--text-secondary);
             cursor: pointer;
@@ -213,19 +189,27 @@
             white-space: nowrap;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
+            font-family: 'Inter', sans-serif;
         }
         .nav-btn:hover {
             color: var(--text-primary);
-            background: rgba(255, 255, 255, 0.04);
+            background: rgba(255, 255, 255, 0.05);
         }
-        .nav-btn i {
-            font-size: 11px;
+        .nav-btn .caret {
+            font-size: 9px;
+            opacity: 0.4;
+            margin-left: 2px;
+            transition: transform var(--transition-fast);
         }
+        .nav-btn:hover .caret {
+            opacity: 0.7;
+        }
+
         .nav-btn-primary {
-            padding: 6px 14px;
-            border-radius: 7px;
-            font-size: 12px;
+            padding: 6px 18px;
+            border-radius: 8px;
+            font-size: 13px;
             font-weight: 600;
             color: #fff;
             background: linear-gradient(135deg, var(--accent-blue), #3B5FE0);
@@ -235,37 +219,19 @@
             white-space: nowrap;
             display: flex;
             align-items: center;
-            gap: 5px;
+            font-family: 'Inter', sans-serif;
         }
         .nav-btn-primary:hover {
             transform: scale(1.02);
-            box-shadow: 0 2px 10px rgba(79, 125, 247, 0.2);
+            box-shadow: 0 2px 12px rgba(79, 125, 247, 0.25);
         }
-        .nav-btn-primary i {
-            font-size: 11px;
+        .nav-btn-primary:active {
+            transform: scale(0.97);
         }
-        .nav-icon-btn {
+
+        .nav-avatar {
             width: 32px;
             height: 32px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid var(--border-subtle);
-            background: transparent;
-            color: var(--text-tertiary);
-            cursor: pointer;
-            transition: all var(--transition-fast);
-            font-size: 12px;
-        }
-        .nav-icon-btn:hover {
-            border-color: var(--border-hover);
-            color: var(--text-secondary);
-            background: rgba(255, 255, 255, 0.03);
-        }
-        .nav-avatar {
-            width: 30px;
-            height: 30px;
             border-radius: 8px;
             object-fit: cover;
             border: 1.5px solid var(--border-subtle);
@@ -275,6 +241,33 @@
         .nav-avatar:hover {
             border-color: rgba(79, 125, 247, 0.3);
         }
+
+        /* Hamburger — minimal, clean */
+        .nav-hamburger {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border-subtle);
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-size: 18px;
+            font-weight: 300;
+            line-height: 1;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+        .nav-hamburger:hover {
+            border-color: var(--border-hover);
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        /* Categories dropdown */
         .nav-cat-dropdown {
             position: relative;
         }
@@ -287,7 +280,7 @@
             border: 1px solid var(--border-default);
             border-radius: var(--radius-md);
             padding: 5px;
-            min-width: 160px;
+            min-width: 170px;
             box-shadow: var(--shadow-elevated);
             animation: dropIn .15s cubic-bezier(0.16, 1, 0.3, 1);
             z-index: 60;
@@ -299,30 +292,25 @@
         .nav-cat-item {
             display: flex;
             align-items: center;
-            gap: 9px;
+            justify-content: space-between;
+            gap: 10px;
             padding: 8px 12px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 12.5px;
+            font-size: 13px;
             color: var(--text-secondary);
             transition: all var(--transition-fast);
             border: none;
             background: none;
             width: 100%;
             text-align: left;
+            font-family: 'Inter', sans-serif;
         }
         .nav-cat-item:hover {
             background: rgba(79, 125, 247, 0.06);
             color: var(--text-primary);
         }
-        .nav-cat-item i {
-            width: 16px;
-            text-align: center;
-            font-size: 12px;
-            color: var(--text-tertiary);
-        }
         .nav-cat-item .count {
-            margin-left: auto;
             font-size: 10px;
             color: var(--text-tertiary);
             background: rgba(255, 255, 255, 0.04);
@@ -340,12 +328,31 @@
             }
         }
 
+        /* Mobile login button (small) */
+        .nav-btn-mobile {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            border: none;
+            background: none;
+            white-space: nowrap;
+            font-family: 'Inter', sans-serif;
+        }
+        .nav-btn-mobile:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
         /* ============================================================
-           SIDEBAR
+           SIDEBAR (mobile)
            ============================================================ */
         .sidebar {
-            width: 260px;
-            min-width: 260px;
+            width: 270px;
+            min-width: 270px;
             height: 100dvh;
             background: rgba(8, 11, 20, 0.98);
             backdrop-filter: blur(24px);
@@ -400,7 +407,7 @@
             }
         }
         .sb-head {
-            padding: 52px 16px 14px;
+            padding: 56px 18px 14px;
             position: relative;
         }
         .sb-head::after {
@@ -431,7 +438,7 @@
             box-shadow: 0 2px 10px rgba(79, 125, 247, 0.2);
         }
         .sb-head-name {
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 700;
             color: var(--text-primary);
             line-height: 1;
@@ -468,13 +475,14 @@
             transition: all var(--transition-fast);
             width: 100%;
             text-align: left;
+            font-family: 'Inter', sans-serif;
         }
         .sb-nav-item:hover {
             background: rgba(79, 125, 247, 0.06);
             color: var(--text-primary);
         }
         .sb-nav-item i {
-            width: 16px;
+            width: 18px;
             text-align: center;
             font-size: 13px;
             color: var(--text-tertiary);
@@ -597,6 +605,7 @@
             background: none;
             width: 100%;
             text-align: left;
+            font-family: 'Inter', sans-serif;
         }
         .sb-dropdown .ddi:hover {
             background: rgba(79, 125, 247, 0.06);
@@ -670,6 +679,7 @@
             align-items: center;
             justify-content: center;
             gap: 7px;
+            font-family: 'Inter', sans-serif;
         }
         .btn-glass:hover {
             border-color: var(--border-hover);
@@ -692,6 +702,7 @@
             text-decoration: none;
             position: relative;
             overflow: hidden;
+            font-family: 'Inter', sans-serif;
         }
         .btn-primary::after {
             content: '';
@@ -725,6 +736,7 @@
             cursor: pointer;
             transition: all var(--transition-base);
             text-decoration: none;
+            font-family: 'Inter', sans-serif;
         }
         .btn-secondary:hover {
             color: var(--text-primary);
@@ -741,6 +753,7 @@
             color: var(--text-primary);
             font-size: 13px;
             transition: border-color var(--transition-fast);
+            font-family: 'Inter', sans-serif;
         }
         .auth-input:focus {
             border-color: var(--accent-blue);
@@ -795,7 +808,7 @@
            ============================================================ */
         .hero-section {
             position: relative;
-            padding: 76px 20px 40px;
+            padding: 80px 20px 44px;
             text-align: center;
             overflow: hidden;
         }
@@ -859,7 +872,7 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            padding: 4px 12px;
+            padding: 4px 14px;
             border-radius: 100px;
             font-size: 10px;
             font-weight: 600;
@@ -1320,6 +1333,7 @@
             cursor: pointer;
             transition: all var(--transition-base);
             text-decoration: none;
+            font-family: 'Inter', sans-serif;
         }
         .app-card-dl-btn.violet {
             background: linear-gradient(135deg, #7C5CFC, #6344E0);
@@ -1488,6 +1502,7 @@
             cursor: pointer;
             transition: all var(--transition-base);
             text-decoration: none;
+            font-family: 'Inter', sans-serif;
         }
         .detail-dl-btn.violet {
             background: linear-gradient(135deg, #7C5CFC, #6344E0);
@@ -1902,6 +1917,7 @@
             box-shadow: 0 2px 10px rgba(245, 166, 35, 0.18);
             transition: all var(--transition-base);
             white-space: nowrap;
+            font-family: 'Inter', sans-serif;
         }
         .doc-password-row .btn-unlock:hover {
             transform: translateY(-1px);
@@ -1975,6 +1991,7 @@
             text-decoration: none;
             transition: all var(--transition-base);
             align-self: flex-start;
+            font-family: 'Inter', sans-serif;
         }
         .doc-unlocked .doc-dl-link:hover {
             transform: translateY(-2px);
@@ -2019,10 +2036,11 @@
             gap: 24px;
         }
         .footer-brand {
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 700;
             color: var(--text-primary);
             margin-bottom: 5px;
+            letter-spacing: -0.2px;
         }
         .footer-desc {
             font-size: 11px;
@@ -2072,6 +2090,7 @@
             background: none;
             border: none;
             text-align: left;
+            font-family: 'Inter', sans-serif;
         }
         .footer-link:hover {
             color: var(--text-primary);
@@ -2116,48 +2135,39 @@
            ============================================================ */
         @media(max-width:767px) {
             .top-nav {
-                height: 48px;
+                height: 52px;
                 padding: 0 12px;
-                gap: 6px;
-            }
-            .nav-brand-mark {
-                width: 28px;
-                height: 28px;
-                font-size: 11px;
-                border-radius: 7px;
+                gap: 8px;
             }
             .nav-brand-text {
-                font-size: 13px;
-            }
-            .nav-brand-tools {
-                font-size: 12px;
+                font-size: 17px;
             }
             .nav-btn {
-                padding: 4px 8px;
-                font-size: 11px;
+                padding: 4px 10px;
+                font-size: 12px;
             }
             .nav-btn-primary {
-                padding: 4px 10px;
-                font-size: 11px;
+                padding: 4px 12px;
+                font-size: 12px;
             }
             .nav-btn-primary span {
-                display: none;
+                display: inline;
             }
-            .nav-icon-btn {
-                width: 28px;
-                height: 28px;
-                font-size: 11px;
+            .nav-hamburger {
+                width: 32px;
+                height: 32px;
+                font-size: 16px;
             }
             .nav-avatar {
-                width: 26px;
-                height: 26px;
+                width: 28px;
+                height: 28px;
             }
             .sidebar {
-                width: 240px;
-                min-width: 240px;
+                width: 250px;
+                min-width: 250px;
             }
             .sb-head {
-                padding: 44px 14px 12px;
+                padding: 48px 14px 12px;
             }
             .sb-head-icon {
                 width: 30px;
@@ -2172,7 +2182,7 @@
                 font-size: 13px;
             }
             .hero-section {
-                padding: 60px 16px 32px;
+                padding: 64px 16px 32px;
             }
             .hero-badge {
                 padding: 3px 10px;
@@ -2311,6 +2321,22 @@
                 max-width: 100%;
                 margin: 0 4px;
             }
+            /* hide desktop-only nav items on mobile */
+            .nav-desktop-only {
+                display: none !important;
+            }
+            /* show mobile login */
+            .nav-mobile-login {
+                display: flex !important;
+            }
+        }
+        @media(min-width:768px) {
+            .nav-mobile-login {
+                display: none !important;
+            }
+            .nav-desktop-only {
+                display: flex !important;
+            }
         }
         @media(min-width:768px) and (max-width:1023px) {
             .categories-grid {
@@ -2334,7 +2360,7 @@
                 grid-template-columns: 1fr 1fr 1fr;
             }
             .hero-section {
-                padding: 92px 36px 56px;
+                padding: 96px 36px 56px;
             }
         }
         @media(prefers-reduced-motion:reduce) {
@@ -2769,7 +2795,6 @@
             _seedDocument: function() {
                 if (this._get('documents') !== null) return;
                 const now = U.now();
-                // Document about WhatsApp Ban Method — kept as a separate guide (not an APK).
                 const doc = {
                     id: 'doc_whatsapp_ban',
                     title: 'WhatsApp Ban Method',
@@ -2960,33 +2985,52 @@
 
             return `
                 <nav class="top-nav">
+                    <!-- Brand: ZETA TOOLS (clean, no icon) -->
                     <div class="nav-brand" onclick="Router.navigate('home')">
-                        <div class="nav-brand-mark"><i class="fa-solid fa-bolt"></i></div>
-                        <div class="nav-brand-text"><span class="nav-brand-zeta">Zeta</span> <span class="nav-brand-tools">Store</span></div>
+                        <span class="nav-brand-text">ZETA TOOLS</span>
                     </div>
 
                     <div class="nav-actions">
-                        <div class="nav-cat-dropdown">
-                            <button class="nav-btn" onclick="toggleCatMenu()"><i class="fa-solid fa-th-list"></i> Categories <i class="fa-solid fa-chevron-down" style="font-size:8px;opacity:.4"></i></button>
+                        <!-- Categories dropdown (desktop) -->
+                        <div class="nav-cat-dropdown nav-desktop-only">
+                            <button class="nav-btn" onclick="toggleCatMenu()">
+                                Categories <span class="caret">▼</span>
+                            </button>
                             <div class="nav-cat-menu" id="catMenu">
                                 ${cats.map(c => `
                                     <button class="nav-cat-item" onclick="filterByCategory('${c.id}')">
-                                        <i class="fa-solid ${c.icon}"></i> ${c.label}
+                                        <span>${c.label}</span>
                                         <span class="count">${c.count}</span>
                                     </button>
                                 `).join('')}
-                                <button class="nav-cat-item" onclick="filterByCategory('all')"><i class="fa-solid fa-th-large"></i> All Apps <span class="count">${DB.getApps().length}</span></button>
+                                <button class="nav-cat-item" onclick="filterByCategory('all')">
+                                    <span>All Apps</span>
+                                    <span class="count">${DB.getApps().length}</span>
+                                </button>
                             </div>
                         </div>
-                        <button class="nav-btn" onclick="Router.navigate('home');scrollToSection('trending')"><i class="fa-solid fa-fire" style="color:var(--status-warning)"></i> Most Popular</button>
+
+                        <!-- Most Popular (desktop) -->
+                        <button class="nav-btn nav-desktop-only" onclick="Router.navigate('home');scrollToSection('trending')">
+                            Most Popular
+                        </button>
+
+                        <!-- Login / Avatar (desktop) -->
                         ${isLoggedIn ? `
-                            <img src="${av}" class="nav-avatar hidden sm:block" onclick="openProfileModal()" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=4F7DF7&color=fff&size=64'" title="Profile" />
-                            <img src="${av}" class="nav-avatar sm:hidden" onclick="toggleSidebar()" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=4F7DF7&color=fff&size=64'" />
+                            <img src="${av}" class="nav-avatar nav-desktop-only" onclick="openProfileModal()" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=4F7DF7&color=fff&size=64'" title="Profile" />
                         ` : `
-                            <button class="nav-btn-primary hidden sm:flex" onclick="openAuthModal('login')"><i class="fa-solid fa-right-to-bracket"></i> <span>Login</span></button>
-                            <button class="nav-icon-btn sm:hidden" onclick="openAuthModal('login')" title="Login"><i class="fa-solid fa-right-to-bracket"></i></button>
+                            <button class="nav-btn-primary nav-desktop-only" onclick="openAuthModal('login')">Login</button>
                         `}
-                        <button class="nav-icon-btn" onclick="toggleSidebar()" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+
+                        <!-- Mobile: small Login button -->
+                        ${isLoggedIn ? `
+                            <img src="${av}" class="nav-avatar nav-mobile-login" onclick="openProfileModal()" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=4F7DF7&color=fff&size=64'" title="Profile" style="width:28px;height:28px;" />
+                        ` : `
+                            <button class="nav-btn-mobile nav-mobile-login" onclick="openAuthModal('login')">Login</button>
+                        `}
+
+                        <!-- Hamburger (mobile) -->
+                        <button class="nav-hamburger" onclick="toggleSidebar()" aria-label="Menu">☰</button>
                     </div>
                 </nav>
             `;
@@ -3006,7 +3050,7 @@
                         <div class="sb-head-logo">
                             <div class="sb-head-icon"><i class="fa-solid fa-bolt"></i></div>
                             <div>
-                                <div class="sb-head-name">ZETA <span>STORE</span></div>
+                                <div class="sb-head-name">ZETA <span>TOOLS</span></div>
                                 <div class="sb-head-ver">v2.0 &middot; Premium</div>
                             </div>
                         </div>
@@ -3061,7 +3105,6 @@
             const doc = DB.getDocument('doc_whatsapp_ban');
             const isUnlocked = sessionStorage.getItem('z_doc_unlocked') === 'true';
 
-            // Build category filter indicator
             const filterLabel = currentCategoryFilter === 'all' ?
                 'All Apps' :
                 (cats.find(c => c.id === currentCategoryFilter)?.label || currentCategoryFilter);
@@ -3069,7 +3112,7 @@
             return `
                 ${renderNav()}
                 ${renderSidebar()}
-                <main style="height:100dvh;padding-top:56px;overflow-y:auto" id="appScroll">
+                <main style="height:100dvh;padding-top:60px;overflow-y:auto" id="appScroll">
                     <!-- HERO -->
                     <section class="hero-section">
                         <div class="hero-glow hero-glow-1"></div>
@@ -3122,7 +3165,7 @@
                             <div class="section-eyebrow"><i class="fa-solid fa-fire" style="color:var(--status-warning)"></i> Most Popular</div>
                             <h2 class="section-heading">${filterLabel} <span style="font-size:14px;font-weight:400;color:var(--text-tertiary)">(${filteredApps.length})</span></h2>
                             <p class="section-sub">${currentCategoryFilter === 'all' ? 'The complete collection of premium applications available for download.' : 'Showing apps in the "' + filterLabel + '" category.'}</p>
-                            ${currentCategoryFilter !== 'all' ? `<button class="btn-glass" onclick="filterByCategory('all')" style="font-size:11px;padding:4px 12px;margin-bottom:12px"><i class="fa-solid fa-xmark"></i> Clear filter</button>` : ''}
+                            ${currentCategoryFilter !== 'all' ? `<button class="btn-glass" onclick="filterByCategory('all')" style="font-size:11px;padding:4px 14px;margin-bottom:12px"><i class="fa-solid fa-xmark"></i> Clear filter</button>` : ''}
                         </div>
                         <div class="app-grid">
                             ${filteredApps.length ? filteredApps.map((a,i) => renderAppCard(a, i)).join('') : `
@@ -3135,7 +3178,7 @@
                         </div>
                     </section>
 
-                    <!-- DOCUMENTS SECTION (below APKs) -->
+                    <!-- DOCUMENTS SECTION -->
                     ${doc ? renderDocumentSection(doc, isUnlocked) : ''}
 
                     <!-- STATS -->
@@ -3287,7 +3330,7 @@
             return `
                 ${renderNav()}
                 ${renderSidebar()}
-                <main style="height:100dvh;padding-top:56px;overflow-y:auto" id="appScroll">
+                <main style="height:100dvh;padding-top:60px;overflow-y:auto" id="appScroll">
                     <div style="padding:12px 20px 0;max-width:720px;margin:0 auto">
                         <button class="nav-btn" onclick="Router.navigate('home')" style="font-size:12px"><i class="fa-solid fa-arrow-left"></i> Back to Store</button>
                     </div>
@@ -3388,7 +3431,7 @@
                 <footer class="site-footer">
                     <div class="footer-grid">
                         <div>
-                            <div class="footer-brand">ZETA STORE</div>
+                            <div class="footer-brand">ZETA TOOLS</div>
                             <p class="footer-desc">Premium Android application platform. Curated, secure, and direct downloads for premium APK files.</p>
                             <div class="footer-social">
                                 <a href="#" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
@@ -3409,7 +3452,7 @@
                             <button class="footer-link" onclick="openDataManagement()">Data</button>
                         </div>
                     </div>
-                    <div class="footer-bottom">&copy; ${new Date().getFullYear()} ZETA STORE &middot; Sri Lanka &middot; All rights reserved.</div>
+                    <div class="footer-bottom">&copy; ${new Date().getFullYear()} ZETA TOOLS &middot; Sri Lanka &middot; All rights reserved.</div>
                 </footer>
             `;
         }
@@ -3477,7 +3520,6 @@
                     setTimeout(tryScroll, 120);
                 }
             };
-            // Wait a beat for DOM to settle
             setTimeout(tryScroll, 80);
         }
 
@@ -3486,12 +3528,10 @@
         // ================================================================
         function filterByCategory(cat) {
             currentCategoryFilter = cat || 'all';
-            // Close any open dropdowns
             catMenuOpen = false;
             const cm = document.getElementById('catMenu');
             if (cm) cm.classList.remove('open');
             Router.navigate('home');
-            // After render, scroll to trending section
             setTimeout(() => scrollToSection('trending'), 120);
         }
 
@@ -3534,7 +3574,6 @@
                 sessionStorage.setItem('z_doc_unlocked', 'true');
                 if (errorEl) errorEl.textContent = '';
                 Router.render();
-                // After render, scroll to documents
                 setTimeout(() => scrollToSection('documents'), 150);
             } else {
                 if (errorEl) errorEl.textContent = 'Incorrect password. Please try again.';
@@ -3766,7 +3805,7 @@
                     <div style="background:rgba(255,255,255,0.02);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:10px 12px;font-size:12px">
                         <div class="flex items-center justify-between py-1.5" style="border-bottom:1px solid var(--border-subtle)"><span class="text-secondary">Theme</span><span class="text-primary">Dark</span></div>
                         <div class="flex items-center justify-between py-1.5" style="border-bottom:1px solid var(--border-subtle)"><span class="text-secondary">Platform</span><span class="text-tertiary">Android</span></div>
-                        <div class="flex items-center justify-between py-1.5"><span class="text-secondary">Version</span><span class="text-tertiary">ZETA Store v2.0</span></div>
+                        <div class="flex items-center justify-between py-1.5"><span class="text-secondary">Version</span><span class="text-tertiary">ZETA Tools v2.0</span></div>
                     </div>
                     <button class="btn-glass w-full mt-3" onclick="Modal.close()">Close</button>
                 </div>
@@ -3828,7 +3867,7 @@
                 }
             });
 
-            console.log('🚀 ZETA STORE v2.0 (WhatsApp Plus & Spotify Premium REMOVED)');
+            console.log('🚀 ZETA TOOLS v2.0 (WhatsApp Plus & Spotify Premium REMOVED)');
             console.log(`📦 ${DB.getApps().length} apps, ${DB.getReviews().length} reviews, ${DB.getDownloads().length} downloads`);
             console.log(`📄 Documents: ${DB.getDocuments().length}`);
             console.log(`🔍 Current filter: ${currentCategoryFilter}`);
