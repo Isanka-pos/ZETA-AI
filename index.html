@@ -16,9 +16,6 @@
         tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] } } } }
     </script>
     <style>
-        /* =============================================
-           ROOT VARIABLES (unchanged)
-           ============================================= */
         :root {
             --bg-base: #04060C;
             --bg-surface: #080B14;
@@ -107,9 +104,6 @@
             border-radius: 10px;
         }
 
-        /* =============================================
-           TOP NAV (unchanged)
-           ============================================= */
         .top-nav {
             position: fixed;
             top: 0;
@@ -154,8 +148,6 @@
             gap: 6px;
             flex-shrink: 0;
         }
-
-        /* Centered brand */
         .nav-brand {
             display: flex;
             align-items: center;
@@ -227,8 +219,6 @@
             font-weight: 500;
             font-size: 13px;
         }
-
-        /* Nav links */
         .nav-links {
             display: flex;
             align-items: center;
@@ -250,8 +240,6 @@
             color: var(--text-primary);
             background: rgba(255, 255, 255, 0.04);
         }
-
-        /* Nav icon buttons */
         .nav-icon-btn {
             width: 32px;
             height: 32px;
@@ -283,10 +271,6 @@
         .nav-avatar:hover {
             border-color: rgba(79, 125, 247, 0.3);
         }
-
-        /* =============================================
-           SIDEBAR — Mobile slide-out (unchanged)
-           ============================================= */
         .sidebar {
             width: 260px;
             min-width: 260px;
@@ -335,7 +319,6 @@
         .sb-ov.active {
             display: block;
         }
-
         .sb-head {
             padding: 52px 16px 14px;
             position: relative;
@@ -383,7 +366,6 @@
             color: var(--text-tertiary);
             margin-top: 2px;
         }
-
         .sb-nav {
             padding: 8px;
             display: flex;
@@ -420,7 +402,6 @@
         .sb-nav-item:hover i {
             color: var(--accent-blue);
         }
-
         .sb-profile {
             margin: auto 10px 14px;
             padding: 11px 13px;
@@ -507,10 +488,6 @@
             color: var(--text-secondary);
             transform: rotate(90deg);
         }
-
-        /* =============================================
-           DROPDOWN (unchanged)
-           ============================================= */
         .dd {
             position: absolute;
             background: var(--bg-elevated);
@@ -557,10 +534,6 @@
             background: var(--border-subtle);
             margin: 3px 0;
         }
-
-        /* =============================================
-           TOAST (unchanged)
-           ============================================= */
         .tc {
             position: fixed;
             top: 64px;
@@ -680,10 +653,6 @@
                 opacity: 1
             }
         }
-
-        /* =============================================
-           MODAL (unchanged)
-           ============================================= */
         .mo {
             position: fixed;
             inset: 0;
@@ -724,10 +693,6 @@
                 transform: scale(1) translateY(0)
             }
         }
-
-        /* =============================================
-           BUTTONS (unchanged)
-           ============================================= */
         .bs {
             background: rgba(255, 255, 255, 0.025);
             border: 1px solid var(--border-default);
@@ -762,10 +727,6 @@
         .hidden {
             display: none !important;
         }
-
-        /* =============================================
-           HERO (unchanged)
-           ============================================= */
         .hero {
             position: relative;
             padding: 76px 20px 44px;
@@ -849,7 +810,6 @@
                 transform: rotate(360deg)
             }
         }
-
         .hero-badge {
             display: inline-flex;
             align-items: center;
@@ -974,10 +934,6 @@
             margin: 36px auto 0;
             opacity: .3;
         }
-
-        /* =============================================
-           FEATURES (unchanged)
-           ============================================= */
         .features {
             padding: 44px 20px;
             max-width: 840px;
@@ -1087,10 +1043,6 @@
             color: var(--text-tertiary);
             line-height: 1.6;
         }
-
-        /* =============================================
-           DOWNLOADS (unchanged)
-           ============================================= */
         .downloads {
             padding: 28px 20px 44px;
             max-width: 720px;
@@ -1172,6 +1124,14 @@
             background: linear-gradient(135deg, #FF0033, #CC0000);
             box-shadow: 0 3px 12px rgba(255, 0, 51, 0.22);
         }
+        .app-icon.green {
+            background: linear-gradient(135deg, #22C990, #0ea56a);
+            box-shadow: 0 3px 12px rgba(34, 201, 144, 0.22);
+        }
+        .app-icon.cyan {
+            background: linear-gradient(135deg, #2DD4E8, #0ea5e9);
+            box-shadow: 0 3px 12px rgba(45, 212, 232, 0.22);
+        }
         .app-icon .sp {
             position: absolute;
             top: -4px;
@@ -1206,6 +1166,12 @@
         }
         .dl-title.red {
             color: #FF4D6D;
+        }
+        .dl-title.green {
+            color: var(--status-success);
+        }
+        .dl-title.cyan {
+            color: var(--accent-cyan);
         }
         .dl-desc {
             font-size: 12px;
@@ -1259,6 +1225,16 @@
             border: 1px solid rgba(255, 0, 51, 0.12);
             color: #FF4D6D;
         }
+        .dl-badge.green {
+            background: rgba(34, 201, 144, 0.10);
+            border: 1px solid rgba(34, 201, 144, 0.12);
+            color: var(--status-success);
+        }
+        .dl-badge.cyan {
+            background: rgba(45, 212, 232, 0.10);
+            border: 1px solid rgba(45, 212, 232, 0.12);
+            color: var(--accent-cyan);
+        }
         .dl-badge i {
             font-size: 6px;
             color: #F5C842;
@@ -1300,6 +1276,14 @@
             background: linear-gradient(135deg, #FF0033, #CC0000);
             box-shadow: 0 2px 10px rgba(255, 0, 51, 0.18);
         }
+        .dl-btn.green {
+            background: linear-gradient(135deg, #22C990, #0ea56a);
+            box-shadow: 0 2px 10px rgba(34, 201, 144, 0.18);
+        }
+        .dl-btn.cyan {
+            background: linear-gradient(135deg, #2DD4E8, #0ea5e9);
+            box-shadow: 0 2px 10px rgba(45, 212, 232, 0.18);
+        }
         .dl-btn:hover {
             transform: translateY(-1px);
         }
@@ -1312,6 +1296,12 @@
         .dl-btn.red:hover {
             box-shadow: 0 4px 18px rgba(255, 0, 51, 0.28);
         }
+        .dl-btn.green:hover {
+            box-shadow: 0 4px 18px rgba(34, 201, 144, 0.28);
+        }
+        .dl-btn.cyan:hover {
+            box-shadow: 0 4px 18px rgba(45, 212, 232, 0.28);
+        }
         .dl-btn:hover::after {
             opacity: 1;
         }
@@ -1321,10 +1311,6 @@
         .dl-btn i {
             font-size: 13px;
         }
-
-        /* =============================================
-           STATS (unchanged)
-           ============================================= */
         .stats {
             padding: 36px 20px;
             border-top: 1px solid var(--border-subtle);
@@ -1355,10 +1341,6 @@
             margin-top: 2px;
             font-weight: 500;
         }
-
-        /* =============================================
-           FOOTER (unchanged)
-           ============================================= */
         .site-footer {
             padding: 32px 20px 18px;
             border-top: 1px solid var(--border-subtle);
@@ -1411,10 +1393,6 @@
             font-size: 10px;
             color: var(--text-tertiary);
         }
-
-        /* =============================================
-           SCROLL REVEAL (unchanged)
-           ============================================= */
         .reveal {
             opacity: 0;
             transform: translateY(16px);
@@ -1436,10 +1414,6 @@
         .reveal-d4 {
             transition-delay: .24s;
         }
-
-        /* =============================================
-           RESPONSIVE (unchanged)
-           ============================================= */
         @media(max-width:767px) {
             .top-nav {
                 padding: 0 12px;
@@ -1469,7 +1443,6 @@
                 height: 28px;
                 border-radius: 7px;
             }
-
             .sidebar {
                 width: 240px;
                 min-width: 240px;
@@ -1500,7 +1473,6 @@
             .sb-profile-name {
                 font-size: 12px;
             }
-
             .hero {
                 padding: 60px 16px 32px;
             }
@@ -1527,7 +1499,6 @@
             .hero-ring {
                 display: none;
             }
-
             .features {
                 padding: 32px 14px;
             }
@@ -1538,7 +1509,6 @@
             .feat-card {
                 padding: 18px 15px;
             }
-
             .downloads {
                 padding: 20px 14px 32px;
             }
@@ -1565,7 +1535,6 @@
                 padding: 9px 14px;
                 font-size: 12.5px;
             }
-
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 6px;
@@ -1579,7 +1548,6 @@
             .stat-label {
                 font-size: 9px;
             }
-
             .footer-grid {
                 grid-template-columns: 1fr;
                 gap: 18px;
@@ -1614,10 +1582,6 @@
                 transition-duration: .01ms !important;
             }
         }
-
-        /* =============================================
-           NEW AUTH STYLES (added)
-           ============================================= */
         .auth-error {
             color: var(--status-error);
             font-size: 12px;
@@ -1735,16 +1699,8 @@
         };
 
         // =====================================================================
-        //  ORIGINAL AUTH OBJECT (will be extended)
+        //  AUTH SYSTEM (unchanged)
         // =====================================================================
-        // We keep the original Auth variable but replace its getUser method
-        // and add new methods for login/register.
-
-        // =====================================================================
-        //  NEW AUTHENTICATION SYSTEM
-        // =====================================================================
-
-        // ------- Password hashing (Web Crypto) -------
         async function hashPassword(password, salt) {
             const encoder = new TextEncoder();
             const data = encoder.encode(password + salt);
@@ -1759,7 +1715,6 @@
             return Array.from(array, b => b.toString(16).padStart(2, '0')).join('');
         }
 
-        // ------- Rate limiting -------
         function getLoginAttempts() {
             try {
                 const data = JSON.parse(localStorage.getItem('z_login_attempts') || '{}');
@@ -1776,11 +1731,8 @@
             const now = Date.now();
             const record = attempts[email];
             if (!record) return false;
-            if (record.count >= 5 && (now - record.lastAttempt) < 300000) { // 5 min
-                return true;
-            }
+            if (record.count >= 5 && (now - record.lastAttempt) < 300000) { return true; }
             if (now - record.lastAttempt >= 300000) {
-                // reset after lockout
                 delete attempts[email];
                 setLoginAttempts(attempts);
                 return false;
@@ -1803,7 +1755,6 @@
             setLoginAttempts(attempts);
         }
 
-        // ------- User management -------
         function getUsers() {
             try {
                 return JSON.parse(localStorage.getItem('z_users') || '[]');
@@ -1845,7 +1796,6 @@
             return hashPassword(password, user.salt).then(hash => hash === user.passwordHash);
         }
 
-        // ------- Session -------
         function getSession() {
             try {
                 return localStorage.getItem('z_session') || null;
@@ -1866,17 +1816,13 @@
             return getUserById(sessionId);
         }
 
-        // ------- Auth API (extended) -------
         const Auth = {
-            _uid: 'local', // fallback guest id
-
-            // Override existing getUser to support real users
+            _uid: 'local',
             getUser: function() {
                 let loggedIn = getLoggedInUser();
                 if (loggedIn) {
                     return loggedIn;
                 }
-                // Fallback to guest
                 let guest = DB.findUserById(this._uid);
                 if (!guest) {
                     guest = DB.addUser({
@@ -1888,12 +1834,9 @@
                 }
                 return guest;
             },
-
-            // New methods
             isLoggedIn: function() {
                 return !!getLoggedInUser();
             },
-
             login: function(email, password) {
                 return new Promise((resolve, reject) => {
                     if (isRateLimited(email)) {
@@ -1918,7 +1861,6 @@
                     }).catch(reject);
                 });
             },
-
             register: function(email, password, name) {
                 return new Promise((resolve, reject) => {
                     if (!email || !password || password.length < 6) {
@@ -1930,16 +1872,13 @@
                         return;
                     }
                     createUser(email, password, name).then(user => {
-                        // Auto-login after registration
                         setSession(user.id);
                         resolve(user);
                     }).catch(reject);
                 });
             },
-
             logout: function() {
                 setSession(null);
-                // Force UI refresh
                 pgDashboard();
                 Toast.show('Logged out successfully', 'info');
             }
@@ -2019,9 +1958,9 @@
         }
 
         // =====================================================================
-        //  MODAL FUNCTIONS (openProfile, openDataManagement, openSettings) - MODIFIED
+        //  MODAL FUNCTIONS (openProfile, openDataManagement, openSettings)
+        //  (unchanged except openProfile uses Auth)
         // =====================================================================
-
         function openProfile() {
             const user = Auth.getUser();
             const isLoggedIn = Auth.isLoggedIn();
@@ -2075,9 +2014,8 @@
             pgDashboard(); }
 
         // =====================================================================
-        //  NEW: LOGIN / REGISTER MODAL
+        //  NEW: LOGIN / REGISTER MODAL (unchanged)
         // =====================================================================
-
         function openAuthModal(mode) {
             mode = mode || 'login';
             const isLogin = mode === 'login';
@@ -2104,7 +2042,6 @@
                 </div>
             `);
 
-            // Attach event listener after modal rendered
             setTimeout(() => {
                 const form = document.getElementById('authForm');
                 const errorEl = document.getElementById('authError');
@@ -2124,8 +2061,9 @@
                     const action = isLogin ? Auth.login(email, password) : Auth.register(email, password, name);
                     action.then(user => {
                         Modal.close();
-                        Toast.show(isLogin ? 'Login successful!' : 'Account created! You are now logged in.', 'success');
-                        pgDashboard(); // refresh UI
+                        Toast.show(isLogin ? 'Login successful!' : 'Account created! You are now logged in.',
+                            'success');
+                        pgDashboard();
                     }).catch(err => {
                         errorEl.textContent = err.message || 'Something went wrong.';
                         submitBtn.disabled = false;
@@ -2136,9 +2074,149 @@
         }
 
         // =====================================================================
-        //  RENDER FUNCTIONS (modified to include auth buttons)
+        //  APK STORAGE FUNCTIONS (NEW)
         // =====================================================================
+        function getApks() {
+            try {
+                return JSON.parse(localStorage.getItem('z_apks') || '[]');
+            } catch { return []; }
+        }
 
+        function saveApks(apks) {
+            localStorage.setItem('z_apks', JSON.stringify(apks));
+        }
+
+        function seedApks() {
+            if (localStorage.getItem('z_apks') === null) {
+                const defaultApks = [{
+                    id: 'apk_' + Date.now() + '_1',
+                    title: 'DeepSeek Premium APK',
+                    description: 'Download DeepSeek Premium APK directly from the link below.',
+                    icon: 'fa-brain',
+                    color: 'violet',
+                    downloadUrl: 'https://www.mediafire.com/file/xobx85ada107n7n/Gemini+AI_1.0.772404132_MOD_Apktofu.com.apk/file',
+                    badge: 'Premium',
+                    tags: ['APK', 'Android', 'MediaFire'],
+                    createdAt: new Date().toISOString()
+                }, {
+                    id: 'apk_' + Date.now() + '_2',
+                    title: 'Telegram Premium APK',
+                    description: 'Download Telegram Premium APK directly from the link below.',
+                    icon: 'fa-telegram',
+                    color: 'blue',
+                    downloadUrl: 'https://www.mediafire.com/file/qcrh2cr3zncbret/Telegram_Premium_by_Fianz.apk',
+                    badge: 'Premium',
+                    tags: ['APK', 'Android', 'MediaFire'],
+                    createdAt: new Date().toISOString()
+                }, {
+                    id: 'apk_' + Date.now() + '_3',
+                    title: 'YouTube Premium APK',
+                    description: 'Download YouTube Premium APK directly from the link below.',
+                    icon: 'fa-youtube',
+                    color: 'red',
+                    downloadUrl: 'https://www.mediafire.com/file/9nu3kqo9blp2h59/Youtube_Premium_RVX_v19_16_39_Cli_v5_0_1_Patches_v5_0_3_signed.apk/file',
+                    badge: 'Premium',
+                    tags: ['APK', 'Android', 'MediaFire'],
+                    createdAt: new Date().toISOString()
+                }];
+                saveApks(defaultApks);
+            }
+        }
+
+        // =====================================================================
+        //  RENDER APK CARDS
+        // =====================================================================
+        function renderApkCards() {
+            const apks = getApks();
+            if (!apks.length) return '<p class="text-sm text-center py-8" style="color:var(--text-tertiary)">No APKs available.</p>';
+            return apks.map(apk => {
+                const color = apk.color || 'violet';
+                const icon = apk.icon || 'fa-box';
+                const title = U.esc(apk.title);
+                const desc = U.esc(apk.description);
+                const badge = apk.badge || 'Premium';
+                const tags = apk.tags || [];
+                const url = U.esc(apk.downloadUrl);
+                return `<div class="dl-card reveal" style="--dl-a:rgba(124,92,252,0.18);--dl-b:rgba(124,92,252,0.06);--dl-glow:rgba(124,92,252,0.03)">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3.5 relative" style="z-index:2">
+                        <div class="app-icon ${color}"><i class="fa-brands ${icon}"></i><span class="sp"><i class="fa-solid fa-sparkles"></i></span></div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center flex-wrap gap-2">
+                                <div class="dl-title ${color}">${title}</div>
+                                <span class="dl-badge ${color}"><i class="fa-solid fa-crown"></i> ${U.esc(badge)}</span>
+                            </div>
+                            <p class="dl-desc">${desc}</p>
+                            <div class="dl-tags">
+                                ${tags.map(t => `<span class="dl-tag"><i class="fa-regular fa-file"></i> ${U.esc(t)}</span>`).join('')}
+                            </div>
+                        </div>
+                        <div class="w-full sm:w-auto flex-shrink-0">
+                            <a href="${url}" target="_blank" rel="noopener noreferrer" class="dl-btn ${color}"><i class="fa-solid fa-download"></i> Download APK</a>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        // =====================================================================
+        //  PAGE CONTENT
+        // =====================================================================
+        function rAPKPage() {
+            seedApks(); // ensure seed data exists
+            return `
+                <section class="hero">
+                    <div class="hero-glow hero-glow-1"></div>
+                    <div class="hero-glow hero-glow-2"></div>
+                    <div class="hero-ring hero-ring-1"></div>
+                    <div style="position:relative;z-index:2">
+                        <div class="hero-badge"><i class="fa-solid fa-bolt"></i> Premium APK Platform</div>
+                        <h1 class="hero-heading"><span class="hero-heading-accent">Premium Android</span><br>Applications</h1>
+                        <p class="hero-desc">Curated collection of premium Android applications, delivered securely and directly to your device.</p>
+                        <div class="hero-actions">
+                            <button class="btn-primary" onclick="navTo('downloads')"><i class="fa-solid fa-download" style="font-size:11px"></i> Browse Downloads</button>
+                            <button class="btn-secondary" onclick="navTo('features')"><i class="fa-solid fa-sparkles" style="font-size:10px;color:var(--accent-violet)"></i> Learn More</button>
+                        </div>
+                        <div class="hero-line"></div>
+                    </div>
+                </section>
+                <section class="features" id="features">
+                    <div class="reveal">
+                        <div class="section-eyebrow"><i class="fa-solid fa-sparkles"></i> The ZETA Advantage</div>
+                        <h2 class="section-heading">Why Choose ZETA</h2>
+                        <p class="section-sub">We focus on what matters — quality, security, and simplicity.</p>
+                    </div>
+                    <div class="features-grid">
+                        <div class="feat-card reveal reveal-d1"><div class="feat-icon i-blue"><i class="fa-solid fa-shield-halved"></i></div><h3>Verified Sources</h3><p>All downloads sourced from trusted platforms with verified file integrity.</p></div>
+                        <div class="feat-card reveal reveal-d2"><div class="feat-icon i-cyan"><i class="fa-solid fa-bolt"></i></div><h3>Fast Downloads</h3><p>Direct MediaFire links ensure maximum speed with no redirects.</p></div>
+                        <div class="feat-card reveal reveal-d3"><div class="feat-icon i-violet"><i class="fa-solid fa-rotate"></i></div><h3>Always Updated</h3><p>Premium versions kept current with the latest available releases.</p></div>
+                        <div class="feat-card reveal reveal-d4"><div class="feat-icon i-green"><i class="fa-solid fa-lock"></i></div><h3>Secure & Private</h3><p>No tracking, no ads, no data collection. Clean APK files only.</p></div>
+                    </div>
+                </section>
+                <section class="downloads" id="downloads">
+                    <div class="reveal"><div class="section-eyebrow"><i class="fa-solid fa-download"></i> Downloads</div><h2 class="section-heading">Available Downloads</h2><p class="section-sub">Premium applications ready for immediate download.</p></div>
+                    ${renderApkCards()}
+                </section>
+                <section class="stats" id="about">
+                    <div class="stats-grid">
+                        <div class="stat reveal"><div class="stat-num">${getApks().length}+</div><div class="stat-label">Premium Apps</div></div>
+                        <div class="stat reveal reveal-d1"><div class="stat-num">100%</div><div class="stat-label">Secure Links</div></div>
+                        <div class="stat reveal reveal-d2"><div class="stat-num">Direct</div><div class="stat-label">Downloads</div></div>
+                        <div class="stat reveal reveal-d3"><div class="stat-num">Free</div><div class="stat-label">Access</div></div>
+                    </div>
+                </section>
+                <footer class="site-footer">
+                    <div class="footer-grid">
+                        <div><div class="footer-brand">ZETA TOOLS</div><p class="footer-desc">Premium Android application platform. Curated, secure, and direct downloads for premium APK files.</p></div>
+                        <div><div class="footer-col-title">Navigation</div><a class="footer-link" onclick="navTo('downloads')">Downloads</a><a class="footer-link" onclick="navTo('features')">Features</a><a class="footer-link" onclick="navTo('about')">About</a></div>
+                        <div><div class="footer-col-title">Info</div><a class="footer-link" onclick="openSettings()">Settings</a><a class="footer-link" onclick="openDataManagement()">Data</a><a class="footer-link" onclick="openProfile()">Profile</a></div>
+                    </div>
+                    <div class="footer-bottom">&copy; ${new Date().getFullYear()} ZETA TOOLS &middot; Sri Lanka &middot; All rights reserved.</div>
+                </footer>`;
+        }
+
+        // =====================================================================
+        //  RENDER FUNCTIONS (modified)
+        // =====================================================================
         function initReveal() {
             const obs = new IntersectionObserver((entries) => {
                 entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible');
@@ -2225,81 +2303,11 @@
         }
 
         // =====================================================================
-        //  PAGE CONTENT RENDERERS (unchanged)
-        // =====================================================================
-
-        function rAPKPage() {
-            return `
-                <section class="hero">
-                    <div class="hero-glow hero-glow-1"></div>
-                    <div class="hero-glow hero-glow-2"></div>
-                    <div class="hero-ring hero-ring-1"></div>
-                    <div style="position:relative;z-index:2">
-                        <div class="hero-badge"><i class="fa-solid fa-bolt"></i> Premium APK Platform</div>
-                        <h1 class="hero-heading"><span class="hero-heading-accent">Premium Android</span><br>Applications</h1>
-                        <p class="hero-desc">Curated collection of premium Android applications, delivered securely and directly to your device.</p>
-                        <div class="hero-actions">
-                            <button class="btn-primary" onclick="navTo('downloads')"><i class="fa-solid fa-download" style="font-size:11px"></i> Browse Downloads</button>
-                            <button class="btn-secondary" onclick="navTo('features')"><i class="fa-solid fa-sparkles" style="font-size:10px;color:var(--accent-violet)"></i> Learn More</button>
-                        </div>
-                        <div class="hero-line"></div>
-                    </div>
-                </section>
-                <section class="features" id="features">
-                    <div class="reveal">
-                        <div class="section-eyebrow"><i class="fa-solid fa-sparkles"></i> The ZETA Advantage</div>
-                        <h2 class="section-heading">Why Choose ZETA</h2>
-                        <p class="section-sub">We focus on what matters — quality, security, and simplicity.</p>
-                    </div>
-                    <div class="features-grid">
-                        <div class="feat-card reveal reveal-d1"><div class="feat-icon i-blue"><i class="fa-solid fa-shield-halved"></i></div><h3>Verified Sources</h3><p>All downloads sourced from trusted platforms with verified file integrity.</p></div>
-                        <div class="feat-card reveal reveal-d2"><div class="feat-icon i-cyan"><i class="fa-solid fa-bolt"></i></div><h3>Fast Downloads</h3><p>Direct MediaFire links ensure maximum speed with no redirects.</p></div>
-                        <div class="feat-card reveal reveal-d3"><div class="feat-icon i-violet"><i class="fa-solid fa-rotate"></i></div><h3>Always Updated</h3><p>Premium versions kept current with the latest available releases.</p></div>
-                        <div class="feat-card reveal reveal-d4"><div class="feat-icon i-green"><i class="fa-solid fa-lock"></i></div><h3>Secure & Private</h3><p>No tracking, no ads, no data collection. Clean APK files only.</p></div>
-                    </div>
-                </section>
-                <section class="downloads" id="downloads">
-                    <div class="reveal"><div class="section-eyebrow"><i class="fa-solid fa-download"></i> Downloads</div><h2 class="section-heading">Available Downloads</h2><p class="section-sub">Premium applications ready for immediate download.</p></div>
-                    ${rDeepSeekCard()}
-                    ${rTelegramCard()}
-                    ${rYoutubeCard()}
-                </section>
-                <section class="stats" id="about">
-                    <div class="stats-grid">
-                        <div class="stat reveal"><div class="stat-num">3+</div><div class="stat-label">Premium Apps</div></div>
-                        <div class="stat reveal reveal-d1"><div class="stat-num">100%</div><div class="stat-label">Secure Links</div></div>
-                        <div class="stat reveal reveal-d2"><div class="stat-num">Direct</div><div class="stat-label">Downloads</div></div>
-                        <div class="stat reveal reveal-d3"><div class="stat-num">Free</div><div class="stat-label">Access</div></div>
-                    </div>
-                </section>
-                <footer class="site-footer">
-                    <div class="footer-grid">
-                        <div><div class="footer-brand">ZETA TOOLS</div><p class="footer-desc">Premium Android application platform. Curated, secure, and direct downloads for premium APK files.</p></div>
-                        <div><div class="footer-col-title">Navigation</div><a class="footer-link" onclick="navTo('downloads')">Downloads</a><a class="footer-link" onclick="navTo('features')">Features</a><a class="footer-link" onclick="navTo('about')">About</a></div>
-                        <div><div class="footer-col-title">Info</div><a class="footer-link" onclick="openSettings()">Settings</a><a class="footer-link" onclick="openDataManagement()">Data</a><a class="footer-link" onclick="openProfile()">Profile</a></div>
-                    </div>
-                    <div class="footer-bottom">&copy; 2026 ZETA TOOLS &middot; Sri Lanka &middot; All rights reserved.</div>
-                </footer>`;
-        }
-
-        function rDeepSeekCard() {
-            return `<div class="dl-card reveal" style="--dl-a:rgba(124,92,252,0.18);--dl-b:rgba(124,92,252,0.06);--dl-glow:rgba(124,92,252,0.03)"><div class="flex flex-col sm:flex-row items-start sm:items-center gap-3.5 relative" style="z-index:2"><div class="app-icon violet"><i class="fa-solid fa-brain"></i><span class="sp"><i class="fa-solid fa-sparkles"></i></span></div><div class="flex-1 min-w-0"><div class="flex items-center flex-wrap gap-2"><div class="dl-title violet">DeepSeek Premium APK</div><span class="dl-badge violet"><i class="fa-solid fa-crown"></i> Premium</span></div><p class="dl-desc">Download DeepSeek Premium APK directly from the link below.</p><div class="dl-tags"><span class="dl-tag"><i class="fa-regular fa-file"></i> APK</span><span class="dl-tag"><i class="fa-brands fa-android"></i> Android</span><span class="dl-tag"><i class="fa-solid fa-cloud-arrow-down"></i> MediaFire</span></div></div><div class="w-full sm:w-auto flex-shrink-0"><a href="https://www.mediafire.com/file/xobx85ada107n7n/Gemini+AI_1.0.772404132_MOD_Apktofu.com.apk/file" target="_blank" rel="noopener noreferrer" class="dl-btn violet"><i class="fa-solid fa-download"></i> Download APK</a></div></div></div>`;
-        }
-
-        function rTelegramCard() {
-            return `<div class="dl-card reveal" style="--dl-a:rgba(79,125,247,0.18);--dl-b:rgba(45,212,232,0.06);--dl-glow:rgba(79,125,247,0.03)"><div class="flex flex-col sm:flex-row items-start sm:items-center gap-3.5 relative" style="z-index:2"><div class="app-icon blue"><i class="fa-brands fa-telegram"></i><span class="sp"><i class="fa-solid fa-sparkles"></i></span></div><div class="flex-1 min-w-0"><div class="flex items-center flex-wrap gap-2"><div class="dl-title blue">Telegram Premium APK</div><span class="dl-badge blue"><i class="fa-solid fa-crown"></i> Premium</span></div><p class="dl-desc">Download Telegram Premium APK directly from the link below.</p><div class="dl-tags"><span class="dl-tag"><i class="fa-regular fa-file"></i> APK</span><span class="dl-tag"><i class="fa-brands fa-android"></i> Android</span><span class="dl-tag"><i class="fa-solid fa-cloud-arrow-down"></i> MediaFire</span></div></div><div class="w-full sm:w-auto flex-shrink-0"><a href="https://www.mediafire.com/file/qcrh2cr3zncbret/Telegram_Premium_by_Fianz.apk" target="_blank" rel="noopener noreferrer" class="dl-btn blue"><i class="fa-solid fa-download"></i> Download APK</a></div></div></div>`;
-        }
-
-        function rYoutubeCard() {
-            return `<div class="dl-card reveal" style="--dl-a:rgba(255,0,51,0.18);--dl-b:rgba(255,0,51,0.06);--dl-glow:rgba(255,0,51,0.03)"><div class="flex flex-col sm:flex-row items-start sm:items-center gap-3.5 relative" style="z-index:2"><div class="app-icon red"><i class="fa-brands fa-youtube"></i><span class="sp"><i class="fa-solid fa-sparkles"></i></span></div><div class="flex-1 min-w-0"><div class="flex items-center flex-wrap gap-2"><div class="dl-title red">YouTube Premium APK</div><span class="dl-badge red"><i class="fa-solid fa-crown"></i> Premium</span></div><p class="dl-desc">Download YouTube Premium APK directly from the link below.</p><div class="dl-tags"><span class="dl-tag"><i class="fa-regular fa-file"></i> APK</span><span class="dl-tag"><i class="fa-brands fa-android"></i> Android</span><span class="dl-tag"><i class="fa-solid fa-cloud-arrow-down"></i> MediaFire</span></div></div><div class="w-full sm:w-auto flex-shrink-0"><a href="https://www.mediafire.com/file/9nu3kqo9blp2h59/Youtube_Premium_RVX_v19_16_39_Cli_v5_0_1_Patches_v5_0_3_signed.apk/file" target="_blank" rel="noopener noreferrer" class="dl-btn red"><i class="fa-solid fa-download"></i> Download APK</a></div></div></div>`;
-        }
-
-        // =====================================================================
         //  INIT
         // =====================================================================
-
         (function() {
             document.documentElement.classList.add('dark');
+            seedApks(); // ensure APK data exists
             pgDashboard();
         })();
     </script>
