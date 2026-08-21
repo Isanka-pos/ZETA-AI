@@ -2527,6 +2527,45 @@
         .text-violet {
             color: var(--accent-violet);
         }
+
+        /* ZETA CHAT BUTTON — elegant, centered, slightly above categories */
+        .zeta-chat-btn {
+            display: inline-block;
+            padding: 11px 32px;
+            background: linear-gradient(135deg, #4F7DF7, #3B5FE0);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 50px;
+            text-decoration: none;
+            box-shadow: 0 4px 20px rgba(79, 125, 247, 0.35);
+            transition: all 0.25s ease;
+            letter-spacing: 0.3px;
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            font-family: 'Inter', sans-serif;
+        }
+        .zeta-chat-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 32px rgba(79, 125, 247, 0.45);
+            background: linear-gradient(135deg, #5A8BF9, #4A6FF0);
+        }
+        .zeta-chat-btn:active {
+            transform: scale(0.97);
+        }
+        .zeta-chat-btn i {
+            margin-right: 10px;
+            font-size: 17px;
+        }
+        @media(max-width:480px) {
+            .zeta-chat-btn {
+                padding: 9px 22px;
+                font-size: 14px;
+            }
+            .zeta-chat-btn i {
+                margin-right: 7px;
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -3158,19 +3197,15 @@
                         </div>
                     </section>
 
-                    <!-- ZETA CHAT BUTTON — placed above Categories, smaller size -->
-                    <div style="padding: 10px 20px 4px; max-width: 720px; margin: 0 auto; text-align: center;">
-                        <a href="https://www.hashuai.cloud-ip.cc/bot/357bcfdc" target="_blank" rel="noopener noreferrer" 
-                           style="display: inline-block; padding: 10px 28px; background: linear-gradient(135deg, #4F7DF7, #3B5FE0); 
-                                  color: #fff; font-size: 15px; font-weight: 600; border-radius: 50px; text-decoration: none; 
-                                  box-shadow: 0 3px 14px rgba(79, 125, 247, 0.30); transition: all 0.2s ease; letter-spacing: 0.2px;
-                                  border: 1px solid rgba(255,255,255,0.1);">
-                            <i class="fa-regular fa-comment-dots" style="margin-right: 8px;"></i> ZETA CHAT
+                    <!-- ZETA CHAT BUTTON — perfectly centered, slightly above categories -->
+                    <div style="padding: 6px 20px 10px; max-width: 720px; margin: 0 auto; text-align: center;">
+                        <a href="https://www.hashuai.cloud-ip.cc/bot/357bcfdc" target="_blank" rel="noopener noreferrer" class="zeta-chat-btn">
+                            <i class="fa-regular fa-comment-dots"></i> ZETA CHAT
                         </a>
                     </div>
 
                     <!-- CATEGORIES -->
-                    <section style="padding:12px 20px 32px;max-width:720px;margin:0 auto" id="categories">
+                    <section style="padding:4px 20px 32px;max-width:720px;margin:0 auto" id="categories">
                         <div class="reveal">
                             <div class="section-eyebrow"><i class="fa-solid fa-th-list"></i> Categories</div>
                             <h2 class="section-heading">Browse by Category</h2>
