@@ -1,0 +1,1772 @@
+/* ============================================
+   ZETA TOOLS ABOUT PAGE — STYLES
+   All classes prefixed with .zeta-about-
+   to avoid conflicts with other pages
+   ============================================ */
+
+/* === BASE RESET FOR ABOUT PAGE === */
+.zeta-about-hero,
+.zeta-about-section {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* === GRADIENT TEXT UTILITY === */
+.zeta-about-gradient-text {
+    background: linear-gradient(135deg, #0066FF, #00D9FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* === SECTION LABEL === */
+.zeta-about-section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #00A3FF;
+    margin-bottom: 12px;
+    padding: 6px 14px;
+    background: rgba(0, 102, 255, 0.08);
+    border: 1px solid rgba(0, 102, 255, 0.15);
+    border-radius: 100px;
+}
+
+/* === SECTION TITLE === */
+.zeta-about-section-title {
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700;
+    color: #FFFFFF;
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+
+/* === BODY TEXT === */
+.zeta-about-text {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: #94A3B8;
+    margin-bottom: 16px;
+}
+
+.zeta-about-text-lg {
+    font-size: 1.05rem;
+    max-width: 680px;
+}
+
+/* === CONTAINER === */
+.zeta-about-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* === SECTION SPACING === */
+.zeta-about-section {
+    padding-top: 100px !important;
+    padding-bottom: 100px !important;
+    position: relative;
+    overflow: hidden;
+}
+
+/* ============================================
+   HERO SECTION
+   ============================================ */
+.zeta-about-hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #020617;
+    overflow: hidden;
+    padding-top: 80px !important;
+    padding-bottom: 0 !important;
+}
+
+/* Hero Canvas */
+.zeta-about-hero-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Hero Grid */
+.zeta-about-hero-grid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-image:
+        linear-gradient(rgba(0, 102, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 102, 255, 0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 20%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 20%, transparent 70%);
+    pointer-events: none;
+}
+
+/* Hero Blobs */
+.zeta-about-hero-blobs {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.zeta-about-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.35;
+}
+
+.zeta-about-blob-1 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, #0066FF, transparent 70%);
+    top: -10%;
+    left: -5%;
+    animation: zetaAboutBlobMove1 20s ease-in-out infinite;
+}
+
+.zeta-about-blob-2 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, #00A3FF, transparent 70%);
+    bottom: 5%;
+    right: -5%;
+    animation: zetaAboutBlobMove2 25s ease-in-out infinite;
+}
+
+.zeta-about-blob-3 {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, #00D9FF, transparent 70%);
+    top: 40%;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: zetaAboutBlobMove3 18s ease-in-out infinite;
+    opacity: 0.2;
+}
+
+@keyframes zetaAboutBlobMove1 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(60px, 40px) scale(1.1); }
+    66% { transform: translate(-30px, 60px) scale(0.95); }
+}
+
+@keyframes zetaAboutBlobMove2 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(-50px, -30px) scale(1.05); }
+    66% { transform: translate(40px, -50px) scale(0.9); }
+}
+
+@keyframes zetaAboutBlobMove3 {
+    0%, 100% { transform: translateX(-50%) translate(0, 0) scale(1); }
+    50% { transform: translateX(-50%) translate(30px, -40px) scale(1.15); }
+}
+
+/* Hero Content */
+.zeta-about-hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 800px;
+    padding: 0 24px;
+    will-change: transform, opacity;
+}
+
+/* Hero Badge */
+.zeta-about-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    background: rgba(0, 102, 255, 0.1);
+    border: 1px solid rgba(0, 102, 255, 0.2);
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #00A3FF;
+    letter-spacing: 0.05em;
+    margin-bottom: 28px;
+}
+
+.zeta-about-badge-dot {
+    width: 6px;
+    height: 6px;
+    background: #00D9FF;
+    border-radius: 50%;
+    animation: zetaAboutDotPulse 2s ease-in-out infinite;
+}
+
+@keyframes zetaAboutDotPulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0, 217, 255, 0.4); }
+    50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(0, 217, 255, 0); }
+}
+
+/* Hero Title */
+.zeta-about-hero-title {
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    font-weight: 800;
+    line-height: 1.05;
+    margin-bottom: 24px;
+}
+
+.zeta-about-hero-title-line {
+    display: block;
+    font-size: clamp(2.8rem, 8vw, 5.5rem);
+    color: #FFFFFF;
+}
+
+.zeta-about-hero-title-line.zeta-about-gradient-text {
+    font-size: clamp(3.2rem, 9vw, 6.5rem);
+    filter: drop-shadow(0 0 40px rgba(0, 102, 255, 0.3));
+}
+
+/* Hero Subtitle */
+.zeta-about-hero-subtitle {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    color: #94A3B8;
+    line-height: 1.6;
+    margin-bottom: 40px;
+    max-width: 560px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Hero Buttons */
+.zeta-about-hero-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.zeta-about-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, #0066FF, #00A3FF);
+    color: #FFFFFF !important;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    box-shadow: 0 4px 20px rgba(0, 102, 255, 0.3);
+}
+
+.zeta-about-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 102, 255, 0.4);
+}
+
+.zeta-about-btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    background: transparent;
+    color: #FFFFFF !important;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.zeta-about-btn-outline:hover {
+    border-color: #00A3FF;
+    color: #00A3FF !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 163, 255, 0.15);
+}
+
+/* Scroll Indicator */
+.zeta-about-scroll-indicator {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: #64748B;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.zeta-about-scroll-mouse {
+    width: 24px;
+    height: 38px;
+    border: 2px solid rgba(100, 116, 139, 0.4);
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    padding-top: 8px;
+}
+
+.zeta-about-scroll-wheel {
+    width: 3px;
+    height: 8px;
+    background: #00A3FF;
+    border-radius: 2px;
+    animation: zetaAboutScrollWheel 2s ease-in-out infinite;
+}
+
+@keyframes zetaAboutScrollWheel {
+    0% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(12px); }
+}
+
+/* ============================================
+   WHO WE ARE
+   ============================================ */
+.zeta-about-whoweare {
+    background: #020617;
+}
+
+.zeta-about-whoweare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+
+.zeta-about-whoweare-features {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 28px;
+}
+
+.zeta-about-whoweare-feature {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    background: rgba(0, 102, 255, 0.05);
+    border: 1px solid rgba(0, 102, 255, 0.1);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.zeta-about-whoweare-feature:hover {
+    background: rgba(0, 102, 255, 0.1);
+    border-color: rgba(0, 102, 255, 0.2);
+    transform: translateX(4px);
+}
+
+.zeta-about-whoweare-feature-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(0, 102, 255, 0.15), rgba(0, 217, 255, 0.1));
+    border-radius: 10px;
+    color: #00A3FF;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.zeta-about-whoweare-feature strong {
+    display: block;
+    color: #FFFFFF;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.zeta-about-whoweare-feature span {
+    color: #64748B;
+    font-size: 0.8rem;
+}
+
+/* Visual Card */
+.zeta-about-visual-card {
+    position: relative;
+    max-width: 440px;
+    margin: 0 auto;
+}
+
+.zeta-about-visual-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120%;
+    height: 120%;
+    background: radial-gradient(circle, rgba(0, 102, 255, 0.12) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.zeta-about-visual-inner {
+    position: relative;
+    background: rgba(6, 26, 64, 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 102, 255, 0.15);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.zeta-about-visual-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.zeta-about-visual-dots {
+    display: flex;
+    gap: 6px;
+}
+
+.zeta-about-visual-dots span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.zeta-about-visual-dots span:first-child { background: #FF5F57; }
+.zeta-about-visual-dots span:nth-child(2) { background: #FFBD2E; }
+.zeta-about-visual-dots span:last-child { background: #28CA41; }
+
+.zeta-about-visual-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #64748B;
+    letter-spacing: 0.08em;
+}
+
+.zeta-about-visual-body {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.zeta-about-visual-tool {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    background: rgba(0, 102, 255, 0.05);
+    border: 1px solid rgba(0, 102, 255, 0.08);
+    border-radius: 10px;
+    color: #94A3B8;
+    font-size: 0.82rem;
+    transition: all 0.3s ease;
+}
+
+.zeta-about-visual-tool:hover {
+    background: rgba(0, 102, 255, 0.12);
+    border-color: rgba(0, 102, 255, 0.25);
+    color: #FFFFFF;
+}
+
+.zeta-about-visual-tool i {
+    color: #00A3FF;
+    font-size: 0.9rem;
+}
+
+@keyframes zetaAboutToolPulse {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+}
+
+.zeta-about-visual-footer {
+    padding: 14px 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.zeta-about-visual-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    color: #4ADE80;
+}
+
+.zeta-about-visual-status-dot {
+    width: 6px;
+    height: 6px;
+    background: #4ADE80;
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(74, 222, 128, 0.5);
+}
+
+/* Floating elements */
+.zeta-about-visual-float {
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(6, 26, 64, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 102, 255, 0.2);
+    border-radius: 10px;
+    color: #00A3FF;
+    font-size: 0.85rem;
+    z-index: 3;
+}
+
+.zeta-about-visual-float-1 {
+    top: -12px;
+    right: -16px;
+}
+
+.zeta-about-visual-float-2 {
+    bottom: 60px;
+    left: -20px;
+    color: #FFD700;
+    border-color: rgba(255, 215, 0, 0.2);
+}
+
+.zeta-about-visual-float-3 {
+    bottom: -10px;
+    right: 40px;
+    color: #00D9FF;
+    border-color: rgba(0, 217, 255, 0.2);
+}
+
+@keyframes zetaAboutFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* ============================================
+   SIMPLER SECTION
+   ============================================ */
+.zeta-about-simpler {
+    background: #020617;
+    position: relative;
+}
+
+.zeta-about-simpler::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0, 102, 255, 0.3), transparent);
+}
+
+.zeta-about-simpler-content {
+    text-align: center;
+    max-width: 680px;
+    margin: 0 auto 60px;
+}
+
+.zeta-about-simpler-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.zeta-about-simpler-card {
+    padding: 32px 24px;
+    background: rgba(6, 26, 64, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 102, 255, 0.1);
+    border-radius: 16px;
+    text-align: center;
+    transition: all 0.4s ease;
+}
+
+.zeta-about-simpler-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(0, 102, 255, 0.3);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(0, 102, 255, 0.08);
+}
+
+.zeta-about-simpler-card-icon {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(0, 102, 255, 0.12), rgba(0, 217, 255, 0.08));
+    border-radius: 14px;
+    color: #00A3FF;
+    font-size: 1.3rem;
+    margin: 0 auto 20px;
+}
+
+.zeta-about-simpler-card h3 {
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #FFFFFF;
+    margin-bottom: 10px;
+}
+
+.zeta-about-simpler-card p {
+    font-size: 0.9rem;
+    color: #94A3B8;
+    line-height: 1.6;
+}
+
+/* ============================================
+   MISSION & VISION
+   ============================================ */
+.zeta-about-mission-vision {
+    background: #020617;
+    position: relative;
+}
+
+.zeta-about-mission-vision::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0, 102, 255, 0.3), transparent);
+}
+
+.zeta-about-mv-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.zeta-about-mv-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+}
+
+.zeta-about-mv-card {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.zeta-about-mv-card-glow {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 30%, rgba(0, 102, 255, 0.06) 0%, transparent 50%);
+    pointer-events: none;
+    transition: all 0.6s ease;
+}
+
+.zeta-about-mv-card:hover .zeta-about-mv-card-glow {
+    background: radial-gradient(circle at 30% 30%, rgba(0, 102, 255, 0.1) 0%, transparent 50%);
+}
+
+.zeta-about-mv-card-inner {
+    position: relative;
+    padding: 40px 32px;
+    background: rgba(6, 26, 64, 0.5);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 102, 255, 0.12);
+    border-radius: 20px;
+    height: 100%;
+    transition: all 0.4s ease;
+}
+
+.zeta-about-mv-card:hover .zeta-about-mv-card-inner {
+    transform: translateY(-4px);
+    border-color: rgba(0, 102, 255, 0.25);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 102, 255, 0.06);
+}
+
+.zeta-about-mv-icon {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(0, 102, 255, 0.15), rgba(0, 217, 255, 0.08));
+    border-radius: 16px;
+    color: #00A3FF;
+    font-size: 1.4rem;
+    margin-bottom: 24px;
+}
+
+.zeta-about-mv-card h3 {
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin-bottom: 14px;
+}
+
+.zeta-about-mv-card p {
+    color: #94A3B8;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    font-size: 0.95rem;
+}
+
+.zeta-about-mv-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.zeta-about-mv-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.88rem;
+    color: #CBD5E1;
+}
+
+.zeta-about-mv-list li i {
+    color: #00A3FF;
+    font-size: 0.75rem;
+}
+
+/* ============================================
+   WHY CHOOSE
+   ============================================ */
+.zeta-about-why {
+    background: #020617;
+    position: relative;
+}
+
+.zeta-about-why::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0, 102, 255, 0.3), transparent);
+}
+
+.zeta-about-why-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.zeta-about-why-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.zeta-about-why-card {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.zeta-about-why-card-glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(0, 102, 255, 0.08) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+
+.zeta-about-why-card:hover .zeta-about-why-card-glow {
+    opacity: 1;
+}
+
+.zeta-about-why-card-border {
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    padding: 1px;
+    background: linear-gradient(135deg, transparent 30%, rgba(0, 102, 255, 0.3) 50%, transparent 70%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    background-size: 300% 300%;
+    animation: zetaAboutBorderGlow 6s linear infinite;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.zeta-about-why-card:hover .zeta-about-why-card-border {
+    opacity: 1;
+}
+
+@keyframes zetaAboutBorderGlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.zeta-about-why-card-inner {
+    position: relative;
+    padding: 32px 24px;
+    background: rgba(6, 26, 64, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 102, 255, 0.08);
+    border-radius: 16px;
+    height: 100%;
+    transition: all 0.4s ease;
+}
+
+.zeta-about-why-card:hover .zeta-about-why-card-inner {
+    transform: translateY(-4px) scale(1.02);
+    border-color: rgba(0, 102, 255, 0.2);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+}
+
+.zeta-about-why-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(0, 102, 255, 0.12), rgba(0, 217, 255, 0.06));
+    border-radius: 12px;
+    color: #00A3FF;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.zeta-about-why-card:hover .zeta-about-why-icon {
+    box-shadow: 0 0 20px rgba(0, 102, 255, 0.2);
+}
+
+.zeta-about-why-card-inner h3 {
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #FFFFFF;
+    margin-bottom: 8px;
+}
+
+.zeta-about-why-card-inner p {
+    font-size: 0.88rem;
+    color: #94A3B8;
+    line-height: 1.6;
+}
+
+/* ============================================
+   HIGHLIGHTS
+   ============================================ */
+.zeta-about-highlights {
+    background: #020617;
+    position: relative;
+}
+
+.zeta-about-highlights::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0, 102, 255, 0.3), transparent);
+}
+
+.zeta-about-highlights-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.zeta-about-highlights-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.zeta-about-highlight-card {
+    position: relative;
+    padding: 36px 28px;
+    background: rgba(6, 26, 64, 0.35);
+    border: 1px solid rgba(0, 102, 255, 0.08);
+    border-radius: 16px;
+    transition: all 0.4s ease;
+    overflow: hidden;
+}
+
+.zeta-about-highlight-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00A3FF, transparent);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.zeta-about-highlight-card:hover::before {
+    opacity: 1;
+}
+
+.zeta-about-highlight-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(0, 102, 255, 0.2);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+}
+
+.zeta-about-highlight-number {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: rgba(0, 102, 255, 0.06);
+    line-height: 1;
+}
+
+.zeta-about-highlight-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(0, 102, 255, 0.1), rgba(0, 217, 255, 0.05));
+    border-radius: 12px;
+    color: #00A3FF;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
+
+.zeta-about-highlight-card h3 {
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #FFFFFF;
+    margin-bottom: 8px;
+}
+
+.zeta-about-highlight-card p {
+    font-size: 0.88rem;
+    color: #94A3B8;
+    line-height: 1.6;
+}
+
+/* ============================================
+   VALUES STRIP
+   ============================================ */
+.zeta-about-values {
+    background: #020617;
+    position: relative;
+    padding-top: 60px !important;
+    padding-bottom: 60px !important;
+}
+
+.zeta-about-values::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0, 102, 255, 0.3), transparent);
+}
+
+.zeta-about-values-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+
+.zeta-about-value-card {
+    text-align: center;
+    padding: 32px 20px;
+    background: rgba(6, 26, 64, 0.3);
+    border: 1px solid rgba(0, 102, 255, 0.06);
+    border-radius: 16px;
+    transition: all 0.4s ease;
+}
+
+.zeta-about-value-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(0, 102, 255, 0.15);
+    background: rgba(6, 26, 64, 0.5);
+}
+
+.zeta-about-value-icon {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(0, 102, 255, 0.1), rgba(0, 217, 255, 0.05));
+    border-radius: 14px;
+    color: #00A3FF;
+    font-size: 1.2rem;
+    margin: 0 auto 18px;
+}
+
+.zeta-about-value-card h3 {
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #FFFFFF;
+    margin-bottom: 8px;
+}
+
+.zeta-about-value-card p {
+    font-size: 0.82rem;
+    color: #64748B;
+    line-height: 1.5;
+}
+
+/* ============================================
+   HOW IT WORKS
+   ============================================ */
+.zeta-about-how {
+    background: #020617;
+    position: relative;
+}
+
+.zeta-about-how::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0, 102, 255, 0.3), transparent);
+}
+
+.zeta-about-how-header {
+    text-align: center;
+    margin-bottom: 70px;
+}
+
+.zeta-about-how-timeline {
+    position: relative;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.zeta-about-how-line {
+    position: absolute;
+    left: 28px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: rgba(0, 102, 255, 0.1);
+    transform-origin: top;
+    transform: scaleY(0);
+    transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.zeta-about-how-line.zeta-about-line-active {
+    transform: scaleY(1);
+}
+
+.zeta-about-how-step {
+    display: flex;
+    gap: 32px;
+    margin-bottom: 48px;
+    position: relative;
+}
+
+.zeta-about-how-step:last-child {
+    margin-bottom: 0;
+}
+
+.zeta-about-step-number {
+    width: 58px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #0066FF, #00A3FF);
+    border-radius: 16px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 4px 20px rgba(0, 102, 255, 0.3);
+}
+
+.zeta-about-step-connector {
+    display: none;
+}
+
+.zeta-about-step-card {
+    flex: 1;
+    padding: 28px 24px;
+    background: rgba(6, 26, 64, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 102, 255, 0.1);
+    border-radius: 16px;
+    transition: all 0.4s ease;
+}
+
+.zeta-about-step-card:hover {
+    border-color: rgba(0, 102, 255, 0.25);
+    transform: translateX(4px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.zeta-about-step-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 102, 255, 0.1);
+    border-radius: 10px;
+    color: #00A3FF;
+    font-size: 0.95rem;
+    margin-bottom: 14px;
+}
+
+.zeta-about-step-card h3 {
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #FFFFFF;
+    margin-bottom: 8px;
+}
+
+.zeta-about-step-card p {
+    font-size: 0.9rem;
+    color: #94A3B8;
+    line-height: 1.65;
+}
+
+/* ============================================
+   TECHNOLOGY
+   ============================================ */
+.zeta-about-tech {
+    background: #020617;
+    position: relative;
+}
+
+.zeta-about-tech::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0, 102, 255, 0.3), transparent);
+}
+
+.zeta-about-tech-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.zeta-about-tech-visual {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* Code Window */
+.zeta-about-code-window {
+    background: rgba(6, 26, 64, 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 102, 255, 0.15);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(0, 102, 255, 0.05);
+}
+
+.zeta-about-code-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.zeta-about-code-dots {
+    display: flex;
+    gap: 6px;
+}
+
+.zeta-about-code-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.zeta-about-code-dot-red { background: #FF5F57; }
+.zeta-about-code-dot-yellow { background: #FFBD2E; }
+.zeta-about-code-dot-green { background: #28CA41; }
+
+.zeta-about-code-filename {
+    font-size: 0.75rem;
+    color: #64748B;
+    font-family: 'Courier New', monospace;
+}
+
+.zeta-about-code-body {
+    padding: 24px;
+    font-family: 'Courier New', 'Fira Code', monospace;
+    font-size: 0.88rem;
+    line-height: 1.9;
+    overflow-x: auto;
+}
+
+.zeta-about-code-line {
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all 0.4s ease;
+    white-space: nowrap;
+}
+
+.zeta-about-code-line.zeta-about-code-visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.zeta-about-code-keyword {
+    color: #C084FC;
+}
+
+.zeta-about-code-var {
+    color: #67E8F9;
+}
+
+.zeta-about-code-key {
+    color: #93C5FD;
+}
+
+.zeta-about-code-string {
+    color: #86EFAC;
+}
+
+/* Tech Tags */
+.zeta-about-tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 28px;
+}
+
+.zeta-about-tech-tag {
+    padding: 8px 18px;
+    background: rgba(0, 102, 255, 0.06);
+    border: 1px solid rgba(0, 102, 255, 0.12);
+    border-radius: 100px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: #94A3B8;
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.zeta-about-tech-tag.zeta-about-tag-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.zeta-about-tech-tag:hover {
+    background: rgba(0, 102, 255, 0.12);
+    border-color: rgba(0, 102, 255, 0.3);
+    color: #FFFFFF;
+}
+
+/* ============================================
+   CTA SECTION
+   ============================================ */
+.zeta-about-cta {
+    position: relative;
+    padding-top: 120px !important;
+    padding-bottom: 120px !important;
+    background: #020617;
+    overflow: hidden;
+}
+
+.zeta-about-cta-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.zeta-about-cta-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+}
+
+.zeta-about-cta-blob-1 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(0, 102, 255, 0.15), transparent 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.zeta-about-cta-blob-2 {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(0, 217, 255, 0.1), transparent 70%);
+    top: 30%;
+    right: 10%;
+}
+
+.zeta-about-cta-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+}
+
+.zeta-about-cta-title {
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700;
+    color: #FFFFFF;
+    margin-bottom: 16px;
+}
+
+.zeta-about-cta-subtitle {
+    font-size: 1.05rem;
+    color: #94A3B8;
+    max-width: 520px;
+    margin: 0 auto 36px;
+    line-height: 1.7;
+}
+
+.zeta-about-cta-btn {
+    font-size: 1rem;
+    padding: 16px 36px;
+}
+
+/* ============================================
+   SCROLL REVEAL ANIMATIONS
+   ============================================ */
+[data-anim="fade-up"] {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-anim="fade-down"] {
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-anim="fade-left"] {
+    opacity: 0;
+    transform: translateX(40px);
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-anim="fade-right"] {
+    opacity: 0;
+    transform: translateX(-40px);
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-anim="scale-in"] {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-anim].zeta-about-visible {
+    opacity: 1 !important;
+    transform: translateY(0) translateX(0) scale(1) !important;
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+    .zeta-about-blob,
+    .zeta-about-badge-dot,
+    .zeta-about-scroll-wheel,
+    .zeta-about-visual-float,
+    .zeta-about-visual-tool,
+    .zeta-about-why-card-border {
+        animation: none !important;
+    }
+
+    [data-anim="fade-up"],
+    [data-anim="fade-down"],
+    [data-anim="fade-left"],
+    [data-anim="fade-right"],
+    [data-anim="scale-in"] {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    .zeta-about-hero-content {
+        transform: none !important;
+        opacity: 1 !important;
+    }
+
+    .zeta-about-how-line {
+        transform: scaleY(1);
+        transition: none;
+    }
+
+    .zeta-about-code-line {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    .zeta-about-tech-tag {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+}
+
+/* ============================================
+   RESPONSIVE — TABLET (max-width: 1024px)
+   ============================================ */
+@media (max-width: 1024px) {
+    .zeta-about-whoweare-grid {
+        grid-template-columns: 1fr;
+        gap: 48px;
+    }
+
+    .zeta-about-whoweare-visual {
+        order: -1;
+    }
+
+    .zeta-about-visual-card {
+        max-width: 400px;
+    }
+
+    .zeta-about-why-grid,
+    .zeta-about-highlights-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .zeta-about-values-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ============================================
+   RESPONSIVE — TABLET SMALL (max-width: 768px)
+   ============================================ */
+@media (max-width: 768px) {
+    .zeta-about-section {
+        padding-top: 70px !important;
+        padding-bottom: 70px !important;
+    }
+
+    .zeta-about-simpler-cards {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .zeta-about-mv-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .zeta-about-mv-card-inner {
+        padding: 28px 24px;
+    }
+
+    .zeta-about-why-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .zeta-about-highlights-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .zeta-about-values-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+    }
+
+    .zeta-about-value-card {
+        padding: 24px 16px;
+    }
+
+    .zeta-about-how-step {
+        gap: 20px;
+    }
+
+    .zeta-about-step-number {
+        width: 48px;
+        height: 48px;
+        font-size: 0.95rem;
+        border-radius: 12px;
+    }
+
+    .zeta-about-how-line {
+        left: 23px;
+    }
+
+    .zeta-about-step-card {
+        padding: 22px 20px;
+    }
+
+    .zeta-about-cta {
+        padding-top: 80px !important;
+        padding-bottom: 80px !important;
+    }
+
+    .zeta-about-scroll-indicator {
+        display: none;
+    }
+
+    .zeta-about-hero-title-line {
+        font-size: clamp(2.2rem, 10vw, 3.5rem);
+    }
+
+    .zeta-about-hero-title-line.zeta-about-gradient-text {
+        font-size: clamp(2.6rem, 12vw, 4.2rem);
+    }
+
+    .zeta-about-section-title {
+        font-size: clamp(1.5rem, 5vw, 2.2rem);
+    }
+
+    .zeta-about-code-body {
+        font-size: 0.78rem;
+        padding: 16px;
+    }
+}
+
+/* ============================================
+   RESPONSIVE — MOBILE (max-width: 480px)
+   ============================================ */
+@media (max-width: 480px) {
+    .zeta-about-container {
+        padding: 0 16px;
+    }
+
+    .zeta-about-section {
+        padding-top: 56px !important;
+        padding-bottom: 56px !important;
+    }
+
+    .zeta-about-hero {
+        min-height: 90vh;
+        padding-top: 70px !important;
+    }
+
+    .zeta-about-hero-title-line {
+        font-size: 2rem;
+    }
+
+    .zeta-about-hero-title-line.zeta-about-gradient-text {
+        font-size: 2.4rem;
+    }
+
+    .zeta-about-hero-subtitle {
+        font-size: 0.92rem;
+    }
+
+    .zeta-about-hero-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .zeta-about-btn-primary,
+    .zeta-about-btn-outline {
+        width: 100%;
+        max-width: 280px;
+        justify-content: center;
+    }
+
+    .zeta-about-visual-card {
+        max-width: 100%;
+    }
+
+    .zeta-about-visual-body {
+        grid-template-columns: 1fr;
+        padding: 16px;
+    }
+
+    .zeta-about-visual-float {
+        display: none;
+    }
+
+    .zeta-about-values-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .zeta-about-value-card {
+        padding: 20px 14px;
+    }
+
+    .zeta-about-value-icon {
+        width: 44px;
+        height: 44px;
+        font-size: 1rem;
+    }
+
+    .zeta-about-value-card h3 {
+        font-size: 0.9rem;
+    }
+
+    .zeta-about-value-card p {
+        font-size: 0.75rem;
+    }
+
+    .zeta-about-how-step {
+        gap: 16px;
+        margin-bottom: 32px;
+    }
+
+    .zeta-about-step-number {
+        width: 42px;
+        height: 42px;
+        font-size: 0.85rem;
+        border-radius: 10px;
+    }
+
+    .zeta-about-how-line {
+        left: 20px;
+    }
+
+    .zeta-about-step-card {
+        padding: 18px 16px;
+    }
+
+    .zeta-about-step-card h3 {
+        font-size: 1rem;
+    }
+
+    .zeta-about-step-card p {
+        font-size: 0.85rem;
+    }
+
+    .zeta-about-cta-title {
+        font-size: 1.5rem;
+    }
+
+    .zeta-about-cta-subtitle {
+        font-size: 0.92rem;
+    }
+
+    .zeta-about-cta-btn {
+        padding: 14px 28px;
+        font-size: 0.92rem;
+    }
+
+    .zeta-about-whoweare-feature {
+        padding: 12px 14px;
+    }
+
+    .zeta-about-whoweare-feature-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 0.9rem;
+    }
+
+    .zeta-about-mv-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+    }
+
+    .zeta-about-tech-tags {
+        gap: 8px;
+    }
+
+    .zeta-about-tech-tag {
+        padding: 6px 14px;
+        font-size: 0.78rem;
+    }
+
+    .zeta-about-blob-1 {
+        width: 300px;
+        height: 300px;
+    }
+
+    .zeta-about-blob-2 {
+        width: 250px;
+        height: 250px;
+    }
+
+    .zeta-about-blob-3 {
+        width: 200px;
+        height: 200px;
+    }
+}
+
+/* ============================================
+   RESPONSIVE — SMALL MOBILE (max-width: 375px)
+   ============================================ */
+@media (max-width: 375px) {
+    .zeta-about-hero-title-line {
+        font-size: 1.8rem;
+    }
+
+    .zeta-about-hero-title-line.zeta-about-gradient-text {
+        font-size: 2.1rem;
+    }
+
+    .zeta-about-hero-badge {
+        font-size: 0.72rem;
+        padding: 6px 14px;
+    }
+
+    .zeta-about-section-label {
+        font-size: 0.72rem;
+        padding: 5px 12px;
+    }
+
+    .zeta-about-why-icon,
+    .zeta-about-highlight-icon,
+    .zeta-about-simpler-card-icon {
+        width: 42px;
+        height: 42px;
+        font-size: 1rem;
+    }
+}

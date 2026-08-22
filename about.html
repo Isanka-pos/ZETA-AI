@@ -1,1182 +1,182 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZETA TOOLS ABOUT</title>
-    <style>
-        /* ===== 1. 全局重置 & 基础 ===== */
-        *,
-        *::before,
-        *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --bg-deep: #020617;
-            --bg-navy: #061A40;
-            --primary-blue: #0066FF;
-            --electric-blue: #00A3FF;
-            --cyan: #00D9FF;
-            --white: #FFFFFF;
-            --text-secondary: #94A3B8;
-            --glass-bg: rgba(6, 26, 64, 0.6);
-            --glass-border: rgba(0, 163, 255, 0.15);
-            --shadow-glow: 0 0 40px rgba(0, 102, 255, 0.15);
-            --radius: 16px;
-            --transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            --font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: var(--font-family);
-            background-color: var(--bg-deep);
-            color: var(--white);
-            line-height: 1.6;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* ===== 2. 复用现有网站的导航栏 ===== */
-        /* 直接从现有首页提取并微调，保持完全一致 */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 24px;
-            background: rgba(2, 6, 23, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(0, 163, 255, 0.08);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            flex-wrap: wrap;
-        }
-
-        .nav-logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary-blue), var(--cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: -0.5px;
-            text-decoration: none;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 28px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .nav-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: color var(--transition);
-            position: relative;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--primary-blue), var(--cyan));
-            transition: width var(--transition);
-        }
-
-        .nav-links a:hover {
-            color: var(--white);
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        .nav-links a.active {
-            color: var(--white);
-        }
-
-        .nav-links a.active::after {
-            width: 100%;
-        }
-
-        /* 移动端菜单按钮 (复用现有风格) */
-        .nav-toggle {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-            background: none;
-            border: none;
-            padding: 4px;
-        }
-
-        .nav-toggle span {
-            display: block;
-            width: 26px;
-            height: 2.5px;
-            background: var(--white);
-            border-radius: 4px;
-            transition: var(--transition);
-        }
-
-        /* ===== 3. About 页面专属样式 (scoped) ===== */
-
-        /* --- 3a. 滚动条 --- */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--bg-deep);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary-blue);
-            border-radius: 10px;
-        }
-
-        /* --- 3b. 工具类 --- */
-        .zeta-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        .section-padding {
-            padding: 100px 0;
-        }
-
-        .section-label {
-            display: inline-block;
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--primary-blue);
-            margin-bottom: 12px;
-            background: rgba(0, 102, 255, 0.08);
-            padding: 4px 16px;
-            border-radius: 100px;
-            border: 1px solid rgba(0, 102, 255, 0.15);
-        }
-
-        .section-title {
-            font-size: 2.8rem;
-            font-weight: 700;
-            line-height: 1.2;
-            margin-bottom: 20px;
-        }
-
-        .section-title .highlight {
-            background: linear-gradient(135deg, var(--primary-blue), var(--cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .section-subtitle {
-            font-size: 1.15rem;
-            color: var(--text-secondary);
-            max-width: 600px;
-            line-height: 1.7;
-        }
-
-        /* --- 3c. 玻璃卡片 --- */
-        .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius);
-            padding: 32px 28px;
-            transition: transform var(--transition), box-shadow var(--transition);
-            box-shadow: var(--shadow-glow);
-        }
-
-        .glass-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 20px 60px rgba(0, 102, 255, 0.2);
-            border-color: rgba(0, 163, 255, 0.3);
-        }
-
-        /* --- 3d. 按钮 (复用首页风格) --- */
-        .btn-primary {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--primary-blue), var(--electric-blue));
-            color: var(--white);
-            padding: 14px 36px;
-            border-radius: 60px;
-            font-weight: 600;
-            font-size: 1rem;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-            transition: transform var(--transition), box-shadow var(--transition);
-            box-shadow: 0 8px 30px rgba(0, 102, 255, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 12px 40px rgba(0, 102, 255, 0.5);
-        }
-
-        .btn-secondary {
-            display: inline-block;
-            background: transparent;
-            color: var(--white);
-            padding: 14px 36px;
-            border-radius: 60px;
-            font-weight: 600;
-            font-size: 1rem;
-            text-decoration: none;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            cursor: pointer;
-            transition: all var(--transition);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: var(--primary-blue);
-            box-shadow: 0 0 30px rgba(0, 102, 255, 0.1);
-            transform: translateY(-2px);
-        }
-
-        /* ============================================================
-                   4. HERO 区域
-                   ============================================================ */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            padding: 120px 24px 80px;
-            background: radial-gradient(ellipse at 20% 50%, rgba(0, 102, 255, 0.08) 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 50%, rgba(0, 163, 255, 0.06) 0%, transparent 60%),
-                var(--bg-deep);
-        }
-
-        /* 动画背景层 */
-        .hero-bg {
-            position: absolute;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        .hero-bg .grid {
-            position: absolute;
-            inset: 0;
-            background-image:
-                linear-gradient(rgba(0, 163, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 163, 255, 0.03) 1px, transparent 1px);
-            background-size: 60px 60px;
-            animation: gridMove 20s linear infinite;
-        }
-
-        @keyframes gridMove {
-            0% {
-                transform: translate(0, 0);
-            }
-            100% {
-                transform: translate(60px, 60px);
-            }
-        }
-
-        .hero-bg .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.4;
-            animation: orbFloat 12s ease-in-out infinite alternate;
-        }
-
-        .hero-bg .orb:nth-child(2) {
-            width: 500px;
-            height: 500px;
-            background: var(--primary-blue);
-            top: -10%;
-            right: -5%;
-            animation-delay: -2s;
-        }
-
-        .hero-bg .orb:nth-child(3) {
-            width: 400px;
-            height: 400px;
-            background: var(--cyan);
-            bottom: -10%;
-            left: -5%;
-            animation-delay: -5s;
-            opacity: 0.2;
-        }
-
-        @keyframes orbFloat {
-            0% {
-                transform: translate(0, 0) scale(1);
-            }
-            100% {
-                transform: translate(30px, -30px) scale(1.1);
-            }
-        }
-
-        /* 粒子 (纯CSS实现) */
-        .particles {
-            position: absolute;
-            inset: 0;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: var(--electric-blue);
-            border-radius: 50%;
-            box-shadow: 0 0 12px rgba(0, 163, 255, 0.3);
-            animation: particleFloat linear infinite;
-            opacity: 0.3;
-        }
-
-        .particle:nth-child(1) {
-            left: 10%;
-            top: 20%;
-            animation-duration: 18s;
-            animation-delay: 0s;
-            width: 6px;
-            height: 6px;
-        }
-        .particle:nth-child(2) {
-            left: 25%;
-            top: 70%;
-            animation-duration: 22s;
-            animation-delay: 2s;
-        }
-        .particle:nth-child(3) {
-            left: 50%;
-            top: 10%;
-            animation-duration: 20s;
-            animation-delay: 4s;
-            width: 8px;
-            height: 8px;
-            opacity: 0.5;
-        }
-        .particle:nth-child(4) {
-            left: 70%;
-            top: 80%;
-            animation-duration: 25s;
-            animation-delay: 1s;
-        }
-        .particle:nth-child(5) {
-            left: 85%;
-            top: 30%;
-            animation-duration: 19s;
-            animation-delay: 3s;
-            width: 5px;
-            height: 5px;
-        }
-        .particle:nth-child(6) {
-            left: 40%;
-            top: 85%;
-            animation-duration: 23s;
-            animation-delay: 5s;
-        }
-        .particle:nth-child(7) {
-            left: 15%;
-            top: 45%;
-            animation-duration: 21s;
-            animation-delay: 1.5s;
-            width: 7px;
-            height: 7px;
-        }
-        .particle:nth-child(8) {
-            left: 65%;
-            top: 15%;
-            animation-duration: 24s;
-            animation-delay: 3.5s;
-        }
-
-        @keyframes particleFloat {
-            0% {
-                transform: translate(0, 0) scale(1);
-                opacity: 0.2;
-            }
-            25% {
-                transform: translate(40px, -60px) scale(1.2);
-                opacity: 0.6;
-            }
-            50% {
-                transform: translate(-20px, -120px) scale(0.8);
-                opacity: 0.3;
-            }
-            75% {
-                transform: translate(60px, -180px) scale(1.4);
-                opacity: 0.7;
-            }
-            100% {
-                transform: translate(0, -240px) scale(1);
-                opacity: 0.2;
-            }
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 900px;
-        }
-
-        .hero-content h1 {
-            font-size: clamp(3rem, 10vw, 5.5rem);
-            font-weight: 800;
-            line-height: 1.05;
-            margin-bottom: 24px;
-            letter-spacing: -2px;
-            background: linear-gradient(135deg, var(--white) 30%, var(--electric-blue) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: 0 0 80px rgba(0, 102, 255, 0.15);
-        }
-
-        .hero-content .subtitle {
-            font-size: 1.25rem;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto 40px;
-            line-height: 1.8;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        /* 滚动指示器 */
-        .scroll-indicator {
-            position: absolute;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 2;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            color: var(--text-secondary);
-            font-size: 0.75rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            animation: bounceDown 2s ease-in-out infinite;
-            cursor: pointer;
-        }
-
-        .scroll-indicator .mouse {
-            width: 24px;
-            height: 38px;
-            border: 2px solid rgba(255, 255, 255, 0.15);
-            border-radius: 30px;
-            position: relative;
-        }
-
-        .scroll-indicator .mouse::after {
-            content: '';
-            position: absolute;
-            top: 8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 4px;
-            height: 10px;
-            background: var(--primary-blue);
-            border-radius: 4px;
-            animation: scrollDot 2s ease-in-out infinite;
-        }
-
-        @keyframes scrollDot {
-            0%,
-            100% {
-                transform: translateX(-50%) translateY(0);
-                opacity: 1;
-            }
-            50% {
-                transform: translateX(-50%) translateY(12px);
-                opacity: 0.3;
-            }
-        }
-
-        @keyframes bounceDown {
-            0%,
-            100% {
-                transform: translateX(-50%) translateY(0);
-            }
-            50% {
-                transform: translateX(-50%) translateY(6px);
-            }
-        }
-
-        /* ============================================================
-                   5. 通用 Reveal 动画 (Intersection Observer)
-                   ============================================================ */
-        .reveal {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .reveal-left {
-            opacity: 0;
-            transform: translateX(-50px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-
-        .reveal-left.visible {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .reveal-right {
-            opacity: 0;
-            transform: translateX(50px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-
-        .reveal-right.visible {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .reveal-scale {
-            opacity: 0;
-            transform: scale(0.92);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-
-        .reveal-scale.visible {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        /* 交错延迟 */
-        .stagger>* {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-
-        .stagger.visible>*:nth-child(1) {
-            transition-delay: 0.05s;
-        }
-        .stagger.visible>*:nth-child(2) {
-            transition-delay: 0.15s;
-        }
-        .stagger.visible>*:nth-child(3) {
-            transition-delay: 0.25s;
-        }
-        .stagger.visible>*:nth-child(4) {
-            transition-delay: 0.35s;
-        }
-        .stagger.visible>*:nth-child(5) {
-            transition-delay: 0.45s;
-        }
-        .stagger.visible>*:nth-child(6) {
-            transition-delay: 0.55s;
-        }
-
-        .stagger.visible>* {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* ============================================================
-                   6. Who We Are
-                   ============================================================ */
-        #who-we-are .content-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;
-        }
-
-        #who-we-are .text-content p {
-            color: var(--text-secondary);
-            font-size: 1.05rem;
-            line-height: 1.9;
-            margin-bottom: 20px;
-        }
-
-        #who-we-are .visual {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 320px;
-        }
-
-        #who-we-are .visual .floating-ui {
-            width: 100%;
-            max-width: 420px;
-            aspect-ratio: 4/3;
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius);
-            padding: 32px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 16px;
-            box-shadow: var(--shadow-glow);
-            position: relative;
-            overflow: hidden;
-        }
-
-        #who-we-are .visual .floating-ui::before {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            border-radius: var(--radius);
-            padding: 2px;
-            background: linear-gradient(135deg, var(--primary-blue), var(--cyan), transparent);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none;
-            animation: borderGlow 4s linear infinite;
-        }
-
-        @keyframes borderGlow {
-            0% {
-                opacity: 0.3;
-            }
-            50% {
-                opacity: 1;
-            }
-            100% {
-                opacity: 0.3;
-            }
-        }
-
-        .floating-ui .ui-row {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            background: rgba(255, 255, 255, 0.03);
-            padding: 12px 16px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-        }
-
-        .floating-ui .ui-row .dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--primary-blue);
-            flex-shrink: 0;
-        }
-
-        .floating-ui .ui-row .dot.green {
-            background: #00D9A0;
-        }
-        .floating-ui .ui-row .dot.purple {
-            background: #8B5CF6;
-        }
-
-        .floating-ui .ui-row .bar {
-            flex: 1;
-            height: 6px;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.06);
-            overflow: hidden;
-        }
-
-        .floating-ui .ui-row .bar .fill {
-            height: 100%;
-            border-radius: 10px;
-            background: linear-gradient(90deg, var(--primary-blue), var(--cyan));
-            width: 70%;
-        }
-
-        .floating-ui .ui-row .bar .fill.short {
-            width: 40%;
-        }
-        .floating-ui .ui-row .bar .fill.long {
-            width: 90%;
-        }
-
-        /* ============================================================
-                   7. Mission & Vision (双卡片)
-                   ============================================================ */
-        .mission-vision-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-        }
-
-        .mission-vision-grid .glass-card {
-            text-align: center;
-            padding: 48px 32px;
-        }
-
-        .mission-vision-grid .glass-card .icon {
-            font-size: 3rem;
-            margin-bottom: 16px;
-            display: block;
-        }
-
-        .mission-vision-grid .glass-card h3 {
-            font-size: 1.6rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-            background: linear-gradient(135deg, var(--white), var(--electric-blue));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .mission-vision-grid .glass-card p {
-            color: var(--text-secondary);
-            line-height: 1.8;
-        }
-
-        /* ============================================================
-                   8. Why ZETA TOOLS (6 cards)
-                   ============================================================ */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-        }
-
-        .features-grid .glass-card {
-            text-align: center;
-            padding: 32px 20px;
-        }
-
-        .features-grid .glass-card .icon {
-            font-size: 2.4rem;
-            margin-bottom: 12px;
-            display: block;
-        }
-
-        .features-grid .glass-card h4 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .features-grid .glass-card p {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        /* ============================================================
-                   9. How It Works (3 steps)
-                   ============================================================ */
-        .steps-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            position: relative;
-        }
-
-        .steps-grid::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 16.66%;
-            right: 16.66%;
-            height: 2px;
-            background: linear-gradient(90deg, var(--primary-blue), var(--cyan), var(--primary-blue));
-            transform: translateY(-50%);
-            opacity: 0.3;
-        }
-
-        .step-card {
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
-
-        .step-card .step-number {
-            font-size: 3rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--primary-blue), var(--cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            opacity: 0.2;
-            line-height: 1;
-        }
-
-        .step-card h4 {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin: 8px 0 6px;
-        }
-
-        .step-card p {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        /* ============================================================
-                   10. CTA 区域
-                   ============================================================ */
-        .cta-section {
-            text-align: center;
-            padding: 80px 24px;
-            background: radial-gradient(ellipse at center, rgba(0, 102, 255, 0.06) 0%, transparent 70%);
-            border-top: 1px solid rgba(0, 163, 255, 0.06);
-            border-bottom: 1px solid rgba(0, 163, 255, 0.06);
-        }
-
-        .cta-section h2 {
-            font-size: 2.6rem;
-            font-weight: 700;
-            margin-bottom: 16px;
-        }
-
-        .cta-section p {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-            max-width: 560px;
-            margin: 0 auto 32px;
-            line-height: 1.7;
-        }
-
-        /* ============================================================
-                   11. Footer (完全复用首页风格)
-                   ============================================================ */
-        .footer {
-            padding: 40px 24px 24px;
-            text-align: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.04);
-        }
-
-        .footer .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 32px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-
-        .footer .footer-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color var(--transition);
-        }
-
-        .footer .footer-links a:hover {
-            color: var(--white);
-        }
-
-        .footer .copyright {
-            color: var(--text-secondary);
-            font-size: 0.8rem;
-            opacity: 0.6;
-        }
-
-        /* ============================================================
-                   12. 响应式设计
-                   ============================================================ */
-
-        /* 平板 */
-        @media (max-width: 992px) {
-            .section-title {
-                font-size: 2.2rem;
-            }
-
-            #who-we-are .content-grid {
-                grid-template-columns: 1fr;
-                gap: 40px;
-            }
-
-            #who-we-are .visual .floating-ui {
-                max-width: 100%;
-            }
-
-            .mission-vision-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .features-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .steps-grid::before {
-                display: none;
-            }
-        }
-
-        /* 移动端 */
-        @media (max-width: 768px) {
-            /* 导航栏 */
-            .nav-links {
-                display: none;
-                flex-direction: column;
-                width: 100%;
-                gap: 12px;
-                padding: 16px 0 8px;
-                border-top: 1px solid rgba(255, 255, 255, 0.04);
-                margin-top: 12px;
-            }
-
-            .nav-links.open {
-                display: flex;
-            }
-
-            .nav-toggle {
-                display: flex;
-            }
-
-            /* 内容 */
-            .section-padding {
-                padding: 60px 0;
-            }
-
-            .section-title {
-                font-size: 1.8rem;
-            }
-
-            .hero-content h1 {
-                font-size: clamp(2.4rem, 12vw, 3.6rem);
-            }
-
-            .hero-content .subtitle {
-                font-size: 1rem;
-            }
-
-            .features-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 16px;
-            }
-
-            .steps-grid {
-                grid-template-columns: 1fr;
-                gap: 24px;
-            }
-
-            .cta-section h2 {
-                font-size: 1.8rem;
-            }
-
-            .btn-primary,
-            .btn-secondary {
-                padding: 12px 28px;
-                font-size: 0.9rem;
-            }
-
-            .scroll-indicator {
-                bottom: 20px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .hero-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .hero-buttons .btn-primary,
-            .hero-buttons .btn-secondary {
-                width: 100%;
-                max-width: 280px;
-                text-align: center;
-            }
-
-            .section-title {
-                font-size: 1.6rem;
-            }
-
-            .navbar {
-                padding: 12px 16px;
-            }
-
-            .nav-logo {
-                font-size: 1.2rem;
-            }
-
-            .mission-vision-grid .glass-card {
-                padding: 32px 20px;
-            }
-        }
-
-        /* ============================================================
-                   13. 减少动画偏好
-                   ============================================================ */
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-
-            .reveal,
-            .reveal-left,
-            .reveal-right,
-            .reveal-scale,
-            .stagger>* {
-                opacity: 1 !important;
-                transform: none !important;
-            }
-
-            .hero-bg .grid {
-                animation: none !important;
-            }
-            .hero-bg .orb {
-                animation: none !important;
-            }
-            .particle {
-                animation: none !important;
-                opacity: 0.1 !important;
-            }
-            .scroll-indicator {
-                animation: none !important;
-            }
-            .scroll-indicator .mouse::after {
-                animation: none !important;
-            }
-            #who-we-are .visual .floating-ui::before {
-                animation: none !important;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
-    <!-- ============================================================
-    导航栏 (完全复用现有首页风格)
-    ============================================================ -->
-    <nav class="navbar" role="navigation" aria-label="主导航">
-        <a href="/" class="nav-logo">ZETA TOOLS</a>
-        <button class="nav-toggle" aria-label="切换菜单" aria-expanded="false">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-        <ul class="nav-links" role="menubar">
-            <li role="none"><a href="/" role="menuitem">首页</a></li>
-            <li role="none"><a href="/about.html" role="menuitem" class="active">关于</a></li>
-            <li role="none"><a href="#tools" role="menuitem">工具</a></li>
-            <li role="none"><a href="#contact" role="menuitem">联系</a></li>
-        </ul>
+    <!-- Existing Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">ZETA<span class="logo-highlight">TOOLS</span></span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="tools.html">Tools</a></li>
+                <li><a href="about.html" class="active">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
     </nav>
 
-    <!-- ============================================================
-    HERO 区域
-    ============================================================ -->
-    <section class="hero" id="hero">
-        <div class="hero-bg">
-            <div class="grid"></div>
-            <div class="orb"></div>
-            <div class="orb"></div>
-            <div class="particles">
-                <span class="particle"></span>
-                <span class="particle"></span>
-                <span class="particle"></span>
-                <span class="particle"></span>
-                <span class="particle"></span>
-                <span class="particle"></span>
-                <span class="particle"></span>
-                <span class="particle"></span>
-            </div>
+    <!-- ============================================ -->
+    <!-- HERO SECTION -->
+    <!-- ============================================ -->
+    <section class="zeta-about-hero" id="zetaAboutHero">
+        <canvas class="zeta-about-hero-canvas" id="heroCanvas"></canvas>
+        <div class="zeta-about-hero-grid"></div>
+        <div class="zeta-about-hero-blobs">
+            <div class="zeta-about-blob zeta-about-blob-1"></div>
+            <div class="zeta-about-blob zeta-about-blob-2"></div>
+            <div class="zeta-about-blob zeta-about-blob-3"></div>
         </div>
-
-        <div class="hero-content">
-            <h1>ZETA TOOLS ABOUT</h1>
-            <p class="subtitle">
-                强大工具 · 智能方案 · 为未来而建
+        <div class="zeta-about-hero-content">
+            <div class="zeta-about-hero-badge" data-anim="fade-down">
+                <span class="zeta-about-badge-dot"></span>
+                About Our Platform
+            </div>
+            <h1 class="zeta-about-hero-title" data-anim="fade-up">
+                <span class="zeta-about-hero-title-line">ZETA TOOLS</span>
+                <span class="zeta-about-hero-title-line zeta-about-gradient-text">ABOUT</span>
+            </h1>
+            <p class="zeta-about-hero-subtitle" data-anim="fade-up" data-delay="200">
+                Powerful Tools. Smarter Solutions. Built for the Future.
             </p>
-            <div class="hero-buttons">
-                <a href="#who-we-are" class="btn-primary">探索 ZETA TOOLS</a>
-                <a href="#contact" class="btn-secondary">联系我们</a>
+            <div class="zeta-about-hero-buttons" data-anim="fade-up" data-delay="400">
+                <a href="tools.html" class="btn btn-primary zeta-about-btn-primary">
+                    <span>Explore ZETA TOOLS</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+                <a href="contact.html" class="btn btn-outline zeta-about-btn-outline">
+                    <span>Contact Us</span>
+                </a>
             </div>
         </div>
-
-        <div class="scroll-indicator" aria-hidden="true">
-            <span>滚动</span>
-            <div class="mouse"></div>
+        <div class="zeta-about-scroll-indicator" data-anim="fade-up" data-delay="600">
+            <div class="zeta-about-scroll-mouse">
+                <div class="zeta-about-scroll-wheel"></div>
+            </div>
+            <span>Scroll to explore</span>
         </div>
     </section>
 
-    <!-- ============================================================
-    Who We Are
-    ============================================================ -->
-    <section id="who-we-are" class="section-padding">
-        <div class="zeta-container">
-            <div class="content-grid">
-                <div class="text-content reveal-left">
-                    <span class="section-label">关于我们</span>
-                    <h2 class="section-title">
-                        我们是谁<br />
-                        <span class="highlight">ZETA TOOLS</span>
+    <!-- ============================================ -->
+    <!-- WHO WE ARE -->
+    <!-- ============================================ -->
+    <section class="zeta-about-section zeta-about-whoweare" id="zetaWhoWeAre">
+        <div class="zeta-about-container">
+            <div class="zeta-about-whoweare-grid">
+                <div class="zeta-about-whoweare-text" data-anim="fade-right">
+                    <div class="zeta-about-section-label">Who We Are</div>
+                    <h2 class="zeta-about-section-title">
+                        A Modern Platform for <span class="zeta-about-gradient-text">Digital Tools</span>
                     </h2>
-                    <p>
-                        ZETA TOOLS 致力于提供<span style="color:var(--white);">实用、现代、易用</span>的数字工具集。
-                        我们相信，好的工具应该让复杂的事情变得简单，让每个人都能高效地完成工作。
+                    <p class="zeta-about-text">
+                        ZETA TOOLS is a platform dedicated to providing useful, modern, and accessible digital tools — all in one place. We believe that powerful tools should not be complicated or hard to find.
                     </p>
-                    <p>
-                        从创意构思到日常任务，ZETA TOOLS 为您提供一站式的解决方案。
-                        我们的目标是打造一个<span style="color:var(--electric-blue);">开放、智能、持续进化</span>的工具平台。
+                    <p class="zeta-about-text">
+                        Our focus is on creating clean, efficient, and reliable tools that solve real digital needs. Whether you are a developer, designer, student, or professional — ZETA TOOLS is built to help you get things done, faster and smarter.
                     </p>
-                    <a href="#features" class="btn-primary" style="margin-top:12px;">了解更多</a>
+                    <div class="zeta-about-whoweare-features">
+                        <div class="zeta-about-whoweare-feature">
+                            <div class="zeta-about-whoweare-feature-icon">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <div>
+                                <strong>Fast & Efficient</strong>
+                                <span>Tools that work instantly</span>
+                            </div>
+                        </div>
+                        <div class="zeta-about-whoweare-feature">
+                            <div class="zeta-about-whoweare-feature-icon">
+                                <i class="fas fa-shield-halved"></i>
+                            </div>
+                            <div>
+                                <strong>Privacy Respected</strong>
+                                <span>No unnecessary data collection</span>
+                            </div>
+                        </div>
+                        <div class="zeta-about-whoweare-feature">
+                            <div class="zeta-about-whoweare-feature-icon">
+                                <i class="fas fa-mobile-screen"></i>
+                            </div>
+                            <div>
+                                <strong>Works Everywhere</strong>
+                                <span>Responsive across all devices</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="visual reveal-right">
-                    <div class="floating-ui">
-                        <div class="ui-row">
-                            <span class="dot"></span>
-                            <span>ZETA 分析引擎</span>
-                            <span style="margin-left:auto;color:var(--text-secondary);font-size:0.8rem;">在线</span>
+                <div class="zeta-about-whoweare-visual" data-anim="fade-left">
+                    <div class="zeta-about-visual-card">
+                        <div class="zeta-about-visual-glow"></div>
+                        <div class="zeta-about-visual-inner">
+                            <div class="zeta-about-visual-header">
+                                <div class="zeta-about-visual-dots">
+                                    <span></span><span></span><span></span>
+                                </div>
+                                <span class="zeta-about-visual-title">ZETA TOOLS</span>
+                            </div>
+                            <div class="zeta-about-visual-body">
+                                <div class="zeta-about-visual-tool" style="--delay: 0s;">
+                                    <i class="fas fa-file-code"></i>
+                                    <span>Formatter</span>
+                                </div>
+                                <div class="zeta-about-visual-tool" style="--delay: 0.1s;">
+                                    <i class="fas fa-palette"></i>
+                                    <span>Color Picker</span>
+                                </div>
+                                <div class="zeta-about-visual-tool" style="--delay: 0.2s;">
+                                    <i class="fas fa-font"></i>
+                                    <span>Text Tools</span>
+                                </div>
+                                <div class="zeta-about-visual-tool" style="--delay: 0.3s;">
+                                    <i class="fas fa-calculator"></i>
+                                    <span>Calculator</span>
+                                </div>
+                                <div class="zeta-about-visual-tool" style="--delay: 0.4s;">
+                                    <i class="fas fa-qrcode"></i>
+                                    <span>QR Generator</span>
+                                </div>
+                                <div class="zeta-about-visual-tool" style="--delay: 0.5s;">
+                                    <i class="fas fa-image"></i>
+                                    <span>Image Tools</span>
+                                </div>
+                            </div>
+                            <div class="zeta-about-visual-footer">
+                                <div class="zeta-about-visual-status">
+                                    <span class="zeta-about-visual-status-dot"></span>
+                                    All Systems Operational
+                                </div>
+                            </div>
                         </div>
-                        <div class="ui-row">
-                            <span class="dot green"></span>
-                            <span>智能处理</span>
-                            <div class="bar"><div class="fill"></div></div>
+                        <div class="zeta-about-visual-float zeta-about-visual-float-1">
+                            <i class="fas fa-check-circle"></i>
                         </div>
-                        <div class="ui-row">
-                            <span class="dot purple"></span>
-                            <span>数据同步</span>
-                            <div class="bar"><div class="fill short"></div></div>
+                        <div class="zeta-about-visual-float zeta-about-visual-float-2">
+                            <i class="fas fa-star"></i>
                         </div>
-                        <div class="ui-row">
-                            <span class="dot"></span>
-                            <span>性能优化</span>
-                            <div class="bar"><div class="fill long"></div></div>
+                        <div class="zeta-about-visual-float zeta-about-visual-float-3">
+                            <i class="fas fa-zap"></i>
                         </div>
                     </div>
                 </div>
@@ -1184,224 +184,670 @@
         </div>
     </section>
 
-    <!-- ============================================================
-    Mission & Vision
-    ============================================================ -->
-    <section class="section-padding" style="padding-top:0;">
-        <div class="zeta-container">
-            <div class="mission-vision-grid">
-                <div class="glass-card reveal">
-                    <span class="icon">🚀</span>
-                    <h3>我们的使命</h3>
-                    <p>
-                        让每个人都能轻松使用强大的数字工具。<br />
-                        我们专注于 <span style="color:var(--electric-blue);">简洁、易用、高效</span>，
-                        帮助用户节省时间、提升创造力。
-                    </p>
-                </div>
-                <div class="glass-card reveal" style="transition-delay:0.15s;">
-                    <span class="icon">🔮</span>
-                    <h3>我们的愿景</h3>
-                    <p>
-                        成为未来数字工具的引领者。<br />
-                        通过 <span style="color:var(--electric-blue);">创新技术</span> 和
-                        <span style="color:var(--electric-blue);">智能设计</span>，
-                        让每个人都能享受到科技带来的便利。
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============================================================
-    Why ZETA TOOLS (6 features)
-    ============================================================ -->
-    <section id="features" class="section-padding" style="padding-top:0;">
-        <div class="zeta-container">
-            <div style="text-align:center;margin-bottom:48px;">
-                <span class="section-label">为什么选择</span>
-                <h2 class="section-title">
-                    为什么选择 <span class="highlight">ZETA TOOLS</span> ?
+    <!-- ============================================ -->
+    <!-- BUILT TO MAKE THINGS SIMPLER -->
+    <!-- ============================================ -->
+    <section class="zeta-about-section zeta-about-simpler">
+        <div class="zeta-about-container">
+            <div class="zeta-about-simpler-content" data-anim="fade-up">
+                <div class="zeta-about-section-label">About ZETA TOOLS</div>
+                <h2 class="zeta-about-section-title">
+                    Built to Make Things <span class="zeta-about-gradient-text">Simpler</span>
                 </h2>
+                <p class="zeta-about-text zeta-about-text-lg">
+                    The digital world is full of fragmented tools — each one requiring sign-ups, downloads, or complicated setups. ZETA TOOLS changes that by bringing useful digital tools together in one modern, clean platform.
+                </p>
+                <p class="zeta-about-text zeta-about-text-lg">
+                    No clutter. No unnecessary steps. Just open a tool, use it, and get your work done. That is the core idea behind everything we build.
+                </p>
             </div>
-            <div class="features-grid stagger">
-                <div class="glass-card">
-                    <span class="icon">⚡</span>
-                    <h4>强大工具</h4>
-                    <p>为日常数字需求而设计的实用工具。</p>
+            <div class="zeta-about-simpler-cards">
+                <div class="zeta-about-simpler-card" data-anim="fade-up" data-delay="0">
+                    <div class="zeta-about-simpler-card-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3>Browser-Based</h3>
+                    <p>Use any tool directly in your browser. No downloads or installations needed.</p>
                 </div>
-                <div class="glass-card">
-                    <span class="icon">✨</span>
-                    <h4>简单体验</h4>
-                    <p>简洁、清晰、易于上手的界面。</p>
+                <div class="zeta-about-simpler-card" data-anim="fade-up" data-delay="100">
+                    <div class="zeta-about-simpler-card-icon">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <h3>One Platform</h3>
+                    <p>Multiple tools gathered in a single place, organized and easy to navigate.</p>
                 </div>
-                <div class="glass-card">
-                    <span class="icon">🧠</span>
-                    <h4>现代技术</h4>
-                    <p>采用前沿 Web 技术构建。</p>
-                </div>
-                <div class="glass-card">
-                    <span class="icon">📱</span>
-                    <h4>快速响应</h4>
-                    <p>为速度和各种设备而优化。</p>
-                </div>
-                <div class="glass-card">
-                    <span class="icon">🔒</span>
-                    <h4>隐私优先</h4>
-                    <p>尊重用户隐私，拒绝不必要的数据收集。</p>
-                </div>
-                <div class="glass-card">
-                    <span class="icon">🔄</span>
-                    <h4>持续进化</h4>
-                    <p>不断改进平台和工具，保持领先。</p>
+                <div class="zeta-about-simpler-card" data-anim="fade-up" data-delay="200">
+                    <div class="zeta-about-simpler-card-icon">
+                        <i class="fas fa-wand-magic-sparkles"></i>
+                    </div>
+                    <h3>Zero Friction</h3>
+                    <p>No sign-ups, no paywalls, no unnecessary steps between you and the tool.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ============================================================
-    How It Works
-    ============================================================ -->
-    <section class="section-padding" style="padding-top:0;">
-        <div class="zeta-container">
-            <div style="text-align:center;margin-bottom:48px;">
-                <span class="section-label">使用流程</span>
-                <h2 class="section-title">
-                    三步开启 <span class="highlight">高效之旅</span>
-                </h2>
+    <!-- ============================================ -->
+    <!-- MISSION & VISION -->
+    <!-- ============================================ -->
+    <section class="zeta-about-section zeta-about-mission-vision">
+        <div class="zeta-about-container">
+            <div class="zeta-about-mv-header" data-anim="fade-up">
+                <div class="zeta-about-section-label">Our Purpose</div>
+                <h2 class="zeta-about-section-title">Mission & Vision</h2>
             </div>
-            <div class="steps-grid">
-                <div class="step-card reveal">
-                    <div class="step-number">01</div>
-                    <h4>探索</h4>
-                    <p>浏览 ZETA TOOLS 提供的各类工具。</p>
+            <div class="zeta-about-mv-grid">
+                <div class="zeta-about-mv-card" data-anim="fade-right">
+                    <div class="zeta-about-mv-card-glow"></div>
+                    <div class="zeta-about-mv-card-inner">
+                        <div class="zeta-about-mv-icon">
+                            <i class="fas fa-compass"></i>
+                        </div>
+                        <h3>Our Mission</h3>
+                        <p>To provide simple, accessible, and powerful digital tools that help people work more efficiently — without complexity, without barriers, and without compromise on quality.</p>
+                        <ul class="zeta-about-mv-list">
+                            <li><i class="fas fa-check"></i> Simplicity in every tool</li>
+                            <li><i class="fas fa-check"></i> Accessible to everyone</li>
+                            <li><i class="fas fa-check"></i> Better productivity</li>
+                            <li><i class="fas fa-check"></i> Modern technology</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="step-card reveal" style="transition-delay:0.15s;">
-                    <div class="step-number">02</div>
-                    <h4>选择</h4>
-                    <p>挑选最适合您需求的工具。</p>
-                </div>
-                <div class="step-card reveal" style="transition-delay:0.3s;">
-                    <div class="step-number">03</div>
-                    <h4>完成</h4>
-                    <p>高效使用工具，快速完成任务。</p>
+                <div class="zeta-about-mv-card" data-anim="fade-left">
+                    <div class="zeta-about-mv-card-glow"></div>
+                    <div class="zeta-about-mv-card-inner">
+                        <div class="zeta-about-mv-icon">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <h3>Our Vision</h3>
+                        <p>To become a go-to platform for useful digital tools — where anyone can find the right tool for their task, built with modern standards and designed for the future.</p>
+                        <ul class="zeta-about-mv-list">
+                            <li><i class="fas fa-check"></i> Future-ready tools</li>
+                            <li><i class="fas fa-check"></i> Smarter experiences</li>
+                            <li><i class="fas fa-check"></i> Continuous innovation</li>
+                            <li><i class="fas fa-check"></i> Easy access to technology</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ============================================================
-    CTA 区域
-    ============================================================ -->
-    <section class="cta-section reveal">
-        <h2>准备好探索 <span class="highlight">ZETA TOOLS</span> 了吗？</h2>
-        <p>
-            发现强大工具，让您的数字体验更简单、更智能。
-        </p>
-        <a href="/" class="btn-primary">探索工具</a>
+    <!-- ============================================ -->
+    <!-- WHY CHOOSE ZETA TOOLS -->
+    <!-- ============================================ -->
+    <section class="zeta-about-section zeta-about-why">
+        <div class="zeta-about-container">
+            <div class="zeta-about-why-header" data-anim="fade-up">
+                <div class="zeta-about-section-label">Advantages</div>
+                <h2 class="zeta-about-section-title">Why Choose <span class="zeta-about-gradient-text">ZETA TOOLS</span>?</h2>
+            </div>
+            <div class="zeta-about-why-grid">
+                <div class="zeta-about-why-card" data-anim="fade-up" data-delay="0">
+                    <div class="zeta-about-why-card-glow"></div>
+                    <div class="zeta-about-why-card-border"></div>
+                    <div class="zeta-about-why-card-inner">
+                        <div class="zeta-about-why-icon">
+                            <i class="fas fa-screwdriver-wrench"></i>
+                        </div>
+                        <h3>Powerful Tools</h3>
+                        <p>Useful tools designed for everyday digital needs.</p>
+                    </div>
+                </div>
+                <div class="zeta-about-why-card" data-anim="fade-up" data-delay="80">
+                    <div class="zeta-about-why-card-glow"></div>
+                    <div class="zeta-about-why-card-border"></div>
+                    <div class="zeta-about-why-card-inner">
+                        <div class="zeta-about-why-icon">
+                            <i class="fas fa-hand-pointer"></i>
+                        </div>
+                        <h3>Simple Experience</h3>
+                        <p>Clean and easy-to-use interfaces.</p>
+                    </div>
+                </div>
+                <div class="zeta-about-why-card" data-anim="fade-up" data-delay="160">
+                    <div class="zeta-about-why-card-glow"></div>
+                    <div class="zeta-about-why-card-border"></div>
+                    <div class="zeta-about-why-card-inner">
+                        <div class="zeta-about-why-icon">
+                            <i class="fas fa-microchip"></i>
+                        </div>
+                        <h3>Modern Technology</h3>
+                        <p>Built with modern web technologies.</p>
+                    </div>
+                </div>
+                <div class="zeta-about-why-card" data-anim="fade-up" data-delay="240">
+                    <div class="zeta-about-why-card-glow"></div>
+                    <div class="zeta-about-why-card-border"></div>
+                    <div class="zeta-about-why-card-inner">
+                        <div class="zeta-about-why-icon">
+                            <i class="fas fa-gauge-high"></i>
+                        </div>
+                        <h3>Fast & Responsive</h3>
+                        <p>Optimized for speed and different devices.</p>
+                    </div>
+                </div>
+                <div class="zeta-about-why-card" data-anim="fade-up" data-delay="320">
+                    <div class="zeta-about-why-card-glow"></div>
+                    <div class="zeta-about-why-card-border"></div>
+                    <div class="zeta-about-why-card-inner">
+                        <div class="zeta-about-why-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <h3>Privacy Focused</h3>
+                        <p>Respect user privacy and avoid unnecessary data collection.</p>
+                    </div>
+                </div>
+                <div class="zeta-about-why-card" data-anim="fade-up" data-delay="400">
+                    <div class="zeta-about-why-card-glow"></div>
+                    <div class="zeta-about-why-card-border"></div>
+                    <div class="zeta-about-why-card-inner">
+                        <div class="zeta-about-why-icon">
+                            <i class="fas fa-arrow-trend-up"></i>
+                        </div>
+                        <h3>Always Improving</h3>
+                        <p>Continuously improve the platform and its tools.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 
-    <!-- ============================================================
-    Footer (完全复用首页风格)
-    ============================================================ -->
-    <footer class="footer">
-        <div class="footer-links">
-            <a href="/">首页</a>
-            <a href="/about.html">关于</a>
-            <a href="#tools">工具</a>
-            <a href="#contact">联系</a>
-            <a href="#">隐私政策</a>
+    <!-- ============================================ -->
+    <!-- HIGHLIGHTS -->
+    <!-- ============================================ -->
+    <section class="zeta-about-section zeta-about-highlights">
+        <div class="zeta-about-container">
+            <div class="zeta-about-highlights-header" data-anim="fade-up">
+                <div class="zeta-about-section-label">Highlights</div>
+                <h2 class="zeta-about-section-title">What Makes Us <span class="zeta-about-gradient-text">Stand Out</span></h2>
+            </div>
+            <div class="zeta-about-highlights-grid">
+                <div class="zeta-about-highlight-card" data-anim="scale-in" data-delay="0">
+                    <div class="zeta-about-highlight-number">01</div>
+                    <div class="zeta-about-highlight-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
+                    <h3>Modern Tools</h3>
+                    <p>Tools designed with current standards and best practices in mind.</p>
+                </div>
+                <div class="zeta-about-highlight-card" data-anim="scale-in" data-delay="100">
+                    <div class="zeta-about-highlight-number">02</div>
+                    <div class="zeta-about-highlight-icon"><i class="fas fa-rocket"></i></div>
+                    <h3>Fast Performance</h3>
+                    <p>Optimized to deliver results quickly, without unnecessary loading.</p>
+                </div>
+                <div class="zeta-about-highlight-card" data-anim="scale-in" data-delay="200">
+                    <div class="zeta-about-highlight-number">03</div>
+                    <div class="zeta-about-highlight-icon"><i class="fas fa-arrows-left-right-to-line"></i></div>
+                    <h3>Responsive Design</h3>
+                    <p>Every tool adapts to your screen, from desktop to mobile.</p>
+                </div>
+                <div class="zeta-about-highlight-card" data-anim="scale-in" data-delay="300">
+                    <div class="zeta-about-highlight-number">04</div>
+                    <div class="zeta-about-highlight-icon"><i class="fas fa-face-smile"></i></div>
+                    <h3>User Friendly</h3>
+                    <p>Intuitive interfaces that require no learning curve.</p>
+                </div>
+                <div class="zeta-about-highlight-card" data-anim="scale-in" data-delay="400">
+                    <div class="zeta-about-highlight-number">05</div>
+                    <div class="zeta-about-highlight-icon"><i class="fas fa-shield-halved"></i></div>
+                    <h3>Secure Experience</h3>
+                    <p>Built with security considerations to protect user data.</p>
+                </div>
+                <div class="zeta-about-highlight-card" data-anim="scale-in" data-delay="500">
+                    <div class="zeta-about-highlight-number">06</div>
+                    <div class="zeta-about-highlight-icon"><i class="fas fa-laptop-mobile"></i></div>
+                    <h3>Cross Device</h3>
+                    <p>Works seamlessly across different devices and browsers.</p>
+                </div>
+            </div>
         </div>
-        <p class="copyright">&copy; 2026 ZETA TOOLS. All rights reserved.</p>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- VALUES / HIGHLIGHTS STRIP -->
+    <!-- ============================================ -->
+    <section class="zeta-about-section zeta-about-values">
+        <div class="zeta-about-container">
+            <div class="zeta-about-values-grid">
+                <div class="zeta-about-value-card" data-anim="fade-up" data-delay="0">
+                    <div class="zeta-about-value-icon"><i class="fas fa-code"></i></div>
+                    <h3>Modern Web Tools</h3>
+                    <p>Curated collection of tools for the modern web</p>
+                </div>
+                <div class="zeta-about-value-card" data-anim="fade-up" data-delay="100">
+                    <div class="zeta-about-value-icon"><i class="fas fa-display"></i></div>
+                    <h3>Responsive Experience</h3>
+                    <p>Consistent quality across every screen size</p>
+                </div>
+                <div class="zeta-about-value-card" data-anim="fade-up" data-delay="200">
+                    <div class="zeta-about-value-icon"><i class="fas fa-users"></i></div>
+                    <h3>User Focused</h3>
+                    <p>Every decision starts with the user in mind</p>
+                </div>
+                <div class="zeta-about-value-card" data-anim="fade-up" data-delay="300">
+                    <div class="zeta-about-value-icon"><i class="fas fa-forward"></i></div>
+                    <h3>Built for the Future</h3>
+                    <p>Designed to evolve with the digital landscape</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- HOW IT WORKS -->
+    <!-- ============================================ -->
+    <section class="zeta-about-section zeta-about-how">
+        <div class="zeta-about-container">
+            <div class="zeta-about-how-header" data-anim="fade-up">
+                <div class="zeta-about-section-label">How It Works</div>
+                <h2 class="zeta-about-section-title">Three Simple <span class="zeta-about-gradient-text">Steps</span></h2>
+            </div>
+            <div class="zeta-about-how-timeline">
+                <div class="zeta-about-how-line"></div>
+                <div class="zeta-about-how-step" data-anim="fade-up" data-delay="0">
+                    <div class="zeta-about-step-number">01</div>
+                    <div class="zeta-about-step-connector"></div>
+                    <div class="zeta-about-step-card">
+                        <div class="zeta-about-step-icon"><i class="fas fa-magnifying-glass"></i></div>
+                        <h3>Explore</h3>
+                        <p>Discover the tools available on ZETA TOOLS. Browse through categories and find what you need.</p>
+                    </div>
+                </div>
+                <div class="zeta-about-how-step" data-anim="fade-up" data-delay="200">
+                    <div class="zeta-about-step-number">02</div>
+                    <div class="zeta-about-step-connector"></div>
+                    <div class="zeta-about-step-card">
+                        <div class="zeta-about-step-icon"><i class="fas fa-hand-pointer"></i></div>
+                        <h3>Choose</h3>
+                        <p>Select the tool that fits your needs. Each tool is designed for a specific purpose.</p>
+                    </div>
+                </div>
+                <div class="zeta-about-how-step" data-anim="fade-up" data-delay="400">
+                    <div class="zeta-about-step-number">03</div>
+                    <div class="zeta-about-step-connector"></div>
+                    <div class="zeta-about-step-card">
+                        <div class="zeta-about-step-icon"><i class="fas fa-circle-check"></i></div>
+                        <h3>Get Things Done</h3>
+                        <p>Use the tool and complete your task efficiently. No unnecessary steps, no friction.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- TECHNOLOGY -->
+    <!-- ============================================ -->
+    <section class="zeta-about-section zeta-about-tech">
+        <div class="zeta-about-container">
+            <div class="zeta-about-tech-header" data-anim="fade-up">
+                <div class="zeta-about-section-label">Technology</div>
+                <h2 class="zeta-about-section-title">Built With <span class="zeta-about-gradient-text">Modern Technology</span></h2>
+            </div>
+            <div class="zeta-about-tech-visual" data-anim="fade-up" data-delay="100">
+                <div class="zeta-about-code-window">
+                    <div class="zeta-about-code-header">
+                        <div class="zeta-about-code-dots">
+                            <span class="zeta-about-code-dot zeta-about-code-dot-red"></span>
+                            <span class="zeta-about-code-dot zeta-about-code-dot-yellow"></span>
+                            <span class="zeta-about-code-dot zeta-about-code-dot-green"></span>
+                        </div>
+                        <span class="zeta-about-code-filename">zeta-tools.config</span>
+                    </div>
+                    <div class="zeta-about-code-body">
+                        <div class="zeta-about-code-line" style="--line-delay: 0s;"><span class="zeta-about-code-keyword">const</span> <span class="zeta-about-code-var">zetaTools</span> = {</div>
+                        <div class="zeta-about-code-line" style="--line-delay: 0.08s;">  <span class="zeta-about-code-key">frontend</span>: <span class="zeta-about-code-string">"HTML5, CSS3, JavaScript"</span>,</div>
+                        <div class="zeta-about-code-line" style="--line-delay: 0.16s;">  <span class="zeta-about-code-key">styling</span>: <span class="zeta-about-code-string">"Custom CSS + Responsive"</span>,</div>
+                        <div class="zeta-about-code-line" style="--line-delay: 0.24s;">  <span class="zeta-about-code-key">icons</span>: <span class="zeta-about-code-string">"Font Awesome"</span>,</div>
+                        <div class="zeta-about-code-line" style="--line-delay: 0.32s;">  <span class="zeta-about-code-key">fonts</span>: <span class="zeta-about-code-string">"Inter, Space Grotesk"</span>,</div>
+                        <div class="zeta-about-code-line" style="--line-delay: 0.40s;">  <span class="zeta-about-code-key">hosting</span>: <span class="zeta-about-code-string">"Vercel"</span>,</div>
+                        <div class="zeta-about-code-line" style="--line-delay: 0.48s;">  <span class="zeta-about-code-key">performance</span>: <span class="zeta-about-code-string">"Optimized"</span>,</div>
+                        <div class="zeta-about-code-line" style="--line-delay: 0.56s;">  <span class="zeta-about-code-key">approach</span>: <span class="zeta-about-code-string">"Modern & Clean"</span></div>
+                        <div class="zeta-about-code-line" style="--line-delay: 0.64s;">};</div>
+                    </div>
+                </div>
+                <div class="zeta-about-tech-tags">
+                    <div class="zeta-about-tech-tag" style="--tag-delay: 0s;">HTML5</div>
+                    <div class="zeta-about-tech-tag" style="--tag-delay: 0.1s;">CSS3</div>
+                    <div class="zeta-about-tech-tag" style="--tag-delay: 0.2s;">JavaScript</div>
+                    <div class="zeta-about-tech-tag" style="--tag-delay: 0.3s;">Responsive</div>
+                    <div class="zeta-about-tech-tag" style="--tag-delay: 0.4s;">Font Awesome</div>
+                    <div class="zeta-about-tech-tag" style="--tag-delay: 0.5s;">Vercel</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- CTA SECTION -->
+    <!-- ============================================ -->
+    <section class="zeta-about-section zeta-about-cta">
+        <div class="zeta-about-cta-bg">
+            <div class="zeta-about-cta-blob zeta-about-cta-blob-1"></div>
+            <div class="zeta-about-cta-blob zeta-about-cta-blob-2"></div>
+        </div>
+        <div class="zeta-about-container">
+            <div class="zeta-about-cta-content" data-anim="fade-up">
+                <h2 class="zeta-about-cta-title">Ready to Explore <span class="zeta-about-gradient-text">ZETA TOOLS</span>?</h2>
+                <p class="zeta-about-cta-subtitle">Discover powerful tools designed to make your digital experience simpler and smarter.</p>
+                <a href="tools.html" class="btn btn-primary zeta-about-btn-primary zeta-about-cta-btn">
+                    <span>Explore Tools</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Existing Footer -->
+    <footer class="footer" id="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <span class="logo-icon">⚡</span>
+                        <span class="logo-text">ZETA<span class="logo-highlight">TOOLS</span></span>
+                    </a>
+                    <p class="footer-description">Powerful digital tools designed for the modern web. Simple, fast, and accessible to everyone.</p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+                        <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="tools.html">Tools</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Tools</h4>
+                    <ul>
+                        <li><a href="tools.html">All Tools</a></li>
+                        <li><a href="tools.html">Text Tools</a></li>
+                        <li><a href="tools.html">Image Tools</a></li>
+                        <li><a href="tools.html">Developer Tools</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 ZETA TOOLS. All rights reserved.</p>
+            </div>
+        </div>
     </footer>
 
-    <!-- ============================================================
-    JavaScript
-    ============================================================ -->
+    <!-- About Page Script -->
     <script>
-        (function() {
-            'use strict';
+    (function() {
+        'use strict';
 
-            // ---------- 1. 移动端导航切换 ----------
-            const toggle = document.querySelector('.nav-toggle');
-            const navLinks = document.querySelector('.nav-links');
+        /* =========================================
+           REDUCED MOTION CHECK
+        ========================================= */
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-            if (toggle && navLinks) {
-                toggle.addEventListener('click', function() {
-                    const isOpen = navLinks.classList.toggle('open');
-                    toggle.setAttribute('aria-expanded', isOpen);
-                });
+        /* =========================================
+           HERO PARTICLE CANVAS
+        ========================================= */
+        const canvas = document.getElementById('heroCanvas');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            let animFrameId;
+            let canvasW, canvasH;
+
+            function resizeCanvas() {
+                const hero = document.getElementById('zetaAboutHero');
+                canvasW = canvas.width = hero.offsetWidth;
+                canvasH = canvas.height = hero.offsetHeight;
             }
 
-            // ---------- 2. Intersection Observer 滚动动画 ----------
-            const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .stagger');
+            function createParticles() {
+                particles = [];
+                const count = Math.min(Math.floor((canvasW * canvasH) / 18000), 80);
+                for (let i = 0; i < count; i++) {
+                    particles.push({
+                        x: Math.random() * canvasW,
+                        y: Math.random() * canvasH,
+                        r: Math.random() * 1.5 + 0.5,
+                        vx: (Math.random() - 0.5) * 0.3,
+                        vy: (Math.random() - 0.5) * 0.3,
+                        alpha: Math.random() * 0.5 + 0.1
+                    });
+                }
+            }
 
-            if ('IntersectionObserver' in window) {
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
+            function drawParticles() {
+                ctx.clearRect(0, 0, canvasW, canvasH);
+                for (let i = 0; i < particles.length; i++) {
+                    const p = particles[i];
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    if (p.x < 0) p.x = canvasW;
+                    if (p.x > canvasW) p.x = 0;
+                    if (p.y < 0) p.y = canvasH;
+                    if (p.y > canvasH) p.y = 0;
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(0, 163, 255, ' + p.alpha + ')';
+                    ctx.fill();
+
+                    /* Draw connections */
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const p2 = particles[j];
+                        const dx = p.x - p2.x;
+                        const dy = p.y - p2.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 120) {
+                            ctx.beginPath();
+                            ctx.moveTo(p.x, p.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            ctx.strokeStyle = 'rgba(0, 163, 255, ' + (0.08 * (1 - dist / 120)) + ')';
+                            ctx.lineWidth = 0.5;
+                            ctx.stroke();
+                        }
+                    }
+                }
+                if (!prefersReducedMotion) {
+                    animFrameId = requestAnimationFrame(drawParticles);
+                }
+            }
+
+            resizeCanvas();
+            createParticles();
+            if (!prefersReducedMotion) {
+                drawParticles();
+            } else {
+                /* Draw once for static state */
+                drawParticles();
+            }
+
+            let resizeTimer;
+            window.addEventListener('resize', function() {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(function() {
+                    resizeCanvas();
+                    createParticles();
+                }, 200);
+            });
+        }
+
+        /* =========================================
+           SCROLL REVEAL (IntersectionObserver)
+        ========================================= */
+        const animElements = document.querySelectorAll('[data-anim]');
+        if (animElements.length && !prefersReducedMotion) {
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        const el = entry.target;
+                        const delay = parseInt(el.getAttribute('data-delay') || '0', 10);
+                        setTimeout(function() {
+                            el.classList.add('zeta-about-visible');
+                        }, delay);
+                        observer.unobserve(el);
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+            animElements.forEach(function(el) {
+                observer.observe(el);
+            });
+        } else if (prefersReducedMotion) {
+            /* Show everything immediately */
+            animElements.forEach(function(el) {
+                el.classList.add('zeta-about-visible');
+            });
+        }
+
+        /* =========================================
+           PARALLAX ON HERO
+        ========================================= */
+        if (!prefersReducedMotion) {
+            const heroContent = document.querySelector('.zeta-about-hero-content');
+            const heroBlobs = document.querySelector('.zeta-about-hero-blobs');
+            window.addEventListener('scroll', function() {
+                const scrollY = window.scrollY;
+                const heroH = document.getElementById('zetaAboutHero').offsetHeight;
+                if (scrollY < heroH) {
+                    const ratio = scrollY / heroH;
+                    if (heroContent) {
+                        heroContent.style.transform = 'translateY(' + (scrollY * 0.3) + 'px)';
+                        heroContent.style.opacity = 1 - ratio * 1.2;
+                    }
+                    if (heroBlobs) {
+                        heroBlobs.style.transform = 'translateY(' + (scrollY * 0.15) + 'px)';
+                    }
+                }
+            }, { passive: true });
+        }
+
+        /* =========================================
+           FLOATING VISUAL ELEMENTS ANIMATION
+        ========================================= */
+        if (!prefersReducedMotion) {
+            const floats = document.querySelectorAll('.zeta-about-visual-float');
+            floats.forEach(function(f, i) {
+                const duration = 3 + i * 0.5;
+                const delay = i * 0.7;
+                f.style.animation = 'zetaAboutFloat ' + duration + 's ease-in-out ' + delay + 's infinite';
+            });
+        }
+
+        /* =========================================
+           VISUAL TOOL CARDS ANIMATION
+        ========================================= */
+        if (!prefersReducedMotion) {
+            const toolCards = document.querySelectorAll('.zeta-about-visual-tool');
+            toolCards.forEach(function(card) {
+                const delay = parseFloat(card.style.getPropertyValue('--delay')) || 0;
+                card.style.animation = 'zetaAboutToolPulse 3s ease-in-out ' + delay + 's infinite';
+            });
+        }
+
+        /* =========================================
+           GLOWING BORDER ANIMATION (Why Cards)
+        ========================================= */
+        if (!prefersReducedMotion) {
+            const whyCards = document.querySelectorAll('.zeta-about-why-card');
+            whyCards.forEach(function(card, i) {
+                const border = card.querySelector('.zeta-about-why-card-border');
+                if (border) {
+                    border.style.animationDelay = (i * 0.5) + 's';
+                }
+            });
+        }
+
+        /* =========================================
+           TECH CODE LINES ANIMATION
+        ========================================= */
+        if (!prefersReducedMotion) {
+            const codeLines = document.querySelectorAll('.zeta-about-code-line');
+            const codeObserver = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        const lines = entry.target.querySelectorAll('.zeta-about-code-line');
+                        lines.forEach(function(line) {
+                            const delay = parseFloat(line.style.getPropertyValue('--line-delay')) || 0;
+                            setTimeout(function() {
+                                line.classList.add('zeta-about-code-visible');
+                            }, delay * 1000);
+                        });
+                        codeObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.3 });
+
+            const codeBody = document.querySelector('.zeta-about-code-body');
+            if (codeBody) codeObserver.observe(codeBody);
+        } else {
+            document.querySelectorAll('.zeta-about-code-line').forEach(function(line) {
+                line.classList.add('zeta-about-code-visible');
+            });
+        }
+
+        /* =========================================
+           TECH TAGS STAGGER
+        ========================================= */
+        if (!prefersReducedMotion) {
+            const tags = document.querySelectorAll('.zeta-about-tech-tag');
+            const tagObserver = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        tags.forEach(function(tag) {
+                            const delay = parseFloat(tag.style.getPropertyValue('--tag-delay')) || 0;
+                            setTimeout(function() {
+                                tag.classList.add('zeta-about-tag-visible');
+                            }, delay * 1000 + 500);
+                        });
+                        tagObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.3 });
+
+            const tagContainer = document.querySelector('.zeta-about-tech-tags');
+            if (tagContainer) tagObserver.observe(tagContainer);
+        } else {
+            document.querySelectorAll('.zeta-about-tech-tag').forEach(function(tag) {
+                tag.classList.add('zeta-about-tag-visible');
+            });
+        }
+
+        /* =========================================
+           HOW IT WORKS — TIMELINE LINE ANIMATION
+        ========================================= */
+        if (!prefersReducedMotion) {
+            const timelineLine = document.querySelector('.zeta-about-how-line');
+            if (timelineLine) {
+                const lineObserver = new IntersectionObserver(function(entries) {
+                    entries.forEach(function(entry) {
                         if (entry.isIntersecting) {
-                            // 对于 .stagger，直接添加 visible 类触发子元素动画
-                            if (entry.target.classList.contains('stagger')) {
-                                entry.target.classList.add('visible');
-                            } else {
-                                entry.target.classList.add('visible');
-                            }
+                            timelineLine.classList.add('zeta-about-line-active');
+                            lineObserver.unobserve(entry.target);
                         }
                     });
-                }, {
-                    threshold: 0.15,
-                    rootMargin: '0px 0px -40px 0px'
-                });
-
-                revealElements.forEach(el => observer.observe(el));
-            } else {
-                // 降级方案：直接显示所有内容
-                revealElements.forEach(el => {
-                    if (el.classList.contains('stagger')) {
-                        el.classList.add('visible');
-                    } else {
-                        el.classList.add('visible');
-                    }
-                });
+                }, { threshold: 0.2 });
+                lineObserver.observe(timelineLine);
             }
+        } else {
+            const tl = document.querySelector('.zeta-about-how-line');
+            if (tl) tl.classList.add('zeta-about-line-active');
+        }
 
-            // ---------- 3. 平滑滚动 (针对锚点) ----------
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    const targetId = this.getAttribute('href');
-                    if (targetId === '#') return;
-                    const target = document.querySelector(targetId);
-                    if (target) {
-                        e.preventDefault();
-                        const navHeight = document.querySelector('.navbar')?.offsetHeight || 70;
-                        const targetPosition = target.getBoundingClientRect().top + window.pageYOffset -
-                            navHeight - 20;
-                        window.scrollTo({
-                            top: targetPosition,
-                            behavior: 'smooth'
-                        });
-                    }
-                });
-            });
-
-            // ---------- 4. 滚动指示器点击 ----------
-            const indicator = document.querySelector('.scroll-indicator');
-            if (indicator) {
-                indicator.addEventListener('click', function() {
-                    const target = document.querySelector('#who-we-are');
-                    if (target) {
-                        const navHeight = document.querySelector('.navbar')?.offsetHeight || 70;
-                        const targetPosition = target.getBoundingClientRect().top + window.pageYOffset -
-                            navHeight - 20;
-                        window.scrollTo({
-                            top: targetPosition,
-                            behavior: 'smooth'
-                        });
-                    }
-                });
-            }
-
-        })();
+    })();
     </script>
 
 </body>
