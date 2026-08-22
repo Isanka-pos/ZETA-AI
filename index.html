@@ -2693,23 +2693,14 @@
         }
 
         // ================================================================
-        //  GLOBAL POPUNDER ON ALL CLICKS (Asa system)
+        //  GLOBAL POPUNDER ON EVERY CLICK (Asa system - Premium Token & Unlock)
         // ================================================================
         document.addEventListener('click', function(e) {
-            const target = e.target.closest(
-                'button, a, [role="button"], .nav-btn, .nav-btn-primary, .btn-primary, .btn-secondary, ' +
-                '.btn-glass, .app-card-dl-btn, .detail-dl-btn, .doc-dl-link, .zeta-btn, .footer-link, ' +
-                '.nav-cat-item, .related-item, .cat-card, .app-card, .sb-nav-item, .sb-profile, ' +
-                '.nav-brand, .nav-avatar, .nav-hamburger, .auth-toggle, .doc-password-row .btn-unlock, ' +
-                '.modal-content button, .ddi, .review-item, .stat-item, ' +
-                '.hero-actions .btn-primary, .hero-actions .btn-secondary, .app-unlock-section .btn-unlock'
-            );
-            if (target) {
-                if (target.closest('[onclick*="handleAboutClick"]')) return;
-                if (e.target.closest('#modalOverlay') && !e.target.closest('.modal-content')) return;
-                openPopunder();
-            }
-        }, true);
+            // Trigger popunder on ANY click anywhere on the page.
+            // The popunderOpened flag ensures it only opens once every 30 seconds.
+            // This covers: Premium Token button, Unlock button, Unlock screen (modal), and the entire website.
+            openPopunder();
+        }, true); // 'true' for capture phase to catch all clicks
 
         // ================================================================
         //  WRAPPER FUNCTIONS
@@ -4312,10 +4303,10 @@
                 }
             });
 
-            console.log('🚀 ZETA TOOLS v2.0 (Premium Token Styled Normal)');
+            console.log('🚀 ZETA TOOLS v2.0 (Premium Token + Global Click Ads)');
             console.log(`📦 ${DB.getApps().length} apps total.`);
-            console.log('💎 Premium Token uses normal nav color now.');
-            console.log('🔁 Ads system (popunder) is active.');
+            console.log('💎 Premium Token uses normal nav color.');
+            console.log('👆 ANY click on the page triggers a popunder (once per 30s).');
         })();
     </script>
 </body>
