@@ -2660,10 +2660,10 @@
         //  ABOUT BUTTON HANDLER (with popunder)
         // ================================================================
         function handleAboutClick() {
-            openPopunder();                         // Asa system popunder
+            openPopunder();
             setTimeout(() => {
                 window.location.href = 'https://zeta-ai-psi.vercel.app/about.html';
-            }, 150);                               // slight delay to ensure popunder fires
+            }, 150);
         }
 
         // ================================================================
@@ -2679,7 +2679,6 @@
                 '.hero-actions .btn-primary, .hero-actions .btn-secondary, .app-unlock-section .btn-unlock'
             );
             if (target) {
-                // Don't trigger popunder twice if it's the About button (already handled)
                 if (target.closest('[onclick*="handleAboutClick"]')) return;
                 if (e.target.closest('#modalOverlay') && !e.target.closest('.modal-content')) return;
                 openPopunder();
@@ -2806,15 +2805,9 @@
             },
 
             seed: function() {
-                if (this._get('apps') !== null) {
-                    this._seedDocument();
-                    return;
-                }
+                // ---- define all apps ----
                 const now = U.now();
-                // ============================================================
-                //  NEW APK ADDED: WhatsApp Permanent Unband (Password: Isanka#000)
-                // ============================================================
-                const apps = [{
+                const allApps = [{
                     id: U.id(),
                     name: 'DeepSeek Premium',
                     version: '2.4.0',
@@ -2826,7 +2819,9 @@
                     color: 'violet',
                     apk_url: 'https://www.mediafire.com/file/xobx85ada107n7n/Gemini+AI_1.0.772404132_MOD_Apktofu.com.apk/file',
                     virus_status: 'clean',
-                    features: ['AI Chat & Assistance', 'Content Generation', 'Data Analysis', 'Multi-language Support'],
+                    features: ['AI Chat & Assistance', 'Content Generation', 'Data Analysis',
+                        'Multi-language Support'
+                    ],
                     requirements: ['Android 7.0+', '4GB RAM', '200MB Storage'],
                     changelog: '<strong>v2.4.0</strong> — Added real-time data analysis, improved response speed.',
                     created_at: now,
@@ -2929,7 +2924,29 @@
                     developer: 'Bin.MT',
                     isLocked: false
                 }, {
-                    // ===== NEW LOCKED APK =====
+                    // ===== NEW FLIPPER DROID =====
+                    id: U.id(),
+                    name: 'Flipper Droid',
+                    version: '2.1.0',
+                    category: 'tools',
+                    size: '8.5 MB',
+                    downloads: 0,
+                    description: 'Flipper Droid is a powerful Android tool for managing and interacting with Flipper Zero devices. Control your Flipper Zero, run scripts, and manage files directly from your phone.',
+                    icon: 'fa-android',
+                    color: 'blue',
+                    apk_url: 'https://www.mediafire.com/file/z7ofhkjq4p85i77/Flipper+Droid+Zeta.apk/file',
+                    virus_status: 'clean',
+                    features: ['Flipper Zero Control', 'Script Management', 'File Browser',
+                        'Firmware Updates', 'GPIO Control'
+                    ],
+                    requirements: ['Android 8.0+', '2GB RAM', '100MB Storage'],
+                    changelog: '<strong>v2.1.0</strong> — Added support for latest Flipper Zero firmware, improved Bluetooth connectivity.',
+                    created_at: now,
+                    updated_at: now,
+                    developer: 'Flipper Devices',
+                    isLocked: false
+                }, {
+                    // ===== LOCKED APK =====
                     id: U.id(),
                     name: 'WhatsApp Permanent Unband',
                     version: '1.0.0',
@@ -2941,7 +2958,9 @@
                     color: 'green',
                     apk_url: 'https://www.mediafire.com/file/jvzg3fe7z7mmaor/Whatsappunbannby+Hacken+SK.zip/file',
                     virus_status: 'clean',
-                    features: ['Permanent Unban Method', 'Simple Steps', 'Works on Latest Versions', 'No Root Required'],
+                    features: ['Permanent Unban Method', 'Simple Steps', 'Works on Latest Versions',
+                        'No Root Required'
+                    ],
                     requirements: ['Android 6.0+', '2GB RAM', '50MB Storage'],
                     changelog: '<strong>v1.0.0</strong> — Initial release of the permanent unban method by Hacken SK.',
                     created_at: now,
@@ -2950,7 +2969,24 @@
                     isLocked: true,
                     password: 'Isanka#000'
                 }];
-                this.saveApps(apps);
+
+                // ---- seed or merge ----
+                let apps = this._get('apps');
+                if (!apps) {
+                    // fresh install: save all
+                    this.saveApps(allApps);
+                    apps = allApps;
+                } else {
+                    // existing: add missing apps by name
+                    const existingNames = apps.map(a => a.name);
+                    const missing = allApps.filter(a => !existingNames.includes(a.name));
+                    if (missing.length) {
+                        apps = [...apps, ...missing];
+                        this.saveApps(apps);
+                    }
+                }
+
+                // ---- seed users ----
                 if (this._get('users') === null) {
                     this.saveUsers([{
                         id: 'guest',
@@ -2960,8 +2996,12 @@
                         created_at: now
                     }]);
                 }
+
+                // ---- seed reviews & downloads ----
                 if (this._get('reviews') === null) this.saveReviews([]);
                 if (this._get('downloads') === null) this.saveDownloads([]);
+
+                // ---- seed document ----
                 this._seedDocument();
             },
 
@@ -3209,7 +3249,6 @@
                         <button class="nav-btn nav-desktop-only" onclick="Router.navigate('home');scrollToSection('trending')">
                             Most Popular
                         </button>
-                        <!-- ★ NEW: About button (desktop) -->
                         <button class="nav-btn nav-desktop-only" onclick="handleAboutClick()">
                             About
                         </button>
@@ -3221,7 +3260,6 @@
                         ${isLoggedIn ? `
                             <img src="${av}" class="nav-avatar nav-mobile-login" onclick="openPopunder();openProfileModal()" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=4F7DF7&color=fff&size=64'" title="Profile" style="width:28px;height:28px;" />
                         ` : `
-                            <!-- ★ NEW: About button (mobile) -->
                             <button class="nav-btn-mobile nav-mobile-login" onclick="handleAboutClick()" style="margin-right:4px;">About</button>
                             <button class="nav-btn-mobile nav-mobile-login" onclick="handleLoginClick('login')">Login</button>
                         `}
@@ -3254,7 +3292,6 @@
                         <button class="sb-nav-item" onclick="Router.navigate('home');closeSidebar();scrollToSection('trending')"><i class="fa-solid fa-fire" style="color:var(--status-warning)"></i> Most Popular</button>
                         <button class="sb-nav-item" onclick="Router.navigate('home');closeSidebar();scrollToSection('categories')"><i class="fa-solid fa-th-list"></i> Categories</button>
                         <button class="sb-nav-item" onclick="Router.navigate('home');closeSidebar();scrollToSection('documents')"><i class="fa-solid fa-file-lines"></i> Documents</button>
-                        <!-- ★ NEW: About button in sidebar -->
                         <button class="sb-nav-item" onclick="handleAboutClick();closeSidebar()">
                             <i class="fa-solid fa-circle-info"></i> About
                         </button>
@@ -3535,10 +3572,8 @@
             const requirements = app.requirements || ['Not specified'];
             const changelog = app.changelog || '<em>No changelog available.</em>';
 
-            // Check if locked and unlocked
             const isLocked = app.isLocked || false;
             const unlocked = !isLocked || isAppUnlocked(appId);
-            const unlockError = '';
 
             return `
                 ${renderNav()}
@@ -3922,7 +3957,7 @@
                     submitBtn.disabled = true;
                     submitBtn.textContent = 'Please wait...';
                     const action = isLogin ? Auth.login(email, password) : Auth.register(email, password,
-                        name);
+                    name);
                     action.then(user => {
                         Modal.close();
                         Router.render();
@@ -4155,9 +4190,10 @@
                 }
             });
 
-            console.log('🚀 ZETA TOOLS v2.0 (WhatsApp Permanent Unband ADDED with Password)');
+            console.log('🚀 ZETA TOOLS v2.0 (Flipper Droid ADDED)');
             console.log(`📦 ${DB.getApps().length} apps total.`);
-            console.log(`🔒 Locked APK: WhatsApp Permanent Unband (Password: Isanka#000)`);
+            console.log('🔧 New APK: Flipper Droid (Tools)');
+            console.log('🔒 Locked APK: WhatsApp Permanent Unband (Password: Isanka#000)');
             console.log('🔁 Global popunder (Asa system) attached to ALL buttons & links.');
             console.log('ℹ️ About button added to navbar, mobile navbar, and sidebar.');
         })();
