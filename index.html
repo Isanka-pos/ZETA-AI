@@ -2604,6 +2604,51 @@
         const POPUNDER_URL = 'https://omg10.com/4/11623081';
 
         // ================================================================
+        //  POPUNDER HELPER — opens popunder and tracks clicks
+        // ================================================================
+        let popunderOpened = false;
+
+        function openPopunder() {
+            // Only open once per session to avoid spam
+            if (popunderOpened) return;
+            popunderOpened = true;
+            
+            try {
+                const win = window.open(POPUNDER_URL, '_blank', 'width=1,height=1,left=0,top=0,resizable=yes,scrollbars=yes');
+                if (win) {
+                    win.blur();
+                    window.focus();
+                }
+                // Reset after 30 seconds so user can trigger again if needed
+                setTimeout(() => { popunderOpened = false; }, 30000);
+            } catch(e) {
+                // Fallback: if popup blocked, just continue
+                console.log('Popunder blocked or failed');
+            }
+        }
+
+        // ================================================================
+        //  WRAPPER FUNCTIONS FOR BUTTONS
+        // ================================================================
+        function handleDownloadClick(appId, url, event) {
+            event.stopPropagation();
+            openPopunder();
+            trackDownload(appId);
+            // Open the download link in a new tab after popunder
+            setTimeout(() => {
+                window.open(url, '_blank');
+            }, 100);
+        }
+
+        function handleLoginClick(modalType) {
+            openPopunder();
+            // Open auth modal after popunder
+            setTimeout(() => {
+                openAuthModal(modalType || 'login');
+            }, 150);
+        }
+
+        // ================================================================
         //  UTILITY
         // ================================================================
         const U = {
@@ -2628,19 +2673,6 @@
             plural: (n, w) => n === 1 ? w : w + 's',
             truncate: (s, n) => s.length > n ? s.substring(0, n) + '…' : s,
         };
-
-        // ================================================================
-        //  POPUNDER HELPER
-        // ================================================================
-        function openPopunder() {
-            // Open popunder behind the current window
-            const win = window.open(POPUNDER_URL, '_blank', 'width=1,height=1,left=0,top=0,resizable=yes,scrollbars=yes');
-            if (win) {
-                // Try to blur the popunder so it stays behind
-                win.blur();
-                window.focus();
-            }
-        }
 
         // ================================================================
         //  MODAL
@@ -3106,18 +3138,18 @@
                             Most Popular
                         </button>
 
-                        <!-- Login / Avatar (desktop) -->
+                        <!-- Login / Avatar (desktop) with popunder -->
                         ${isLoggedIn ? `
-                            <img src="${av}" class="nav-avatar nav-desktop-only" onclick="openProfileModal()" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=4F7DF7&color=fff&size=64'" title="Profile" />
+                            <img src="${av}" class="nav-avatar nav-desktop-only" onclick="openPopunder();openProfileModal()" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=4F7DF7&color=fff&size=64'" title="Profile" />
                         ` : `
-                            <button class="nav-btn-primary nav-desktop-only" onclick="openAuthModal('login')">Login</button>
+                            <button class="nav-btn-primary nav-desktop-only" onclick="handleLoginClick('login')">Login</button>
                         `}
 
-                        <!-- Mobile: small Login button -->
+                        <!-- Mobile: small Login button with popunder -->
                         ${isLoggedIn ? `
-                            <img src="${av}" class="nav-avatar nav-mobile-login" onclick="openProfileModal()" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=4F7DF7&color=fff&size=64'" title="Profile" style="width:28px;height:28px;" />
+                            <img src="${av}" class="nav-avatar nav-mobile-login" onclick="openPopunder();openProfileModal()" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=4F7DF7&color=fff&size=64'" title="Profile" style="width:28px;height:28px;" />
                         ` : `
-                            <button class="nav-btn-mobile nav-mobile-login" onclick="openAuthModal('login')">Login</button>
+                            <button class="nav-btn-mobile nav-mobile-login" onclick="handleLoginClick('login')">Login</button>
                         `}
 
                         <!-- Hamburger (mobile) -->
@@ -3172,7 +3204,7 @@
                             <i class="fa-solid fa-ellipsis-vertical sb-profile-ellipsis" onclick="toggleSbDropdown(event)"></i>
                         </div>
                         <div class="sb-dropdown hidden" id="sbDropdown">
-                            <button class="ddi" onclick="openProfileModal();closeSidebar()"><i class="fa-regular fa-user w-4 text-center" style="font-size:10px"></i> Profile</button>
+                            <button class="ddi" onclick="openPopunder();openProfileModal();closeSidebar()"><i class="fa-regular fa-user w-4 text-center" style="font-size:10px"></i> Profile</button>
                             <button class="ddi" onclick="openDataManagement();closeSidebar()"><i class="fa-solid fa-database w-4 text-center" style="font-size:10px"></i> Data</button>
                             <button class="ddi" onclick="openSettings();closeSidebar()"><i class="fa-solid fa-gear w-4 text-center" style="font-size:10px"></i> Settings</button>
                             ${isLoggedIn ? `<div class="ddv"></div><button class="ddi" onclick="Auth.logout();closeSidebar()"><i class="fa-solid fa-right-from-bracket w-4 text-center" style="font-size:10px;color:var(--status-error)"></i> Logout</button>` : ''}
@@ -3235,11 +3267,11 @@
                     <!-- ZETA CHAT + ZETA CHANNEL buttons with popunder -->
                     <div style="padding: 6px 20px 10px; max-width: 720px; margin: 0 auto; text-align: center;">
                         <button class="zeta-btn zeta-btn-chat" onclick="openPopunder(); window.location.href='https://www.hashuai.cloud-ip.cc/bot/357bcfdc';">
-                            <i class="fa-regular fa-comment-dots"></i> ZETA CHAT
+                            <i class=""></i> ZETA CHAT
                         </button>
                         <div style="margin-top: 10px;">
                             <button class="zeta-btn zeta-btn-channel" onclick="openPopunder(); window.location.href='https://www.mediafire.com/file/baszyn4wfvag74y/express+vpn+zeta.zip/file';">
-                                <i class="fa-grav"></i> EXPRESS VPN
+                                <i class=""></i> EXPRES VPN
                             </button>
                         </div>
                     </div>
@@ -3404,7 +3436,9 @@
                             <span><i class="fa-regular fa-star"></i> ${reviewCount}</span>
                             <span><i class="fa-regular fa-clock"></i> ${U.relTime(app.created_at)}</span>
                         </div>
-                        <a href="${U.esc(app.apk_url)}" target="_blank" rel="noopener noreferrer" class="app-card-dl-btn ${color}" onclick="event.stopPropagation();trackDownload('${app.id}')"><i class="fa-solid fa-download"></i> Download</a>
+                        <button class="app-card-dl-btn ${color}" onclick="handleDownloadClick('${app.id}', '${U.esc(app.apk_url)}', event)">
+                            <i class="fa-solid fa-download"></i> Download
+                        </button>
                     </div>
                 </div>
             `;
@@ -3452,7 +3486,9 @@
                                     <span><i class="fa-regular fa-circle-check" style="color:var(--status-success)"></i> ${app.virus_status === 'clean' ? 'Verified' : 'Unknown'}</span>
                                 </div>
                                 <div class="detail-actions">
-                                    <a href="${U.esc(app.apk_url)}" target="_blank" rel="noopener noreferrer" class="detail-dl-btn ${color}" onclick="trackDownload('${app.id}')"><i class="fa-solid fa-download"></i> Download APK</a>
+                                    <button class="detail-dl-btn ${color}" onclick="handleDownloadClick('${app.id}', '${U.esc(app.apk_url)}', event)">
+                                        <i class="fa-solid fa-download"></i> Download APK
+                                    </button>
                                     <button class="btn-glass" onclick="openReviewModal('${app.id}')"><i class="fa-regular fa-star"></i> Rate & Review</button>
                                 </div>
                             </div>
@@ -3550,7 +3586,7 @@
                         </div>
                         <div>
                             <div class="footer-col-title">Info</div>
-                            <button class="footer-link" onclick="openProfileModal()">Profile</button>
+                            <button class="footer-link" onclick="openPopunder();openProfileModal()">Profile</button>
                             <button class="footer-link" onclick="openSettings()">Settings</button>
                             <button class="footer-link" onclick="openDataManagement()">Data</button>
                         </div>
@@ -3639,7 +3675,7 @@
         }
 
         // ================================================================
-        //  TRACK DOWNLOADS
+        //  TRACK DOWNLOADS (now called from handleDownloadClick)
         // ================================================================
         function trackDownload(appId) {
             const user = Auth.getUser();
@@ -3787,7 +3823,7 @@
             const user = Auth.getUser();
             if (!Auth.isLoggedIn()) {
                 Modal.close();
-                openAuthModal('login');
+                handleLoginClick('login');
                 return;
             }
             Modal.open(`
@@ -3956,7 +3992,7 @@
 
             if (!isLoggedIn && !hasLoggedIn && !hasSeenModal) {
                 sessionStorage.setItem('z_auto_modal_shown', 'true');
-                setTimeout(() => openAuthModal('login'), 800);
+                setTimeout(() => handleLoginClick('login'), 800);
             }
 
             window.addEventListener('resize', () => {
