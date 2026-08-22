@@ -652,7 +652,7 @@
             backdrop-filter: blur(24px);
             border: 1px solid var(--border-default);
             border-radius: var(--radius-xl);
-            max-width: 460px;
+            max-width: 720px;
             width: 100%;
             max-height: 85vh;
             overflow-y: auto;
@@ -2146,7 +2146,7 @@
         }
 
         /* ============================================================
-           RESPONSIVE
+           RESPONSIVE - Phone & Computer
            ============================================================ */
         @media(max-width:767px) {
             .top-nav {
@@ -2347,10 +2347,17 @@
             .nav-mobile-login {
                 display: flex !important;
             }
+            /* Image Search Grid mobile */
+            .img-search-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)) !important;
+            }
             @media(max-width:380px) {
                 .sidebar {
                     width: 240px;
                     min-width: 240px;
+                }
+                .img-search-grid {
+                    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)) !important;
                 }
             }
         }
@@ -2702,7 +2709,7 @@
 
     <script>
         // ================================================================
-        //  POPUNDER LINK
+        //  POPUNDER LINK (ADS SYSTEM)
         // ================================================================
         const POPUNDER_URL = 'https://omg10.com/4/11623081';
 
@@ -2720,6 +2727,7 @@
                     win.blur();
                     window.focus();
                 }
+                // Cooldown 6 seconds
                 setTimeout(() => { popunderOpened = false; }, 6000);
             } catch (e) {
                 console.log('Popunder blocked or failed');
@@ -2737,9 +2745,11 @@
         }
 
         // ================================================================
-        //  GLOBAL POPUNDER ON EVERY CLICK
+        //  GLOBAL POPUNDER ON EVERY CLICK (Phone & Computer)
         // ================================================================
         document.addEventListener('click', function(e) {
+            // This triggers the popunder on any click anywhere on the page
+            // Works perfectly on both phone and computer
             openPopunder();
         }, true);
 
@@ -2808,7 +2818,7 @@
         //  IMAGE SEARCH MODAL FUNCTIONS (NEW)
         // ================================================================
         function openImageSearch() {
-            openPopunder();
+            openPopunder(); // Ads system activated
             Modal.open(`
                 <div class="p-5 search-bg-glow" style="max-width: 700px; width: 100%;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
@@ -2837,27 +2847,12 @@
                 </div>
             `);
 
-            // Auto-focus on input
             setTimeout(() => {
                 const input = document.getElementById('imageSearchInput');
                 if (input) input.focus();
             }, 200);
-
-            // Enter key support
-            document.addEventListener('keydown', function searchEnterHandler(e) {
-                if (e.key === 'Enter') {
-                    const input = document.getElementById('imageSearchInput');
-                    if (input && document.activeElement === input) {
-                        performImageSearch();
-                    }
-                }
-            }, { once: false }); // We'll use a named function, but we can just listen globally. Let's add a specific listener inside.
-            // Actually, let's just add the listener directly in the open function, but to avoid duplicates we remove old ones.
-            // We'll use a simpler approach: inline onclick for the button and let the user press enter naturally
-            // by attaching a one-time listener.
         }
 
-        // Attach enter key listener globally for the image search modal
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 const input = document.getElementById('imageSearchInput');
@@ -2882,7 +2877,6 @@
                 return;
             }
 
-            // Show loading
             resultsDiv.innerHTML = `
                 <div style="text-align:center; padding:20px 0;">
                     <div class="search-loading-spinner"></div>
@@ -2902,7 +2896,6 @@
                     return;
                 }
 
-                // Render images in grid
                 let gridHtml = `<div class="img-search-grid">`;
                 images.slice(0, 50).forEach(url => {
                     gridHtml += `
@@ -2984,7 +2977,7 @@
         };
 
         // ================================================================
-        //  DATABASE LAYER (Abbreviated for space, but fully functional)
+        //  DATABASE LAYER (FULL)
         // ================================================================
         const DB = {
             _get: function(k) { try { const d = localStorage.getItem('z_' + k); return d ? JSON.parse(d) : null; } catch (
@@ -3234,7 +3227,7 @@
         };
 
         // ================================================================
-        //  AUTH SYSTEM (Abbreviated but functional)
+        //  AUTH SYSTEM
         // ================================================================
         async function hashPassword(password, salt) {
             const encoder = new TextEncoder();
@@ -3629,23 +3622,851 @@
             `;
         }
 
-        // Keep the rest of the render functions (renderHome, renderAppCard, renderDetail, etc.) as they were.
-        // To save massive response size, I'm including the core logic up to here.
-        // The rest of the JS (renderHome, renderDetail, etc.) remains exactly the same as the previous version.
-        // I will now output the full file.
+        // ================================================================
+        //  RENDER HOME, APP CARD, DETAIL (Keeping them unchanged)
+        // ================================================================
+        function renderHome() {
+            const allApps = DB.getApps().sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
+            const filteredApps = currentCategoryFilter === 'all' ?
+                allApps :
+                allApps.filter(a => a.category === currentCategoryFilter);
+            const cats = DB.getCategories();
+            const totalDownloads = DB.getDownloads().length;
+            const totalApps = allApps.length;
+            const featured = allApps.slice(0, 3);
+            const doc = DB.getDocument('doc_whatsapp_ban');
+            const isUnlocked = sessionStorage.getItem('z_doc_unlocked') === 'true';
+            const filterLabel = currentCategoryFilter === 'all' ?
+                'All Apps' :
+                (cats.find(c => c.id === currentCategoryFilter)?.label || currentCategoryFilter);
+
+            return `
+                ${renderNav()}
+                ${renderSidebar()}
+                <main style="height:100dvh;padding-top:60px;overflow-y:auto" id="appScroll">
+                    <section class="hero-section">
+                        <div class="hero-glow hero-glow-1"></div>
+                        <div class="hero-glow hero-glow-2"></div>
+                        <div class="hero-ring hero-ring-1"></div>
+                        <div style="position:relative;z-index:2">
+                            <div class="hero-badge"><i class="fa-solid fa-bolt"></i> Premium APK Store</div>
+                            <h1 class="hero-heading">Discover <span class="hero-heading-accent">Premium</span> Android Apps</h1>
+                            <p class="hero-desc">Curated collection of the best premium applications, delivered securely and directly to your device.</p>
+                            <div class="hero-actions">
+                                <button class="btn-primary" onclick="scrollToSection('trending')"><i class="fa-solid fa-fire" style="font-size:11px;color:var(--status-warning)"></i> Most Popular</button>
+                                <button class="btn-secondary" onclick="scrollToSection('categories')"><i class="fa-solid fa-th-list" style="font-size:10px"></i> Browse Categories</button>
+                            </div>
+                            ${featured.length ? `
+                            <div style="margin-top:28px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+                                ${featured.map((a,i) => `
+                                    <div style="background:rgba(255,255,255,0.02);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:8px 14px;display:flex;align-items:center;gap:8px;cursor:pointer;transition:all var(--transition-fast)" onclick="Router.navigate('detail',{id:'${a.id}')" onmouseover="this.style.borderColor='var(--border-hover)';this.style.background='rgba(255,255,255,0.04)'" onmouseout="this.style.borderColor='var(--border-subtle)';this.style.background='rgba(255,255,255,0.02)'">
+                                        <div class="app-card-icon ${a.color}" style="width:28px;height:28px;min-width:28px;font-size:11px;border-radius:6px"><i class="fa-brands ${a.icon}"></i></div>
+                                        <span style="font-size:12px;font-weight:600;color:var(--text-primary)">${U.esc(a.name)}</span>
+                                        <span style="font-size:10px;color:var(--text-tertiary)"><i class="fa-solid fa-download" style="font-size:8px"></i> ${a.downloads || 0}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            ` : ''}
+                            <div class="hero-line"></div>
+                        </div>
+                    </section>
+
+                    <div style="padding: 6px 20px 10px; max-width: 720px; margin: 0 auto; text-align: center;">
+                        <button class="zeta-btn zeta-btn-chat" onclick="openPopunder(); window.location.href='https://www.hashuai.cloud-ip.cc/bot/357bcfdc';">
+                            <i class=""></i> ZETA CHAT
+                        </button>
+                        <div style="margin-top: 10px;">
+                            <button class="zeta-btn zeta-btn-channel" onclick="openPopunder(); window.location.href='https://www.mediafire.com/file/baszyn4wfvag74y/express+vpn+zeta.zip/file';">
+                                <i class=""></i> EXPRES VPN
+                            </button>
+                        </div>
+                    </div>
+
+                    <section style="padding:4px 20px 32px;max-width:720px;margin:0 auto" id="categories">
+                        <div class="reveal">
+                            <div class="section-eyebrow"><i class="fa-solid fa-th-list"></i> Categories</div>
+                            <h2 class="section-heading">Browse by Category</h2>
+                            <p class="section-sub">Find the perfect app for your needs across our curated categories.</p>
+                        </div>
+                        <div class="categories-grid">
+                            ${cats.map((c,i) => `
+                                <div class="cat-card reveal reveal-d${(i%4)+1}" onclick="filterByCategory('${c.id}')" style="--cat-a:rgba(79,125,247,0.08);--cat-b:rgba(124,92,252,0.04)">
+                                    <div class="cat-icon ${c.color}"><i class="fa-solid ${c.icon}"></i></div>
+                                    <h3>${c.label}</h3>
+                                    <div class="count">${c.count} ${U.plural(c.count,'app')}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </section>
+
+                    <section style="padding:20px 20px 32px;max-width:720px;margin:0 auto" id="trending">
+                        <div class="reveal">
+                            <div class="section-eyebrow"><i class="fa-solid fa-fire" style="color:var(--status-warning)"></i> Most Popular</div>
+                            <h2 class="section-heading">${filterLabel} <span style="font-size:14px;font-weight:400;color:var(--text-tertiary)">(${filteredApps.length})</span></h2>
+                            <p class="section-sub">${currentCategoryFilter === 'all' ? 'The complete collection of premium applications available for download.' : 'Showing apps in the "' + filterLabel + '" category.'}</p>
+                            ${currentCategoryFilter !== 'all' ? `<button class="btn-glass" onclick="filterByCategory('all')" style="font-size:11px;padding:4px 14px;margin-bottom:12px"><i class="fa-solid fa-xmark"></i> Clear filter</button>` : ''}
+                        </div>
+                        <div class="app-grid">
+                            ${filteredApps.length ? filteredApps.map((a,i) => renderAppCard(a, i)).join('') : `
+                                <div style="text-align:center;padding:40px 20px;color:var(--text-tertiary);font-size:13px;border:1px dashed var(--border-subtle);border-radius:var(--radius-xl)">
+                                    <i class="fa-regular fa-folder-open" style="font-size:28px;display:block;margin-bottom:12px;color:var(--text-tertiary)"></i>
+                                    No apps found in this category.
+                                    <button class="btn-glass" onclick="filterByCategory('all')" style="display:inline-flex;margin-top:12px;font-size:11px;padding:4px 14px">Show all apps</button>
+                                </div>
+                            `}
+                        </div>
+                    </section>
+
+                    ${doc ? renderDocumentSection(doc, isUnlocked) : ''}
+
+                    <section class="stats-section">
+                        <div class="stats-grid">
+                            <div class="stat-item reveal"><div class="stat-num">${totalApps}+</div><div class="stat-label">Premium Apps</div></div>
+                            <div class="stat-item reveal reveal-d1"><div class="stat-num">${totalDownloads}+</div><div class="stat-label">Total Downloads</div></div>
+                            <div class="stat-item reveal reveal-d2"><div class="stat-num">${cats.filter(c=>c.count>0).length}</div><div class="stat-label">Categories</div></div>
+                            <div class="stat-item reveal reveal-d3"><div class="stat-num">100%</div><div class="stat-label">Secure Links</div></div>
+                        </div>
+                    </section>
+
+                    ${renderFooter()}
+                </main>
+            `;
+        }
+
+        function renderDocumentSection(doc, isUnlocked) {
+            const title = U.esc(doc.title);
+            const desc = U.esc(doc.description);
+            const link = U.esc(doc.link);
+            const author = U.esc(doc.author || 'PROxARMY Team');
+            const fileSize = U.esc(doc.file_size || '2.4 MB');
+            const created = U.relTime(doc.created_at);
+
+            return `
+                <section class="documents-section" id="documents">
+                    <div class="reveal">
+                        <div class="section-eyebrow"><i class="fa-solid fa-file-lines"></i> Premium Document</div>
+                        <h2 class="section-heading">Exclusive Guide</h2>
+                        <p class="section-sub">Access premium resources and guides from our community.</p>
+                    </div>
+                    <div class="doc-card reveal reveal-d1">
+                        <div class="doc-card-header">
+                            <div class="doc-icon ${isUnlocked ? 'unlocked' : 'locked'}">
+                                <i class="fa-solid ${isUnlocked ? 'fa-lock-open' : 'fa-lock'}"></i>
+                            </div>
+                            <div class="doc-header-info">
+                                <div class="doc-title">${title}</div>
+                                <div class="doc-sub">
+                                    <i class="fa-regular fa-user"></i> ${author}
+                                    <span style="opacity:0.3">·</span>
+                                    <i class="fa-regular fa-clock"></i> ${created}
+                                    <span style="opacity:0.3">·</span>
+                                    <i class="fa-regular fa-hdd"></i> ${fileSize}
+                                </div>
+                            </div>
+                            <div class="doc-status-badge ${isUnlocked ? 'unlocked' : 'locked'}">
+                                <i class="fa-solid ${isUnlocked ? 'fa-check-circle' : 'fa-lock'}"></i>
+                                ${isUnlocked ? 'Unlocked' : 'Protected'}
+                            </div>
+                        </div>
+                        <div class="doc-body">
+                            ${isUnlocked ? `
+                                <div class="doc-unlocked">
+                                    <div class="doc-desc">
+                                        <strong>${title}</strong> — ${desc}
+                                    </div>
+                                    <div class="doc-meta-grid">
+                                        <div><span class="label">Author</span><br/><span class="value">${author}</span></div>
+                                        <div><span class="label">File Size</span><br/><span class="value">${fileSize}</span></div>
+                                        <div><span class="label">Published</span><br/><span class="value">${created}</span></div>
+                                        <div><span class="label">Type</span><br/><span class="value">Guide / Method</span></div>
+                                    </div>
+                                    <a href="${link}" target="_blank" rel="noopener noreferrer" class="doc-dl-link">
+                                        <i class="fa-solid fa-download"></i> Download Document
+                                    </a>
+                                </div>
+                            ` : `
+                                <div class="doc-locked">
+                                    <div class="lock-msg">
+                                        <i class="fa-solid fa-lock"></i>
+                                        This document is password protected. Enter the password to access the full guide.
+                                    </div>
+                                    <div class="doc-password-row">
+                                        <input type="password" id="docPasswordInput" class="auth-input" placeholder="Enter document password" autocomplete="off" />
+                                        <button class="btn-unlock" onclick="unlockDocument()">
+                                            <i class="fa-solid fa-key"></i> Unlock
+                                        </button>
+                                    </div>
+                                    <div class="doc-password-hint">
+                                        <i class="fa-solid fa-lightbulb"></i> Hint: team name (lowercase)
+                                    </div>
+                                    <div id="docError" class="doc-error"></div>
+                                </div>
+                            `}
+                        </div>
+                    </div>
+                </section>
+            `;
+        }
 
         // ================================================================
-        //  PLACEHOLDER FOR REMAINING FUNCTIONS (renderHome, renderDetail, etc.)
-        //  They are identical to the previous version, so I'm skipping them here for brevity
-        //  but including them in the final output string.
+        //  RENDER APP CARD - MODIFIED WITH GOLDEN UNLOCK BUTTON
+        // ================================================================
+        function renderAppCard(app, index) {
+            const color = app.color || 'violet';
+            const icon = app.icon || 'fa-grav';
+            const name = U.esc(app.name);
+            const desc = U.esc(app.description);
+            const badge = app.isLocked ? '🔒 Locked' : 'Premium';
+            const badgeClass = app.isLocked ? 'red' : color;
+            const dlCount = DB.getDownloadCount(app.id);
+            const reviewCount = DB.getReviewsForApp(app.id).length;
+
+            return `
+                <div class="app-card reveal reveal-d${(index % 4) + 1}" onclick="Router.navigate('detail',{id:'${app.id}')" style="--card-a:rgba(79,125,247,0.08);--card-b:rgba(124,92,252,0.04)">
+                    <div class="app-card-top">
+                        <div class="app-card-icon ${color}"><i class="fa-brands ${icon}"></i><span class="sp"><i class="fa-solid fa-sparkles"></i></span></div>
+                        <div class="app-card-info">
+                            <div class="app-card-title ${color}">${name} ${app.isLocked ? '<span class="lock-badge"><i class="fa-solid fa-lock"></i> Locked</span>' : ''}</div>
+                            <div class="app-card-meta">
+                                <span><i class="fa-regular fa-circle"></i> v${U.esc(app.version)}</span>
+                                <span><i class="fa-regular fa-hdd"></i> ${U.esc(app.size)}</span>
+                                <span class="app-card-badge ${badgeClass}">${app.isLocked ? '<i class="fa-solid fa-lock"></i>' : '<i class="fa-solid fa-crown"></i>'} ${badge}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="app-card-desc">${desc}</div>
+                    <div class="app-card-footer">
+                        <div class="app-card-stats">
+                            <span><i class="fa-solid fa-download"></i> ${dlCount}</span>
+                            <span><i class="fa-regular fa-star"></i> ${reviewCount}</span>
+                            <span><i class="fa-regular fa-clock"></i> ${U.relTime(app.created_at)}</span>
+                        </div>
+                        ${app.isLocked ? `
+                            <!-- 🟢 LOCKED APP - GOLDEN UNLOCK BUTTON (WhatsApp Permanent Unband) -->
+                            <button class="app-card-dl-btn ${color}" style="background:linear-gradient(135deg, #F59E0B, #D97706);border:none;color:#fff;box-shadow:0 2px 12px rgba(245,158,11,0.3);font-weight:600;transition:all 0.25s ease" onclick="event.stopPropagation(); openAppUnlockModal('${app.id}')" onmouseover="this.style.transform='scale(1.03)';this.style.boxShadow='0 4px 20px rgba(245,158,11,0.45)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 2px 12px rgba(245,158,11,0.3)'">
+                                <i class="fa-solid fa-lock"></i> Unlock to Download
+                            </button>
+                        ` : `
+                            <!-- 🟢 NORMAL DOWNLOAD BUTTON -->
+                            <button class="app-card-dl-btn ${color}" onclick="handleDownloadClick('${app.id}', '${U.esc(app.apk_url)}', event)">
+                                <i class="fa-solid fa-download"></i> Download
+                            </button>
+                        `}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderDetail(appId) {
+            const app = DB.getApp(appId);
+            if (!app) {
+                Router.navigate('home');
+                return '';
+            }
+
+            const color = app.color || 'violet';
+            const icon = app.icon || 'fa-grav';
+            const name = U.esc(app.name);
+            const desc = U.esc(app.description);
+            const dlCount = DB.getDownloadCount(app.id);
+            const reviews = DB.getReviewsForApp(app.id);
+            const related = DB.getApps().filter(a => a.id !== app.id && a.category === app.category).slice(0, 3);
+            const avgRating = reviews.length ? (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length) : 0;
+            const features = app.features || ['No features listed'];
+            const requirements = app.requirements || ['Not specified'];
+            const changelog = app.changelog || '<em>No changelog available.</em>';
+
+            const isLocked = app.isLocked || false;
+            const unlocked = !isLocked || isAppUnlocked(appId);
+
+            return `
+                ${renderNav()}
+                ${renderSidebar()}
+                <main style="height:100dvh;padding-top:60px;overflow-y:auto" id="appScroll">
+                    <div style="padding:12px 20px 0;max-width:720px;margin:0 auto">
+                        <button class="nav-btn" onclick="Router.navigate('home')" style="font-size:12px"><i class="fa-solid fa-arrow-left"></i> Back to Store</button>
+                    </div>
+
+                    <div class="detail-hero">
+                        <div class="detail-hero-inner">
+                            <div class="detail-icon ${color}"><i class="fa-brands ${icon}"></i><span class="sp"><i class="fa-solid fa-sparkles"></i></span></div>
+                            <div class="detail-info">
+                                <div class="detail-name ${color}">${name} ${isLocked ? '<span class="lock-badge" style="font-size:12px;padding:2px 12px"><i class="fa-solid fa-lock"></i> Locked</span>' : ''}</div>
+                                <div class="detail-meta">
+                                    <span><i class="fa-regular fa-circle"></i> v${U.esc(app.version)}</span>
+                                    <span><i class="fa-regular fa-hdd"></i> ${U.esc(app.size)}</span>
+                                    <span><i class="fa-regular fa-user"></i> ${U.esc(app.developer || 'ZETA Labs')}</span>
+                                    <span><i class="fa-solid fa-download"></i> ${dlCount} downloads</span>
+                                    <span><i class="fa-regular fa-star"></i> ${avgRating ? avgRating.toFixed(1) : '—'} (${reviews.length})</span>
+                                    <span><i class="fa-regular fa-circle-check" style="color:var(--status-success)"></i> ${app.virus_status === 'clean' ? 'Verified' : 'Unknown'}</span>
+                                </div>
+                                <div class="detail-actions">
+                                    ${unlocked ? `
+                                        <button class="detail-dl-btn ${color}" onclick="handleDownloadClick('${app.id}', '${U.esc(app.apk_url)}', event)">
+                                            <i class="fa-solid fa-download"></i> Download APK
+                                        </button>
+                                    ` : `
+                                        <button class="detail-dl-btn" style="opacity:0.6;background:var(--bg-surface);border:1px solid var(--border-default);color:var(--text-secondary);cursor:default" disabled>
+                                            <i class="fa-solid fa-lock"></i> Unlock to Download
+                                        </button>
+                                    `}
+                                    <button class="btn-glass" onclick="openReviewModal('${app.id}')"><i class="fa-regular fa-star"></i> Rate & Review</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detail-body">
+                        ${isLocked ? `
+                            <div class="app-unlock-section ${unlocked ? 'unlocked' : ''}" id="appUnlockSection">
+                                ${unlocked ? `
+                                    <div style="display:flex;align-items:center;gap:10px;color:var(--status-success)">
+                                        <i class="fa-solid fa-circle-check" style="font-size:18px"></i>
+                                        <span style="font-weight:600">APK Unlocked!</span>
+                                        <span style="font-size:12px;color:var(--text-secondary)">You can now download the file.</span>
+                                    </div>
+                                ` : `
+                                    <div style="display:flex;flex-direction:column;gap:12px">
+                                        <div style="display:flex;align-items:center;gap:8px;color:var(--text-secondary);font-size:13px">
+                                            <i class="fa-solid fa-lock" style="color:var(--status-warning)"></i>
+                                            This APK is password protected. Enter the password below to unlock.
+                                        </div>
+                                        <div class="doc-password-row">
+                                            <input type="password" id="appUnlockInput" class="auth-input" placeholder="Enter APK password" autocomplete="off" />
+                                            <button class="btn-unlock" onclick="handleAppUnlock('${app.id}')">
+                                                <i class="fa-solid fa-key"></i> Unlock
+                                            </button>
+                                        </div>
+                                        <div class="doc-password-hint">
+                                            <i class="fa-solid fa-lightbulb"></i> Hint: Case sensitive
+                                        </div>
+                                        <div id="appUnlockError" class="doc-error"></div>
+                                    </div>
+                                `}
+                            </div>
+                        ` : ''}
+
+                        <div class="detail-section">
+                            <div class="detail-section-title"><i class="fa-solid fa-align-left"></i> Description</div>
+                            <p>${desc}</p>
+                        </div>
+
+                        <div class="detail-section">
+                            <div class="detail-section-title"><i class="fa-solid fa-list-check"></i> Features</div>
+                            <ul>
+                                ${features.map(f => `<li>${U.esc(f)}</li>`).join('')}
+                            </ul>
+                        </div>
+
+                        <div class="detail-section">
+                            <div class="detail-section-title"><i class="fa-solid fa-microchip"></i> Requirements</div>
+                            <div class="detail-requirements-grid">
+                                ${requirements.map(r => `
+                                    <div class="detail-req-item"><i class="fa-solid fa-check-circle"></i> <strong>${U.esc(r.split(' ').slice(0,1).join(' '))}</strong> ${U.esc(r.split(' ').slice(1).join(' '))}</div>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <div class="detail-section">
+                            <div class="detail-section-title"><i class="fa-solid fa-clock-rotate-left"></i> Changelog</div>
+                            <div class="detail-changelog">${changelog}</div>
+                        </div>
+
+                        <div class="detail-section" id="reviews">
+                            <div class="detail-section-title"><i class="fa-regular fa-star"></i> Reviews (${reviews.length})</div>
+                            ${reviews.length ? reviews.map(r => {
+                                const user = DB.getUser(r.user_id) || { name: 'Anonymous', profile_image: 'https://ui-avatars.com/api/?name=Anonymous&background=4F7DF7&color=fff&size=64' };
+                                return `
+                                    <div class="review-item">
+                                        <div class="review-item-top">
+                                            <img src="${U.esc(user.profile_image)}" class="review-item-avatar" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=4F7DF7&color=fff&size=64'" />
+                                            <div class="review-item-name">${U.esc(user.name)}</div>
+                                            <div class="review-item-stars">${U.stars(r.rating)}</div>
+                                        </div>
+                                        <div class="review-item-text">${U.esc(r.review)}</div>
+                                        <div class="review-item-date">${U.relTime(r.created_at)}</div>
+                                    </div>
+                                `;
+                            }).join('') : `
+                                <p style="font-size:12px;color:var(--text-tertiary);padding:12px 0">No reviews yet. Be the first to rate this app!</p>
+                            `}
+                        </div>
+
+                        ${related.length ? `
+                        <div class="detail-section">
+                            <div class="detail-section-title"><i class="fa-solid fa-link"></i> Related Apps</div>
+                            <div class="related-grid">
+                                ${related.map(a => `
+                                    <div class="related-item" onclick="Router.navigate('detail',{id:'${a.id}')">
+                                        <div class="related-item-icon ${a.color}"><i class="fa-brands ${a.icon || 'fa-grav'}"></i></div>
+                                        <div class="related-item-info">
+                                            <div class="related-item-name">${U.esc(a.name)}</div>
+                                            <div class="related-item-meta">${U.esc(a.size)} · ${U.relTime(a.created_at)}</div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        ` : ''}
+                    </div>
+
+                    ${renderFooter()}
+                </main>
+            `;
+        }
+
+        function renderFooter() {
+            return `
+                <footer class="site-footer">
+                    <div class="footer-grid">
+                        <div>
+                            <div class="footer-brand">ZETA TOOLS</div>
+                            <p class="footer-desc">Premium Android application platform. Curated, secure, and direct downloads for premium APK files.</p>
+                            <div class="footer-social">
+                                <a href="#" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+                                <a href="#" title="Twitter"><i class="fa-brands fa-twitter"></i></a>
+                                <a href="#" title="GitHub"><i class="fa-brands fa-github"></i></a>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="footer-col-title">Quick Links</div>
+                            <button class="footer-link" onclick="Router.navigate('home');scrollToSection('trending')">Most Popular</button>
+                            <button class="footer-link" onclick="Router.navigate('home');scrollToSection('categories')">Categories</button>
+                            <button class="footer-link" onclick="Router.navigate('home');scrollToSection('documents')">Documents</button>
+                        </div>
+                        <div>
+                            <div class="footer-col-title">Info</div>
+                            <button class="footer-link" onclick="openPopunder();openProfileModal()">Profile</button>
+                            <button class="footer-link" onclick="openSettings()">Settings</button>
+                            <button class="footer-link" onclick="openDataManagement()">Data</button>
+                        </div>
+                    </div>
+                    <div class="footer-bottom">&copy; ${new Date().getFullYear()} ZETA TOOLS &middot; Sri Lanka &middot; All rights reserved.</div>
+                </footer>
+            `;
+        }
+
+        // ================================================================
+        //  INTERACTIONS
         // ================================================================
 
-        // ... (The rest of the JavaScript including renderHome, renderDetail, renderAppCard, renderFooter, etc. is exactly the same as the provided base code. I will include them in the final answer text.)
+        let catMenuOpen = false;
+        let sbDropdownOpen = false;
 
-        console.log('🚀 ZETA TOOLS v2.0 (Image Search Added)');
-        console.log('🔍 Image Search button added to Navbar & Sidebar.');
-        console.log('💎 Unlock button is Golden.');
-        console.log('🔁 Popunder cooldown: 6s');
+        function toggleCatMenu() {
+            catMenuOpen = !catMenuOpen;
+            const el = document.getElementById('catMenu');
+            if (el) el.classList.toggle('open', catMenuOpen);
+        }
+        document.addEventListener('click', e => {
+            if (catMenuOpen && !e.target.closest('.nav-cat-dropdown')) {
+                catMenuOpen = false;
+                const el = document.getElementById('catMenu');
+                if (el) el.classList.remove('open');
+            }
+        });
+
+        function toggleSbDropdown(e) {
+            e.stopPropagation();
+            sbDropdownOpen = !sbDropdownOpen;
+            const el = document.getElementById('sbDropdown');
+            if (el) el.classList.toggle('hidden', !sbDropdownOpen);
+        }
+        document.addEventListener('click', e => {
+            if (sbDropdownOpen && !e.target.closest('#sbProfile')) {
+                sbDropdownOpen = false;
+                const el = document.getElementById('sbDropdown');
+                if (el) el.classList.add('hidden');
+            }
+        });
+
+        function toggleSidebar() {
+            const s = document.getElementById('sidebar');
+            const o = document.getElementById('sbOverlay');
+            if (s) s.classList.toggle('open');
+            if (o) o.classList.toggle('active');
+        }
+
+        function closeSidebar() {
+            const s = document.getElementById('sidebar');
+            const o = document.getElementById('sbOverlay');
+            if (s) s.classList.remove('open');
+            if (o) o.classList.remove('active');
+        }
+
+        function scrollToSection(id) {
+            const maxAttempts = 12;
+            let attempts = 0;
+            const tryScroll = () => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    return;
+                }
+                attempts++;
+                if (attempts < maxAttempts) {
+                    setTimeout(tryScroll, 120);
+                }
+            };
+            setTimeout(tryScroll, 80);
+        }
+
+        function filterByCategory(cat) {
+            currentCategoryFilter = cat || 'all';
+            catMenuOpen = false;
+            const cm = document.getElementById('catMenu');
+            if (cm) cm.classList.remove('open');
+            Router.navigate('home');
+            setTimeout(() => scrollToSection('trending'), 120);
+        }
+
+        function trackDownload(appId) {
+            const user = Auth.getUser();
+            DB.addDownload({
+                id: U.id(),
+                app_id: appId,
+                user_id: user.id,
+                timestamp: U.now()
+            });
+            const app = DB.getApp(appId);
+            if (app) {
+                const current = app.downloads || 0;
+                DB.updateApp(appId, { downloads: current + 1 });
+            }
+        }
+
+        function handleAppUnlock(appId) {
+            const input = document.getElementById('appUnlockInput');
+            const errorEl = document.getElementById('appUnlockError');
+            if (!input) return;
+            const entered = input.value.trim();
+            if (!entered) {
+                if (errorEl) errorEl.textContent = 'Please enter the password.';
+                return;
+            }
+            const success = unlockApp(appId, entered);
+            if (success) {
+                if (errorEl) errorEl.textContent = '';
+                Router.render();
+                setTimeout(() => {
+                    const section = document.getElementById('appUnlockSection');
+                    if (section) section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 150);
+            } else {
+                if (errorEl) errorEl.textContent = 'Incorrect password. Please try again.';
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        function unlockDocument() {
+            const input = document.getElementById('docPasswordInput');
+            const errorEl = document.getElementById('docError');
+            if (!input) return;
+            const entered = input.value.trim();
+            if (!entered) {
+                if (errorEl) errorEl.textContent = 'Please enter the password.';
+                return;
+            }
+            const doc = DB.getDocument('doc_whatsapp_ban');
+            if (!doc) {
+                if (errorEl) errorEl.textContent = 'Document not found.';
+                return;
+            }
+            if (entered === doc.password) {
+                sessionStorage.setItem('z_doc_unlocked', 'true');
+                if (errorEl) errorEl.textContent = '';
+                Router.render();
+                setTimeout(() => scrollToSection('documents'), 150);
+            } else {
+                if (errorEl) errorEl.textContent = 'Incorrect password. Please try again.';
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const input = document.getElementById('appUnlockInput');
+                if (input && document.activeElement === input) {
+                    const appId = window.location.hash.split('/')[1];
+                    if (appId) handleAppUnlock(appId);
+                }
+                const docInput = document.getElementById('docPasswordInput');
+                if (docInput && document.activeElement === docInput) {
+                    unlockDocument();
+                }
+            }
+        });
+
+        function openAuthModal(mode) {
+            mode = mode || 'login';
+            const isLogin = mode === 'login';
+            const title = isLogin ? 'Sign In' : 'Create Account';
+            const btnText = isLogin ? 'Login' : 'Register';
+            const toggleMode = isLogin ? 'register' : 'login';
+            const toggleText = isLogin ? 'Don\'t have an account? Register' : 'Already have an account? Login';
+
+            Modal.open(`
+                <div class="p-5">
+                    <h3 class="text-sm font-semibold mb-1"><i class="fa-solid fa-${isLogin ? 'right-to-bracket' : 'user-plus'} mr-1.5 text-blue"></i> ${title}</h3>
+                    <p class="text-xs mb-3 text-secondary">${isLogin ? 'Enter your credentials to access your account.' : 'Create a new account to personalize your experience.'}</p>
+                    <form id="authForm" onsubmit="return false;">
+                        ${isLogin ? '' : `<div class="mb-2"><input type="text" id="authName" class="auth-input" placeholder="Full Name" /></div>`}
+                        <div class="mb-2"><input type="email" id="authEmail" class="auth-input" placeholder="Email Address" required /></div>
+                        <div class="mb-2"><input type="password" id="authPassword" class="auth-input" placeholder="Password (min 6 chars)" required minlength="6" /></div>
+                        <div id="authError" class="auth-error"></div>
+                        <button type="submit" id="authSubmit" class="btn-primary w-full justify-center mt-2">${btnText}</button>
+                    </form>
+                    <div class="auth-divider"><span>or</span></div>
+                    <div class="text-center">
+                        <span class="auth-toggle" onclick="Modal.close();openAuthModal('${toggleMode}')">${toggleText}</span>
+                    </div>
+                </div>
+            `);
+
+            setTimeout(() => {
+                const form = document.getElementById('authForm');
+                const errorEl = document.getElementById('authError');
+                const submitBtn = document.getElementById('authSubmit');
+                if (!form) return;
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const email = document.getElementById('authEmail').value.trim();
+                    const password = document.getElementById('authPassword').value;
+                    const name = isLogin ? '' : document.getElementById('authName').value.trim();
+                    errorEl.textContent = '';
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Please wait...';
+                    const action = isLogin ? Auth.login(email, password) : Auth.register(email, password,
+                        name);
+                    action.then(user => {
+                        Modal.close();
+                        Router.render();
+                    }).catch(err => {
+                        errorEl.textContent = err.message || 'Something went wrong.';
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = btnText;
+                    });
+                });
+            }, 50);
+        }
+
+        function openProfileModal() {
+            const user = Auth.getUser();
+            const isLoggedIn = Auth.isLoggedIn();
+            const email = isLoggedIn ? (user.email || '') : 'guest@zeta.tools';
+            const av = U.esc(user.profile_image);
+            const name = U.esc(user.name);
+
+            Modal.open(`
+                <div class="p-5">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="relative">
+                            <img src="${av}" class="w-11 h-11 rounded-xl object-cover" style="border:1.5px solid var(--border-default)" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=4F7DF7&color=fff&size=64'" />
+                            <div class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full" style="background:var(--status-success);border:2px solid var(--bg-elevated)"></div>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-semibold">${name}</h3>
+                            <p class="text-xs text-tertiary">${U.esc(email)}</p>
+                        </div>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.02);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:10px 12px;font-size:12px">
+                        <div class="flex justify-between py-1.5" style="border-bottom:1px solid var(--border-subtle)"><span class="text-secondary">Member since</span><span>${U.relTime(user.created_at)}</span></div>
+                        <div class="flex justify-between py-1.5"><span class="text-secondary">User ID</span><span class="font-mono text-xs text-tertiary">${user.id.slice(0,8)}</span></div>
+                        ${isLoggedIn ? `<div class="flex justify-between py-1.5" style="border-top:1px solid var(--border-subtle);margin-top:4px;padding-top:8px"><span class="text-secondary">Status</span><span class="text-success">Authenticated</span></div>` : ''}
+                    </div>
+                    <div class="flex gap-2 mt-3">
+                        <button class="btn-glass flex-1" onclick="Modal.close()">Close</button>
+                        ${isLoggedIn ? `<button class="btn-glass flex-1" style="border-color:var(--status-error);color:var(--status-error)" onclick="Modal.close();Auth.logout()">Logout</button>` : ''}
+                    </div>
+                </div>
+            `);
+        }
+
+        function openReviewModal(appId) {
+            const user = Auth.getUser();
+            if (!Auth.isLoggedIn()) {
+                Modal.close();
+                handleLoginClick('login');
+                return;
+            }
+            Modal.open(`
+                <div class="p-5">
+                    <h3 class="text-sm font-semibold mb-1"><i class="fa-regular fa-star mr-1.5 text-blue"></i> Rate & Review</h3>
+                    <p class="text-xs mb-3 text-secondary">Share your experience with this app.</p>
+                    <form id="reviewForm" onsubmit="return false;">
+                        <div class="mb-2">
+                            <label style="font-size:12px;color:var(--text-secondary);display:block;margin-bottom:4px">Rating</label>
+                            <div style="display:flex;gap:4px;font-size:20px" id="starPicker">
+                                ${[1,2,3,4,5].map(n => `<span style="cursor:pointer;color:var(--text-tertiary);transition:color var(--transition-fast)" data-val="${n}" onclick="setStarRating(${n})"><i class="fa-regular fa-star"></i></span>`).join('')}
+                            </div>
+                            <input type="hidden" id="ratingValue" value="5" />
+                        </div>
+                        <div class="mb-2">
+                            <textarea id="reviewText" class="auth-input" placeholder="Write your review..." rows="3" style="resize:vertical"></textarea>
+                        </div>
+                        <div id="reviewError" class="auth-error"></div>
+                        <div class="flex gap-2 mt-2">
+                            <button class="btn-glass flex-1" onclick="Modal.close()">Cancel</button>
+                            <button type="submit" id="reviewSubmit" class="btn-primary flex-1 justify-center">Submit Review</button>
+                        </div>
+                    </form>
+                </div>
+            `);
+
+            let selectedRating = 5;
+            window.setStarRating = function(n) {
+                selectedRating = n;
+                document.getElementById('ratingValue').value = n;
+                const stars = document.querySelectorAll('#starPicker span');
+                stars.forEach((el, i) => {
+                    const val = parseInt(el.dataset.val);
+                    if (val <= n) { el.style.color = 'var(--status-warning)';
+                        el.innerHTML = '<i class="fa-solid fa-star"></i>'; } else { el.style
+                            .color = 'var(--text-tertiary)';
+                        el.innerHTML = '<i class="fa-regular fa-star"></i>'; }
+                });
+            };
+            setTimeout(() => window.setStarRating(5), 50);
+
+            setTimeout(() => {
+                const form = document.getElementById('reviewForm');
+                const errorEl = document.getElementById('reviewError');
+                const submitBtn = document.getElementById('reviewSubmit');
+                if (!form) return;
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const rating = parseInt(document.getElementById('ratingValue').value) || 5;
+                    const review = document.getElementById('reviewText').value.trim();
+                    if (!review) { errorEl.textContent = 'Please write a review.';
+                        return; }
+                    errorEl.textContent = '';
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Submitting...';
+                    DB.addReview({
+                        id: U.id(),
+                        app_id: appId,
+                        user_id: Auth.getUser().id,
+                        rating: rating,
+                        review: review,
+                        created_at: U.now()
+                    });
+                    Modal.close();
+                    Router.render();
+                });
+            }, 50);
+        }
+
+        function openDataManagement() {
+            Modal.open(`
+                <div class="p-5">
+                    <h3 class="text-sm font-semibold mb-1"><i class="fa-solid fa-database mr-1.5 text-blue"></i> Data Management</h3>
+                    <p class="text-xs mb-3 text-secondary">Manage your stored data and history.</p>
+                    <div style="display:flex;flex-wrap:wrap;gap:8px">
+                        <button class="btn-glass flex-1" onclick="clearAllData()" style="border-color:var(--status-error);color:var(--status-error)"><i class="fa-solid fa-trash-can mr-1"></i> Clear All Data</button>
+                        <button class="btn-glass flex-1" onclick="Modal.close();"><i class="fa-solid fa-rotate mr-1"></i> Refresh</button>
+                    </div>
+                    <div style="margin-top:12px;background:rgba(255,255,255,0.02);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:8px 12px;font-size:11px;color:var(--text-tertiary)">
+                        <div>Apps: ${DB.getApps().length}</div>
+                        <div>Reviews: ${DB.getReviews().length}</div>
+                        <div>Downloads: ${DB.getDownloads().length}</div>
+                        <div>Documents: ${DB.getDocuments().length}</div>
+                    </div>
+                </div>
+            `);
+        }
+
+        function clearAllData() {
+            Modal.open(`
+                <div class="p-5 text-center">
+                    <div class="mb-3"><i class="fa-solid fa-triangle-exclamation" style="font-size:24px;color:var(--status-warning)"></i></div>
+                    <h3 class="text-sm font-semibold mb-1">Clear All Data</h3>
+                    <p class="text-xs mb-4 text-secondary">Deletes your profile, reviews, download history, and all app data. Cannot be undone.</p>
+                    <div class="flex gap-2">
+                        <button class="btn-glass flex-1" onclick="Modal.close()">Cancel</button>
+                        <button class="flex-1 py-2.5 px-4 rounded-lg font-semibold text-xs border-none cursor-pointer" style="background:var(--status-error);color:#fff;transition:opacity var(--transition-fast)" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'" onclick="doClearAll()">Clear All</button>
+                    </div>
+                </div>
+            `);
+        }
+
+        function doClearAll() {
+            ['apps', 'users', 'reviews', 'downloads', 'documents', 'login_attempts', 'session'].forEach(k =>
+                localStorage.removeItem('z_' + k));
+            sessionStorage.removeItem('z_doc_unlocked');
+            sessionStorage.removeItem('z_unlocked_apps');
+            Modal.close();
+            DB.seed();
+            currentCategoryFilter = 'all';
+            Router.render();
+        }
+
+        function openSettings() {
+            Modal.open(`
+                <div class="p-5">
+                    <h3 class="text-sm font-semibold mb-1"><i class="fa-solid fa-gear mr-1.5 text-blue"></i> Settings</h3>
+                    <p class="text-xs mb-3 text-secondary">App preferences and configuration.</p>
+                    <div style="background:rgba(255,255,255,0.02);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:10px 12px;font-size:12px">
+                        <div class="flex items-center justify-between py-1.5" style="border-bottom:1px solid var(--border-subtle)"><span class="text-secondary">Theme</span><span class="text-primary">Dark</span></div>
+                        <div class="flex items-center justify-between py-1.5" style="border-bottom:1px solid var(--border-subtle)"><span class="text-secondary">Platform</span><span class="text-tertiary">Android</span></div>
+                        <div class="flex items-center justify-between py-1.5"><span class="text-secondary">Version</span><span class="text-tertiary">ZETA Tools v2.0</span></div>
+                    </div>
+                    <button class="btn-glass w-full mt-3" onclick="Modal.close()">Close</button>
+                </div>
+            `);
+        }
+
+        function initReveal() {
+            const obs = new IntersectionObserver((entries) => {
+                entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible');
+                        obs.unobserve(e.target); } });
+            }, { threshold: 0.06, rootMargin: '0px 0px -20px 0px' });
+            document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+        }
+
+        function handleHash() {
+            const hash = window.location.hash.slice(1);
+            if (hash.startsWith('detail/')) {
+                const id = hash.split('/')[1];
+                Router.navigate('detail', { id });
+            } else {
+                Router.navigate('home');
+            }
+        }
+
+        window.addEventListener('hashchange', handleHash);
+
+        (function init() {
+            document.documentElement.classList.add('dark');
+            DB.seed();
+
+            const hasLoggedIn = localStorage.getItem('z_has_logged_in');
+            const isLoggedIn = Auth.isLoggedIn();
+            const hasSeenModal = sessionStorage.getItem('z_auto_modal_shown');
+
+            handleHash();
+
+            if (!isLoggedIn && !hasLoggedIn && !hasSeenModal) {
+                sessionStorage.setItem('z_auto_modal_shown', 'true');
+                setTimeout(() => handleLoginClick('login'), 800);
+            }
+
+            window.addEventListener('resize', () => {
+                if (window.innerWidth >= 768) closeSidebar();
+            });
+
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape') {
+                    Modal.close();
+                    closeSidebar();
+                }
+            });
+
+            console.log('🚀 ZETA TOOLS v2.0 (Full Version: Ads + Responsive + Image Search + Golden Unlock)');
+            console.log(`📦 ${DB.getApps().length} apps total.`);
+            console.log('🔍 Search Image, 💎 Premium Token, 🟡 Golden Unlock, 📱 Fully Responsive, 🔁 Ads System Active.');
+        })();
     </script>
 </body>
 </html>
