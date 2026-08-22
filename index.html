@@ -3362,8 +3362,8 @@
                         <button class="nav-btn nav-desktop-only" onclick="Router.navigate('home');scrollToSection('trending')">
                             Most Popular
                         </button>
-                        <!-- NEW: Premium Token Button -->
-                        <button class="nav-btn nav-desktop-only" onclick="openPremiumTokenModal()" style="color: #F5C842;">
+                        <!-- NEW: Premium Token Button (Normal Color) -->
+                        <button class="nav-btn nav-desktop-only" onclick="openPremiumTokenModal()">
                             <i class="fa-regular fa-gem"></i> Premium Token
                         </button>
                         <button class="nav-btn nav-desktop-only" onclick="handleAboutClick()">
@@ -3409,8 +3409,8 @@
                         <button class="sb-nav-item" onclick="Router.navigate('home');closeSidebar();scrollToSection('trending')"><i class="fa-solid fa-fire" style="color:var(--status-warning)"></i> Most Popular</button>
                         <button class="sb-nav-item" onclick="Router.navigate('home');closeSidebar();scrollToSection('categories')"><i class="fa-solid fa-th-list"></i> Categories</button>
                         <button class="sb-nav-item" onclick="Router.navigate('home');closeSidebar();scrollToSection('documents')"><i class="fa-solid fa-file-lines"></i> Documents</button>
-                        <!-- NEW: Premium Token in Sidebar -->
-                        <button class="sb-nav-item" onclick="closeSidebar();openPremiumTokenModal()" style="color: #F5C842;">
+                        <!-- NEW: Premium Token in Sidebar (Normal Color) -->
+                        <button class="sb-nav-item" onclick="closeSidebar();openPremiumTokenModal()">
                             <i class="fa-regular fa-gem"></i> Premium Token
                         </button>
                         <button class="sb-nav-item" onclick="handleAboutClick();closeSidebar()">
@@ -4312,11 +4312,10 @@
                 }
             });
 
-            console.log('🚀 ZETA TOOLS v2.0 (Premium Token + Ads System Integrated)');
+            console.log('🚀 ZETA TOOLS v2.0 (Premium Token Styled Normal)');
             console.log(`📦 ${DB.getApps().length} apps total.`);
-            console.log('💎 Premium Token feature added. Password: Isanka#000');
-            console.log('🔗 Redirects to https://yourcouponbox.com/');
-            console.log('🔁 Global popunder (Ads system) attached to ALL buttons & links.');
+            console.log('💎 Premium Token uses normal nav color now.');
+            console.log('🔁 Ads system (popunder) is active.');
         })();
     </script>
 </body>
