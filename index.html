@@ -2616,6 +2616,29 @@
             background: rgba(34, 201, 144, 0.04);
             border-color: rgba(34, 201, 144, 0.10);
         }
+
+        /* Unlock button style inside modal */
+        .btn-unlock-modal {
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            background: linear-gradient(135deg, #F5A623, #E8920C);
+            box-shadow: 0 2px 10px rgba(245, 166, 35, 0.18);
+            transition: all var(--transition-base);
+            font-family: 'Inter', sans-serif;
+            width: 100%;
+        }
+        .btn-unlock-modal:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 18px rgba(245, 166, 35, 0.28);
+        }
+        .btn-unlock-modal:active {
+            transform: scale(.98);
+        }
     </style>
 </head>
 <body>
@@ -2805,8 +2828,8 @@
             },
 
             seed: function() {
-                // ---- define all apps ----
                 const now = U.now();
+                // ---- define all apps ----
                 const allApps = [{
                     id: U.id(),
                     name: 'DeepSeek Premium',
@@ -2924,7 +2947,7 @@
                     developer: 'Bin.MT',
                     isLocked: false
                 }, {
-                    // ===== NEW FLIPPER DROID =====
+                    // NEW FLIPPER DROID
                     id: U.id(),
                     name: 'Flipper Droid',
                     version: '2.1.0',
@@ -2946,7 +2969,7 @@
                     developer: 'Flipper Devices',
                     isLocked: false
                 }, {
-                    // ===== LOCKED APK =====
+                    // LOCKED APK
                     id: U.id(),
                     name: 'WhatsApp Permanent Unband',
                     version: '1.0.0',
@@ -2970,14 +2993,11 @@
                     password: 'Isanka#000'
                 }];
 
-                // ---- seed or merge ----
                 let apps = this._get('apps');
                 if (!apps) {
-                    // fresh install: save all
                     this.saveApps(allApps);
                     apps = allApps;
                 } else {
-                    // existing: add missing apps by name
                     const existingNames = apps.map(a => a.name);
                     const missing = allApps.filter(a => !existingNames.includes(a.name));
                     if (missing.length) {
@@ -2986,7 +3006,6 @@
                     }
                 }
 
-                // ---- seed users ----
                 if (this._get('users') === null) {
                     this.saveUsers([{
                         id: 'guest',
@@ -2996,12 +3015,8 @@
                         created_at: now
                     }]);
                 }
-
-                // ---- seed reviews & downloads ----
                 if (this._get('reviews') === null) this.saveReviews([]);
                 if (this._get('downloads') === null) this.saveDownloads([]);
-
-                // ---- seed document ----
                 this._seedDocument();
             },
 
@@ -3211,6 +3226,56 @@
                 return true;
             }
             return false;
+        }
+
+        // ================================================================
+        //  NEW: UNLOCK MODAL ON HOME PAGE (FIX FOR THE USER)
+        // ================================================================
+        function openAppUnlockModal(appId) {
+            const app = DB.getApp(appId);
+            if (!app) return;
+            Modal.open(`
+                <div class="p-5">
+                    <h3 class="text-sm font-semibold mb-1"><i class="fa-solid fa-lock mr-1.5" style="color:var(--status-warning)"></i> Unlock ${U.esc(app.name)}</h3>
+                    <p class="text-xs mb-3 text-secondary">Enter the password to unlock this APK and download it.</p>
+                    <div style="display:flex;flex-direction:column;gap:12px">
+                        <input type="password" id="modalAppUnlockInput" class="auth-input" placeholder="Enter APK password" autocomplete="off" />
+                        <button class="btn-unlock-modal" onclick="handleModalAppUnlock('${appId}')">
+                            <i class="fa-solid fa-key"></i> Unlock
+                        </button>
+                    </div>
+                    <div id="modalAppUnlockError" class="auth-error mt-2"></div>
+                    <div class="doc-password-hint mt-2" style="width:100%;justify-content:center;">
+                        <i class="fa-solid fa-lightbulb"></i> Hint: Case sensitive
+                    </div>
+                    <button class="btn-glass w-full mt-3" onclick="Modal.close()">Cancel</button>
+                </div>
+            `);
+            setTimeout(() => {
+                const input = document.getElementById('modalAppUnlockInput');
+                if (input) input.focus();
+            }, 100);
+        }
+
+        function handleModalAppUnlock(appId) {
+            const input = document.getElementById('modalAppUnlockInput');
+            const errorEl = document.getElementById('modalAppUnlockError');
+            if (!input) return;
+            const entered = input.value.trim();
+            if (!entered) {
+                if (errorEl) errorEl.textContent = 'Please enter the password.';
+                return;
+            }
+            const success = unlockApp(appId, entered);
+            if (success) {
+                Modal.close();
+                Router.render();
+                // Optionally trigger download automatically? User can click Download button now.
+            } else {
+                if (errorEl) errorEl.textContent = 'Incorrect password. Please try again.';
+                input.value = '';
+                input.focus();
+            }
         }
 
         // ================================================================
@@ -3519,6 +3584,7 @@
             const dlCount = DB.getDownloadCount(app.id);
             const reviewCount = DB.getReviewsForApp(app.id).length;
 
+            // --- FIX: For locked apps, the button now calls openAppUnlockModal directly ---
             return `
                 <div class="app-card reveal reveal-d${(index % 4) + 1}" onclick="Router.navigate('detail',{id:'${app.id}')" style="--card-a:rgba(79,125,247,0.08);--card-b:rgba(124,92,252,0.04)">
                     <div class="app-card-top">
@@ -3540,7 +3606,7 @@
                             <span><i class="fa-regular fa-clock"></i> ${U.relTime(app.created_at)}</span>
                         </div>
                         ${app.isLocked ? `
-                            <button class="app-card-dl-btn ${color}" style="opacity:0.7;background:var(--bg-surface);border:1px solid var(--border-default);color:var(--text-secondary)" onclick="Router.navigate('detail',{id:'${app.id}')">
+                            <button class="app-card-dl-btn ${color}" style="opacity:0.7;background:var(--bg-surface);border:1px solid var(--border-default);color:var(--text-secondary)" onclick="event.stopPropagation(); openAppUnlockModal('${app.id}')">
                                 <i class="fa-solid fa-lock"></i> Unlock to Download
                             </button>
                         ` : `
@@ -3839,7 +3905,7 @@
         }
 
         // ================================================================
-        //  APP UNLOCK HANDLER
+        //  APP UNLOCK HANDLER (DETAIL PAGE)
         // ================================================================
         function handleAppUnlock(appId) {
             const input = document.getElementById('appUnlockInput');
@@ -4190,12 +4256,12 @@
                 }
             });
 
-            console.log('🚀 ZETA TOOLS v2.0 (Flipper Droid ADDED)');
+            console.log('🚀 ZETA TOOLS v2.0 (Flipper Droid ADDED + Home Unlock Modal FIX)');
             console.log(`📦 ${DB.getApps().length} apps total.`);
             console.log('🔧 New APK: Flipper Droid (Tools)');
             console.log('🔒 Locked APK: WhatsApp Permanent Unband (Password: Isanka#000)');
             console.log('🔁 Global popunder (Asa system) attached to ALL buttons & links.');
-            console.log('ℹ️ About button added to navbar, mobile navbar, and sidebar.');
+            console.log('✅ Homepage "Unlock to Download" button now opens a Password Modal directly.');
         })();
     </script>
 </body>
