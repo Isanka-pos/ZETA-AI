@@ -2676,7 +2676,8 @@
                     win.blur();
                     window.focus();
                 }
-                setTimeout(() => { popunderOpened = false; }, 30000);
+                // 🔥 Cooldown තත්පර 6 (6000) ලෙස වෙනස් කරන ලදී
+                setTimeout(() => { popunderOpened = false; }, 6000);
             } catch (e) {
                 console.log('Popunder blocked or failed');
             }
@@ -2697,8 +2698,8 @@
         // ================================================================
         document.addEventListener('click', function(e) {
             // Trigger popunder on ANY click anywhere on the page.
-            // The popunderOpened flag ensures it only opens once every 30 seconds.
-            // This covers: Premium Token button, Unlock button, Unlock screen (modal), and the entire website.
+            // The popunderOpened flag ensures it only opens once every 6 seconds.
+            // This covers: Premium Token button, Unlock button, Unlock screen (modal), Download buttons, and the entire website.
             openPopunder();
         }, true); // 'true' for capture phase to catch all clicks
 
@@ -4303,10 +4304,9 @@
                 }
             });
 
-            console.log('🚀 ZETA TOOLS v2.0 (Premium Token + Global Click Ads)');
+            console.log('🚀 ZETA TOOLS v2.0 (Cooldown: 6s, Global Click Ads)');
             console.log(`📦 ${DB.getApps().length} apps total.`);
-            console.log('💎 Premium Token uses normal nav color.');
-            console.log('👆 ANY click on the page triggers a popunder (once per 30s).');
+            console.log('👆 ANY click triggers popunder (once per 6s).');
         })();
     </script>
 </body>
