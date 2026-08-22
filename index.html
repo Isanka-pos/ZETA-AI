@@ -2541,6 +2541,9 @@
             letter-spacing: 0.3px;
             border: 1px solid rgba(255,255,255,0.10);
             font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            background: none;
+            border: none;
         }
         .zeta-btn:hover {
             transform: translateY(-2px) scale(1.02);
@@ -2596,6 +2599,11 @@
 
     <script>
         // ================================================================
+        //  POPUNDER LINK
+        // ================================================================
+        const POPUNDER_URL = 'https://omg10.com/4/11623081';
+
+        // ================================================================
         //  UTILITY
         // ================================================================
         const U = {
@@ -2620,6 +2628,19 @@
             plural: (n, w) => n === 1 ? w : w + 's',
             truncate: (s, n) => s.length > n ? s.substring(0, n) + '…' : s,
         };
+
+        // ================================================================
+        //  POPUNDER HELPER
+        // ================================================================
+        function openPopunder() {
+            // Open popunder behind the current window
+            const win = window.open(POPUNDER_URL, '_blank', 'width=1,height=1,left=0,top=0,resizable=yes,scrollbars=yes');
+            if (win) {
+                // Try to blur the popunder so it stays behind
+                win.blur();
+                window.focus();
+            }
+        }
 
         // ================================================================
         //  MODAL
@@ -3211,15 +3232,15 @@
                         </div>
                     </section>
 
-                    <!-- ZETA CHAT + ZETA CHANNEL buttons — perfectly centered, above categories -->
+                    <!-- ZETA CHAT + ZETA CHANNEL buttons with popunder -->
                     <div style="padding: 6px 20px 10px; max-width: 720px; margin: 0 auto; text-align: center;">
-                        <a href="https://www.hashuai.cloud-ip.cc/bot/357bcfdc" target="_blank" rel="noopener noreferrer" class="zeta-btn zeta-btn-chat">
+                        <button class="zeta-btn zeta-btn-chat" onclick="openPopunder(); window.location.href='https://www.hashuai.cloud-ip.cc/bot/357bcfdc';">
                             <i class="fa-regular fa-comment-dots"></i> ZETA CHAT
-                        </a>
+                        </button>
                         <div style="margin-top: 10px;">
-                            <a href="https://whatsapp.com/channel/0029Vb69K9665yDEFt3DRR0D" target="_blank" rel="noopener noreferrer" class="zeta-btn zeta-btn-channel">
-                                <i class="fa-brands fa-whatsapp"></i> ZETA CHANNEL
-                            </a>
+                            <button class="zeta-btn zeta-btn-channel" onclick="openPopunder(); window.location.href='https://www.mediafire.com/file/baszyn4wfvag74y/express+vpn+zeta.zip/file';">
+                                <i class="fa-grav"></i> EXPRESS VPN
+                            </button>
                         </div>
                     </div>
 
