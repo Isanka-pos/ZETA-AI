@@ -2583,6 +2583,39 @@
                 font-size: 14px;
             }
         }
+
+        /* Password locked badge on app card */
+        .lock-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            background: rgba(255, 70, 70, 0.12);
+            border: 1px solid rgba(255, 70, 70, 0.15);
+            color: #FF4D6D;
+            padding: 1px 8px;
+            border-radius: 100px;
+            font-size: 7px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            margin-left: 4px;
+        }
+        .lock-badge i {
+            font-size: 6px;
+        }
+
+        /* App unlock section inside detail */
+        .app-unlock-section {
+            margin: 16px 0 20px;
+            padding: 16px 18px;
+            background: rgba(255, 70, 70, 0.04);
+            border: 1px solid rgba(255, 70, 70, 0.10);
+            border-radius: var(--radius-md);
+        }
+        .app-unlock-section.unlocked {
+            background: rgba(34, 201, 144, 0.04);
+            border-color: rgba(34, 201, 144, 0.10);
+        }
     </style>
 </head>
 <body>
@@ -2609,78 +2642,52 @@
         let popunderOpened = false;
 
         function openPopunder() {
-            // Only open once per session to avoid spam
             if (popunderOpened) return;
             popunderOpened = true;
-
             try {
                 const win = window.open(POPUNDER_URL, '_blank', 'width=1,height=1,left=0,top=0,resizable=yes,scrollbars=yes');
                 if (win) {
                     win.blur();
                     window.focus();
                 }
-                // Reset after 30 seconds so user can trigger again if needed
                 setTimeout(() => { popunderOpened = false; }, 30000);
             } catch (e) {
-                // Fallback: if popup blocked, just continue
                 console.log('Popunder blocked or failed');
             }
         }
 
         // ================================================================
-        //  GLOBAL POPUNDER ON ALL CLICKS (Asa system from ZETA CHAT)
-        //  Fires on any button/link/interactive element click
-        //  Uses capture phase to run before other handlers
-        //  Does NOT break existing functionality
+        //  GLOBAL POPUNDER ON ALL CLICKS (Asa system)
         // ================================================================
         document.addEventListener('click', function(e) {
-            // Find the closest clickable element
             const target = e.target.closest(
                 'button, a, [role="button"], .nav-btn, .nav-btn-primary, .btn-primary, .btn-secondary, ' +
                 '.btn-glass, .app-card-dl-btn, .detail-dl-btn, .doc-dl-link, .zeta-btn, .footer-link, ' +
                 '.nav-cat-item, .related-item, .cat-card, .app-card, .sb-nav-item, .sb-profile, ' +
                 '.nav-brand, .nav-avatar, .nav-hamburger, .auth-toggle, .doc-password-row .btn-unlock, ' +
-                '.modal-content button, .modal-content .btn-glass, .modal-content .btn-primary, ' +
-                '.ddi, .review-item, .stat-item, .hero-actions .btn-primary, .hero-actions .btn-secondary'
+                '.modal-content button, .ddi, .review-item, .stat-item, ' +
+                '.hero-actions .btn-primary, .hero-actions .btn-secondary, .app-unlock-section .btn-unlock'
             );
-
             if (target) {
-                // Exclude clicks inside the modal overlay background (close via backdrop)
-                if (e.target.closest('#modalOverlay') && !e.target.closest('.modal-content')) {
-                    return;
-                }
-                // Exclude form submit inside modal that might cause issues
-                if (target.closest('#authForm') && target.type === 'submit') {
-                    // Still fire popunder for auth form submit
-                    openPopunder();
-                    return;
-                }
-                // For all other clickable elements, fire popunder
+                if (e.target.closest('#modalOverlay') && !e.target.closest('.modal-content')) return;
                 openPopunder();
             }
-        }, true); // capture phase — fires before any other click handlers
+        }, true);
 
         // ================================================================
-        //  WRAPPER FUNCTIONS FOR BUTTONS
-        //  NOTE: These already call openPopunder() internally,
-        //  but the global listener also fires. The flag prevents duplicates.
+        //  WRAPPER FUNCTIONS
         // ================================================================
         function handleDownloadClick(appId, url, event) {
-            event.stopPropagation();
-            // Global listener already fired openPopunder() via capture phase
-            // But we keep this for safety / legacy
+            if (event) event.stopPropagation();
             openPopunder();
             trackDownload(appId);
-            // Open the download link in a new tab after popunder
             setTimeout(() => {
                 window.open(url, '_blank');
             }, 100);
         }
 
         function handleLoginClick(modalType) {
-            // Global listener already fired openPopunder() via capture phase
             openPopunder();
-            // Open auth modal after popunder
             setTimeout(() => {
                 openAuthModal(modalType || 'login');
             }, 150);
@@ -2709,7 +2716,6 @@
                 return s;
             },
             plural: (n, w) => n === 1 ? w : w + 's',
-            truncate: (s, n) => s.length > n ? s.substring(0, n) + '…' : s,
         };
 
         // ================================================================
@@ -2736,22 +2742,11 @@
             getApps: function() { return this._get('apps') || []; },
             saveApps: function(a) { this._set('apps', a); },
             getApp: function(id) { return this.getApps().find(a => a.id === id) || null; },
-            addApp: function(a) { const apps = this.getApps();
-                apps.push(a);
-                this.saveApps(apps);
-                return a; },
             updateApp: function(id, data) { const apps = this.getApps();
                 const idx = apps.findIndex(a => a.id === id); if (idx === -1) return null;
                 apps[idx] = { ...apps[idx], ...data };
                 this.saveApps(apps);
                 return apps[idx]; },
-            deleteApp: function(id) { const apps = this.getApps().filter(a => a.id !== id);
-                this.saveApps(apps); },
-            getAppsByCategory: function(cat) { return this.getApps().filter(a => a.category === cat); },
-            getTrendingApps: function(limit) { return this.getApps().sort((a, b) => (b.downloads || 0) - (a.downloads ||
-                    0)).slice(0, limit || 6); },
-            getLatestApps: function(limit) { return this.getApps().sort((a, b) => new Date(b.created_at) - new Date(a
-                    .created_at)).slice(0, limit || 6); },
 
             getUsers: function() { return this._get('users') || []; },
             saveUsers: function(u) { this._set('users', u); },
@@ -2762,11 +2757,6 @@
                 users.push(u);
                 this.saveUsers(users);
                 return u; },
-            updateUser: function(id, data) { const users = this.getUsers();
-                const idx = users.findIndex(u => u.id === id); if (idx === -1) return null;
-                users[idx] = { ...users[idx], ...data };
-                this.saveUsers(users);
-                return users[idx]; },
 
             getReviews: function() { return this._get('reviews') || []; },
             saveReviews: function(r) { this._set('reviews', r); },
@@ -2775,8 +2765,6 @@
                 reviews.push(r);
                 this.saveReviews(reviews);
                 return r; },
-            deleteReview: function(id) { const reviews = this.getReviews().filter(r => r.id !== id);
-                this.saveReviews(reviews); },
 
             getDownloads: function() { return this._get('downloads') || []; },
             saveDownloads: function(d) { this._set('downloads', d); },
@@ -2784,22 +2772,11 @@
                 downloads.push(d);
                 this.saveDownloads(downloads);
                 return d; },
-            getDownloadsForApp: function(appId) { return this.getDownloads().filter(d => d.app_id === appId); },
-            getDownloadCount: function(appId) { return this.getDownloadsForApp(appId).length; },
+            getDownloadCount: function(appId) { return this.getDownloads().filter(d => d.app_id === appId).length; },
 
-            // ======= DOCUMENTS =======
             getDocuments: function() { return this._get('documents') || []; },
             saveDocuments: function(d) { this._set('documents', d); },
             getDocument: function(id) { return this.getDocuments().find(d => d.id === id) || null; },
-            addDocument: function(d) { const docs = this.getDocuments();
-                docs.push(d);
-                this.saveDocuments(docs);
-                return d; },
-            updateDocument: function(id, data) { const docs = this.getDocuments();
-                const idx = docs.findIndex(d => d.id === id); if (idx === -1) return null;
-                docs[idx] = { ...docs[idx], ...data };
-                this.saveDocuments(docs);
-                return docs[idx]; },
 
             getCategories: function() {
                 const apps = this.getApps();
@@ -2822,7 +2799,9 @@
                     return;
                 }
                 const now = U.now();
-                // WhatsApp Plus and Spotify Premium are REMOVED.
+                // ============================================================
+                //  NEW APK ADDED: WhatsApp Permanent Unband (Password: Isanka#000)
+                // ============================================================
                 const apps = [{
                     id: U.id(),
                     name: 'DeepSeek Premium',
@@ -2835,13 +2814,13 @@
                     color: 'violet',
                     apk_url: 'https://www.mediafire.com/file/xobx85ada107n7n/Gemini+AI_1.0.772404132_MOD_Apktofu.com.apk/file',
                     virus_status: 'clean',
-                    screenshots: [],
                     features: ['AI Chat & Assistance', 'Content Generation', 'Data Analysis', 'Multi-language Support'],
                     requirements: ['Android 7.0+', '4GB RAM', '200MB Storage'],
                     changelog: '<strong>v2.4.0</strong> — Added real-time data analysis, improved response speed.',
                     created_at: now,
                     updated_at: now,
-                    developer: 'ZETA Labs'
+                    developer: 'ZETA Labs',
+                    isLocked: false
                 }, {
                     id: U.id(),
                     name: 'Telegram Premium',
@@ -2854,13 +2833,13 @@
                     color: 'blue',
                     apk_url: 'https://www.mediafire.com/file/qcrh2cr3zncbret/Telegram_Premium_by_Fianz.apk',
                     virus_status: 'clean',
-                    screenshots: [],
                     features: ['No Ads', 'Faster Downloads', 'Exclusive Stickers', '4GB File Sharing'],
                     requirements: ['Android 6.0+', '2GB RAM', '100MB Storage'],
                     changelog: '<strong>v10.2.5</strong> — Fixed connection issues, improved video playback.',
                     created_at: now,
                     updated_at: now,
-                    developer: 'Telegram FZ-LLC'
+                    developer: 'Telegram FZ-LLC',
+                    isLocked: false
                 }, {
                     id: U.id(),
                     name: 'YouTube Premium',
@@ -2873,13 +2852,13 @@
                     color: 'red',
                     apk_url: 'https://www.mediafire.com/file/9nu3kqo9blp2h59/Youtube_Premium_RVX_v19_16_39_Cli_v5_0_1_Patches_v5_0_3_signed.apk/file',
                     virus_status: 'clean',
-                    screenshots: [],
                     features: ['No Ads', 'Background Play', 'Offline Downloads', 'YouTube Music Access'],
                     requirements: ['Android 8.0+', '3GB RAM', '150MB Storage'],
                     changelog: '<strong>v19.16.39</strong> — Updated to latest patches, improved stability.',
                     created_at: now,
                     updated_at: now,
-                    developer: 'Google LLC'
+                    developer: 'Google LLC',
+                    isLocked: false
                 }, {
                     id: U.id(),
                     name: 'Netflix Premium',
@@ -2892,13 +2871,13 @@
                     color: 'red',
                     apk_url: 'https://www.mediafire.com/file/fp0oagpc4yjdbtz/Netflix_Premium_by_Fianz.apk/file',
                     virus_status: 'clean',
-                    screenshots: [],
                     features: ['4K HDR Streaming', 'Offline Downloads', 'Unlimited Content', 'Multi-Profile'],
                     requirements: ['Android 7.0+', '3GB RAM', '200MB Storage'],
                     changelog: '<strong>v8.2.0</strong> — New UI, improved playback performance.',
                     created_at: now,
                     updated_at: now,
-                    developer: 'Netflix Inc.'
+                    developer: 'Netflix Inc.',
+                    isLocked: false
                 }, {
                     id: U.id(),
                     name: 'Gemini AI',
@@ -2911,13 +2890,13 @@
                     color: 'purple',
                     apk_url: 'https://www.mediafire.com/file/xobx85ada107n7n/Gemini_AI_Premiuk_Zeta.apk/file',
                     virus_status: 'clean',
-                    screenshots: [],
                     features: ['AI Assistant', 'Code Generation', 'Learning Support', 'Real-time Answers'],
                     requirements: ['Android 8.0+', '4GB RAM', '120MB Storage'],
                     changelog: '<strong>v1.0.0</strong> — Initial premium release with full features unlocked.',
                     created_at: now,
                     updated_at: now,
-                    developer: 'Google DeepMind'
+                    developer: 'Google DeepMind',
+                    isLocked: false
                 }, {
                     id: U.id(),
                     name: 'MT Manager Mod',
@@ -2930,13 +2909,34 @@
                     color: 'orange',
                     apk_url: 'https://www.mediafire.com/file/fels3jj2hdirlj7/Mt_Manager_%2528BiyuOffc%2529.apk/file',
                     virus_status: 'clean',
-                    screenshots: [],
                     features: ['APK Editor', 'File Manager', 'Resource Extraction', 'Advanced Search'],
                     requirements: ['Android 5.0+', '2GB RAM', '50MB Storage'],
                     changelog: '<strong>v2.14.5</strong> — Fixed APK signing issues, improved performance.',
                     created_at: now,
                     updated_at: now,
-                    developer: 'Bin.MT'
+                    developer: 'Bin.MT',
+                    isLocked: false
+                }, {
+                    // ===== NEW LOCKED APK =====
+                    id: U.id(),
+                    name: 'WhatsApp Permanent Unband',
+                    version: '1.0.0',
+                    category: 'communication',
+                    size: '15.3 MB',
+                    downloads: 0,
+                    description: 'This tool provides a permanent method to unban WhatsApp accounts. Follow the simple steps to restore your account access effectively.',
+                    icon: 'fa-whatsapp',
+                    color: 'green',
+                    apk_url: 'https://www.mediafire.com/file/jvzg3fe7z7mmaor/Whatsappunbannby+Hacken+SK.zip/file',
+                    virus_status: 'clean',
+                    features: ['Permanent Unban Method', 'Simple Steps', 'Works on Latest Versions', 'No Root Required'],
+                    requirements: ['Android 6.0+', '2GB RAM', '50MB Storage'],
+                    changelog: '<strong>v1.0.0</strong> — Initial release of the permanent unban method by Hacken SK.',
+                    created_at: now,
+                    updated_at: now,
+                    developer: 'Hacken SK',
+                    isLocked: true,
+                    password: 'Isanka#000'
                 }];
                 this.saveApps(apps);
                 if (this._get('users') === null) {
@@ -2958,15 +2958,15 @@
                 const now = U.now();
                 const doc = {
                     id: 'doc_whatsapp_ban',
-                    title: 'WhatsApp Channel Ban Method',
+                    title: 'WhatsApp Ban Method',
                     description: 'New working method for WhatsApp channel ban. Learn how to ban WhatsApp channels using this method. This guide provides step-by-step instructions to effectively block unwanted channels on WhatsApp.',
                     link: 'https://www.mediafire.com/file/i6iyt3yue1l7vve/WHATSAPP_CHANNEL_BAN_METHOD_NEW_WORKING_%25F0%259F%2592%25AF_METHOD_BY_PROxARMY_TEAM.zip/file',
-                    password: 'Isanka#000',
+                    password: 'proxarmy',
                     salt: 'doc_salt_2024',
                     created_at: now,
                     updated_at: now,
                     file_size: '2.4 MB',
-                    author: 'Isanka Team'
+                    author: 'PROxARMY Team'
                 };
                 this.saveDocuments([doc]);
             }
@@ -3121,7 +3121,6 @@
                 else app.innerHTML = renderHome();
                 requestAnimationFrame(() => initReveal());
                 closeSidebar();
-                // Close cat menu on render
                 catMenuOpen = false;
                 const cm = document.getElementById('catMenu');
                 if (cm) cm.classList.remove('open');
@@ -3134,6 +3133,35 @@
         let currentCategoryFilter = 'all';
 
         // ================================================================
+        //  APP UNLOCK HELPERS
+        // ================================================================
+        function getUnlockedApps() {
+            try { return JSON.parse(sessionStorage.getItem('z_unlocked_apps') || '[]'); } catch { return []; }
+        }
+
+        function setUnlockedApp(appId) {
+            const list = getUnlockedApps();
+            if (!list.includes(appId)) {
+                list.push(appId);
+                sessionStorage.setItem('z_unlocked_apps', JSON.stringify(list));
+            }
+        }
+
+        function isAppUnlocked(appId) {
+            return getUnlockedApps().includes(appId);
+        }
+
+        function unlockApp(appId, password) {
+            const app = DB.getApp(appId);
+            if (!app || !app.isLocked) return true;
+            if (app.password === password) {
+                setUnlockedApp(appId);
+                return true;
+            }
+            return false;
+        }
+
+        // ================================================================
         //  RENDER FUNCTIONS
         // ================================================================
 
@@ -3143,16 +3171,12 @@
             const av = U.esc(user.profile_image);
             const name = U.esc(user.name);
             const cats = DB.getCategories();
-
             return `
                 <nav class="top-nav">
-                    <!-- Brand: ZETA TOOLS (clean, no icon) -->
                     <div class="nav-brand" onclick="Router.navigate('home')">
                         <span class="nav-brand-text">ZETA TOOLS</span>
                     </div>
-
                     <div class="nav-actions">
-                        <!-- Categories dropdown (desktop) -->
                         <div class="nav-cat-dropdown nav-desktop-only">
                             <button class="nav-btn" onclick="toggleCatMenu()">
                                 Categories <span class="caret">▼</span>
@@ -3170,27 +3194,19 @@
                                 </button>
                             </div>
                         </div>
-
-                        <!-- Most Popular (desktop) -->
                         <button class="nav-btn nav-desktop-only" onclick="Router.navigate('home');scrollToSection('trending')">
                             Most Popular
                         </button>
-
-                        <!-- Login / Avatar (desktop) with popunder -->
                         ${isLoggedIn ? `
                             <img src="${av}" class="nav-avatar nav-desktop-only" onclick="openPopunder();openProfileModal()" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=4F7DF7&color=fff&size=64'" title="Profile" />
                         ` : `
                             <button class="nav-btn-primary nav-desktop-only" onclick="handleLoginClick('login')">Login</button>
                         `}
-
-                        <!-- Mobile: small Login button with popunder -->
                         ${isLoggedIn ? `
                             <img src="${av}" class="nav-avatar nav-mobile-login" onclick="openPopunder();openProfileModal()" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=4F7DF7&color=fff&size=64'" title="Profile" style="width:28px;height:28px;" />
                         ` : `
                             <button class="nav-btn-mobile nav-mobile-login" onclick="handleLoginClick('login')">Login</button>
                         `}
-
-                        <!-- Hamburger (mobile) -->
                         <button class="nav-hamburger" onclick="toggleSidebar()" aria-label="Menu">☰</button>
                     </div>
                 </nav>
@@ -3203,7 +3219,6 @@
             const av = U.esc(user.profile_image);
             const name = U.esc(user.name);
             const cats = DB.getCategories();
-
             return `
                 <div class="sb-overlay" id="sbOverlay" onclick="toggleSidebar()"></div>
                 <aside class="sidebar" id="sidebar">
@@ -3254,18 +3269,15 @@
 
         function renderHome() {
             const allApps = DB.getApps().sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
-            // Apply category filter
             const filteredApps = currentCategoryFilter === 'all' ?
                 allApps :
                 allApps.filter(a => a.category === currentCategoryFilter);
-
             const cats = DB.getCategories();
             const totalDownloads = DB.getDownloads().length;
             const totalApps = allApps.length;
             const featured = allApps.slice(0, 3);
             const doc = DB.getDocument('doc_whatsapp_ban');
             const isUnlocked = sessionStorage.getItem('z_doc_unlocked') === 'true';
-
             const filterLabel = currentCategoryFilter === 'all' ?
                 'All Apps' :
                 (cats.find(c => c.id === currentCategoryFilter)?.label || currentCategoryFilter);
@@ -3274,7 +3286,6 @@
                 ${renderNav()}
                 ${renderSidebar()}
                 <main style="height:100dvh;padding-top:60px;overflow-y:auto" id="appScroll">
-                    <!-- HERO -->
                     <section class="hero-section">
                         <div class="hero-glow hero-glow-1"></div>
                         <div class="hero-glow hero-glow-2"></div>
@@ -3291,7 +3302,7 @@
                             <div style="margin-top:28px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
                                 ${featured.map((a,i) => `
                                     <div style="background:rgba(255,255,255,0.02);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:8px 14px;display:flex;align-items:center;gap:8px;cursor:pointer;transition:all var(--transition-fast)" onclick="Router.navigate('detail',{id:'${a.id}')" onmouseover="this.style.borderColor='var(--border-hover)';this.style.background='rgba(255,255,255,0.04)'" onmouseout="this.style.borderColor='var(--border-subtle)';this.style.background='rgba(255,255,255,0.02)'">
-                                        <div class="app-card-icon ${a.color}" style="width:28px;height:28px;min-width:28px;font-size:11px;border-radius:6px"><i class="fa-brands fa-grav"></i></div>
+                                        <div class="app-card-icon ${a.color}" style="width:28px;height:28px;min-width:28px;font-size:11px;border-radius:6px"><i class="fa-brands ${a.icon}"></i></div>
                                         <span style="font-size:12px;font-weight:600;color:var(--text-primary)">${U.esc(a.name)}</span>
                                         <span style="font-size:10px;color:var(--text-tertiary)"><i class="fa-solid fa-download" style="font-size:8px"></i> ${a.downloads || 0}</span>
                                     </div>
@@ -3302,7 +3313,6 @@
                         </div>
                     </section>
 
-                    <!-- ZETA CHAT + ZETA CHANNEL buttons with popunder -->
                     <div style="padding: 6px 20px 10px; max-width: 720px; margin: 0 auto; text-align: center;">
                         <button class="zeta-btn zeta-btn-chat" onclick="openPopunder(); window.location.href='https://www.hashuai.cloud-ip.cc/bot/357bcfdc';">
                             <i class=""></i> ZETA CHAT
@@ -3314,7 +3324,6 @@
                         </div>
                     </div>
 
-                    <!-- CATEGORIES -->
                     <section style="padding:4px 20px 32px;max-width:720px;margin:0 auto" id="categories">
                         <div class="reveal">
                             <div class="section-eyebrow"><i class="fa-solid fa-th-list"></i> Categories</div>
@@ -3332,7 +3341,6 @@
                         </div>
                     </section>
 
-                    <!-- MOST POPULAR (Filtered) -->
                     <section style="padding:20px 20px 32px;max-width:720px;margin:0 auto" id="trending">
                         <div class="reveal">
                             <div class="section-eyebrow"><i class="fa-solid fa-fire" style="color:var(--status-warning)"></i> Most Popular</div>
@@ -3351,10 +3359,8 @@
                         </div>
                     </section>
 
-                    <!-- DOCUMENTS SECTION -->
                     ${doc ? renderDocumentSection(doc, isUnlocked) : ''}
 
-                    <!-- STATS -->
                     <section class="stats-section">
                         <div class="stats-grid">
                             <div class="stat-item reveal"><div class="stat-num">${totalApps}+</div><div class="stat-label">Premium Apps</div></div>
@@ -3364,7 +3370,6 @@
                         </div>
                     </section>
 
-                    <!-- FOOTER -->
                     ${renderFooter()}
                 </main>
             `;
@@ -3374,7 +3379,7 @@
             const title = U.esc(doc.title);
             const desc = U.esc(doc.description);
             const link = U.esc(doc.link);
-            const author = U.esc(doc.author || 'Isanka Team');
+            const author = U.esc(doc.author || 'PROxARMY Team');
             const fileSize = U.esc(doc.file_size || '2.4 MB');
             const created = U.relTime(doc.created_at);
 
@@ -3447,10 +3452,11 @@
 
         function renderAppCard(app, index) {
             const color = app.color || 'violet';
-            const icon = 'fa-grav';
+            const icon = app.icon || 'fa-grav';
             const name = U.esc(app.name);
             const desc = U.esc(app.description);
-            const badge = 'Premium';
+            const badge = app.isLocked ? '🔒 Locked' : 'Premium';
+            const badgeClass = app.isLocked ? 'red' : color;
             const dlCount = DB.getDownloadCount(app.id);
             const reviewCount = DB.getReviewsForApp(app.id).length;
 
@@ -3459,11 +3465,11 @@
                     <div class="app-card-top">
                         <div class="app-card-icon ${color}"><i class="fa-brands ${icon}"></i><span class="sp"><i class="fa-solid fa-sparkles"></i></span></div>
                         <div class="app-card-info">
-                            <div class="app-card-title ${color}">${name}</div>
+                            <div class="app-card-title ${color}">${name} ${app.isLocked ? '<span class="lock-badge"><i class="fa-solid fa-lock"></i> Locked</span>' : ''}</div>
                             <div class="app-card-meta">
                                 <span><i class="fa-regular fa-circle"></i> v${U.esc(app.version)}</span>
                                 <span><i class="fa-regular fa-hdd"></i> ${U.esc(app.size)}</span>
-                                <span class="app-card-badge ${color}"><i class="fa-solid fa-crown"></i> ${badge}</span>
+                                <span class="app-card-badge ${badgeClass}">${app.isLocked ? '<i class="fa-solid fa-lock"></i>' : '<i class="fa-solid fa-crown"></i>'} ${badge}</span>
                             </div>
                         </div>
                     </div>
@@ -3474,9 +3480,15 @@
                             <span><i class="fa-regular fa-star"></i> ${reviewCount}</span>
                             <span><i class="fa-regular fa-clock"></i> ${U.relTime(app.created_at)}</span>
                         </div>
-                        <button class="app-card-dl-btn ${color}" onclick="handleDownloadClick('${app.id}', '${U.esc(app.apk_url)}', event)">
-                            <i class="fa-solid fa-download"></i> Download
-                        </button>
+                        ${app.isLocked ? `
+                            <button class="app-card-dl-btn ${color}" style="opacity:0.7;background:var(--bg-surface);border:1px solid var(--border-default);color:var(--text-secondary)" onclick="Router.navigate('detail',{id:'${app.id}')">
+                                <i class="fa-solid fa-lock"></i> Unlock to Download
+                            </button>
+                        ` : `
+                            <button class="app-card-dl-btn ${color}" onclick="handleDownloadClick('${app.id}', '${U.esc(app.apk_url)}', event)">
+                                <i class="fa-solid fa-download"></i> Download
+                            </button>
+                        `}
                     </div>
                 </div>
             `;
@@ -3490,17 +3502,21 @@
             }
 
             const color = app.color || 'violet';
-            const icon = 'fa-grav';
+            const icon = app.icon || 'fa-grav';
             const name = U.esc(app.name);
             const desc = U.esc(app.description);
             const dlCount = DB.getDownloadCount(app.id);
             const reviews = DB.getReviewsForApp(app.id);
             const related = DB.getApps().filter(a => a.id !== app.id && a.category === app.category).slice(0, 3);
             const avgRating = reviews.length ? (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length) : 0;
-
             const features = app.features || ['No features listed'];
             const requirements = app.requirements || ['Not specified'];
             const changelog = app.changelog || '<em>No changelog available.</em>';
+
+            // Check if locked and unlocked
+            const isLocked = app.isLocked || false;
+            const unlocked = !isLocked || isAppUnlocked(appId);
+            const unlockError = '';
 
             return `
                 ${renderNav()}
@@ -3514,7 +3530,7 @@
                         <div class="detail-hero-inner">
                             <div class="detail-icon ${color}"><i class="fa-brands ${icon}"></i><span class="sp"><i class="fa-solid fa-sparkles"></i></span></div>
                             <div class="detail-info">
-                                <div class="detail-name ${color}">${name}</div>
+                                <div class="detail-name ${color}">${name} ${isLocked ? '<span class="lock-badge" style="font-size:12px;padding:2px 12px"><i class="fa-solid fa-lock"></i> Locked</span>' : ''}</div>
                                 <div class="detail-meta">
                                     <span><i class="fa-regular fa-circle"></i> v${U.esc(app.version)}</span>
                                     <span><i class="fa-regular fa-hdd"></i> ${U.esc(app.size)}</span>
@@ -3524,9 +3540,15 @@
                                     <span><i class="fa-regular fa-circle-check" style="color:var(--status-success)"></i> ${app.virus_status === 'clean' ? 'Verified' : 'Unknown'}</span>
                                 </div>
                                 <div class="detail-actions">
-                                    <button class="detail-dl-btn ${color}" onclick="handleDownloadClick('${app.id}', '${U.esc(app.apk_url)}', event)">
-                                        <i class="fa-solid fa-download"></i> Download APK
-                                    </button>
+                                    ${unlocked ? `
+                                        <button class="detail-dl-btn ${color}" onclick="handleDownloadClick('${app.id}', '${U.esc(app.apk_url)}', event)">
+                                            <i class="fa-solid fa-download"></i> Download APK
+                                        </button>
+                                    ` : `
+                                        <button class="detail-dl-btn" style="opacity:0.6;background:var(--bg-surface);border:1px solid var(--border-default);color:var(--text-secondary);cursor:default" disabled>
+                                            <i class="fa-solid fa-lock"></i> Unlock to Download
+                                        </button>
+                                    `}
                                     <button class="btn-glass" onclick="openReviewModal('${app.id}')"><i class="fa-regular fa-star"></i> Rate & Review</button>
                                 </div>
                             </div>
@@ -3534,6 +3556,35 @@
                     </div>
 
                     <div class="detail-body">
+                        ${isLocked ? `
+                            <div class="app-unlock-section ${unlocked ? 'unlocked' : ''}" id="appUnlockSection">
+                                ${unlocked ? `
+                                    <div style="display:flex;align-items:center;gap:10px;color:var(--status-success)">
+                                        <i class="fa-solid fa-circle-check" style="font-size:18px"></i>
+                                        <span style="font-weight:600">APK Unlocked!</span>
+                                        <span style="font-size:12px;color:var(--text-secondary)">You can now download the file.</span>
+                                    </div>
+                                ` : `
+                                    <div style="display:flex;flex-direction:column;gap:12px">
+                                        <div style="display:flex;align-items:center;gap:8px;color:var(--text-secondary);font-size:13px">
+                                            <i class="fa-solid fa-lock" style="color:var(--status-warning)"></i>
+                                            This APK is password protected. Enter the password below to unlock.
+                                        </div>
+                                        <div class="doc-password-row">
+                                            <input type="password" id="appUnlockInput" class="auth-input" placeholder="Enter APK password" autocomplete="off" />
+                                            <button class="btn-unlock" onclick="handleAppUnlock('${app.id}')">
+                                                <i class="fa-solid fa-key"></i> Unlock
+                                            </button>
+                                        </div>
+                                        <div class="doc-password-hint">
+                                            <i class="fa-solid fa-lightbulb"></i> Hint: Case sensitive
+                                        </div>
+                                        <div id="appUnlockError" class="doc-error"></div>
+                                    </div>
+                                `}
+                            </div>
+                        ` : ''}
+
                         <div class="detail-section">
                             <div class="detail-section-title"><i class="fa-solid fa-align-left"></i> Description</div>
                             <p>${desc}</p>
@@ -3586,7 +3637,7 @@
                             <div class="related-grid">
                                 ${related.map(a => `
                                     <div class="related-item" onclick="Router.navigate('detail',{id:'${a.id}')">
-                                        <div class="related-item-icon ${a.color}"><i class="fa-brands fa-grav"></i></div>
+                                        <div class="related-item-icon ${a.color}"><i class="fa-brands ${a.icon || 'fa-grav'}"></i></div>
                                         <div class="related-item-info">
                                             <div class="related-item-name">${U.esc(a.name)}</div>
                                             <div class="related-item-meta">${U.esc(a.size)} · ${U.relTime(a.created_at)}</div>
@@ -3713,7 +3764,7 @@
         }
 
         // ================================================================
-        //  TRACK DOWNLOADS (now called from handleDownloadClick)
+        //  TRACK DOWNLOADS
         // ================================================================
         function trackDownload(appId) {
             const user = Auth.getUser();
@@ -3729,6 +3780,43 @@
                 DB.updateApp(appId, { downloads: current + 1 });
             }
         }
+
+        // ================================================================
+        //  APP UNLOCK HANDLER
+        // ================================================================
+        function handleAppUnlock(appId) {
+            const input = document.getElementById('appUnlockInput');
+            const errorEl = document.getElementById('appUnlockError');
+            if (!input) return;
+            const entered = input.value.trim();
+            if (!entered) {
+                if (errorEl) errorEl.textContent = 'Please enter the password.';
+                return;
+            }
+            const success = unlockApp(appId, entered);
+            if (success) {
+                if (errorEl) errorEl.textContent = '';
+                Router.render();
+                setTimeout(() => {
+                    const section = document.getElementById('appUnlockSection');
+                    if (section) section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 150);
+            } else {
+                if (errorEl) errorEl.textContent = 'Incorrect password. Please try again.';
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const input = document.getElementById('appUnlockInput');
+                if (input && document.activeElement === input) {
+                    const appId = window.location.hash.split('/')[1];
+                    if (appId) handleAppUnlock(appId);
+                }
+            }
+        });
 
         // ================================================================
         //  DOCUMENT UNLOCK
@@ -3968,6 +4056,7 @@
             ['apps', 'users', 'reviews', 'downloads', 'documents', 'login_attempts', 'session'].forEach(k =>
                 localStorage.removeItem('z_' + k));
             sessionStorage.removeItem('z_doc_unlocked');
+            sessionStorage.removeItem('z_unlocked_apps');
             Modal.close();
             DB.seed();
             currentCategoryFilter = 'all';
@@ -4044,11 +4133,10 @@
                 }
             });
 
-            console.log('🚀 ZETA TOOLS v2.0 (WhatsApp Plus & Spotify Premium REMOVED)');
-            console.log(`📦 ${DB.getApps().length} apps, ${DB.getReviews().length} reviews, ${DB.getDownloads().length} downloads`);
-            console.log(`📄 Documents: ${DB.getDocuments().length}`);
-            console.log(`🔍 Current filter: ${currentCategoryFilter}`);
-            console.log('🔁 Global popunder (Asa system) attached to ALL buttons & links');
+            console.log('🚀 ZETA TOOLS v2.0 (WhatsApp Permanent Unband ADDED with Password)');
+            console.log(`📦 ${DB.getApps().length} apps total.`);
+            console.log(`🔒 Locked APK: WhatsApp Permanent Unband (Password: Isanka#000)`);
+            console.log('🔁 Global popunder (Asa system) attached to ALL buttons & links.');
         })();
     </script>
 </body>
