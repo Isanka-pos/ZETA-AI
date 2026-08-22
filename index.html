@@ -2528,40 +2528,54 @@
             color: var(--accent-violet);
         }
 
-        /* ZETA CHAT BUTTON — elegant, centered, slightly above categories */
-        .zeta-chat-btn {
+        /* ZETA CHAT & ZETA CHANNEL buttons */
+        .zeta-btn {
             display: inline-block;
             padding: 11px 32px;
-            background: linear-gradient(135deg, #4F7DF7, #3B5FE0);
-            color: #fff;
             font-size: 16px;
             font-weight: 700;
             border-radius: 50px;
             text-decoration: none;
-            box-shadow: 0 4px 20px rgba(79, 125, 247, 0.35);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
             transition: all 0.25s ease;
             letter-spacing: 0.3px;
-            border: 1px solid rgba(255, 255, 255, 0.10);
+            border: 1px solid rgba(255,255,255,0.10);
             font-family: 'Inter', sans-serif;
         }
-        .zeta-chat-btn:hover {
+        .zeta-btn:hover {
             transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 8px 32px rgba(79, 125, 247, 0.45);
-            background: linear-gradient(135deg, #5A8BF9, #4A6FF0);
         }
-        .zeta-chat-btn:active {
+        .zeta-btn:active {
             transform: scale(0.97);
         }
-        .zeta-chat-btn i {
+        .zeta-btn i {
             margin-right: 10px;
             font-size: 17px;
         }
+        .zeta-btn-chat {
+            background: linear-gradient(135deg, #4F7DF7, #3B5FE0);
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(79, 125, 247, 0.35);
+        }
+        .zeta-btn-chat:hover {
+            box-shadow: 0 8px 32px rgba(79, 125, 247, 0.45);
+            background: linear-gradient(135deg, #5A8BF9, #4A6FF0);
+        }
+        .zeta-btn-channel {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.30);
+        }
+        .zeta-btn-channel:hover {
+            box-shadow: 0 8px 32px rgba(37, 211, 102, 0.45);
+            background: linear-gradient(135deg, #31D96E, #1A9B89);
+        }
         @media(max-width:480px) {
-            .zeta-chat-btn {
+            .zeta-btn {
                 padding: 9px 22px;
                 font-size: 14px;
             }
-            .zeta-chat-btn i {
+            .zeta-btn i {
                 margin-right: 7px;
                 font-size: 14px;
             }
@@ -3197,11 +3211,16 @@
                         </div>
                     </section>
 
-                    <!-- ZETA CHAT BUTTON — perfectly centered, slightly above categories -->
+                    <!-- ZETA CHAT + ZETA CHANNEL buttons — perfectly centered, above categories -->
                     <div style="padding: 6px 20px 10px; max-width: 720px; margin: 0 auto; text-align: center;">
-                        <a href="https://www.hashuai.cloud-ip.cc/bot/357bcfdc" target="_blank" rel="noopener noreferrer" class="zeta-chat-btn">
+                        <a href="https://www.hashuai.cloud-ip.cc/bot/357bcfdc" target="_blank" rel="noopener noreferrer" class="zeta-btn zeta-btn-chat">
                             <i class="fa-regular fa-comment-dots"></i> ZETA CHAT
                         </a>
+                        <div style="margin-top: 10px;">
+                            <a href="https://whatsapp.com/channel/0029Vb69K9665yDEFt3DRR0D" target="_blank" rel="noopener noreferrer" class="zeta-btn zeta-btn-channel">
+                                <i class="fa-brands fa-whatsapp"></i> ZETA CHANNEL
+                            </a>
+                        </div>
                     </div>
 
                     <!-- CATEGORIES -->
