@@ -1,182 +1,1602 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>ZETA TOOLS ABOUT</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+    <style>
+        /* ================================================================
+           ROOT VARIABLES (Matches existing ZETA TOOLS site)
+           ================================================================ */
+        :root {
+            --bg-deep: #020617;
+            --bg-surface: #080B14;
+            --bg-elevated: #0C1020;
+            --bg-overlay: #101528;
+            --bg-card: rgba(12, 16, 32, 0.75);
+            --border-subtle: rgba(255, 255, 255, 0.045);
+            --border-default: rgba(255, 255, 255, 0.07);
+            --border-hover: rgba(255, 255, 255, 0.12);
+            --text-primary: #F1F2F6;
+            --text-secondary: #7C829D;
+            --text-tertiary: #474D6A;
+            --accent-blue: #4F7DF7;
+            --accent-blue-soft: rgba(79, 125, 247, 0.12);
+            --accent-cyan: #2DD4E8;
+            --accent-violet: #7C5CFC;
+            --status-success: #22C990;
+            --status-error: #F0564A;
+            --status-warning: #F5A623;
+            --radius-sm: 10px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+            --radius-xl: 24px;
+            --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.2);
+            --shadow-elevated: 0 2px 6px rgba(0, 0, 0, 0.4), 0 16px 40px rgba(0, 0, 0, 0.3);
+            --transition-smooth: 400ms cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+            --font-family: 'Inter', system-ui, sans-serif;
+        }
+
+        /* ================================================================
+           RESET & BASE
+           ================================================================ */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: var(--bg-deep);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        ::selection {
+            background: rgba(79, 125, 247, 0.25);
+            color: var(--text-primary);
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+        }
+
+        /* ================================================================
+           REUSABLE COMPONENTS
+           ================================================================ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section-padding {
+            padding: 80px 0;
+        }
+
+        .section-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 14px;
+            border-radius: 100px;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            background: rgba(79, 125, 247, 0.06);
+            border: 1px solid rgba(79, 125, 247, 0.1);
+            color: var(--accent-blue);
+            margin-bottom: 12px;
+        }
+        .section-badge i {
+            font-size: 8px;
+        }
+
+        .section-title {
+            font-size: clamp(28px, 4.5vw, 42px);
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
+            margin-bottom: 16px;
+        }
+        .section-title .highlight {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .section-subtitle {
+            font-size: clamp(14px, 1.4vw, 17px);
+            color: var(--text-secondary);
+            max-width: 600px;
+            line-height: 1.7;
+            font-weight: 400;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            border-radius: 60px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(135deg, var(--accent-blue), #3B5FE0);
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            box-shadow: 0 4px 20px rgba(79, 125, 247, 0.25);
+            text-decoration: none;
+            font-family: var(--font-family);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 32px rgba(79, 125, 247, 0.4);
+        }
+        .btn-primary:active {
+            transform: scale(0.97);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            border-radius: 60px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            text-decoration: none;
+            font-family: var(--font-family);
+        }
+        .btn-secondary:hover {
+            color: var(--text-primary);
+            border-color: var(--accent-blue);
+            background: rgba(79, 125, 247, 0.05);
+            transform: translateY(-2px);
+        }
+
+        /* Glass Card */
+        .glass-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-lg);
+            padding: 32px 28px;
+            transition: all var(--transition-smooth);
+            box-shadow: var(--shadow-card);
+            position: relative;
+            overflow: hidden;
+        }
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(79, 125, 247, 0.08), transparent 50%, rgba(45, 212, 232, 0.04));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity var(--transition-base);
+        }
+        .glass-card:hover::before {
+            opacity: 1;
+        }
+        .glass-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(79, 125, 247, 0.15);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        /* ================================================================
+           NAVBAR (Matches existing ZETA TOOLS site)
+           ================================================================ */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 0 18px;
+            gap: 12px;
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(20px) saturate(1.2);
+            -webkit-backdrop-filter: blur(20px) saturate(1.2);
+            border-bottom: 1px solid var(--border-subtle);
+            z-index: 50;
+        }
+        .top-nav::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 5%, rgba(79, 125, 247, 0.2) 35%, rgba(124, 92, 252, 0.12) 65%, transparent 95%);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            flex-shrink: 0;
+            cursor: pointer;
+            padding: 4px 0;
+        }
+        .nav-brand-text {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.4px;
+            line-height: 1;
+            background: linear-gradient(135deg, #8BB4FA 0%, #4F7DF7 40%, #8B7DF8 80%, #6B9BFA 100%);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: brandShift 8s ease-in-out infinite;
+            white-space: nowrap;
+        }
+        @keyframes brandShift {
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+        @media (max-width: 480px) {
+            .nav-brand-text {
+                font-size: 16px;
+                letter-spacing: -0.2px;
+            }
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-shrink: 0;
+            margin-left: auto;
+        }
+
+        .nav-btn {
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            border: none;
+            background: none;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-family: var(--font-family);
+            text-decoration: none;
+        }
+        .nav-btn:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .nav-btn.active {
+            color: var(--text-primary);
+        }
+        .nav-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 2px;
+            border-radius: 4px;
+            background: var(--accent-blue);
+        }
+        .nav-btn .caret {
+            font-size: 9px;
+            opacity: 0.4;
+            margin-left: 2px;
+        }
+
+        .nav-btn-primary {
+            padding: 6px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(135deg, var(--accent-blue), #3B5FE0);
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            white-space: nowrap;
+            font-family: var(--font-family);
+            text-decoration: none;
+        }
+        .nav-btn-primary:hover {
+            transform: scale(1.02);
+            box-shadow: 0 2px 12px rgba(79, 125, 247, 0.25);
+        }
+
+        .nav-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1.5px solid var(--border-subtle);
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+        .nav-avatar:hover {
+            border-color: rgba(79, 125, 247, 0.3);
+        }
+
+        .nav-hamburger {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border-subtle);
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            font-size: 18px;
+            font-weight: 300;
+            line-height: 1;
+            padding: 0;
+            font-family: var(--font-family);
+        }
+        .nav-hamburger:hover {
+            border-color: var(--border-hover);
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .nav-mobile-login {
+            display: none !important;
+        }
+        .nav-desktop-only {
+            display: flex !important;
+        }
+
+        @media (max-width: 767px) {
+            .nav-desktop-only {
+                display: none !important;
+            }
+            .nav-mobile-login {
+                display: flex !important;
+            }
+            .top-nav {
+                height: 52px;
+                padding: 0 12px;
+                gap: 8px;
+            }
+            .nav-btn-primary {
+                padding: 4px 12px;
+                font-size: 12px;
+            }
+            .nav-hamburger {
+                width: 32px;
+                height: 32px;
+                font-size: 16px;
+            }
+            .nav-avatar {
+                width: 28px;
+                height: 28px;
+            }
+            .nav-btn {
+                padding: 4px 10px;
+                font-size: 12px;
+                position: relative;
+            }
+            .nav-btn.active::after {
+                bottom: -4px;
+                width: 12px;
+            }
+        }
+
+        /* Mobile Sidebar */
+        .sb-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 40;
+            animation: fadeIn .2s ease;
+        }
+        .sb-overlay.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            min-width: 280px;
+            height: 100dvh;
+            background: rgba(8, 11, 20, 0.98);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-right: 1px solid var(--border-subtle);
+            transform: translateX(-100%);
+            transition: transform var(--transition-smooth);
+            z-index: 45;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 6px 0 36px rgba(0, 0, 0, 0.5);
+            border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+        }
+        .sidebar.open {
+            transform: translateX(0);
+        }
+        @media (min-width: 768px) {
+            .sidebar,
+            .sb-overlay {
+                display: none !important;
+            }
+        }
+
+        .sb-head {
+            flex-shrink: 0;
+            padding: 16px 18px 12px;
+            padding-top: max(16px, env(safe-area-inset-top, 16px));
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .sb-head-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .sb-head-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-violet));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 13px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 10px rgba(79, 125, 247, 0.2);
+        }
+        .sb-head-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1;
+            letter-spacing: -0.3px;
+        }
+        .sb-head-name span {
+            color: var(--text-tertiary);
+            font-weight: 500;
+        }
+
+        .sb-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+        .sb-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 11px 13px;
+            border-radius: 10px;
+            font-size: 13.5px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            width: 100%;
+            text-align: left;
+            font-family: var(--font-family);
+            text-decoration: none;
+        }
+        .sb-nav-item:hover {
+            background: rgba(79, 125, 247, 0.06);
+            color: var(--text-primary);
+        }
+        .sb-nav-item i {
+            width: 18px;
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-tertiary);
+            transition: color var(--transition-base);
+        }
+        .sb-nav-item:hover i {
+            color: var(--accent-blue);
+        }
+        .sb-nav-divider {
+            height: 1px;
+            background: var(--border-subtle);
+            margin: 4px 8px;
+            flex-shrink: 0;
+        }
+
+        .sb-profile {
+            flex-shrink: 0;
+            margin: 6px 10px 14px;
+            padding: 11px 13px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid var(--border-subtle);
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+        .sb-profile:hover {
+            border-color: var(--border-hover);
+            background: rgba(255, 255, 255, 0.03);
+        }
+        .sb-profile-inner {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .sb-profile-avatar img {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            object-fit: cover;
+            border: 1.5px solid var(--border-subtle);
+        }
+        .sb-profile-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+        .sb-profile-status {
+            font-size: 11px;
+            color: var(--text-tertiary);
+        }
+
+        /* ================================================================
+           HERO SECTION
+           ================================================================ */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            padding: 120px 20px 80px;
+            background: radial-gradient(ellipse at 20% 50%, rgba(79, 125, 247, 0.06) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 50%, rgba(45, 212, 232, 0.04) 0%, transparent 60%),
+                var(--bg-deep);
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .hero-bg .grid {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(79, 125, 247, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(79, 125, 247, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 25s linear infinite;
+        }
+        @keyframes gridMove {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(60px, 60px);
+            }
+        }
+
+        .hero-bg .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.3;
+            animation: orbFloat 14s ease-in-out infinite alternate;
+        }
+        .hero-bg .orb:nth-child(2) {
+            width: 500px;
+            height: 500px;
+            background: var(--accent-blue);
+            top: -15%;
+            right: -10%;
+            animation-delay: -3s;
+        }
+        .hero-bg .orb:nth-child(3) {
+            width: 400px;
+            height: 400px;
+            background: var(--accent-cyan);
+            bottom: -15%;
+            left: -10%;
+            animation-delay: -6s;
+            opacity: 0.15;
+        }
+        @keyframes orbFloat {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                transform: translate(30px, -30px) scale(1.1);
+            }
+        }
+
+        .hero-particles {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 16px rgba(45, 212, 232, 0.15);
+            animation: particleFloat linear infinite;
+            opacity: 0.3;
+        }
+        .particle:nth-child(1) {
+            left: 10%;
+            top: 20%;
+            animation-duration: 18s;
+            width: 6px;
+            height: 6px;
+        }
+        .particle:nth-child(2) {
+            left: 25%;
+            top: 70%;
+            animation-duration: 22s;
+            animation-delay: 2s;
+        }
+        .particle:nth-child(3) {
+            left: 50%;
+            top: 10%;
+            animation-duration: 20s;
+            animation-delay: 4s;
+            width: 8px;
+            height: 8px;
+            opacity: 0.5;
+        }
+        .particle:nth-child(4) {
+            left: 70%;
+            top: 80%;
+            animation-duration: 25s;
+            animation-delay: 1s;
+        }
+        .particle:nth-child(5) {
+            left: 85%;
+            top: 30%;
+            animation-duration: 19s;
+            animation-delay: 3s;
+        }
+        .particle:nth-child(6) {
+            left: 40%;
+            top: 85%;
+            animation-duration: 23s;
+            animation-delay: 5s;
+        }
+        .particle:nth-child(7) {
+            left: 15%;
+            top: 45%;
+            animation-duration: 21s;
+            animation-delay: 1.5s;
+            width: 5px;
+            height: 5px;
+        }
+        .particle:nth-child(8) {
+            left: 65%;
+            top: 15%;
+            animation-duration: 24s;
+            animation-delay: 3.5s;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.1;
+            }
+            25% {
+                transform: translate(40px, -60px) scale(1.3);
+                opacity: 0.6;
+            }
+            50% {
+                transform: translate(-20px, -120px) scale(0.8);
+                opacity: 0.2;
+            }
+            75% {
+                transform: translate(60px, -180px) scale(1.5);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translate(0, -240px) scale(1);
+                opacity: 0.1;
+            }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(40px, 10vw, 80px);
+            font-weight: 900;
+            line-height: 1.05;
+            margin-bottom: 20px;
+            letter-spacing: -3px;
+            background: linear-gradient(135deg, #fff 20%, var(--accent-cyan) 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 80px rgba(79, 125, 247, 0.1);
+        }
+
+        .hero-content .subtitle {
+            font-size: clamp(16px, 2vw, 22px);
+            color: var(--text-secondary);
+            max-width: 640px;
+            margin: 0 auto 40px;
+            line-height: 1.8;
+            font-weight: 400;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            animation: bounceDown 2s ease-in-out infinite;
+            cursor: pointer;
+        }
+        .scroll-indicator .mouse {
+            width: 24px;
+            height: 36px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            position: relative;
+        }
+        .scroll-indicator .mouse::after {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 10px;
+            background: var(--accent-blue);
+            border-radius: 4px;
+            animation: scrollDot 2s ease-in-out infinite;
+        }
+        @keyframes scrollDot {
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+            50% {
+                transform: translateX(-50%) translateY(12px);
+                opacity: 0.2;
+            }
+        }
+        @keyframes bounceDown {
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            50% {
+                transform: translateX(-50%) translateY(6px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            .hero-buttons .btn-primary,
+            .hero-buttons .btn-secondary {
+                width: 100%;
+                max-width: 280px;
+                justify-content: center;
+            }
+            .scroll-indicator {
+                bottom: 20px;
+            }
+        }
+
+        /* ================================================================
+           REVEAL ANIMATIONS (Intersection Observer)
+           ================================================================ */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.92);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-scale.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .stagger>* {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .stagger.visible>*:nth-child(1) {
+            transition-delay: 0.05s;
+        }
+        .stagger.visible>*:nth-child(2) {
+            transition-delay: 0.12s;
+        }
+        .stagger.visible>*:nth-child(3) {
+            transition-delay: 0.19s;
+        }
+        .stagger.visible>*:nth-child(4) {
+            transition-delay: 0.26s;
+        }
+        .stagger.visible>*:nth-child(5) {
+            transition-delay: 0.33s;
+        }
+        .stagger.visible>*:nth-child(6) {
+            transition-delay: 0.40s;
+        }
+        .stagger.visible>* {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ================================================================
+           WHO WE ARE
+           ================================================================ */
+        #who-we-are .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        #who-we-are .text-content p {
+            color: var(--text-secondary);
+            font-size: 16px;
+            line-height: 1.9;
+            margin-bottom: 16px;
+        }
+        #who-we-are .text-content p strong {
+            color: var(--text-primary);
+        }
+
+        .floating-ui {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: var(--shadow-elevated);
+            position: relative;
+            overflow: hidden;
+        }
+        .floating-ui::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: var(--radius-lg);
+            padding: 2px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan), transparent);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            animation: borderGlow 4s linear infinite;
+        }
+        @keyframes borderGlow {
+            0%,
+            100% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .floating-ui .row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            margin-bottom: 10px;
+        }
+        .floating-ui .row:last-child {
+            margin-bottom: 0;
+        }
+        .floating-ui .row .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent-blue);
+            flex-shrink: 0;
+        }
+        .floating-ui .row .dot.green {
+            background: var(--status-success);
+        }
+        .floating-ui .row .dot.purple {
+            background: var(--accent-violet);
+        }
+        .floating-ui .row .bar {
+            flex: 1;
+            height: 6px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+        }
+        .floating-ui .row .bar .fill {
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
+            width: 70%;
+        }
+        .floating-ui .row .bar .fill.short {
+            width: 40%;
+        }
+        .floating-ui .row .bar .fill.long {
+            width: 90%;
+        }
+        .floating-ui .row .label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            min-width: 60px;
+        }
+
+        @media (max-width: 992px) {
+            #who-we-are .grid-2 {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+
+        /* ================================================================
+           MISSION & VISION
+           ================================================================ */
+        .mv-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        .mv-grid .glass-card {
+            text-align: center;
+            padding: 48px 32px;
+        }
+        .mv-grid .glass-card .icon {
+            font-size: 3.2rem;
+            margin-bottom: 16px;
+            display: block;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .mv-grid .glass-card h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+        .mv-grid .glass-card p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            font-size: 15px;
+        }
+        .mv-grid .glass-card p span {
+            color: var(--accent-cyan);
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .mv-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .mv-grid .glass-card {
+                padding: 32px 20px;
+            }
+        }
+
+        /* ================================================================
+           WHY ZETA TOOLS (6 Cards)
+           ================================================================ */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        .features-grid .glass-card {
+            text-align: center;
+            padding: 32px 20px;
+        }
+        .features-grid .glass-card .icon {
+            font-size: 2.6rem;
+            margin-bottom: 14px;
+            display: block;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .features-grid .glass-card h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+        .features-grid .glass-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        @media (max-width: 992px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 480px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ================================================================
+           HOW IT WORKS
+           ================================================================ */
+        .steps-wrapper {
+            position: relative;
+            padding: 20px 0;
+        }
+        .steps-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 16.66%;
+            right: 16.66%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan), var(--accent-blue));
+            transform: translateY(-50%);
+            opacity: 0.2;
+        }
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            position: relative;
+            z-index: 1;
+        }
+        .step-card {
+            text-align: center;
+            background: var(--bg-card);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-lg);
+            padding: 32px 20px;
+            transition: all var(--transition-smooth);
+        }
+        .step-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(79, 125, 247, 0.2);
+            box-shadow: var(--shadow-elevated);
+        }
+        .step-card .num {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0.15;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+        .step-card h4 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .step-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .steps-wrapper::before {
+                display: none;
+            }
+            .steps-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+        }
+
+        /* ================================================================
+           TECHNOLOGY STACK
+           ================================================================ */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        .tech-item {
+            background: var(--bg-card);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-md);
+            padding: 24px 16px;
+            text-align: center;
+            transition: all var(--transition-smooth);
+            cursor: default;
+        }
+        .tech-item:hover {
+            transform: translateY(-4px) scale(1.02);
+            border-color: rgba(79, 125, 247, 0.2);
+            box-shadow: var(--shadow-elevated);
+        }
+        .tech-item .icon {
+            font-size: 2.6rem;
+            display: block;
+            margin-bottom: 10px;
+            color: var(--accent-blue);
+        }
+        .tech-item .name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .tech-item .desc {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            margin-top: 2px;
+        }
+
+        @media (max-width: 992px) {
+            .tech-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 480px) {
+            .tech-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+            .tech-item {
+                padding: 16px 12px;
+            }
+            .tech-item .icon {
+                font-size: 2rem;
+            }
+        }
+
+        /* ================================================================
+           CTA
+           ================================================================ */
+        .cta-section {
+            text-align: center;
+            padding: 80px 20px;
+            background: radial-gradient(ellipse at center, rgba(79, 125, 247, 0.06) 0%, transparent 70%);
+            border-top: 1px solid var(--border-subtle);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .cta-section h2 {
+            font-size: clamp(28px, 4vw, 44px);
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
+            margin-bottom: 16px;
+        }
+        .cta-section h2 .highlight {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .cta-section p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 560px;
+            margin: 0 auto 32px;
+            line-height: 1.7;
+        }
+
+        /* ================================================================
+           FOOTER
+           ================================================================ */
+        .site-footer {
+            padding: 40px 20px 20px;
+            border-top: 1px solid var(--border-subtle);
+        }
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 40px;
+        }
+        .footer-brand {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #8BB4FA, #4F7DF7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: inline-block;
+        }
+        .footer-desc {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            line-height: 1.7;
+            max-width: 300px;
+        }
+        .footer-social {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .footer-social a {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            border: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-tertiary);
+            transition: all var(--transition-base);
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .footer-social a:hover {
+            border-color: var(--border-hover);
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.03);
+            transform: translateY(-2px);
+        }
+
+        .footer-col-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+        .footer-link {
+            display: block;
+            font-size: 13px;
+            color: var(--text-tertiary);
+            text-decoration: none;
+            padding: 4px 0;
+            transition: color var(--transition-base);
+            cursor: pointer;
+            background: none;
+            border: none;
+            text-align: left;
+            font-family: var(--font-family);
+        }
+        .footer-link:hover {
+            color: var(--text-primary);
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 30px auto 0;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-subtle);
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-tertiary);
+            opacity: 0.6;
+        }
+
+        @media (max-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            .footer-desc {
+                max-width: 100%;
+            }
+        }
+
+        /* ================================================================
+           REDUCED MOTION
+           ================================================================ */
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            .reveal,
+            .reveal-left,
+            .reveal-right,
+            .reveal-scale,
+            .stagger>* {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+            .hero-bg .grid,
+            .hero-bg .orb,
+            .particle,
+            .scroll-indicator,
+            .floating-ui::before {
+                animation: none !important;
+            }
+            .glass-card:hover {
+                transform: none !important;
+            }
+        }
+    </style>
 </head>
 <body>
 
-    <!-- Existing Navbar -->
-    <nav class="navbar" id="navbar">
-        <div class="nav-container">
-            <a href="index.html" class="logo">
-                <span class="logo-icon">⚡</span>
-                <span class="logo-text">ZETA<span class="logo-highlight">TOOLS</span></span>
-            </a>
-            <ul class="nav-links" id="navLinks">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="tools.html">Tools</a></li>
-                <li><a href="about.html" class="active">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-            <div class="nav-actions">
-                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-                    <i class="fas fa-moon"></i>
-                </button>
-                <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-            </div>
+    <!-- ================================================================
+    NAVBAR
+    ================================================================ -->
+    <nav class="top-nav">
+        <a href="/" class="nav-brand">
+            <span class="nav-brand-text">ZETA TOOLS</span>
+        </a>
+        <div class="nav-actions">
+            <a href="/" class="nav-btn nav-desktop-only">Home</a>
+            <a href="/about.html" class="nav-btn nav-desktop-only active">About</a>
+            <a href="/about.html#features" class="nav-btn nav-desktop-only">Features</a>
+            <a href="/" class="nav-btn-primary nav-desktop-only">Get Started</a>
+            <a href="/" class="nav-btn-primary nav-mobile-login" style="padding:4px 12px;font-size:12px;">Home</a>
+            <button class="nav-hamburger" onclick="toggleSidebar()" aria-label="Toggle Menu">☰</button>
         </div>
     </nav>
 
-    <!-- ============================================ -->
-    <!-- HERO SECTION -->
-    <!-- ============================================ -->
-    <section class="zeta-about-hero" id="zetaAboutHero">
-        <canvas class="zeta-about-hero-canvas" id="heroCanvas"></canvas>
-        <div class="zeta-about-hero-grid"></div>
-        <div class="zeta-about-hero-blobs">
-            <div class="zeta-about-blob zeta-about-blob-1"></div>
-            <div class="zeta-about-blob zeta-about-blob-2"></div>
-            <div class="zeta-about-blob zeta-about-blob-3"></div>
-        </div>
-        <div class="zeta-about-hero-content">
-            <div class="zeta-about-hero-badge" data-anim="fade-down">
-                <span class="zeta-about-badge-dot"></span>
-                About Our Platform
+    <!-- ================================================================
+    MOBILE SIDEBAR
+    ================================================================ -->
+    <div class="sb-overlay" id="sbOverlay" onclick="toggleSidebar()"></div>
+    <aside class="sidebar" id="sidebar">
+        <div class="sb-head">
+            <div class="sb-head-logo">
+                <div class="sb-head-icon"><i class="fa-solid fa-bolt"></i></div>
+                <div>
+                    <div class="sb-head-name">ZETA <span>TOOLS</span></div>
+                    <div style="font-size:10px;color:var(--text-tertiary);margin-top:2px;">About</div>
+                </div>
             </div>
-            <h1 class="zeta-about-hero-title" data-anim="fade-up">
-                <span class="zeta-about-hero-title-line">ZETA TOOLS</span>
-                <span class="zeta-about-hero-title-line zeta-about-gradient-text">ABOUT</span>
-            </h1>
-            <p class="zeta-about-hero-subtitle" data-anim="fade-up" data-delay="200">
+        </div>
+        <nav class="sb-nav">
+            <a href="/" class="sb-nav-item"><i class="fa-solid fa-house"></i> Home</a>
+            <a href="/about.html" class="sb-nav-item" style="color:var(--text-primary)"><i class="fa-solid fa-circle-info" style="color:var(--accent-blue)"></i> About</a>
+            <a href="/about.html#features" class="sb-nav-item"><i class="fa-solid fa-star"></i> Features</a>
+            <a href="/about.html#tech" class="sb-nav-item"><i class="fa-solid fa-microchip"></i> Technology</a>
+            <div class="sb-nav-divider"></div>
+            <a href="/" class="sb-nav-item"><i class="fa-solid fa-arrow-right-to-bracket"></i> Get Started</a>
+        </nav>
+        <div class="sb-profile">
+            <div class="sb-profile-inner">
+                <div class="sb-profile-avatar">
+                    <img src="https://ui-avatars.com/api/?name=ZETA&background=4F7DF7&color=fff&size=64&bold=true" alt="ZETA" />
+                </div>
+                <div>
+                    <div class="sb-profile-name">ZETA Tools</div>
+                    <div class="sb-profile-status">v2.0 · Premium</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ================================================================
+    HERO
+    ================================================================ -->
+    <section class="hero" id="hero">
+        <div class="hero-bg">
+            <div class="grid"></div>
+            <div class="orb"></div>
+            <div class="orb"></div>
+            <div class="hero-particles">
+                <span class="particle"></span>
+                <span class="particle"></span>
+                <span class="particle"></span>
+                <span class="particle"></span>
+                <span class="particle"></span>
+                <span class="particle"></span>
+                <span class="particle"></span>
+                <span class="particle"></span>
+            </div>
+        </div>
+
+        <div class="hero-content">
+            <span class="section-badge" style="margin:0 auto 20px;"><i class="fa-solid fa-bolt"></i> ZETA TOOLS</span>
+            <h1>ZETA TOOLS ABOUT</h1>
+            <p class="subtitle">
                 Powerful Tools. Smarter Solutions. Built for the Future.
             </p>
-            <div class="zeta-about-hero-buttons" data-anim="fade-up" data-delay="400">
-                <a href="tools.html" class="btn btn-primary zeta-about-btn-primary">
-                    <span>Explore ZETA TOOLS</span>
-                    <i class="fas fa-arrow-right"></i>
-                </a>
-                <a href="contact.html" class="btn btn-outline zeta-about-btn-outline">
-                    <span>Contact Us</span>
-                </a>
+            <div class="hero-buttons">
+                <a href="#who-we-are" class="btn-primary"><i class="fa-solid fa-compass"></i> Explore ZETA TOOLS</a>
+                <a href="#cta" class="btn-secondary"><i class="fa-regular fa-message"></i> Contact Us</a>
             </div>
         </div>
-        <div class="zeta-about-scroll-indicator" data-anim="fade-up" data-delay="600">
-            <div class="zeta-about-scroll-mouse">
-                <div class="zeta-about-scroll-wheel"></div>
-            </div>
-            <span>Scroll to explore</span>
+
+        <div class="scroll-indicator" onclick="document.getElementById('who-we-are').scrollIntoView({behavior:'smooth'})">
+            <span>Scroll</span>
+            <div class="mouse"></div>
         </div>
     </section>
 
-    <!-- ============================================ -->
-    <!-- WHO WE ARE -->
-    <!-- ============================================ -->
-    <section class="zeta-about-section zeta-about-whoweare" id="zetaWhoWeAre">
-        <div class="zeta-about-container">
-            <div class="zeta-about-whoweare-grid">
-                <div class="zeta-about-whoweare-text" data-anim="fade-right">
-                    <div class="zeta-about-section-label">Who We Are</div>
-                    <h2 class="zeta-about-section-title">
-                        A Modern Platform for <span class="zeta-about-gradient-text">Digital Tools</span>
+    <!-- ================================================================
+    WHO WE ARE
+    ================================================================ -->
+    <section id="who-we-are" class="section-padding">
+        <div class="container">
+            <div class="grid-2">
+                <div class="text-content reveal-left">
+                    <span class="section-badge"><i class="fa-solid fa-users"></i> Who We Are</span>
+                    <h2 class="section-title">
+                        We Are <span class="highlight">ZETA TOOLS</span>
                     </h2>
-                    <p class="zeta-about-text">
-                        ZETA TOOLS is a platform dedicated to providing useful, modern, and accessible digital tools — all in one place. We believe that powerful tools should not be complicated or hard to find.
+                    <p>
+                        <strong>ZETA TOOLS</strong> is a modern digital platform dedicated to providing
+                        <strong>useful, accessible, and powerful</strong> tools for everyday digital needs.
                     </p>
-                    <p class="zeta-about-text">
-                        Our focus is on creating clean, efficient, and reliable tools that solve real digital needs. Whether you are a developer, designer, student, or professional — ZETA TOOLS is built to help you get things done, faster and smarter.
+                    <p>
+                        We believe that great tools should make complex tasks simple. From creative workflows
+                        to technical problem-solving, we bring together a curated suite of utilities designed
+                        to <strong>enhance productivity</strong> and <strong>unlock potential</strong>.
                     </p>
-                    <div class="zeta-about-whoweare-features">
-                        <div class="zeta-about-whoweare-feature">
-                            <div class="zeta-about-whoweare-feature-icon">
-                                <i class="fas fa-bolt"></i>
-                            </div>
-                            <div>
-                                <strong>Fast & Efficient</strong>
-                                <span>Tools that work instantly</span>
-                            </div>
-                        </div>
-                        <div class="zeta-about-whoweare-feature">
-                            <div class="zeta-about-whoweare-feature-icon">
-                                <i class="fas fa-shield-halved"></i>
-                            </div>
-                            <div>
-                                <strong>Privacy Respected</strong>
-                                <span>No unnecessary data collection</span>
-                            </div>
-                        </div>
-                        <div class="zeta-about-whoweare-feature">
-                            <div class="zeta-about-whoweare-feature-icon">
-                                <i class="fas fa-mobile-screen"></i>
-                            </div>
-                            <div>
-                                <strong>Works Everywhere</strong>
-                                <span>Responsive across all devices</span>
-                            </div>
-                        </div>
-                    </div>
+                    <p>
+                        Our commitment is to innovation, quality, and a seamless user experience across
+                        all devices.
+                    </p>
+                    <a href="#features" class="btn-primary" style="margin-top:16px;"><i class="fa-solid fa-arrow-right"></i> Discover Our Tools</a>
                 </div>
-                <div class="zeta-about-whoweare-visual" data-anim="fade-left">
-                    <div class="zeta-about-visual-card">
-                        <div class="zeta-about-visual-glow"></div>
-                        <div class="zeta-about-visual-inner">
-                            <div class="zeta-about-visual-header">
-                                <div class="zeta-about-visual-dots">
-                                    <span></span><span></span><span></span>
-                                </div>
-                                <span class="zeta-about-visual-title">ZETA TOOLS</span>
-                            </div>
-                            <div class="zeta-about-visual-body">
-                                <div class="zeta-about-visual-tool" style="--delay: 0s;">
-                                    <i class="fas fa-file-code"></i>
-                                    <span>Formatter</span>
-                                </div>
-                                <div class="zeta-about-visual-tool" style="--delay: 0.1s;">
-                                    <i class="fas fa-palette"></i>
-                                    <span>Color Picker</span>
-                                </div>
-                                <div class="zeta-about-visual-tool" style="--delay: 0.2s;">
-                                    <i class="fas fa-font"></i>
-                                    <span>Text Tools</span>
-                                </div>
-                                <div class="zeta-about-visual-tool" style="--delay: 0.3s;">
-                                    <i class="fas fa-calculator"></i>
-                                    <span>Calculator</span>
-                                </div>
-                                <div class="zeta-about-visual-tool" style="--delay: 0.4s;">
-                                    <i class="fas fa-qrcode"></i>
-                                    <span>QR Generator</span>
-                                </div>
-                                <div class="zeta-about-visual-tool" style="--delay: 0.5s;">
-                                    <i class="fas fa-image"></i>
-                                    <span>Image Tools</span>
-                                </div>
-                            </div>
-                            <div class="zeta-about-visual-footer">
-                                <div class="zeta-about-visual-status">
-                                    <span class="zeta-about-visual-status-dot"></span>
-                                    All Systems Operational
-                                </div>
-                            </div>
+                <div class="reveal-right">
+                    <div class="floating-ui">
+                        <div class="row">
+                            <span class="dot"></span>
+                            <span class="label">ZETA Engine</span>
+                            <div class="bar"><div class="fill long"></div></div>
+                            <span style="font-size:11px;color:var(--text-tertiary);">Active</span>
                         </div>
-                        <div class="zeta-about-visual-float zeta-about-visual-float-1">
-                            <i class="fas fa-check-circle"></i>
+                        <div class="row">
+                            <span class="dot green"></span>
+                            <span class="label">Data Sync</span>
+                            <div class="bar"><div class="fill"></div></div>
                         </div>
-                        <div class="zeta-about-visual-float zeta-about-visual-float-2">
-                            <i class="fas fa-star"></i>
+                        <div class="row">
+                            <span class="dot purple"></span>
+                            <span class="label">AI Core</span>
+                            <div class="bar"><div class="fill short"></div></div>
                         </div>
-                        <div class="zeta-about-visual-float zeta-about-visual-float-3">
-                            <i class="fas fa-zap"></i>
+                        <div class="row">
+                            <span class="dot"></span>
+                            <span class="label">Security</span>
+                            <div class="bar"><div class="fill long"></div></div>
+                            <span style="font-size:11px;color:var(--status-success);"><i class="fa-solid fa-shield-halved"></i> Encrypted</span>
                         </div>
                     </div>
                 </div>
@@ -184,670 +1604,321 @@
         </div>
     </section>
 
-    <!-- ============================================ -->
-    <!-- BUILT TO MAKE THINGS SIMPLER -->
-    <!-- ============================================ -->
-    <section class="zeta-about-section zeta-about-simpler">
-        <div class="zeta-about-container">
-            <div class="zeta-about-simpler-content" data-anim="fade-up">
-                <div class="zeta-about-section-label">About ZETA TOOLS</div>
-                <h2 class="zeta-about-section-title">
-                    Built to Make Things <span class="zeta-about-gradient-text">Simpler</span>
-                </h2>
-                <p class="zeta-about-text zeta-about-text-lg">
-                    The digital world is full of fragmented tools — each one requiring sign-ups, downloads, or complicated setups. ZETA TOOLS changes that by bringing useful digital tools together in one modern, clean platform.
-                </p>
-                <p class="zeta-about-text zeta-about-text-lg">
-                    No clutter. No unnecessary steps. Just open a tool, use it, and get your work done. That is the core idea behind everything we build.
-                </p>
+    <!-- ================================================================
+    MISSION & VISION
+    ================================================================ -->
+    <section class="section-padding" style="padding-top:0;">
+        <div class="container">
+            <div style="text-align:center;margin-bottom:48px;">
+                <span class="section-badge"><i class="fa-regular fa-compass"></i> Our Direction</span>
+                <h2 class="section-title">Mission &amp; <span class="highlight">Vision</span></h2>
             </div>
-            <div class="zeta-about-simpler-cards">
-                <div class="zeta-about-simpler-card" data-anim="fade-up" data-delay="0">
-                    <div class="zeta-about-simpler-card-icon">
-                        <i class="fas fa-globe"></i>
-                    </div>
-                    <h3>Browser-Based</h3>
-                    <p>Use any tool directly in your browser. No downloads or installations needed.</p>
+            <div class="mv-grid">
+                <div class="glass-card reveal">
+                    <span class="icon"><i class="fa-solid fa-rocket"></i></span>
+                    <h3>Our Mission</h3>
+                    <p>
+                        To make powerful digital tools <span>simple</span> and <span>accessible</span>
+                        for everyone. We focus on usability, performance, and creating
+                        technology that genuinely improves how people work and create.
+                    </p>
                 </div>
-                <div class="zeta-about-simpler-card" data-anim="fade-up" data-delay="100">
-                    <div class="zeta-about-simpler-card-icon">
-                        <i class="fas fa-layer-group"></i>
-                    </div>
-                    <h3>One Platform</h3>
-                    <p>Multiple tools gathered in a single place, organized and easy to navigate.</p>
-                </div>
-                <div class="zeta-about-simpler-card" data-anim="fade-up" data-delay="200">
-                    <div class="zeta-about-simpler-card-icon">
-                        <i class="fas fa-wand-magic-sparkles"></i>
-                    </div>
-                    <h3>Zero Friction</h3>
-                    <p>No sign-ups, no paywalls, no unnecessary steps between you and the tool.</p>
+                <div class="glass-card reveal" style="transition-delay:0.15s;">
+                    <span class="icon"><i class="fa-solid fa-eye"></i></span>
+                    <h3>Our Vision</h3>
+                    <p>
+                        To be the leading platform for <span>future-ready</span> digital solutions.
+                        We envision a world where intelligent tools break down barriers,
+                        empowering users to achieve more with less friction.
+                    </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ============================================ -->
-    <!-- MISSION & VISION -->
-    <!-- ============================================ -->
-    <section class="zeta-about-section zeta-about-mission-vision">
-        <div class="zeta-about-container">
-            <div class="zeta-about-mv-header" data-anim="fade-up">
-                <div class="zeta-about-section-label">Our Purpose</div>
-                <h2 class="zeta-about-section-title">Mission & Vision</h2>
+    <!-- ================================================================
+    WHY ZETA TOOLS (6 Features)
+    ================================================================ -->
+    <section id="features" class="section-padding" style="padding-top:0;">
+        <div class="container">
+            <div style="text-align:center;margin-bottom:48px;">
+                <span class="section-badge"><i class="fa-solid fa-star"></i> Why Choose Us</span>
+                <h2 class="section-title">Why <span class="highlight">ZETA TOOLS</span>?</h2>
+                <p class="section-subtitle" style="margin:0 auto;">Built with precision, designed for you.</p>
             </div>
-            <div class="zeta-about-mv-grid">
-                <div class="zeta-about-mv-card" data-anim="fade-right">
-                    <div class="zeta-about-mv-card-glow"></div>
-                    <div class="zeta-about-mv-card-inner">
-                        <div class="zeta-about-mv-icon">
-                            <i class="fas fa-compass"></i>
-                        </div>
-                        <h3>Our Mission</h3>
-                        <p>To provide simple, accessible, and powerful digital tools that help people work more efficiently — without complexity, without barriers, and without compromise on quality.</p>
-                        <ul class="zeta-about-mv-list">
-                            <li><i class="fas fa-check"></i> Simplicity in every tool</li>
-                            <li><i class="fas fa-check"></i> Accessible to everyone</li>
-                            <li><i class="fas fa-check"></i> Better productivity</li>
-                            <li><i class="fas fa-check"></i> Modern technology</li>
-                        </ul>
-                    </div>
+            <div class="features-grid stagger">
+                <div class="glass-card">
+                    <span class="icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+                    <h4>Powerful Tools</h4>
+                    <p>Useful tools designed for everyday digital needs.</p>
                 </div>
-                <div class="zeta-about-mv-card" data-anim="fade-left">
-                    <div class="zeta-about-mv-card-glow"></div>
-                    <div class="zeta-about-mv-card-inner">
-                        <div class="zeta-about-mv-icon">
-                            <i class="fas fa-eye"></i>
-                        </div>
-                        <h3>Our Vision</h3>
-                        <p>To become a go-to platform for useful digital tools — where anyone can find the right tool for their task, built with modern standards and designed for the future.</p>
-                        <ul class="zeta-about-mv-list">
-                            <li><i class="fas fa-check"></i> Future-ready tools</li>
-                            <li><i class="fas fa-check"></i> Smarter experiences</li>
-                            <li><i class="fas fa-check"></i> Continuous innovation</li>
-                            <li><i class="fas fa-check"></i> Easy access to technology</li>
-                        </ul>
-                    </div>
+                <div class="glass-card">
+                    <span class="icon"><i class="fa-regular fa-face-smile"></i></span>
+                    <h4>Simple Experience</h4>
+                    <p>Clean, intuitive, and easy-to-use interfaces.</p>
+                </div>
+                <div class="glass-card">
+                    <span class="icon"><i class="fa-solid fa-microchip"></i></span>
+                    <h4>Modern Technology</h4>
+                    <p>Built with cutting-edge web technologies.</p>
+                </div>
+                <div class="glass-card">
+                    <span class="icon"><i class="fa-solid fa-gauge-high"></i></span>
+                    <h4>Fast &amp; Responsive</h4>
+                    <p>Optimized for speed and all device types.</p>
+                </div>
+                <div class="glass-card">
+                    <span class="icon"><i class="fa-solid fa-shield-halved"></i></span>
+                    <h4>Privacy Focused</h4>
+                    <p>Respecting user privacy without unnecessary data collection.</p>
+                </div>
+                <div class="glass-card">
+                    <span class="icon"><i class="fa-solid fa-arrows-rotate"></i></span>
+                    <h4>Always Improving</h4>
+                    <p>Continuously evolving our platform and tools.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ============================================ -->
-    <!-- WHY CHOOSE ZETA TOOLS -->
-    <!-- ============================================ -->
-    <section class="zeta-about-section zeta-about-why">
-        <div class="zeta-about-container">
-            <div class="zeta-about-why-header" data-anim="fade-up">
-                <div class="zeta-about-section-label">Advantages</div>
-                <h2 class="zeta-about-section-title">Why Choose <span class="zeta-about-gradient-text">ZETA TOOLS</span>?</h2>
+    <!-- ================================================================
+    HOW IT WORKS
+    ================================================================ -->
+    <section class="section-padding" style="padding-top:0;">
+        <div class="container">
+            <div style="text-align:center;margin-bottom:48px;">
+                <span class="section-badge"><i class="fa-solid fa-route"></i> How It Works</span>
+                <h2 class="section-title">Three Steps to <span class="highlight">Success</span></h2>
             </div>
-            <div class="zeta-about-why-grid">
-                <div class="zeta-about-why-card" data-anim="fade-up" data-delay="0">
-                    <div class="zeta-about-why-card-glow"></div>
-                    <div class="zeta-about-why-card-border"></div>
-                    <div class="zeta-about-why-card-inner">
-                        <div class="zeta-about-why-icon">
-                            <i class="fas fa-screwdriver-wrench"></i>
-                        </div>
-                        <h3>Powerful Tools</h3>
-                        <p>Useful tools designed for everyday digital needs.</p>
+            <div class="steps-wrapper">
+                <div class="steps-grid">
+                    <div class="step-card reveal">
+                        <div class="num">01</div>
+                        <h4>Explore</h4>
+                        <p>Discover the wide range of tools available on ZETA TOOLS.</p>
                     </div>
-                </div>
-                <div class="zeta-about-why-card" data-anim="fade-up" data-delay="80">
-                    <div class="zeta-about-why-card-glow"></div>
-                    <div class="zeta-about-why-card-border"></div>
-                    <div class="zeta-about-why-card-inner">
-                        <div class="zeta-about-why-icon">
-                            <i class="fas fa-hand-pointer"></i>
-                        </div>
-                        <h3>Simple Experience</h3>
-                        <p>Clean and easy-to-use interfaces.</p>
+                    <div class="step-card reveal" style="transition-delay:0.15s;">
+                        <div class="num">02</div>
+                        <h4>Choose</h4>
+                        <p>Select the perfect tool that fits your specific needs.</p>
                     </div>
-                </div>
-                <div class="zeta-about-why-card" data-anim="fade-up" data-delay="160">
-                    <div class="zeta-about-why-card-glow"></div>
-                    <div class="zeta-about-why-card-border"></div>
-                    <div class="zeta-about-why-card-inner">
-                        <div class="zeta-about-why-icon">
-                            <i class="fas fa-microchip"></i>
-                        </div>
-                        <h3>Modern Technology</h3>
-                        <p>Built with modern web technologies.</p>
-                    </div>
-                </div>
-                <div class="zeta-about-why-card" data-anim="fade-up" data-delay="240">
-                    <div class="zeta-about-why-card-glow"></div>
-                    <div class="zeta-about-why-card-border"></div>
-                    <div class="zeta-about-why-card-inner">
-                        <div class="zeta-about-why-icon">
-                            <i class="fas fa-gauge-high"></i>
-                        </div>
-                        <h3>Fast & Responsive</h3>
-                        <p>Optimized for speed and different devices.</p>
-                    </div>
-                </div>
-                <div class="zeta-about-why-card" data-anim="fade-up" data-delay="320">
-                    <div class="zeta-about-why-card-glow"></div>
-                    <div class="zeta-about-why-card-border"></div>
-                    <div class="zeta-about-why-card-inner">
-                        <div class="zeta-about-why-icon">
-                            <i class="fas fa-lock"></i>
-                        </div>
-                        <h3>Privacy Focused</h3>
-                        <p>Respect user privacy and avoid unnecessary data collection.</p>
-                    </div>
-                </div>
-                <div class="zeta-about-why-card" data-anim="fade-up" data-delay="400">
-                    <div class="zeta-about-why-card-glow"></div>
-                    <div class="zeta-about-why-card-border"></div>
-                    <div class="zeta-about-why-card-inner">
-                        <div class="zeta-about-why-icon">
-                            <i class="fas fa-arrow-trend-up"></i>
-                        </div>
-                        <h3>Always Improving</h3>
-                        <p>Continuously improve the platform and its tools.</p>
+                    <div class="step-card reveal" style="transition-delay:0.3s;">
+                        <div class="num">03</div>
+                        <h4>Get Things Done</h4>
+                        <p>Use the tool and complete your tasks efficiently.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ============================================ -->
-    <!-- HIGHLIGHTS -->
-    <!-- ============================================ -->
-    <section class="zeta-about-section zeta-about-highlights">
-        <div class="zeta-about-container">
-            <div class="zeta-about-highlights-header" data-anim="fade-up">
-                <div class="zeta-about-section-label">Highlights</div>
-                <h2 class="zeta-about-section-title">What Makes Us <span class="zeta-about-gradient-text">Stand Out</span></h2>
+    <!-- ================================================================
+    TECHNOLOGY STACK
+    ================================================================ -->
+    <section id="tech" class="section-padding" style="padding-top:0;">
+        <div class="container">
+            <div style="text-align:center;margin-bottom:48px;">
+                <span class="section-badge"><i class="fa-solid fa-code"></i> Built With</span>
+                <h2 class="section-title">Modern <span class="highlight">Technology</span></h2>
+                <p class="section-subtitle" style="margin:0 auto;">Powered by industry-leading tools and frameworks.</p>
             </div>
-            <div class="zeta-about-highlights-grid">
-                <div class="zeta-about-highlight-card" data-anim="scale-in" data-delay="0">
-                    <div class="zeta-about-highlight-number">01</div>
-                    <div class="zeta-about-highlight-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
-                    <h3>Modern Tools</h3>
-                    <p>Tools designed with current standards and best practices in mind.</p>
+            <div class="tech-grid reveal-scale">
+                <div class="tech-item">
+                    <span class="icon"><i class="fa-brands fa-html5"></i></span>
+                    <div class="name">HTML5</div>
+                    <div class="desc">Semantic &amp; Accessible</div>
                 </div>
-                <div class="zeta-about-highlight-card" data-anim="scale-in" data-delay="100">
-                    <div class="zeta-about-highlight-number">02</div>
-                    <div class="zeta-about-highlight-icon"><i class="fas fa-rocket"></i></div>
-                    <h3>Fast Performance</h3>
-                    <p>Optimized to deliver results quickly, without unnecessary loading.</p>
+                <div class="tech-item">
+                    <span class="icon"><i class="fa-brands fa-css3-alt"></i></span>
+                    <div class="name">CSS3</div>
+                    <div class="desc">Modern &amp; Responsive</div>
                 </div>
-                <div class="zeta-about-highlight-card" data-anim="scale-in" data-delay="200">
-                    <div class="zeta-about-highlight-number">03</div>
-                    <div class="zeta-about-highlight-icon"><i class="fas fa-arrows-left-right-to-line"></i></div>
-                    <h3>Responsive Design</h3>
-                    <p>Every tool adapts to your screen, from desktop to mobile.</p>
+                <div class="tech-item">
+                    <span class="icon"><i class="fa-brands fa-js"></i></span>
+                    <div class="name">JavaScript</div>
+                    <div class="desc">ES6+ &amp; Interactive</div>
                 </div>
-                <div class="zeta-about-highlight-card" data-anim="scale-in" data-delay="300">
-                    <div class="zeta-about-highlight-number">04</div>
-                    <div class="zeta-about-highlight-icon"><i class="fas fa-face-smile"></i></div>
-                    <h3>User Friendly</h3>
-                    <p>Intuitive interfaces that require no learning curve.</p>
-                </div>
-                <div class="zeta-about-highlight-card" data-anim="scale-in" data-delay="400">
-                    <div class="zeta-about-highlight-number">05</div>
-                    <div class="zeta-about-highlight-icon"><i class="fas fa-shield-halved"></i></div>
-                    <h3>Secure Experience</h3>
-                    <p>Built with security considerations to protect user data.</p>
-                </div>
-                <div class="zeta-about-highlight-card" data-anim="scale-in" data-delay="500">
-                    <div class="zeta-about-highlight-number">06</div>
-                    <div class="zeta-about-highlight-icon"><i class="fas fa-laptop-mobile"></i></div>
-                    <h3>Cross Device</h3>
-                    <p>Works seamlessly across different devices and browsers.</p>
+                <div class="tech-item">
+                    <span class="icon"><i class="fa-solid fa-cloud"></i></span>
+                    <div class="name">Cloud Native</div>
+                    <div class="desc">Scalable &amp; Secure</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ============================================ -->
-    <!-- VALUES / HIGHLIGHTS STRIP -->
-    <!-- ============================================ -->
-    <section class="zeta-about-section zeta-about-values">
-        <div class="zeta-about-container">
-            <div class="zeta-about-values-grid">
-                <div class="zeta-about-value-card" data-anim="fade-up" data-delay="0">
-                    <div class="zeta-about-value-icon"><i class="fas fa-code"></i></div>
-                    <h3>Modern Web Tools</h3>
-                    <p>Curated collection of tools for the modern web</p>
-                </div>
-                <div class="zeta-about-value-card" data-anim="fade-up" data-delay="100">
-                    <div class="zeta-about-value-icon"><i class="fas fa-display"></i></div>
-                    <h3>Responsive Experience</h3>
-                    <p>Consistent quality across every screen size</p>
-                </div>
-                <div class="zeta-about-value-card" data-anim="fade-up" data-delay="200">
-                    <div class="zeta-about-value-icon"><i class="fas fa-users"></i></div>
-                    <h3>User Focused</h3>
-                    <p>Every decision starts with the user in mind</p>
-                </div>
-                <div class="zeta-about-value-card" data-anim="fade-up" data-delay="300">
-                    <div class="zeta-about-value-icon"><i class="fas fa-forward"></i></div>
-                    <h3>Built for the Future</h3>
-                    <p>Designed to evolve with the digital landscape</p>
-                </div>
-            </div>
-        </div>
+    <!-- ================================================================
+    CTA
+    ================================================================ -->
+    <section id="cta" class="cta-section reveal">
+        <h2>Ready to Explore <span class="highlight">ZETA TOOLS</span>?</h2>
+        <p>Discover powerful tools designed to make your digital experience simpler and smarter.</p>
+        <a href="/" class="btn-primary"><i class="fa-solid fa-arrow-right"></i> Explore Tools</a>
     </section>
 
-    <!-- ============================================ -->
-    <!-- HOW IT WORKS -->
-    <!-- ============================================ -->
-    <section class="zeta-about-section zeta-about-how">
-        <div class="zeta-about-container">
-            <div class="zeta-about-how-header" data-anim="fade-up">
-                <div class="zeta-about-section-label">How It Works</div>
-                <h2 class="zeta-about-section-title">Three Simple <span class="zeta-about-gradient-text">Steps</span></h2>
-            </div>
-            <div class="zeta-about-how-timeline">
-                <div class="zeta-about-how-line"></div>
-                <div class="zeta-about-how-step" data-anim="fade-up" data-delay="0">
-                    <div class="zeta-about-step-number">01</div>
-                    <div class="zeta-about-step-connector"></div>
-                    <div class="zeta-about-step-card">
-                        <div class="zeta-about-step-icon"><i class="fas fa-magnifying-glass"></i></div>
-                        <h3>Explore</h3>
-                        <p>Discover the tools available on ZETA TOOLS. Browse through categories and find what you need.</p>
-                    </div>
-                </div>
-                <div class="zeta-about-how-step" data-anim="fade-up" data-delay="200">
-                    <div class="zeta-about-step-number">02</div>
-                    <div class="zeta-about-step-connector"></div>
-                    <div class="zeta-about-step-card">
-                        <div class="zeta-about-step-icon"><i class="fas fa-hand-pointer"></i></div>
-                        <h3>Choose</h3>
-                        <p>Select the tool that fits your needs. Each tool is designed for a specific purpose.</p>
-                    </div>
-                </div>
-                <div class="zeta-about-how-step" data-anim="fade-up" data-delay="400">
-                    <div class="zeta-about-step-number">03</div>
-                    <div class="zeta-about-step-connector"></div>
-                    <div class="zeta-about-step-card">
-                        <div class="zeta-about-step-icon"><i class="fas fa-circle-check"></i></div>
-                        <h3>Get Things Done</h3>
-                        <p>Use the tool and complete your task efficiently. No unnecessary steps, no friction.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============================================ -->
-    <!-- TECHNOLOGY -->
-    <!-- ============================================ -->
-    <section class="zeta-about-section zeta-about-tech">
-        <div class="zeta-about-container">
-            <div class="zeta-about-tech-header" data-anim="fade-up">
-                <div class="zeta-about-section-label">Technology</div>
-                <h2 class="zeta-about-section-title">Built With <span class="zeta-about-gradient-text">Modern Technology</span></h2>
-            </div>
-            <div class="zeta-about-tech-visual" data-anim="fade-up" data-delay="100">
-                <div class="zeta-about-code-window">
-                    <div class="zeta-about-code-header">
-                        <div class="zeta-about-code-dots">
-                            <span class="zeta-about-code-dot zeta-about-code-dot-red"></span>
-                            <span class="zeta-about-code-dot zeta-about-code-dot-yellow"></span>
-                            <span class="zeta-about-code-dot zeta-about-code-dot-green"></span>
-                        </div>
-                        <span class="zeta-about-code-filename">zeta-tools.config</span>
-                    </div>
-                    <div class="zeta-about-code-body">
-                        <div class="zeta-about-code-line" style="--line-delay: 0s;"><span class="zeta-about-code-keyword">const</span> <span class="zeta-about-code-var">zetaTools</span> = {</div>
-                        <div class="zeta-about-code-line" style="--line-delay: 0.08s;">  <span class="zeta-about-code-key">frontend</span>: <span class="zeta-about-code-string">"HTML5, CSS3, JavaScript"</span>,</div>
-                        <div class="zeta-about-code-line" style="--line-delay: 0.16s;">  <span class="zeta-about-code-key">styling</span>: <span class="zeta-about-code-string">"Custom CSS + Responsive"</span>,</div>
-                        <div class="zeta-about-code-line" style="--line-delay: 0.24s;">  <span class="zeta-about-code-key">icons</span>: <span class="zeta-about-code-string">"Font Awesome"</span>,</div>
-                        <div class="zeta-about-code-line" style="--line-delay: 0.32s;">  <span class="zeta-about-code-key">fonts</span>: <span class="zeta-about-code-string">"Inter, Space Grotesk"</span>,</div>
-                        <div class="zeta-about-code-line" style="--line-delay: 0.40s;">  <span class="zeta-about-code-key">hosting</span>: <span class="zeta-about-code-string">"Vercel"</span>,</div>
-                        <div class="zeta-about-code-line" style="--line-delay: 0.48s;">  <span class="zeta-about-code-key">performance</span>: <span class="zeta-about-code-string">"Optimized"</span>,</div>
-                        <div class="zeta-about-code-line" style="--line-delay: 0.56s;">  <span class="zeta-about-code-key">approach</span>: <span class="zeta-about-code-string">"Modern & Clean"</span></div>
-                        <div class="zeta-about-code-line" style="--line-delay: 0.64s;">};</div>
-                    </div>
-                </div>
-                <div class="zeta-about-tech-tags">
-                    <div class="zeta-about-tech-tag" style="--tag-delay: 0s;">HTML5</div>
-                    <div class="zeta-about-tech-tag" style="--tag-delay: 0.1s;">CSS3</div>
-                    <div class="zeta-about-tech-tag" style="--tag-delay: 0.2s;">JavaScript</div>
-                    <div class="zeta-about-tech-tag" style="--tag-delay: 0.3s;">Responsive</div>
-                    <div class="zeta-about-tech-tag" style="--tag-delay: 0.4s;">Font Awesome</div>
-                    <div class="zeta-about-tech-tag" style="--tag-delay: 0.5s;">Vercel</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============================================ -->
-    <!-- CTA SECTION -->
-    <!-- ============================================ -->
-    <section class="zeta-about-section zeta-about-cta">
-        <div class="zeta-about-cta-bg">
-            <div class="zeta-about-cta-blob zeta-about-cta-blob-1"></div>
-            <div class="zeta-about-cta-blob zeta-about-cta-blob-2"></div>
-        </div>
-        <div class="zeta-about-container">
-            <div class="zeta-about-cta-content" data-anim="fade-up">
-                <h2 class="zeta-about-cta-title">Ready to Explore <span class="zeta-about-gradient-text">ZETA TOOLS</span>?</h2>
-                <p class="zeta-about-cta-subtitle">Discover powerful tools designed to make your digital experience simpler and smarter.</p>
-                <a href="tools.html" class="btn btn-primary zeta-about-btn-primary zeta-about-cta-btn">
-                    <span>Explore Tools</span>
-                    <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Existing Footer -->
-    <footer class="footer" id="footer">
-        <div class="footer-container">
+    <!-- ================================================================
+    FOOTER
+    ================================================================ -->
+    <footer class="site-footer">
+        <div class="container">
             <div class="footer-grid">
-                <div class="footer-brand">
-                    <a href="index.html" class="logo">
-                        <span class="logo-icon">⚡</span>
-                        <span class="logo-text">ZETA<span class="logo-highlight">TOOLS</span></span>
-                    </a>
-                    <p class="footer-description">Powerful digital tools designed for the modern web. Simple, fast, and accessible to everyone.</p>
+                <div>
+                    <span class="footer-brand">ZETA TOOLS</span>
+                    <p class="footer-desc">Premium digital tools platform. Curated, secure, and built for the future.</p>
                     <div class="footer-social">
-                        <a href="#" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
-                        <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
-                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="#" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="#" aria-label="Discord"><i class="fa-brands fa-discord"></i></a>
                     </div>
                 </div>
-                <div class="footer-links">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="tools.html">Tools</a></li>
-                        <li><a href="about.html">About</a></li>
-                        <li><a href="contact.html">Contact</a></li>
-                    </ul>
+                <div>
+                    <div class="footer-col-title">Quick Links</div>
+                    <a href="/" class="footer-link">Home</a>
+                    <a href="/about.html" class="footer-link">About</a>
+                    <a href="/about.html#features" class="footer-link">Features</a>
+                    <a href="/about.html#tech" class="footer-link">Technology</a>
                 </div>
-                <div class="footer-links">
-                    <h4>Tools</h4>
-                    <ul>
-                        <li><a href="tools.html">All Tools</a></li>
-                        <li><a href="tools.html">Text Tools</a></li>
-                        <li><a href="tools.html">Image Tools</a></li>
-                        <li><a href="tools.html">Developer Tools</a></li>
-                    </ul>
-                </div>
-                <div class="footer-links">
-                    <h4>Support</h4>
-                    <ul>
-                        <li><a href="contact.html">Contact Us</a></li>
-                        <li><a href="#">FAQ</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                    </ul>
+                <div>
+                    <div class="footer-col-title">Support</div>
+                    <a href="/" class="footer-link">Contact</a>
+                    <a href="/" class="footer-link">Privacy Policy</a>
+                    <a href="/" class="footer-link">Terms of Service</a>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 ZETA TOOLS. All rights reserved.</p>
+                &copy; 2026 ZETA TOOLS &middot; Sri Lanka &middot; All rights reserved.
             </div>
         </div>
     </footer>
 
-    <!-- About Page Script -->
+    <!-- ================================================================
+    JAVASCRIPT
+    ================================================================ -->
     <script>
-    (function() {
-        'use strict';
+        (function() {
+            'use strict';
 
-        /* =========================================
-           REDUCED MOTION CHECK
-        ========================================= */
-        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            // --- 1. SIDEBAR TOGGLE ---
+            const hamburger = document.querySelector('.nav-hamburger');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sbOverlay');
 
-        /* =========================================
-           HERO PARTICLE CANVAS
-        ========================================= */
-        const canvas = document.getElementById('heroCanvas');
-        if (canvas) {
-            const ctx = canvas.getContext('2d');
-            let particles = [];
-            let animFrameId;
-            let canvasW, canvasH;
+            window.toggleSidebar = function() {
+                if (!sidebar || !overlay) return;
+                const isOpen = sidebar.classList.contains('open');
+                sidebar.classList.toggle('open', !isOpen);
+                overlay.classList.toggle('active', !isOpen);
+                document.body.style.overflow = isOpen ? '' : 'hidden';
+            };
 
-            function resizeCanvas() {
-                const hero = document.getElementById('zetaAboutHero');
-                canvasW = canvas.width = hero.offsetWidth;
-                canvasH = canvas.height = hero.offsetHeight;
-            }
-
-            function createParticles() {
-                particles = [];
-                const count = Math.min(Math.floor((canvasW * canvasH) / 18000), 80);
-                for (let i = 0; i < count; i++) {
-                    particles.push({
-                        x: Math.random() * canvasW,
-                        y: Math.random() * canvasH,
-                        r: Math.random() * 1.5 + 0.5,
-                        vx: (Math.random() - 0.5) * 0.3,
-                        vy: (Math.random() - 0.5) * 0.3,
-                        alpha: Math.random() * 0.5 + 0.1
-                    });
-                }
-            }
-
-            function drawParticles() {
-                ctx.clearRect(0, 0, canvasW, canvasH);
-                for (let i = 0; i < particles.length; i++) {
-                    const p = particles[i];
-                    p.x += p.vx;
-                    p.y += p.vy;
-                    if (p.x < 0) p.x = canvasW;
-                    if (p.x > canvasW) p.x = 0;
-                    if (p.y < 0) p.y = canvasH;
-                    if (p.y > canvasH) p.y = 0;
-
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                    ctx.fillStyle = 'rgba(0, 163, 255, ' + p.alpha + ')';
-                    ctx.fill();
-
-                    /* Draw connections */
-                    for (let j = i + 1; j < particles.length; j++) {
-                        const p2 = particles[j];
-                        const dx = p.x - p2.x;
-                        const dy = p.y - p2.y;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
-                        if (dist < 120) {
-                            ctx.beginPath();
-                            ctx.moveTo(p.x, p.y);
-                            ctx.lineTo(p2.x, p2.y);
-                            ctx.strokeStyle = 'rgba(0, 163, 255, ' + (0.08 * (1 - dist / 120)) + ')';
-                            ctx.lineWidth = 0.5;
-                            ctx.stroke();
-                        }
-                    }
-                }
-                if (!prefersReducedMotion) {
-                    animFrameId = requestAnimationFrame(drawParticles);
-                }
-            }
-
-            resizeCanvas();
-            createParticles();
-            if (!prefersReducedMotion) {
-                drawParticles();
-            } else {
-                /* Draw once for static state */
-                drawParticles();
-            }
-
-            let resizeTimer;
+            // Close sidebar on window resize to desktop
             window.addEventListener('resize', function() {
-                clearTimeout(resizeTimer);
-                resizeTimer = setTimeout(function() {
-                    resizeCanvas();
-                    createParticles();
-                }, 200);
-            });
-        }
-
-        /* =========================================
-           SCROLL REVEAL (IntersectionObserver)
-        ========================================= */
-        const animElements = document.querySelectorAll('[data-anim]');
-        if (animElements.length && !prefersReducedMotion) {
-            const observer = new IntersectionObserver(function(entries) {
-                entries.forEach(function(entry) {
-                    if (entry.isIntersecting) {
-                        const el = entry.target;
-                        const delay = parseInt(el.getAttribute('data-delay') || '0', 10);
-                        setTimeout(function() {
-                            el.classList.add('zeta-about-visible');
-                        }, delay);
-                        observer.unobserve(el);
-                    }
-                });
-            }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
-            animElements.forEach(function(el) {
-                observer.observe(el);
-            });
-        } else if (prefersReducedMotion) {
-            /* Show everything immediately */
-            animElements.forEach(function(el) {
-                el.classList.add('zeta-about-visible');
-            });
-        }
-
-        /* =========================================
-           PARALLAX ON HERO
-        ========================================= */
-        if (!prefersReducedMotion) {
-            const heroContent = document.querySelector('.zeta-about-hero-content');
-            const heroBlobs = document.querySelector('.zeta-about-hero-blobs');
-            window.addEventListener('scroll', function() {
-                const scrollY = window.scrollY;
-                const heroH = document.getElementById('zetaAboutHero').offsetHeight;
-                if (scrollY < heroH) {
-                    const ratio = scrollY / heroH;
-                    if (heroContent) {
-                        heroContent.style.transform = 'translateY(' + (scrollY * 0.3) + 'px)';
-                        heroContent.style.opacity = 1 - ratio * 1.2;
-                    }
-                    if (heroBlobs) {
-                        heroBlobs.style.transform = 'translateY(' + (scrollY * 0.15) + 'px)';
-                    }
-                }
-            }, { passive: true });
-        }
-
-        /* =========================================
-           FLOATING VISUAL ELEMENTS ANIMATION
-        ========================================= */
-        if (!prefersReducedMotion) {
-            const floats = document.querySelectorAll('.zeta-about-visual-float');
-            floats.forEach(function(f, i) {
-                const duration = 3 + i * 0.5;
-                const delay = i * 0.7;
-                f.style.animation = 'zetaAboutFloat ' + duration + 's ease-in-out ' + delay + 's infinite';
-            });
-        }
-
-        /* =========================================
-           VISUAL TOOL CARDS ANIMATION
-        ========================================= */
-        if (!prefersReducedMotion) {
-            const toolCards = document.querySelectorAll('.zeta-about-visual-tool');
-            toolCards.forEach(function(card) {
-                const delay = parseFloat(card.style.getPropertyValue('--delay')) || 0;
-                card.style.animation = 'zetaAboutToolPulse 3s ease-in-out ' + delay + 's infinite';
-            });
-        }
-
-        /* =========================================
-           GLOWING BORDER ANIMATION (Why Cards)
-        ========================================= */
-        if (!prefersReducedMotion) {
-            const whyCards = document.querySelectorAll('.zeta-about-why-card');
-            whyCards.forEach(function(card, i) {
-                const border = card.querySelector('.zeta-about-why-card-border');
-                if (border) {
-                    border.style.animationDelay = (i * 0.5) + 's';
+                if (window.innerWidth >= 768) {
+                    if (sidebar) sidebar.classList.remove('open');
+                    if (overlay) overlay.classList.remove('active');
+                    document.body.style.overflow = '';
                 }
             });
-        }
 
-        /* =========================================
-           TECH CODE LINES ANIMATION
-        ========================================= */
-        if (!prefersReducedMotion) {
-            const codeLines = document.querySelectorAll('.zeta-about-code-line');
-            const codeObserver = new IntersectionObserver(function(entries) {
-                entries.forEach(function(entry) {
-                    if (entry.isIntersecting) {
-                        const lines = entry.target.querySelectorAll('.zeta-about-code-line');
-                        lines.forEach(function(line) {
-                            const delay = parseFloat(line.style.getPropertyValue('--line-delay')) || 0;
-                            setTimeout(function() {
-                                line.classList.add('zeta-about-code-visible');
-                            }, delay * 1000);
-                        });
-                        codeObserver.unobserve(entry.target);
+            // Close on escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    if (sidebar && sidebar.classList.contains('open')) {
+                        sidebar.classList.remove('open');
+                        overlay.classList.remove('active');
+                        document.body.style.overflow = '';
                     }
-                });
-            }, { threshold: 0.3 });
-
-            const codeBody = document.querySelector('.zeta-about-code-body');
-            if (codeBody) codeObserver.observe(codeBody);
-        } else {
-            document.querySelectorAll('.zeta-about-code-line').forEach(function(line) {
-                line.classList.add('zeta-about-code-visible');
+                }
             });
-        }
 
-        /* =========================================
-           TECH TAGS STAGGER
-        ========================================= */
-        if (!prefersReducedMotion) {
-            const tags = document.querySelectorAll('.zeta-about-tech-tag');
-            const tagObserver = new IntersectionObserver(function(entries) {
-                entries.forEach(function(entry) {
-                    if (entry.isIntersecting) {
-                        tags.forEach(function(tag) {
-                            const delay = parseFloat(tag.style.getPropertyValue('--tag-delay')) || 0;
-                            setTimeout(function() {
-                                tag.classList.add('zeta-about-tag-visible');
-                            }, delay * 1000 + 500);
-                        });
-                        tagObserver.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.3 });
+            // --- 2. SCROLL REVEAL (Intersection Observer) ---
+            const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .stagger');
 
-            const tagContainer = document.querySelector('.zeta-about-tech-tags');
-            if (tagContainer) tagObserver.observe(tagContainer);
-        } else {
-            document.querySelectorAll('.zeta-about-tech-tag').forEach(function(tag) {
-                tag.classList.add('zeta-about-tag-visible');
-            });
-        }
-
-        /* =========================================
-           HOW IT WORKS — TIMELINE LINE ANIMATION
-        ========================================= */
-        if (!prefersReducedMotion) {
-            const timelineLine = document.querySelector('.zeta-about-how-line');
-            if (timelineLine) {
-                const lineObserver = new IntersectionObserver(function(entries) {
-                    entries.forEach(function(entry) {
+            if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
                         if (entry.isIntersecting) {
-                            timelineLine.classList.add('zeta-about-line-active');
-                            lineObserver.unobserve(entry.target);
+                            if (entry.target.classList.contains('stagger')) {
+                                entry.target.classList.add('visible');
+                            } else {
+                                entry.target.classList.add('visible');
+                            }
+                            // Optionally unobserve after reveal to save resources
+                            // observer.unobserve(entry.target);
                         }
                     });
-                }, { threshold: 0.2 });
-                lineObserver.observe(timelineLine);
-            }
-        } else {
-            const tl = document.querySelector('.zeta-about-how-line');
-            if (tl) tl.classList.add('zeta-about-line-active');
-        }
+                }, {
+                    threshold: 0.12,
+                    rootMargin: '0px 0px -40px 0px'
+                });
 
-    })();
+                revealElements.forEach(el => observer.observe(el));
+            } else {
+                // Fallback: show everything immediately
+                revealElements.forEach(el => {
+                    if (el.classList.contains('stagger')) {
+                        el.classList.add('visible');
+                    } else {
+                        el.classList.add('visible');
+                    }
+                });
+            }
+
+            // --- 3. SMOOTH SCROLL for anchor links ---
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    const target = document.querySelector(targetId);
+                    if (target) {
+                        e.preventDefault();
+                        const navHeight = document.querySelector('.top-nav')?.offsetHeight || 60;
+                        const targetPosition = target.getBoundingClientRect().top + window.pageYOffset -
+                            navHeight - 20;
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                        // Close mobile sidebar if open
+                        if (sidebar && sidebar.classList.contains('open')) {
+                            sidebar.classList.remove('open');
+                            overlay.classList.remove('active');
+                            document.body.style.overflow = '';
+                        }
+                    }
+                });
+            });
+
+            // --- 4. HERO SCROLL INDICATOR ---
+            const indicator = document.querySelector('.scroll-indicator');
+            if (indicator) {
+                indicator.addEventListener('click', function() {
+                    const target = document.getElementById('who-we-are');
+                    if (target) {
+                        const navHeight = document.querySelector('.top-nav')?.offsetHeight || 60;
+                        const targetPosition = target.getBoundingClientRect().top + window.pageYOffset -
+                            navHeight - 20;
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            }
+
+            // --- 5. ACTIVE NAV LINK HIGHLIGHT ---
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('.nav-btn, .sb-nav-item').forEach(link => {
+                const href = link.getAttribute('href');
+                if (href === currentPath || (currentPath === '/' && href === '/')) {
+                    link.classList.add('active');
+                }
+            });
+
+            console.log('🚀 ZETA TOOLS ABOUT page loaded successfully.');
+            console.log('🌐 Fully responsive design enabled.');
+        })();
     </script>
 
 </body>
