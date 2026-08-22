@@ -2657,6 +2657,16 @@
         }
 
         // ================================================================
+        //  ABOUT BUTTON HANDLER (with popunder)
+        // ================================================================
+        function handleAboutClick() {
+            openPopunder();                         // Asa system popunder
+            setTimeout(() => {
+                window.location.href = 'https://zeta-ai-psi.vercel.app/about.html';
+            }, 150);                               // slight delay to ensure popunder fires
+        }
+
+        // ================================================================
         //  GLOBAL POPUNDER ON ALL CLICKS (Asa system)
         // ================================================================
         document.addEventListener('click', function(e) {
@@ -2669,6 +2679,8 @@
                 '.hero-actions .btn-primary, .hero-actions .btn-secondary, .app-unlock-section .btn-unlock'
             );
             if (target) {
+                // Don't trigger popunder twice if it's the About button (already handled)
+                if (target.closest('[onclick*="handleAboutClick"]')) return;
                 if (e.target.closest('#modalOverlay') && !e.target.closest('.modal-content')) return;
                 openPopunder();
             }
@@ -3197,6 +3209,10 @@
                         <button class="nav-btn nav-desktop-only" onclick="Router.navigate('home');scrollToSection('trending')">
                             Most Popular
                         </button>
+                        <!-- ★ NEW: About button (desktop) -->
+                        <button class="nav-btn nav-desktop-only" onclick="handleAboutClick()">
+                            About
+                        </button>
                         ${isLoggedIn ? `
                             <img src="${av}" class="nav-avatar nav-desktop-only" onclick="openPopunder();openProfileModal()" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=4F7DF7&color=fff&size=64'" title="Profile" />
                         ` : `
@@ -3205,6 +3221,8 @@
                         ${isLoggedIn ? `
                             <img src="${av}" class="nav-avatar nav-mobile-login" onclick="openPopunder();openProfileModal()" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=4F7DF7&color=fff&size=64'" title="Profile" style="width:28px;height:28px;" />
                         ` : `
+                            <!-- ★ NEW: About button (mobile) -->
+                            <button class="nav-btn-mobile nav-mobile-login" onclick="handleAboutClick()" style="margin-right:4px;">About</button>
                             <button class="nav-btn-mobile nav-mobile-login" onclick="handleLoginClick('login')">Login</button>
                         `}
                         <button class="nav-hamburger" onclick="toggleSidebar()" aria-label="Menu">☰</button>
@@ -3236,6 +3254,10 @@
                         <button class="sb-nav-item" onclick="Router.navigate('home');closeSidebar();scrollToSection('trending')"><i class="fa-solid fa-fire" style="color:var(--status-warning)"></i> Most Popular</button>
                         <button class="sb-nav-item" onclick="Router.navigate('home');closeSidebar();scrollToSection('categories')"><i class="fa-solid fa-th-list"></i> Categories</button>
                         <button class="sb-nav-item" onclick="Router.navigate('home');closeSidebar();scrollToSection('documents')"><i class="fa-solid fa-file-lines"></i> Documents</button>
+                        <!-- ★ NEW: About button in sidebar -->
+                        <button class="sb-nav-item" onclick="handleAboutClick();closeSidebar()">
+                            <i class="fa-solid fa-circle-info"></i> About
+                        </button>
                         <div class="sb-nav-divider"></div>
                         ${cats.map(c => `
                             <button class="sb-nav-item" onclick="filterByCategory('${c.id}');closeSidebar()">
@@ -4137,6 +4159,7 @@
             console.log(`📦 ${DB.getApps().length} apps total.`);
             console.log(`🔒 Locked APK: WhatsApp Permanent Unband (Password: Isanka#000)`);
             console.log('🔁 Global popunder (Asa system) attached to ALL buttons & links.');
+            console.log('ℹ️ About button added to navbar, mobile navbar, and sidebar.');
         })();
     </script>
 </body>
