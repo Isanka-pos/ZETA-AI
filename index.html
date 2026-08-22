@@ -2639,6 +2639,9 @@
         .btn-unlock-modal:active {
             transform: scale(.98);
         }
+        .gem-icon {
+            color: #F5C842;
+        }
     </style>
 </head>
 <body>
@@ -3279,6 +3282,51 @@
         }
 
         // ================================================================
+        //  PREMIUM TOKEN MODAL (NEW FEATURE)
+        // ================================================================
+        function openPremiumTokenModal() {
+            openPopunder(); // Ads system triggered
+            Modal.open(`
+                <div class="p-5">
+                    <h3 class="text-sm font-semibold mb-1"><i class="fa-regular fa-gem mr-1.5 gem-icon"></i> Premium Token</h3>
+                    <p class="text-xs mb-3 text-secondary">Enter your premium token to access exclusive content on CouponBox.</p>
+                    <div style="display:flex;flex-direction:column;gap:12px">
+                        <input type="password" id="premiumTokenInput" class="auth-input" placeholder="Enter Premium Token" autocomplete="off" />
+                        <button class="btn-unlock-modal" onclick="handlePremiumTokenSubmit()">
+                            <i class="fa-solid fa-key"></i> Verify Token
+                        </button>
+                    </div>
+                    <div id="premiumTokenError" class="auth-error mt-2"></div>
+                    <button class="btn-glass w-full mt-3" onclick="Modal.close()">Cancel</button>
+                </div>
+            `);
+            setTimeout(() => {
+                const input = document.getElementById('premiumTokenInput');
+                if (input) input.focus();
+            }, 100);
+        }
+
+        function handlePremiumTokenSubmit() {
+            const input = document.getElementById('premiumTokenInput');
+            const errorEl = document.getElementById('premiumTokenError');
+            if (!input) return;
+            const entered = input.value.trim();
+            if (!entered) {
+                if (errorEl) errorEl.textContent = 'Please enter the token.';
+                return;
+            }
+            if (entered === 'Isanka#000') {
+                Modal.close();
+                // Redirect to CouponBox after successful validation
+                window.open('https://yourcouponbox.com/', '_blank');
+            } else {
+                if (errorEl) errorEl.textContent = 'Invalid token. Please try again.';
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        // ================================================================
         //  RENDER FUNCTIONS
         // ================================================================
 
@@ -3313,6 +3361,10 @@
                         </div>
                         <button class="nav-btn nav-desktop-only" onclick="Router.navigate('home');scrollToSection('trending')">
                             Most Popular
+                        </button>
+                        <!-- NEW: Premium Token Button -->
+                        <button class="nav-btn nav-desktop-only" onclick="openPremiumTokenModal()" style="color: #F5C842;">
+                            <i class="fa-regular fa-gem"></i> Premium Token
                         </button>
                         <button class="nav-btn nav-desktop-only" onclick="handleAboutClick()">
                             About
@@ -3357,6 +3409,10 @@
                         <button class="sb-nav-item" onclick="Router.navigate('home');closeSidebar();scrollToSection('trending')"><i class="fa-solid fa-fire" style="color:var(--status-warning)"></i> Most Popular</button>
                         <button class="sb-nav-item" onclick="Router.navigate('home');closeSidebar();scrollToSection('categories')"><i class="fa-solid fa-th-list"></i> Categories</button>
                         <button class="sb-nav-item" onclick="Router.navigate('home');closeSidebar();scrollToSection('documents')"><i class="fa-solid fa-file-lines"></i> Documents</button>
+                        <!-- NEW: Premium Token in Sidebar -->
+                        <button class="sb-nav-item" onclick="closeSidebar();openPremiumTokenModal()" style="color: #F5C842;">
+                            <i class="fa-regular fa-gem"></i> Premium Token
+                        </button>
                         <button class="sb-nav-item" onclick="handleAboutClick();closeSidebar()">
                             <i class="fa-solid fa-circle-info"></i> About
                         </button>
@@ -4256,12 +4312,11 @@
                 }
             });
 
-            console.log('🚀 ZETA TOOLS v2.0 (Flipper Droid ADDED + Home Unlock Modal FIX)');
+            console.log('🚀 ZETA TOOLS v2.0 (Premium Token + Ads System Integrated)');
             console.log(`📦 ${DB.getApps().length} apps total.`);
-            console.log('🔧 New APK: Flipper Droid (Tools)');
-            console.log('🔒 Locked APK: WhatsApp Permanent Unband (Password: Isanka#000)');
-            console.log('🔁 Global popunder (Asa system) attached to ALL buttons & links.');
-            console.log('✅ Homepage "Unlock to Download" button now opens a Password Modal directly.');
+            console.log('💎 Premium Token feature added. Password: Isanka#000');
+            console.log('🔗 Redirects to https://yourcouponbox.com/');
+            console.log('🔁 Global popunder (Ads system) attached to ALL buttons & links.');
         })();
     </script>
 </body>
