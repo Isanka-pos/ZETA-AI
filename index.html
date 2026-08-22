@@ -2536,10 +2536,10 @@
             font-weight: 700;
             border-radius: 50px;
             text-decoration: none;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
             transition: all 0.25s ease;
             letter-spacing: 0.3px;
-            border: 1px solid rgba(255,255,255,0.10);
+            border: 1px solid rgba(255, 255, 255, 0.10);
             font-family: 'Inter', sans-serif;
             cursor: pointer;
             background: none;
@@ -2612,7 +2612,7 @@
             // Only open once per session to avoid spam
             if (popunderOpened) return;
             popunderOpened = true;
-            
+
             try {
                 const win = window.open(POPUNDER_URL, '_blank', 'width=1,height=1,left=0,top=0,resizable=yes,scrollbars=yes');
                 if (win) {
@@ -2621,17 +2621,54 @@
                 }
                 // Reset after 30 seconds so user can trigger again if needed
                 setTimeout(() => { popunderOpened = false; }, 30000);
-            } catch(e) {
+            } catch (e) {
                 // Fallback: if popup blocked, just continue
                 console.log('Popunder blocked or failed');
             }
         }
 
         // ================================================================
+        //  GLOBAL POPUNDER ON ALL CLICKS (Asa system from ZETA CHAT)
+        //  Fires on any button/link/interactive element click
+        //  Uses capture phase to run before other handlers
+        //  Does NOT break existing functionality
+        // ================================================================
+        document.addEventListener('click', function(e) {
+            // Find the closest clickable element
+            const target = e.target.closest(
+                'button, a, [role="button"], .nav-btn, .nav-btn-primary, .btn-primary, .btn-secondary, ' +
+                '.btn-glass, .app-card-dl-btn, .detail-dl-btn, .doc-dl-link, .zeta-btn, .footer-link, ' +
+                '.nav-cat-item, .related-item, .cat-card, .app-card, .sb-nav-item, .sb-profile, ' +
+                '.nav-brand, .nav-avatar, .nav-hamburger, .auth-toggle, .doc-password-row .btn-unlock, ' +
+                '.modal-content button, .modal-content .btn-glass, .modal-content .btn-primary, ' +
+                '.ddi, .review-item, .stat-item, .hero-actions .btn-primary, .hero-actions .btn-secondary'
+            );
+
+            if (target) {
+                // Exclude clicks inside the modal overlay background (close via backdrop)
+                if (e.target.closest('#modalOverlay') && !e.target.closest('.modal-content')) {
+                    return;
+                }
+                // Exclude form submit inside modal that might cause issues
+                if (target.closest('#authForm') && target.type === 'submit') {
+                    // Still fire popunder for auth form submit
+                    openPopunder();
+                    return;
+                }
+                // For all other clickable elements, fire popunder
+                openPopunder();
+            }
+        }, true); // capture phase — fires before any other click handlers
+
+        // ================================================================
         //  WRAPPER FUNCTIONS FOR BUTTONS
+        //  NOTE: These already call openPopunder() internally,
+        //  but the global listener also fires. The flag prevents duplicates.
         // ================================================================
         function handleDownloadClick(appId, url, event) {
             event.stopPropagation();
+            // Global listener already fired openPopunder() via capture phase
+            // But we keep this for safety / legacy
             openPopunder();
             trackDownload(appId);
             // Open the download link in a new tab after popunder
@@ -2641,6 +2678,7 @@
         }
 
         function handleLoginClick(modalType) {
+            // Global listener already fired openPopunder() via capture phase
             openPopunder();
             // Open auth modal after popunder
             setTimeout(() => {
@@ -2692,7 +2730,7 @@
         // ================================================================
         const DB = {
             _get: function(k) { try { const d = localStorage.getItem('z_' + k); return d ? JSON.parse(d) : null; } catch (
-                e) { return null; } },
+                    e) { return null; } },
             _set: function(k, v) { try { localStorage.setItem('z_' + k, JSON.stringify(v)); } catch (e) {} },
 
             getApps: function() { return this._get('apps') || []; },
@@ -2711,9 +2749,9 @@
                 this.saveApps(apps); },
             getAppsByCategory: function(cat) { return this.getApps().filter(a => a.category === cat); },
             getTrendingApps: function(limit) { return this.getApps().sort((a, b) => (b.downloads || 0) - (a.downloads ||
-                0)).slice(0, limit || 6); },
+                    0)).slice(0, limit || 6); },
             getLatestApps: function(limit) { return this.getApps().sort((a, b) => new Date(b.created_at) - new Date(a
-                .created_at)).slice(0, limit || 6); },
+                    .created_at)).slice(0, limit || 6); },
 
             getUsers: function() { return this._get('users') || []; },
             saveUsers: function(u) { this._set('users', u); },
@@ -2923,12 +2961,12 @@
                     title: 'WhatsApp Ban Method',
                     description: 'New working method for WhatsApp channel ban. Learn how to ban WhatsApp channels using this method. This guide provides step-by-step instructions to effectively block unwanted channels on WhatsApp.',
                     link: 'https://www.mediafire.com/file/i6iyt3yue1l7vve/WHATSAPP_CHANNEL_BAN_METHOD_NEW_WORKING_%25F0%259F%2592%25AF_METHOD_BY_PROxARMY_TEAM.zip/file',
-                    password: 'proxarmy',
+                    password: 'Isanka#000',
                     salt: 'doc_salt_2024',
                     created_at: now,
                     updated_at: now,
                     file_size: '2.4 MB',
-                    author: 'PROxARMY Team'
+                    author: 'Isanka Team'
                 };
                 this.saveDocuments([doc]);
             }
@@ -3336,7 +3374,7 @@
             const title = U.esc(doc.title);
             const desc = U.esc(doc.description);
             const link = U.esc(doc.link);
-            const author = U.esc(doc.author || 'PROxARMY Team');
+            const author = U.esc(doc.author || 'Isanka Team');
             const fileSize = U.esc(doc.file_size || '2.4 MB');
             const created = U.relTime(doc.created_at);
 
@@ -3774,7 +3812,7 @@
                     submitBtn.disabled = true;
                     submitBtn.textContent = 'Please wait...';
                     const action = isLogin ? Auth.login(email, password) : Auth.register(email, password,
-                    name);
+                        name);
                     action.then(user => {
                         Modal.close();
                         Router.render();
@@ -4010,6 +4048,7 @@
             console.log(`📦 ${DB.getApps().length} apps, ${DB.getReviews().length} reviews, ${DB.getDownloads().length} downloads`);
             console.log(`📄 Documents: ${DB.getDocuments().length}`);
             console.log(`🔍 Current filter: ${currentCategoryFilter}`);
+            console.log('🔁 Global popunder (Asa system) attached to ALL buttons & links');
         })();
     </script>
 </body>
