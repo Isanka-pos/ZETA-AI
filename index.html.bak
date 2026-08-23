@@ -1,0 +1,4206 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>ZETA TOOLS — Premium APK Downloads</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <script>
+        tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] } } } }
+    </script>
+    <style>
+        /* ============================================================
+           ROOT VARIABLES
+           ============================================================ */
+        :root {
+            --bg-base: #04060C;
+            --bg-surface: #080B14;
+            --bg-elevated: #0C1020;
+            --bg-overlay: #101528;
+            --bg-card: rgba(12, 16, 32, 0.75);
+            --border-subtle: rgba(255, 255, 255, 0.045);
+            --border-default: rgba(255, 255, 255, 0.07);
+            --border-hover: rgba(255, 255, 255, 0.12);
+            --text-primary: #F1F2F6;
+            --text-secondary: #7C829D;
+            --text-tertiary: #474D6A;
+            --accent-blue: #4F7DF7;
+            --accent-blue-soft: rgba(79, 125, 247, 0.12);
+            --accent-cyan: #2DD4E8;
+            --accent-violet: #7C5CFC;
+            --accent-violet-soft: rgba(124, 92, 252, 0.10);
+            --status-success: #22C990;
+            --status-error: #F0564A;
+            --status-warning: #F5A623;
+            --radius-sm: 10px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+            --radius-xl: 24px;
+            --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.2);
+            --shadow-elevated: 0 2px 6px rgba(0, 0, 0, 0.4), 0 16px 40px rgba(0, 0, 0, 0.3);
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-smooth: 400ms cubic-bezier(0.16, 1, 0.3, 1);
+            --gold: #F59E0B;
+            --gold-light: #FBBF24;
+            --gold-dark: #D97706;
+        }
+
+        /* ============================================================
+           RESET & BASE
+           ============================================================ */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg-base);
+            color: var(--text-primary);
+            overflow: hidden;
+            height: 100dvh;
+            -webkit-font-smoothing: antialiased;
+        }
+        ::selection {
+            background: rgba(79, 125, 247, 0.25);
+            color: var(--text-primary);
+        }
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+        #app-scroll::-webkit-scrollbar {
+            width: 3px;
+        }
+        #app-scroll::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        /* ============================================================
+           NAVBAR
+           ============================================================ */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 0 18px;
+            gap: 12px;
+            background: rgba(4, 6, 12, 0.82);
+            backdrop-filter: blur(20px) saturate(1.2);
+            -webkit-backdrop-filter: blur(20px) saturate(1.2);
+            border-bottom: 1px solid var(--border-subtle);
+            z-index: 50;
+        }
+        .top-nav::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 5%, rgba(79, 125, 247, 0.2) 35%, rgba(124, 92, 252, 0.12) 65%, transparent 95%);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            flex-shrink: 0;
+            cursor: pointer;
+            gap: 0;
+            padding: 4px 0;
+        }
+        .nav-brand-text {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.4px;
+            line-height: 1;
+            background: linear-gradient(135deg, #8BB4FA 0%, #4F7DF7 40%, #8B7DF8 80%, #6B9BFA 100%);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: brandShift 8s ease-in-out infinite;
+            white-space: nowrap;
+        }
+        @keyframes brandShift {
+            0%,
+            100% {
+                background-position: 0% 50%
+            }
+            50% {
+                background-position: 100% 50%
+            }
+        }
+        @media(max-width:480px) {
+            .nav-brand-text {
+                font-size: 16px;
+                letter-spacing: -0.2px;
+            }
+        }
+        @media(min-width:481px) and (max-width:767px) {
+            .nav-brand-text {
+                font-size: 18px;
+            }
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-shrink: 0;
+            margin-left: auto;
+        }
+
+        /* ============================================================
+           GOLDEN COLOR FOR ALL NAV & SIDEBAR ITEMS
+           ============================================================ */
+        .nav-btn,
+        .sb-nav-item,
+        .nav-cat-item,
+        .footer-link,
+        .nav-btn-mobile {
+            color: var(--gold) !important;
+            transition: color 0.2s ease;
+        }
+        .nav-btn:hover,
+        .sb-nav-item:hover,
+        .nav-cat-item:hover,
+        .footer-link:hover,
+        .nav-btn-mobile:hover {
+            color: var(--gold-light) !important;
+        }
+        .nav-btn:active,
+        .sb-nav-item:active {
+            color: var(--gold-dark) !important;
+        }
+        .nav-btn i,
+        .sb-nav-item i,
+        .nav-cat-item i,
+        .footer-link i,
+        .nav-btn-mobile i {
+            color: var(--gold) !important;
+        }
+        .nav-btn:hover i,
+        .sb-nav-item:hover i,
+        .nav-cat-item:hover i,
+        .footer-link:hover i,
+        .nav-btn-mobile:hover i {
+            color: var(--gold-light) !important;
+        }
+
+        .nav-btn-primary {
+            color: #fff !important;
+            background: linear-gradient(135deg, var(--accent-blue), #3B5FE0) !important;
+        }
+        .nav-btn-primary:hover {
+            background: linear-gradient(135deg, #5A8BF9, #4A6FF0) !important;
+        }
+        .nav-brand-text {
+            -webkit-text-fill-color: transparent !important;
+        }
+
+        /* ============================================================
+           SIDEBAR
+           ============================================================ */
+        .sidebar {
+            width: 280px;
+            min-width: 280px;
+            height: 100dvh;
+            background: rgba(8, 11, 20, 0.98);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-right: 1px solid var(--border-subtle);
+            display: flex;
+            flex-direction: column;
+            transition: transform var(--transition-smooth);
+            z-index: 45;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 6px 0 36px rgba(0, 0, 0, 0.5);
+        }
+        @media(min-width:768px) {
+            .sidebar {
+                display: none !important;
+            }
+            .sb-overlay {
+                display: none !important;
+            }
+        }
+        @media(max-width:767px) {
+            .sidebar {
+                position: fixed;
+                left: 0;
+                top: 0;
+                transform: translateX(-100%);
+                border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+                width: 280px;
+                min-width: 280px;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+        }
+        @media(max-width:480px) {
+            .sidebar {
+                width: 260px;
+                min-width: 260px;
+            }
+        }
+
+        .sb-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: 40;
+            backdrop-filter: blur(4px);
+            animation: fadeIn .2s ease;
+        }
+        .sb-overlay.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        .sb-head {
+            flex-shrink: 0;
+            padding: 16px 18px 12px;
+            padding-top: max(16px, env(safe-area-inset-top, 16px));
+            position: relative;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .sb-head-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .sb-head-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-violet));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 13px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 10px rgba(79, 125, 247, 0.2);
+        }
+        .sb-head-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1;
+            letter-spacing: -0.3px;
+        }
+        .sb-head-name span {
+            color: var(--text-tertiary);
+            font-weight: 500;
+        }
+        .sb-head-ver {
+            font-size: 10px;
+            color: var(--text-tertiary);
+            margin-top: 2px;
+        }
+
+        .sb-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 6px 8px 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+        .sb-nav::-webkit-scrollbar {
+            width: 3px;
+        }
+        .sb-nav::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .sb-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 11px 13px;
+            border-radius: 10px;
+            font-size: 13.5px;
+            font-weight: 500;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            width: 100%;
+            text-align: left;
+            font-family: 'Inter', sans-serif;
+            flex-shrink: 0;
+        }
+        .sb-nav-item:hover {
+            background: rgba(79, 125, 247, 0.06);
+        }
+
+        .sb-nav-divider {
+            height: 1px;
+            background: var(--border-subtle);
+            margin: 4px 8px;
+            flex-shrink: 0;
+        }
+
+        .sb-profile {
+            flex-shrink: 0;
+            margin: 6px 10px 14px;
+            padding: 11px 13px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid var(--border-subtle);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            position: relative;
+        }
+        .sb-profile:hover {
+            border-color: var(--border-hover);
+            background: rgba(255, 255, 255, 0.03);
+        }
+        .sb-profile-inner {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        .sb-profile-avatar {
+            position: relative;
+            flex-shrink: 0;
+        }
+        .sb-profile-avatar img {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            object-fit: cover;
+            border: 1.5px solid var(--border-subtle);
+            transition: border-color var(--transition-fast);
+        }
+        .sb-profile:hover .sb-profile-avatar img {
+            border-color: rgba(79, 125, 247, 0.25);
+        }
+        .sb-profile-dot {
+            position: absolute;
+            bottom: -1px;
+            right: -1px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--status-success);
+            border: 2px solid var(--bg-surface);
+            animation: pulseDot 2.5s ease-in-out infinite;
+        }
+        @keyframes pulseDot {
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(34, 201, 144, 0.35)
+            }
+            50% {
+                box-shadow: 0 0 0 4px rgba(34, 201, 144, 0)
+            }
+        }
+        .sb-profile-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+        .sb-profile-status {
+            font-size: 11px;
+            color: var(--status-success);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .sb-profile-status::before {
+            content: '';
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--status-success);
+        }
+        .sb-profile-ellipsis {
+            margin-left: auto;
+            color: var(--text-tertiary);
+            font-size: 12px;
+            transition: all var(--transition-base);
+        }
+        .sb-profile:hover .sb-profile-ellipsis {
+            color: var(--text-secondary);
+            transform: rotate(90deg);
+        }
+        .sb-dropdown {
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 8px;
+            background: var(--bg-elevated);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-md);
+            padding: 5px;
+            min-width: 160px;
+            box-shadow: var(--shadow-elevated);
+            animation: dropIn .15s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 50;
+        }
+        .sb-dropdown .ddi {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 8px 11px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--text-secondary);
+            transition: all var(--transition-fast);
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-family: 'Inter', sans-serif;
+        }
+        .sb-dropdown .ddi:hover {
+            background: rgba(79, 125, 247, 0.06);
+            color: var(--text-primary);
+        }
+        .sb-dropdown .ddv {
+            height: 1px;
+            background: var(--border-subtle);
+            margin: 3px 0;
+        }
+
+        /* ============================================================
+           MODAL
+           ============================================================ */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn .2s ease;
+            padding: 16px;
+        }
+        .modal-content {
+            background: var(--bg-elevated);
+            backdrop-filter: blur(24px);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-xl);
+            max-width: 720px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            animation: modalIn .3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: var(--shadow-elevated);
+        }
+        .modal-content::-webkit-scrollbar {
+            width: 3px;
+        }
+        .modal-content::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+        }
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(.94) translateY(16px)
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0)
+            }
+        }
+
+        /* ============================================================
+           BUTTONS & INPUTS
+           ============================================================ */
+        .btn-glass {
+            background: rgba(255, 255, 255, 0.025);
+            border: 1px solid var(--border-default);
+            color: var(--text-primary);
+            font-weight: 500;
+            padding: 9px 18px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 13px;
+            transition: all var(--transition-fast);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            font-family: 'Inter', sans-serif;
+        }
+        .btn-glass:hover {
+            border-color: var(--border-hover);
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 10px 22px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(135deg, var(--accent-blue), #3B5FE0);
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            box-shadow: 0 2px 14px rgba(79, 125, 247, 0.18);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent 60%);
+            opacity: 0;
+            transition: opacity var(--transition-base)
+        }
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 22px rgba(79, 125, 247, 0.28);
+        }
+        .btn-primary:hover::after {
+            opacity: 1;
+        }
+        .btn-primary:active {
+            transform: scale(.98);
+        }
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 10px 22px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            background: transparent;
+            border: 1px solid var(--border-default);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+        }
+        .btn-secondary:hover {
+            color: var(--text-primary);
+            border-color: var(--border-hover);
+            background: rgba(255, 255, 255, 0.025);
+            transform: translateY(-1px);
+        }
+        .auth-input {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-sm);
+            padding: 9px 12px;
+            width: 100%;
+            color: var(--text-primary);
+            font-size: 13px;
+            transition: border-color var(--transition-fast);
+            font-family: 'Inter', sans-serif;
+        }
+        .auth-input:focus {
+            border-color: var(--accent-blue);
+            outline: none;
+        }
+        .auth-input::placeholder {
+            color: var(--text-tertiary);
+        }
+        .auth-error {
+            color: var(--status-error);
+            font-size: 12px;
+            margin-top: 4px;
+            min-height: 18px;
+        }
+        .auth-success {
+            color: var(--status-success);
+            font-size: 12px;
+            margin-top: 4px;
+            min-height: 18px;
+        }
+        .auth-toggle {
+            color: var(--accent-blue);
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 13px;
+        }
+        .auth-toggle:hover {
+            text-decoration: underline;
+        }
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 14px 0;
+        }
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border-subtle);
+        }
+        .auth-divider span {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ============================================================
+           HERO
+           ============================================================ */
+        .hero-section {
+            position: relative;
+            padding: 80px 20px 44px;
+            text-align: center;
+            overflow: hidden;
+        }
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(79, 125, 247, 0.022) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(79, 125, 247, 0.022) 1px, transparent 1px);
+            background-size: 52px 52px;
+            mask-image: radial-gradient(ellipse 70% 55% at 50% 35%, rgba(0, 0, 0, 0.5) 10%, transparent 60%);
+            -webkit-mask-image: radial-gradient(ellipse 70% 55% at 50% 35%, rgba(0, 0, 0, 0.5) 10%, transparent 60%);
+            pointer-events: none;
+        }
+        .hero-glow {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            filter: blur(80px);
+            will-change: transform;
+        }
+        .hero-glow-1 {
+            top: -18%;
+            left: -8%;
+            width: 380px;
+            height: 380px;
+            background: radial-gradient(circle, rgba(79, 125, 247, 0.06), transparent 70%);
+            animation: hg1 22s ease-in-out infinite alternate;
+        }
+        .hero-glow-2 {
+            bottom: -22%;
+            right: -6%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(124, 92, 252, 0.04), transparent 70%);
+            animation: hg2 18s ease-in-out infinite alternate;
+        }
+        @keyframes hg1 {
+            0% {
+                transform: translate(0, 0) scale(1)
+            }
+            50% {
+                transform: translate(20px, 14px) scale(1.05)
+            }
+            100% {
+                transform: translate(-12px, -6px) scale(.96)
+            }
+        }
+        @keyframes hg2 {
+            0% {
+                transform: translate(0, 0) scale(1)
+            }
+            50% {
+                transform: translate(-16px, 10px) scale(1.06)
+            }
+            100% {
+                transform: translate(10px, -14px) scale(.95)
+            }
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 14px;
+            border-radius: 100px;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            background: rgba(79, 125, 247, 0.06);
+            border: 1px solid rgba(79, 125, 247, 0.1);
+            color: var(--accent-blue);
+            margin-bottom: 22px;
+        }
+        .hero-badge i {
+            font-size: 8px;
+        }
+        .hero-heading {
+            font-size: clamp(26px, 5.5vw, 48px);
+            font-weight: 800;
+            letter-spacing: -1.6px;
+            line-height: 1.08;
+            margin-bottom: 14px;
+            max-width: 520px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .hero-heading-accent {
+            background: linear-gradient(135deg, #7BA4FA 0%, #4F7DF7 35%, #7C5CFC 70%, #4F7DF7 100%);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: hs 7s ease-in-out infinite;
+        }
+        @keyframes hs {
+            0%,
+            100% {
+                background-position: 0% 50%
+            }
+            50% {
+                background-position: 100% 50%
+            }
+        }
+        .hero-desc {
+            font-size: clamp(13px, 1.8vw, 15px);
+            color: var(--text-secondary);
+            max-width: 400px;
+            margin: 0 auto 30px;
+            line-height: 1.7;
+            font-weight: 400;
+        }
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .hero-line {
+            width: 36px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
+            margin: 36px auto 0;
+            opacity: .3;
+        }
+        .hero-ring {
+            position: absolute;
+            border: 1px solid rgba(79, 125, 247, 0.035);
+            pointer-events: none;
+            border-radius: 50%;
+        }
+        .hero-ring-1 {
+            top: 12%;
+            right: 6%;
+            width: 90px;
+            height: 90px;
+            animation: rs 36s linear infinite;
+        }
+        @keyframes rs {
+            from {
+                transform: rotate(0)
+            }
+            to {
+                transform: rotate(360deg)
+            }
+        }
+
+        /* ============================================================
+           SECTIONS
+           ============================================================ */
+        .section-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: var(--accent-blue);
+            margin-bottom: 8px;
+        }
+        .section-eyebrow i {
+            font-size: 8px;
+        }
+        .section-heading {
+            font-size: clamp(18px, 3vw, 26px);
+            font-weight: 700;
+            letter-spacing: -0.7px;
+            margin-bottom: 5px;
+        }
+        .section-sub {
+            font-size: 13px;
+            color: var(--text-secondary);
+            max-width: 380px;
+            line-height: 1.7;
+            margin-bottom: 28px;
+        }
+
+        /* ============================================================
+           CATEGORIES
+           ============================================================ */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .cat-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 20px 16px;
+            text-align: center;
+            transition: all var(--transition-base);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .cat-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: var(--radius-lg);
+            padding: 1px;
+            background: linear-gradient(135deg, var(--cat-a, rgba(79, 125, 247, 0.1)), transparent 50%, var(--cat-b, rgba(124, 92, 252, 0.06)));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity var(--transition-base);
+        }
+        .cat-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--border-default);
+            box-shadow: var(--shadow-card);
+        }
+        .cat-card:hover::before {
+            opacity: 1;
+        }
+        .cat-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            margin: 0 auto 10px;
+            transition: transform var(--transition-base);
+        }
+        .cat-card:hover .cat-icon {
+            transform: scale(1.06) rotate(-2deg);
+        }
+        .cat-icon.blue {
+            background: var(--accent-blue-soft);
+            color: var(--accent-blue);
+        }
+        .cat-icon.cyan {
+            background: rgba(45, 212, 232, 0.08);
+            color: var(--accent-cyan);
+        }
+        .cat-icon.violet {
+            background: var(--accent-violet-soft);
+            color: var(--accent-violet);
+        }
+        .cat-icon.green {
+            background: rgba(34, 201, 144, 0.08);
+            color: var(--status-success);
+        }
+        .cat-icon.orange {
+            background: rgba(249, 115, 22, 0.08);
+            color: #FB923C;
+        }
+        .cat-icon.pink {
+            background: rgba(236, 72, 153, 0.08);
+            color: #F472B6;
+        }
+        .cat-card h3 {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        .cat-card .count {
+            font-size: 11px;
+            color: var(--text-tertiary);
+        }
+
+        /* ============================================================
+           APP CARDS
+           ============================================================ */
+        .app-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+        .app-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            padding: 18px;
+            transition: all var(--transition-base);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .app-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: var(--radius-xl);
+            padding: 1px;
+            background: linear-gradient(135deg, var(--card-a, rgba(79, 125, 247, 0.15)), transparent 50%, var(--card-b, rgba(124, 92, 252, 0.08)));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity var(--transition-base);
+        }
+        .app-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--border-default);
+            box-shadow: var(--shadow-card);
+        }
+        .app-card:hover::before {
+            opacity: 1;
+        }
+        .app-card-top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .app-card-icon {
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #fff;
+            transition: transform var(--transition-base);
+            position: relative;
+        }
+        .app-card:hover .app-card-icon {
+            transform: scale(1.04) rotate(-1deg);
+        }
+        .app-card-icon.violet {
+            background: linear-gradient(135deg, #7C5CFC, #6344E0);
+            box-shadow: 0 3px 12px rgba(124, 92, 252, 0.22);
+        }
+        .app-card-icon.blue {
+            background: linear-gradient(135deg, #4F7DF7, #3B5FE0);
+            box-shadow: 0 3px 12px rgba(79, 125, 247, 0.22);
+        }
+        .app-card-icon.red {
+            background: linear-gradient(135deg, #FF0033, #CC0000);
+            box-shadow: 0 3px 12px rgba(255, 0, 51, 0.22);
+        }
+        .app-card-icon.green {
+            background: linear-gradient(135deg, #22C990, #0ea56a);
+            box-shadow: 0 3px 12px rgba(34, 201, 144, 0.22);
+        }
+        .app-card-icon.cyan {
+            background: linear-gradient(135deg, #2DD4E8, #0ea5e9);
+            box-shadow: 0 3px 12px rgba(45, 212, 232, 0.22);
+        }
+        .app-card-icon.orange {
+            background: linear-gradient(135deg, #F97316, #EA580C);
+            box-shadow: 0 3px 12px rgba(249, 115, 22, 0.22);
+        }
+        .app-card-icon.purple {
+            background: linear-gradient(135deg, #A855F7, #7C3AED);
+            box-shadow: 0 3px 12px rgba(168, 85, 247, 0.22);
+        }
+        .app-card-icon .sp {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            font-size: 9px;
+            color: #F5C842;
+            filter: drop-shadow(0 0 4px rgba(245, 200, 66, 0.3));
+            animation: spk 2.8s ease-in-out infinite;
+        }
+        @keyframes spk {
+            0%,
+            100% {
+                transform: scale(1) rotate(0);
+                opacity: 1
+            }
+            50% {
+                transform: scale(1.2) rotate(12deg);
+                opacity: .7
+            }
+        }
+        .app-card-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .app-card-title {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: -0.2px;
+            line-height: 1.2;
+        }
+        .app-card-title.violet {
+            color: var(--accent-violet);
+        }
+        .app-card-title.blue {
+            color: var(--accent-blue);
+        }
+        .app-card-title.red {
+            color: #FF4D6D;
+        }
+        .app-card-title.green {
+            color: var(--status-success);
+        }
+        .app-card-title.cyan {
+            color: var(--accent-cyan);
+        }
+        .app-card-title.orange {
+            color: #FB923C;
+        }
+        .app-card-title.purple {
+            color: #C084FC;
+        }
+        .app-card-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 2px;
+            font-size: 11px;
+            color: var(--text-tertiary);
+        }
+        .app-card-meta span {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+        .app-card-meta i {
+            font-size: 9px;
+            color: var(--text-tertiary);
+        }
+        .app-card-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            padding: 2px 8px;
+            border-radius: 100px;
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+        .app-card-badge.violet {
+            background: var(--accent-violet-soft);
+            border: 1px solid rgba(124, 92, 252, 0.12);
+            color: var(--accent-violet);
+        }
+        .app-card-badge.blue {
+            background: var(--accent-blue-soft);
+            border: 1px solid rgba(79, 125, 247, 0.12);
+            color: var(--accent-blue);
+        }
+        .app-card-badge.red {
+            background: rgba(255, 0, 51, 0.10);
+            border: 1px solid rgba(255, 0, 51, 0.12);
+            color: #FF4D6D;
+        }
+        .app-card-badge.green {
+            background: rgba(34, 201, 144, 0.10);
+            border: 1px solid rgba(34, 201, 144, 0.12);
+            color: var(--status-success);
+        }
+        .app-card-badge.cyan {
+            background: rgba(45, 212, 232, 0.10);
+            border: 1px solid rgba(45, 212, 232, 0.12);
+            color: var(--accent-cyan);
+        }
+        .app-card-badge.orange {
+            background: rgba(249, 115, 22, 0.10);
+            border: 1px solid rgba(249, 115, 22, 0.12);
+            color: #FB923C;
+        }
+        .app-card-badge.purple {
+            background: rgba(168, 85, 247, 0.10);
+            border: 1px solid rgba(168, 85, 247, 0.12);
+            color: #C084FC;
+        }
+        .app-card-badge i {
+            font-size: 6px;
+            color: #F5C842;
+        }
+        .app-card-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .app-card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 4px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-subtle);
+        }
+        .app-card-stats {
+            display: flex;
+            gap: 12px;
+            font-size: 11px;
+            color: var(--text-tertiary);
+        }
+        .app-card-stats span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .app-card-stats i {
+            font-size: 10px;
+        }
+        .app-card-dl-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 600;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+        }
+        .app-card-dl-btn.violet {
+            background: linear-gradient(135deg, #7C5CFC, #6344E0);
+            box-shadow: 0 2px 10px rgba(124, 92, 252, 0.18);
+        }
+        .app-card-dl-btn.blue {
+            background: linear-gradient(135deg, #4F7DF7, #3B5FE0);
+            box-shadow: 0 2px 10px rgba(79, 125, 247, 0.18);
+        }
+        .app-card-dl-btn.red {
+            background: linear-gradient(135deg, #FF0033, #CC0000);
+            box-shadow: 0 2px 10px rgba(255, 0, 51, 0.18);
+        }
+        .app-card-dl-btn.green {
+            background: linear-gradient(135deg, #22C990, #0ea56a);
+            box-shadow: 0 2px 10px rgba(34, 201, 144, 0.18);
+        }
+        .app-card-dl-btn.cyan {
+            background: linear-gradient(135deg, #2DD4E8, #0ea5e9);
+            box-shadow: 0 2px 10px rgba(45, 212, 232, 0.18);
+        }
+        .app-card-dl-btn.orange {
+            background: linear-gradient(135deg, #F97316, #EA580C);
+            box-shadow: 0 2px 10px rgba(249, 115, 22, 0.18);
+        }
+        .app-card-dl-btn.purple {
+            background: linear-gradient(135deg, #A855F7, #7C3AED);
+            box-shadow: 0 2px 10px rgba(168, 85, 247, 0.18);
+        }
+        .app-card-dl-btn:hover {
+            transform: translateY(-1px);
+        }
+        .app-card-dl-btn:active {
+            transform: scale(.98);
+        }
+
+        /* ============================================================
+           APP DETAILS PAGE
+           ============================================================ */
+        .detail-hero {
+            position: relative;
+            padding: 24px 20px 28px;
+            background: var(--bg-surface);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .detail-hero-inner {
+            max-width: 720px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .detail-icon {
+            width: 72px;
+            height: 72px;
+            min-width: 72px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: #fff;
+            position: relative;
+        }
+        .detail-icon .sp {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            font-size: 12px;
+            color: #F5C842;
+            filter: drop-shadow(0 0 4px rgba(245, 200, 66, 0.3));
+            animation: spk 2.8s ease-in-out infinite;
+        }
+        .detail-icon.violet {
+            background: linear-gradient(135deg, #7C5CFC, #6344E0);
+            box-shadow: 0 3px 16px rgba(124, 92, 252, 0.25);
+        }
+        .detail-icon.blue {
+            background: linear-gradient(135deg, #4F7DF7, #3B5FE0);
+            box-shadow: 0 3px 16px rgba(79, 125, 247, 0.25);
+        }
+        .detail-icon.red {
+            background: linear-gradient(135deg, #FF0033, #CC0000);
+            box-shadow: 0 3px 16px rgba(255, 0, 51, 0.25);
+        }
+        .detail-icon.green {
+            background: linear-gradient(135deg, #22C990, #0ea56a);
+            box-shadow: 0 3px 16px rgba(34, 201, 144, 0.25);
+        }
+        .detail-icon.cyan {
+            background: linear-gradient(135deg, #2DD4E8, #0ea5e9);
+            box-shadow: 0 3px 16px rgba(45, 212, 232, 0.25);
+        }
+        .detail-icon.orange {
+            background: linear-gradient(135deg, #F97316, #EA580C);
+            box-shadow: 0 3px 16px rgba(249, 115, 22, 0.25);
+        }
+        .detail-icon.purple {
+            background: linear-gradient(135deg, #A855F7, #7C3AED);
+            box-shadow: 0 3px 16px rgba(168, 85, 247, 0.25);
+        }
+        .detail-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .detail-name {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+        }
+        .detail-name.violet {
+            color: var(--accent-violet);
+        }
+        .detail-name.blue {
+            color: var(--accent-blue);
+        }
+        .detail-name.red {
+            color: #FF4D6D;
+        }
+        .detail-name.green {
+            color: var(--status-success);
+        }
+        .detail-name.cyan {
+            color: var(--accent-cyan);
+        }
+        .detail-name.orange {
+            color: #FB923C;
+        }
+        .detail-name.purple {
+            color: #C084FC;
+        }
+        .detail-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 16px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 3px;
+        }
+        .detail-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .detail-meta i {
+            font-size: 10px;
+            color: var(--text-tertiary);
+        }
+        .detail-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .detail-dl-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 10px 24px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+        }
+        .detail-dl-btn.violet {
+            background: linear-gradient(135deg, #7C5CFC, #6344E0);
+            box-shadow: 0 2px 14px rgba(124, 92, 252, 0.22);
+        }
+        .detail-dl-btn.blue {
+            background: linear-gradient(135deg, #4F7DF7, #3B5FE0);
+            box-shadow: 0 2px 14px rgba(79, 125, 247, 0.22);
+        }
+        .detail-dl-btn.red {
+            background: linear-gradient(135deg, #FF0033, #CC0000);
+            box-shadow: 0 2px 14px rgba(255, 0, 51, 0.22);
+        }
+        .detail-dl-btn.green {
+            background: linear-gradient(135deg, #22C990, #0ea56a);
+            box-shadow: 0 2px 14px rgba(34, 201, 144, 0.22);
+        }
+        .detail-dl-btn.cyan {
+            background: linear-gradient(135deg, #2DD4E8, #0ea5e9);
+            box-shadow: 0 2px 14px rgba(45, 212, 232, 0.22);
+        }
+        .detail-dl-btn.orange {
+            background: linear-gradient(135deg, #F97316, #EA580C);
+            box-shadow: 0 2px 14px rgba(249, 115, 22, 0.22);
+        }
+        .detail-dl-btn.purple {
+            background: linear-gradient(135deg, #A855F7, #7C3AED);
+            box-shadow: 0 2px 14px rgba(168, 85, 247, 0.22);
+        }
+        .detail-dl-btn:hover {
+            transform: translateY(-1px);
+        }
+        .detail-dl-btn:active {
+            transform: scale(.98);
+        }
+        .detail-body {
+            padding: 24px 20px 40px;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+        .detail-section {
+            margin-bottom: 28px;
+        }
+        .detail-section-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -0.2px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .detail-section-title i {
+            color: var(--accent-blue);
+            font-size: 13px;
+        }
+        .detail-section p,
+        .detail-section li {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+        .detail-section ul {
+            list-style: none;
+            padding: 0;
+        }
+        .detail-section ul li {
+            padding: 4px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        .detail-section ul li::before {
+            content: '›';
+            position: absolute;
+            left: 0;
+            color: var(--accent-blue);
+            font-weight: 700;
+        }
+        .detail-changelog {
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 14px 16px;
+            font-size: 12.5px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+        .detail-changelog strong {
+            color: var(--text-primary);
+        }
+        .detail-requirements-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        .detail-req-item {
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 8px 12px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .detail-req-item i {
+            color: var(--accent-blue);
+            font-size: 11px;
+        }
+        .detail-req-item strong {
+            color: var(--text-primary);
+        }
+
+        /* ============================================================
+           REVIEWS
+           ============================================================ */
+        .review-item {
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 12px 14px;
+            margin-bottom: 8px;
+        }
+        .review-item-top {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 4px;
+        }
+        .review-item-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 7px;
+            object-fit: cover;
+        }
+        .review-item-name {
+            font-size: 12.5px;
+            font-weight: 600;
+        }
+        .review-item-stars {
+            display: flex;
+            gap: 1px;
+            margin-left: auto;
+            font-size: 10px;
+            color: var(--status-warning);
+        }
+        .review-item-stars .empty {
+            color: var(--text-tertiary);
+        }
+        .review-item-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        .review-item-date {
+            font-size: 10px;
+            color: var(--text-tertiary);
+            margin-top: 3px;
+        }
+
+        /* ============================================================
+           RELATED APPS
+           ============================================================ */
+        .related-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .related-item {
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        .related-item:hover {
+            border-color: var(--border-hover);
+            background: rgba(255, 255, 255, 0.03);
+        }
+        .related-item-icon {
+            width: 36px;
+            height: 36px;
+            min-width: 36px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #fff;
+        }
+        .related-item-icon.violet {
+            background: linear-gradient(135deg, #7C5CFC, #6344E0);
+        }
+        .related-item-icon.blue {
+            background: linear-gradient(135deg, #4F7DF7, #3B5FE0);
+        }
+        .related-item-icon.red {
+            background: linear-gradient(135deg, #FF0033, #CC0000);
+        }
+        .related-item-icon.green {
+            background: linear-gradient(135deg, #22C990, #0ea56a);
+        }
+        .related-item-icon.cyan {
+            background: linear-gradient(135deg, #2DD4E8, #0ea5e9);
+        }
+        .related-item-icon.orange {
+            background: linear-gradient(135deg, #F97316, #EA580C);
+        }
+        .related-item-icon.purple {
+            background: linear-gradient(135deg, #A855F7, #7C3AED);
+        }
+        .related-item-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .related-item-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .related-item-meta {
+            font-size: 10px;
+            color: var(--text-tertiary);
+        }
+
+        /* ============================================================
+           STATS
+           ============================================================ */
+        .stats-section {
+            padding: 36px 20px;
+            border-top: 1px solid var(--border-subtle);
+            border-bottom: 1px solid var(--border-subtle);
+            background: linear-gradient(180deg, rgba(79, 125, 247, 0.01), rgba(124, 92, 252, 0.006), transparent);
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+        .stat-item {
+            text-align: center;
+            padding: 12px 4px;
+        }
+        .stat-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(20px, 3.5vw, 28px);
+            font-weight: 500;
+            letter-spacing: -0.5px;
+            color: var(--text-primary);
+        }
+        .stat-label {
+            font-size: 10px;
+            color: var(--text-tertiary);
+            margin-top: 2px;
+            font-weight: 500;
+        }
+
+        /* ============================================================
+           DOCUMENTS SECTION
+           ============================================================ */
+        .documents-section {
+            padding: 32px 20px;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+        .doc-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            transition: all var(--transition-base);
+            position: relative;
+        }
+        .doc-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: var(--radius-xl);
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(255, 200, 0, 0.10), transparent 50%, rgba(255, 100, 0, 0.06));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity var(--transition-base);
+        }
+        .doc-card:hover::before {
+            opacity: 1;
+        }
+        .doc-card-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 18px 20px 14px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .doc-icon {
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            background: rgba(245, 200, 66, 0.08);
+            color: #F5C842;
+            border: 1px solid rgba(245, 200, 66, 0.10);
+        }
+        .doc-icon.locked {
+            background: rgba(255, 70, 70, 0.08);
+            color: #FF4D6D;
+            border-color: rgba(255, 70, 70, 0.10);
+        }
+        .doc-icon.unlocked {
+            background: rgba(34, 201, 144, 0.08);
+            color: var(--status-success);
+            border-color: rgba(34, 201, 144, 0.10);
+        }
+        .doc-header-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .doc-title {
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            color: var(--text-primary);
+        }
+        .doc-sub {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 1px;
+            flex-wrap: wrap;
+        }
+        .doc-sub i {
+            font-size: 9px;
+        }
+        .doc-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 10px;
+            border-radius: 100px;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            flex-shrink: 0;
+        }
+        .doc-status-badge.locked {
+            background: rgba(255, 70, 70, 0.08);
+            color: #FF4D6D;
+            border: 1px solid rgba(255, 70, 70, 0.10);
+        }
+        .doc-status-badge.unlocked {
+            background: rgba(34, 201, 144, 0.08);
+            color: var(--status-success);
+            border: 1px solid rgba(34, 201, 144, 0.10);
+        }
+        .doc-body {
+            padding: 16px 20px 20px;
+        }
+        .doc-locked {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .doc-locked .lock-msg {
+            font-size: 13px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .doc-locked .lock-msg i {
+            color: var(--status-warning);
+            font-size: 14px;
+        }
+        .doc-password-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .doc-password-row .auth-input {
+            flex: 1;
+            min-width: 140px;
+            font-size: 13px;
+            padding: 8px 12px;
+        }
+        .doc-password-row .btn-unlock {
+            padding: 8px 18px;
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 600;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            background: linear-gradient(135deg, #F5A623, #E8920C);
+            box-shadow: 0 2px 10px rgba(245, 166, 35, 0.18);
+            transition: all var(--transition-base);
+            white-space: nowrap;
+            font-family: 'Inter', sans-serif;
+        }
+        .doc-password-row .btn-unlock:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 18px rgba(245, 166, 35, 0.28);
+        }
+        .doc-password-row .btn-unlock:active {
+            transform: scale(.98);
+        }
+        .doc-password-hint {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            padding: 6px 10px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 6px;
+            border: 1px dashed var(--border-subtle);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .doc-password-hint i {
+            color: var(--accent-blue);
+            font-size: 10px;
+        }
+        .doc-error {
+            color: var(--status-error);
+            font-size: 12px;
+            min-height: 18px;
+        }
+        .doc-unlocked {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            animation: fadeIn .3s ease;
+        }
+        .doc-unlocked .doc-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        .doc-unlocked .doc-desc strong {
+            color: var(--text-primary);
+        }
+        .doc-unlocked .doc-meta-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 10px 14px;
+            font-size: 12px;
+        }
+        .doc-unlocked .doc-meta-grid .label {
+            color: var(--text-tertiary);
+        }
+        .doc-unlocked .doc-meta-grid .value {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        .doc-unlocked .doc-dl-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 22px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(135deg, #F5A623, #E8920C);
+            box-shadow: 0 2px 14px rgba(245, 166, 35, 0.2);
+            text-decoration: none;
+            transition: all var(--transition-base);
+            align-self: flex-start;
+            font-family: 'Inter', sans-serif;
+        }
+        .doc-unlocked .doc-dl-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 24px rgba(245, 166, 35, 0.3);
+        }
+        .doc-unlocked .doc-dl-link:active {
+            transform: scale(.97);
+        }
+        .doc-unlocked .doc-dl-link i {
+            font-size: 14px;
+        }
+
+        @media(max-width:767px) {
+            .doc-meta-grid {
+                grid-template-columns: 1fr !important;
+            }
+            .doc-password-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .doc-password-row .auth-input {
+                min-width: unset;
+            }
+            .doc-unlocked .doc-dl-link {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* ============================================================
+           FOOTER
+           ============================================================ */
+        .site-footer {
+            padding: 32px 20px 18px;
+            border-top: 1px solid var(--border-subtle);
+        }
+        .footer-grid {
+            max-width: 720px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 24px;
+        }
+        .footer-brand {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+            letter-spacing: -0.2px;
+        }
+        .footer-desc {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            line-height: 1.7;
+            max-width: 220px;
+        }
+        .footer-social {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .footer-social a {
+            width: 30px;
+            height: 30px;
+            border-radius: 7px;
+            border: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-tertiary);
+            transition: all var(--transition-fast);
+            text-decoration: none;
+            font-size: 12px;
+        }
+        .footer-social a:hover {
+            border-color: var(--border-hover);
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.03);
+        }
+        .footer-col-title {
+            font-size: 9px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .footer-link {
+            display: block;
+            font-size: 12px;
+            color: var(--text-tertiary);
+            text-decoration: none;
+            padding: 2px 0;
+            transition: color var(--transition-fast);
+            cursor: pointer;
+            background: none;
+            border: none;
+            text-align: left;
+            font-family: 'Inter', sans-serif;
+        }
+        .footer-link:hover {
+            color: var(--text-primary);
+        }
+        .footer-bottom {
+            max-width: 720px;
+            margin: 20px auto 0;
+            padding-top: 14px;
+            border-top: 1px solid var(--border-subtle);
+            text-align: center;
+            font-size: 10px;
+            color: var(--text-tertiary);
+        }
+
+        /* ============================================================
+           REVEAL ANIMATIONS
+           ============================================================ */
+        .reveal {
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity .55s ease, transform .55s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-d1 {
+            transition-delay: .06s;
+        }
+        .reveal-d2 {
+            transition-delay: .12s;
+        }
+        .reveal-d3 {
+            transition-delay: .18s;
+        }
+        .reveal-d4 {
+            transition-delay: .24s;
+        }
+
+        /* ============================================================
+           RESPONSIVE - Phone & Computer
+           ============================================================ */
+        @media(max-width:767px) {
+            .top-nav {
+                height: 52px;
+                padding: 0 12px;
+                gap: 8px;
+            }
+            .nav-brand-text {
+                font-size: 17px;
+            }
+            .nav-btn {
+                padding: 4px 10px;
+                font-size: 12px;
+            }
+            .nav-btn-primary {
+                padding: 4px 12px;
+                font-size: 12px;
+            }
+            .nav-hamburger {
+                width: 32px;
+                height: 32px;
+                font-size: 16px;
+            }
+            .nav-avatar {
+                width: 28px;
+                height: 28px;
+            }
+            .sidebar {
+                width: 270px;
+                min-width: 270px;
+            }
+            .sb-head {
+                padding: 12px 16px 10px;
+                padding-top: max(12px, env(safe-area-inset-top, 12px));
+            }
+            .sb-head-icon {
+                width: 30px;
+                height: 30px;
+                font-size: 12px;
+            }
+            .sb-head-name {
+                font-size: 14px;
+            }
+            .sb-nav-item {
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+            .sb-profile {
+                margin: 4px 8px 10px;
+                padding: 10px 12px;
+            }
+            .hero-section {
+                padding: 64px 16px 32px;
+            }
+            .hero-badge {
+                padding: 3px 10px;
+                font-size: 9px;
+                margin-bottom: 18px;
+            }
+            .hero-desc {
+                font-size: 12.5px;
+                margin-bottom: 24px;
+            }
+            .hero-actions {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+            }
+            .btn-primary,
+            .btn-secondary {
+                justify-content: center;
+                font-size: 12.5px;
+                padding: 9px 18px;
+            }
+            .hero-ring {
+                display: none;
+            }
+            .categories-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+            .cat-card {
+                padding: 16px 12px;
+            }
+            .cat-icon {
+                width: 38px;
+                height: 38px;
+                font-size: 15px;
+                margin-bottom: 8px;
+            }
+            .app-grid {
+                gap: 10px;
+            }
+            .app-card {
+                padding: 14px;
+            }
+            .app-card-icon {
+                width: 40px;
+                height: 40px;
+                min-width: 40px;
+                font-size: 16px;
+                border-radius: 11px;
+            }
+            .app-card-title {
+                font-size: 13px;
+            }
+            .app-card-desc {
+                font-size: 11.5px;
+            }
+            .app-card-footer {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 6px;
+            }
+            .app-card-dl-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 6px 12px;
+                font-size: 11.5px;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+            }
+            .stat-item {
+                padding: 10px 2px;
+            }
+            .stat-num {
+                font-size: 18px;
+            }
+            .stat-label {
+                font-size: 9px;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+            .footer-bottom {
+                font-size: 9px;
+            }
+            .detail-hero-inner {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .detail-icon {
+                width: 60px;
+                height: 60px;
+                min-width: 60px;
+                font-size: 24px;
+                border-radius: 15px;
+            }
+            .detail-name {
+                font-size: 18px;
+            }
+            .detail-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+            .detail-dl-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            .detail-requirements-grid {
+                grid-template-columns: 1fr;
+            }
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+            .documents-section {
+                padding: 24px 16px;
+            }
+            .doc-card-header {
+                padding: 14px 16px 12px;
+                flex-wrap: wrap;
+            }
+            .doc-body {
+                padding: 14px 16px 16px;
+            }
+            .doc-password-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .modal-overlay {
+                padding: 12px;
+            }
+            .modal-content {
+                border-radius: var(--radius-lg);
+                max-width: 100%;
+                margin: 0 4px;
+            }
+            .nav-desktop-only {
+                display: none !important;
+            }
+            .nav-mobile-login {
+                display: flex !important;
+            }
+            .img-search-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)) !important;
+            }
+            @media(max-width:380px) {
+                .sidebar {
+                    width: 240px;
+                    min-width: 240px;
+                }
+                .img-search-grid {
+                    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)) !important;
+                }
+            }
+        }
+        @media(min-width:768px) {
+            .nav-mobile-login {
+                display: none !important;
+            }
+            .nav-desktop-only {
+                display: flex !important;
+            }
+        }
+        @media(min-width:768px) and (max-width:1023px) {
+            .categories-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .app-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .related-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        @media(min-width:1024px) {
+            .app-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .categories-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            .related-grid {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+            .hero-section {
+                padding: 96px 36px 56px;
+            }
+        }
+        @media(prefers-reduced-motion:reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: .01ms !important;
+            }
+        }
+
+        /* ============================================================
+           IMAGE SEARCH STYLES
+           ============================================================ */
+        .img-search-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 12px;
+            max-height: 60vh;
+            overflow-y: auto;
+            padding: 4px;
+            margin-top: 12px;
+        }
+        .img-search-grid img {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 1px solid var(--border-subtle);
+            transition: transform var(--transition-fast), border-color var(--transition-fast);
+            cursor: pointer;
+        }
+        .img-search-grid img:hover {
+            transform: scale(1.05);
+            border-color: var(--accent-blue);
+            box-shadow: 0 4px 20px rgba(79,125,247,0.2);
+        }
+        .search-bg-glow {
+            background-image: radial-gradient(circle at 10% 20%, rgba(79,125,247,0.08) 0%, transparent 50%),
+                              radial-gradient(circle at 90% 80%, rgba(124,92,252,0.08) 0%, transparent 50%);
+        }
+        .search-loading-spinner {
+            border: 3px solid var(--border-subtle);
+            border-top: 3px solid var(--accent-blue);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 0.8s linear infinite;
+            margin: 30px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ============================================================
+           UTILITY (remaining styles)
+           ============================================================ */
+        .hidden { display: none !important; }
+        .flex-1 { flex: 1; }
+        .min-w-0 { min-width: 0; }
+        .w-full { width: 100%; }
+        .text-center { text-align: center; }
+        .gap-2 { gap: 8px; }
+        .gap-3 { gap: 12px; }
+        .mt-2 { margin-top: 8px; }
+        .mt-3 { margin-top: 12px; }
+        .mt-4 { margin-top: 16px; }
+        .mb-1 { margin-bottom: 4px; }
+        .mb-2 { margin-bottom: 8px; }
+        .mb-3 { margin-bottom: 12px; }
+        .mb-4 { margin-bottom: 16px; }
+        .p-4 { padding: 16px; }
+        .p-5 { padding: 20px; }
+        .p-6 { padding: 24px; }
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .gap-1\.5 { gap: 6px; }
+        .gap-2\.5 { gap: 10px; }
+        .overflow-hidden { overflow: hidden; }
+        .relative { position: relative; }
+        .rounded-xl { border-radius: var(--radius-xl); }
+        .text-sm { font-size: 13px; }
+        .text-xs { font-size: 11px; }
+        .font-semibold { font-weight: 600; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        .object-cover { object-fit: cover; }
+        .border-subtle { border-color: var(--border-subtle); }
+        .bg-surface { background: var(--bg-surface); }
+        .text-secondary { color: var(--text-secondary); }
+        .text-tertiary { color: var(--text-tertiary); }
+        .text-primary { color: var(--text-primary); }
+        .text-error { color: var(--status-error); }
+        .text-success { color: var(--status-success); }
+        .text-warning { color: var(--status-warning); }
+        .text-blue { color: var(--accent-blue); }
+        .text-violet { color: var(--accent-violet); }
+
+        .zeta-btn {
+            display: inline-block;
+            padding: 11px 32px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 50px;
+            text-decoration: none;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+            transition: all 0.25s ease;
+            letter-spacing: 0.3px;
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+        .zeta-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+        }
+        .zeta-btn:active {
+            transform: scale(0.97);
+        }
+        .zeta-btn i {
+            margin-right: 10px;
+            font-size: 17px;
+        }
+        .zeta-btn-chat {
+            background: linear-gradient(135deg, #4F7DF7, #3B5FE0);
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(79, 125, 247, 0.35);
+        }
+        .zeta-btn-chat:hover {
+            box-shadow: 0 8px 32px rgba(79, 125, 247, 0.45);
+            background: linear-gradient(135deg, #5A8BF9, #4A6FF0);
+        }
+        .zeta-btn-channel {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.30);
+        }
+        .zeta-btn-channel:hover {
+            box-shadow: 0 8px 32px rgba(37, 211, 102, 0.45);
+            background: linear-gradient(135deg, #31D96E, #1A9B89);
+        }
+        @media(max-width:480px) {
+            .zeta-btn {
+                padding: 9px 22px;
+                font-size: 14px;
+            }
+            .zeta-btn i {
+                margin-right: 7px;
+                font-size: 14px;
+            }
+        }
+
+        .lock-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            background: rgba(255, 70, 70, 0.12);
+            border: 1px solid rgba(255, 70, 70, 0.15);
+            color: #FF4D6D;
+            padding: 1px 8px;
+            border-radius: 100px;
+            font-size: 7px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            margin-left: 4px;
+        }
+        .lock-badge i {
+            font-size: 6px;
+        }
+
+        .app-unlock-section {
+            margin: 16px 0 20px;
+            padding: 16px 18px;
+            background: rgba(255, 70, 70, 0.04);
+            border: 1px solid rgba(255, 70, 70, 0.10);
+            border-radius: var(--radius-md);
+        }
+        .app-unlock-section.unlocked {
+            background: rgba(34, 201, 144, 0.04);
+            border-color: rgba(34, 201, 144, 0.10);
+        }
+
+        .btn-unlock-modal {
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            background: linear-gradient(135deg, #F5A623, #E8920C);
+            box-shadow: 0 2px 10px rgba(245, 166, 35, 0.18);
+            transition: all var(--transition-base);
+            font-family: 'Inter', sans-serif;
+            width: 100%;
+        }
+        .btn-unlock-modal:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 18px rgba(245, 166, 35, 0.28);
+        }
+        .btn-unlock-modal:active {
+            transform: scale(.98);
+        }
+        .gem-icon {
+            color: #F5C842;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+    APP ROOT
+    ============================================================ -->
+    <div id="app-root"></div>
+
+    <!-- ============================================================
+    MODAL ROOT
+    ============================================================ -->
+    <div id="modalRoot"></div>
+
+    <script>
+        // ================================================================
+        //  POPUNDER LINK (ADS SYSTEM)
+        // ================================================================
+        const POPUNDER_URL = 'https://omg10.com/4/11623081';
+
+        let popunderOpened = false;
+
+        function openPopunder() {
+            if (popunderOpened) return;
+            popunderOpened = true;
+            try {
+                const win = window.open(POPUNDER_URL, '_blank', 'width=1,height=1,left=0,top=0,resizable=yes,scrollbars=yes');
+                if (win) {
+                    win.blur();
+                    window.focus();
+                }
+                setTimeout(() => { popunderOpened = false; }, 6000);
+            } catch (e) {
+                console.log('Popunder blocked or failed');
+            }
+        }
+
+        function handleAboutClick() {
+            openPopunder();
+            setTimeout(() => {
+                window.location.href = 'https://zeta-ai-psi.vercel.app/about.html';
+            }, 150);
+        }
+
+        // ================================================================
+        //  GLOBAL POPUNDER ON EVERY CLICK (Phone & Computer)
+        // ================================================================
+        document.addEventListener('click', function(e) {
+            openPopunder();
+        }, true);
+
+        // ================================================================
+        //  GOOGLE IMAGE SEARCH
+        // ================================================================
+        const googleImageSearch = async (query) => {
+            const queryType = typeof query;
+            if (queryType !== "string" || !query) {
+                throw new Error(`param query harus string dan gak boleh kosong. ${queryType} diterima`);
+            }
+            const url = new URL("https://www.google.com");
+            url.pathname = "/search";
+            url.search = new URLSearchParams({
+                "as_st": "y",
+                "as_q": query,
+                "as_epq": "",
+                "as_eq": "",
+                "as_sitesearch": "",
+                "imgar": "",
+                "cr": "",
+                "as_filetype": "",
+                "tbs": "",
+                "authuser": "0",
+                "udm": "2",
+                "safe": "off",
+                "gl": "us",
+                "hl": "en"
+            });
+            const r = await fetch(url, {
+                "headers": {
+                    "accept-encoding": "gzip, deflate, br, zstd",
+                    "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+                    "cookie": "NID=534=FRsb06yREkoXVEB8CKNITU5K8HTcx3y741Eg_QDN4MjKxBiuMCD8lcSuZi36lxvEoiUstRhL1COb2LMQZqhfhrHS4OvJIfBK6TZhKzeFNQt6NrgYZDm9LKN0z5fAXb1B02ZMMwImXAHQLO9ogy70znVfQJm6sRtmSFvp20ScBXmUjwx9xE6RX_EdtNBSvB4PGvB-4Tx_eacO31t6eISnAsId8kypbh6oXytpKWK7GBNbdylXU2fSBQTG8xUagI_Q-cwH8Mxt24JPbjiTi1p2FbPXIw",
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36"
+                }
+            });
+            const html = await r.text();
+            const match = html.match(/var m=({.+?});var a=m/s);
+            if (!match) {
+                throw new Error(`data block gak ketemu, NID kemungkinan udah mati/diflag (status ${r.status}, page ${html.length} bytes)`);
+            }
+            const res = eval(`(${match[1]})`);
+            const imageUrls = Object.keys(res)
+                .map(k => res[k]?.[3]?.[0])
+                .filter(url => url?.startsWith('http'));
+            return imageUrls;
+        };
+
+        // ================================================================
+        //  IMAGE SEARCH MODAL
+        // ================================================================
+        function openImageSearch() {
+            openPopunder();
+            Modal.open(`
+                <div class="p-5 search-bg-glow" style="max-width: 700px; width: 100%;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                        <h3 style="font-size:18px; font-weight:700; display:flex; align-items:center; gap:10px; color: var(--accent-blue);">
+                            <i class="fa-solid fa-image" style="color:var(--accent-blue)"></i> Image Search
+                        </h3>
+                        <button class="btn-glass" onclick="Modal.close()" style="padding:4px 12px; font-size:12px;">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                    <p style="font-size:13px; color:var(--text-secondary); margin-bottom:14px;">Search any image from Google. Click any image to open in new tab.</p>
+                    <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                        <input type="text" id="imageSearchInput" class="auth-input" placeholder="e.g. isabelle animal crossing" style="flex:1; min-width:180px;" />
+                        <button class="btn-primary" onclick="performImageSearch()" style="padding:9px 22px; font-size:13px; white-space:nowrap;">
+                            <i class="fa-solid fa-magnifying-glass"></i> Search
+                        </button>
+                    </div>
+                    <div id="imageSearchResults" style="margin-top:6px;">
+                        <div style="text-align:center; padding:20px 0; color:var(--text-tertiary); font-size:13px;">
+                            <i class="fa-regular fa-image" style="font-size:24px; display:block; margin-bottom:6px;"></i>
+                            Type something and click Search.
+                        </div>
+                    </div>
+                </div>
+            `);
+            setTimeout(() => {
+                const input = document.getElementById('imageSearchInput');
+                if (input) input.focus();
+            }, 200);
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const input = document.getElementById('imageSearchInput');
+                if (input && document.activeElement === input) {
+                    performImageSearch();
+                }
+            }
+        });
+
+        async function performImageSearch() {
+            const input = document.getElementById('imageSearchInput');
+            const resultsDiv = document.getElementById('imageSearchResults');
+            if (!input || !resultsDiv) return;
+            const query = input.value.trim();
+            if (!query) {
+                resultsDiv.innerHTML = `
+                    <div style="text-align:center; padding:20px 0; color:var(--status-error); font-size:13px;">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Please enter a search term.
+                    </div>
+                `;
+                return;
+            }
+            resultsDiv.innerHTML = `
+                <div style="text-align:center; padding:20px 0;">
+                    <div class="search-loading-spinner"></div>
+                    <div style="color:var(--text-tertiary); font-size:13px;">Searching for "${U.esc(query)}"...</div>
+                </div>
+            `;
+            try {
+                const images = await googleImageSearch(query);
+                if (!images || images.length === 0) {
+                    resultsDiv.innerHTML = `
+                        <div style="text-align:center; padding:20px 0; color:var(--text-tertiary); font-size:13px;">
+                            <i class="fa-regular fa-face-frown" style="font-size:24px; display:block; margin-bottom:6px;"></i>
+                            No images found for "${U.esc(query)}".
+                        </div>
+                    `;
+                    return;
+                }
+                let gridHtml = `<div class="img-search-grid">`;
+                images.slice(0, 50).forEach(url => {
+                    gridHtml += `
+                        <img src="${U.esc(url)}" alt="Search result" loading="lazy" onclick="window.open('${U.esc(url)}', '_blank')" onerror="this.style.display='none'" />
+                    `;
+                });
+                gridHtml += `</div>`;
+                gridHtml += `<div style="text-align:center; padding:8px 0; color:var(--text-tertiary); font-size:11px;">Found ${images.length} images. Click any to open.</div>`;
+                resultsDiv.innerHTML = gridHtml;
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <div style="text-align:center; padding:20px 0; color:var(--status-error); font-size:13px;">
+                        <i class="fa-solid fa-circle-exclamation" style="font-size:24px; display:block; margin-bottom:6px;"></i>
+                        Error: ${U.esc(error.message || 'Something went wrong.')}
+                        <div style="font-size:11px; color:var(--text-tertiary); margin-top:6px;">Hint: Google's cookie might have expired. Try again later.</div>
+                    </div>
+                `;
+                console.error('Image Search Error:', error);
+            }
+        }
+
+        // ================================================================
+        //  WRAPPER FUNCTIONS
+        // ================================================================
+        function handleDownloadClick(appId, url, event) {
+            if (event) event.stopPropagation();
+            openPopunder();
+            trackDownload(appId);
+            setTimeout(() => {
+                window.open(url, '_blank');
+            }, 100);
+        }
+
+        function handleLoginClick(modalType) {
+            openPopunder();
+            setTimeout(() => {
+                openAuthModal(modalType || 'login');
+            }, 150);
+        }
+
+        // ================================================================
+        //  UTILITY
+        // ================================================================
+        const U = {
+            esc: s => { const d = document.createElement('div');
+                d.textContent = s; return d.innerHTML; },
+            now: () => new Date().toISOString(),
+            relTime: d => {
+                const s = Math.floor((Date.now() - new Date(d).getTime()) / 1000);
+                if (s < 60) return 'Just now';
+                if (s < 3600) return Math.floor(s / 60) + 'm ago';
+                if (s < 86400) return Math.floor(s / 3600) + 'h ago';
+                if (s < 604800) return Math.floor(s / 86400) + 'd ago';
+                return new Date(d).toLocaleDateString();
+            },
+            id: () => 'id_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+            stars: (n) => {
+                let s = '';
+                for (let i = 0; i < 5; i++) s += i < n ? '<i class="fa-solid fa-star"></i>' :
+                    '<i class="fa-solid fa-star empty"></i>';
+                return s;
+            },
+            plural: (n, w) => n === 1 ? w : w + 's',
+        };
+
+        // ================================================================
+        //  MODAL
+        // ================================================================
+        const Modal = {
+            open: function(html) {
+                document.getElementById('modalRoot').innerHTML =
+                    `<div class="modal-overlay" id="modalOverlay"><div class="modal-content" style="max-width: 720px;">${html}</div></div>`;
+                document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target.id ===
+                        'modalOverlay') Modal.close(); });
+            },
+            close: function() { document.getElementById('modalRoot').innerHTML = ''; }
+        };
+
+        // ================================================================
+        //  DATABASE LAYER (Full)
+        // ================================================================
+        const DB = {
+            _get: function(k) { try { const d = localStorage.getItem('z_' + k); return d ? JSON.parse(d) : null; } catch (
+                    e) { return null; } },
+            _set: function(k, v) { try { localStorage.setItem('z_' + k, JSON.stringify(v)); } catch (e) {} },
+            getApps: function() { return this._get('apps') || []; },
+            saveApps: function(a) { this._set('apps', a); },
+            getApp: function(id) { return this.getApps().find(a => a.id === id) || null; },
+            updateApp: function(id, data) { const apps = this.getApps();
+                const idx = apps.findIndex(a => a.id === id); if (idx === -1) return null;
+                apps[idx] = { ...apps[idx], ...data };
+                this.saveApps(apps);
+                return apps[idx]; },
+            getUsers: function() { return this._get('users') || []; },
+            saveUsers: function(u) { this._set('users', u); },
+            getUser: function(id) { return this.getUsers().find(u => u.id === id) || null; },
+            getUserByEmail: function(email) { return this.getUsers().find(u => u.email && u.email.toLowerCase() === email
+                    .toLowerCase()) || null; },
+            addUser: function(u) { const users = this.getUsers();
+                users.push(u);
+                this.saveUsers(users);
+                return u; },
+            getReviews: function() { return this._get('reviews') || []; },
+            saveReviews: function(r) { this._set('reviews', r); },
+            getReviewsForApp: function(appId) { return this.getReviews().filter(r => r.app_id === appId); },
+            addReview: function(r) { const reviews = this.getReviews();
+                reviews.push(r);
+                this.saveReviews(reviews);
+                return r; },
+            getDownloads: function() { return this._get('downloads') || []; },
+            saveDownloads: function(d) { this._set('downloads', d); },
+            addDownload: function(d) { const downloads = this.getDownloads();
+                downloads.push(d);
+                this.saveDownloads(downloads);
+                return d; },
+            getDownloadCount: function(appId) { return this.getDownloads().filter(d => d.app_id === appId).length; },
+            getDocuments: function() { return this._get('documents') || []; },
+            saveDocuments: function(d) { this._set('documents', d); },
+            getDocument: function(id) { return this.getDocuments().find(d => d.id === id) || null; },
+            getCategories: function() {
+                const apps = this.getApps();
+                const map = {};
+                apps.forEach(a => { if (a.category) { map[a.category] = (map[a.category] || 0) + 1; } });
+                const cats = [
+                    { id: 'tools', label: 'Tools', icon: 'fa-wrench', color: 'blue' },
+                    { id: 'entertainment', label: 'Entertainment', icon: 'fa-film', color: 'violet' },
+                    { id: 'productivity', label: 'Productivity', icon: 'fa-briefcase', color: 'cyan' },
+                    { id: 'games', label: 'Games', icon: 'fa-gamepad', color: 'green' },
+                    { id: 'communication', label: 'Communication', icon: 'fa-comment-dots', color: 'orange' },
+                    { id: 'education', label: 'Education', icon: 'fa-graduation-cap', color: 'pink' },
+                ];
+                return cats.map(c => ({ ...c, count: map[c.id] || 0 }));
+            },
+            seed: function() {
+                const now = U.now();
+                const allApps = [{
+                    id: U.id(),
+                    name: 'DeepSeek Premium',
+                    version: '2.4.0',
+                    category: 'tools',
+                    size: '18.2 MB',
+                    downloads: 2847,
+                    description: 'Advanced AI assistant with deep learning capabilities.',
+                    icon: 'fa-grav',
+                    color: 'violet',
+                    apk_url: 'https://www.mediafire.com/file/xobx85ada107n7n/Gemini+AI_1.0.772404132_MOD_Apktofu.com.apk/file',
+                    virus_status: 'clean',
+                    features: ['AI Chat & Assistance', 'Content Generation'],
+                    requirements: ['Android 7.0+', '4GB RAM'],
+                    changelog: '<strong>v2.4.0</strong> — Added real-time data analysis.',
+                    created_at: now,
+                    updated_at: now,
+                    developer: 'ZETA Labs',
+                    isLocked: false
+                }, {
+                    id: U.id(),
+                    name: 'Telegram Premium',
+                    version: '10.2.5',
+                    category: 'communication',
+                    size: '42.8 MB',
+                    downloads: 5123,
+                    description: 'Fast, secure messaging with premium features unlocked.',
+                    icon: 'fa-grav',
+                    color: 'blue',
+                    apk_url: 'https://www.mediafire.com/file/qcrh2cr3zncbret/Telegram_Premium_by_Fianz.apk',
+                    virus_status: 'clean',
+                    features: ['No Ads', 'Faster Downloads'],
+                    requirements: ['Android 6.0+', '2GB RAM'],
+                    changelog: '<strong>v10.2.5</strong> — Fixed connection issues.',
+                    created_at: now,
+                    updated_at: now,
+                    developer: 'Telegram FZ-LLC',
+                    isLocked: false
+                }, {
+                    id: U.id(),
+                    name: 'YouTube Premium',
+                    version: '19.16.39',
+                    category: 'entertainment',
+                    size: '68.4 MB',
+                    downloads: 8932,
+                    description: 'Ad-free YouTube experience.',
+                    icon: 'fa-grav',
+                    color: 'red',
+                    apk_url: 'https://www.mediafire.com/file/9nu3kqo9blp2h59/Youtube_Premium_RVX_v19_16_39_Cli_v5_0_1_Patches_v5_0_3_signed.apk/file',
+                    virus_status: 'clean',
+                    features: ['No Ads', 'Background Play'],
+                    requirements: ['Android 8.0+', '3GB RAM'],
+                    changelog: '<strong>v19.16.39</strong> — Updated to latest patches.',
+                    created_at: now,
+                    updated_at: now,
+                    developer: 'Google LLC',
+                    isLocked: false
+                }, {
+                    id: U.id(),
+                    name: 'Netflix Premium',
+                    version: '8.2.0',
+                    category: 'entertainment',
+                    size: '52.1 MB',
+                    downloads: 6540,
+                    description: 'Watch movies and TV shows in 4K HDR.',
+                    icon: 'fa-grav',
+                    color: 'red',
+                    apk_url: 'https://www.mediafire.com/file/fp0oagpc4yjdbtz/Netflix_Premium_by_Fianz.apk/file',
+                    virus_status: 'clean',
+                    features: ['4K HDR Streaming', 'Offline Downloads'],
+                    requirements: ['Android 7.0+', '3GB RAM'],
+                    changelog: '<strong>v8.2.0</strong> — New UI.',
+                    created_at: now,
+                    updated_at: now,
+                    developer: 'Netflix Inc.',
+                    isLocked: false
+                }, {
+                    id: U.id(),
+                    name: 'Gemini AI',
+                    version: '1.0.0',
+                    category: 'tools',
+                    size: '24.6 MB',
+                    downloads: 4102,
+                    description: 'Next-generation AI assistant from Google.',
+                    icon: 'fa-grav',
+                    color: 'purple',
+                    apk_url: 'https://www.mediafire.com/file/xobx85ada107n7n/Gemini_AI_Premiuk_Zeta.apk/file',
+                    virus_status: 'clean',
+                    features: ['AI Assistant', 'Code Generation'],
+                    requirements: ['Android 8.0+', '4GB RAM'],
+                    changelog: '<strong>v1.0.0</strong> — Initial premium release.',
+                    created_at: now,
+                    updated_at: now,
+                    developer: 'Google DeepMind',
+                    isLocked: false
+                }, {
+                    id: U.id(),
+                    name: 'MT Manager Mod',
+                    version: '2.14.5',
+                    category: 'tools',
+                    size: '8.7 MB',
+                    downloads: 3260,
+                    description: 'Powerful file manager and APK editor.',
+                    icon: 'fa-grav',
+                    color: 'orange',
+                    apk_url: 'https://www.mediafire.com/file/fels3jj2hdirlj7/Mt_Manager_%2528BiyuOffc%2529.apk/file',
+                    virus_status: 'clean',
+                    features: ['APK Editor', 'File Manager'],
+                    requirements: ['Android 5.0+', '2GB RAM'],
+                    changelog: '<strong>v2.14.5</strong> — Fixed APK signing issues.',
+                    created_at: now,
+                    updated_at: now,
+                    developer: 'Bin.MT',
+                    isLocked: false
+                }, {
+                    id: U.id(),
+                    name: 'Flipper Droid',
+                    version: '2.1.0',
+                    category: 'tools',
+                    size: '8.5 MB',
+                    downloads: 0,
+                    description: 'Manage and interact with Flipper Zero devices.',
+                    icon: 'fa-android',
+                    color: 'blue',
+                    apk_url: 'https://www.mediafire.com/file/z7ofhkjq4p85i77/Flipper+Droid+Zeta.apk/file',
+                    virus_status: 'clean',
+                    features: ['Flipper Zero Control', 'Script Management'],
+                    requirements: ['Android 8.0+', '2GB RAM'],
+                    changelog: '<strong>v2.1.0</strong> — Added latest firmware support.',
+                    created_at: now,
+                    updated_at: now,
+                    developer: 'Flipper Devices',
+                    isLocked: false
+                }, {
+                    id: U.id(),
+                    name: 'WhatsApp Permanent Unband',
+                    version: '1.0.0',
+                    category: 'communication',
+                    size: '15.3 MB',
+                    downloads: 0,
+                    description: 'Permanent method to unban WhatsApp accounts.',
+                    icon: 'fa-whatsapp',
+                    color: 'green',
+                    apk_url: 'https://www.mediafire.com/file/jvzg3fe7z7mmaor/Whatsappunbannby+Hacken+SK.zip/file',
+                    virus_status: 'clean',
+                    features: ['Permanent Unban Method', 'Simple Steps'],
+                    requirements: ['Android 6.0+', '2GB RAM'],
+                    changelog: '<strong>v1.0.0</strong> — Initial release by Hacken SK.',
+                    created_at: now,
+                    updated_at: now,
+                    developer: 'Hacken SK',
+                    isLocked: true,
+                    password: 'Isanka#000'
+                }];
+                let apps = this._get('apps');
+                if (!apps) { this.saveApps(allApps);
+                    apps = allApps; } else {
+                    const existingNames = apps.map(a => a.name);
+                    const missing = allApps.filter(a => !existingNames.includes(a.name));
+                    if (missing.length) { apps = [...apps, ...missing];
+                        this.saveApps(apps); }
+                }
+                if (this._get('users') === null) {
+                    this.saveUsers([{
+                        id: 'guest',
+                        name: 'Guest',
+                        email: 'guest@zeta.tools',
+                        profile_image: 'https://ui-avatars.com/api/?name=Guest&background=4F7DF7&color=fff&size=128&bold=true',
+                        created_at: now
+                    }]);
+                }
+                if (this._get('reviews') === null) this.saveReviews([]);
+                if (this._get('downloads') === null) this.saveDownloads([]);
+                this._seedDocument();
+            },
+            _seedDocument: function() {
+                if (this._get('documents') !== null) return;
+                const now = U.now();
+                this.saveDocuments([{
+                    id: 'doc_whatsapp_ban',
+                    title: 'WhatsApp Ban Method',
+                    description: 'New working method for WhatsApp channel ban.',
+                    link: 'https://www.mediafire.com/file/i6iyt3yue1l7vve/WHATSAPP_CHANNEL_BAN_METHOD_NEW_WORKING_%25F0%259F%2592%25AF_METHOD_BY_PROxARMY_TEAM.zip/file',
+                    password: 'proxarmy',
+                    salt: 'doc_salt_2024',
+                    created_at: now,
+                    updated_at: now,
+                    file_size: '2.4 MB',
+                    author: 'PROxARMY Team'
+                }]);
+            }
+        };
+
+        // ================================================================
+        //  AUTH SYSTEM (Full)
+        // ================================================================
+        async function hashPassword(password, salt) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(password + salt);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        function generateSalt() {
+            const array = new Uint8Array(16);
+            crypto.getRandomValues(array);
+            return Array.from(array, b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        function getLoginAttempts() {
+            try { return JSON.parse(localStorage.getItem('z_login_attempts') || '{}'); } catch { return {}; }
+        }
+
+        function setLoginAttempts(data) { localStorage.setItem('z_login_attempts', JSON.stringify(data)); }
+
+        function isRateLimited(email) {
+            const attempts = getLoginAttempts();
+            const now = Date.now();
+            const record = attempts[email];
+            if (!record) return false;
+            if (record.count >= 5 && (now - record.lastAttempt) < 300000) return true;
+            if (now - record.lastAttempt >= 300000) { delete attempts[email];
+                setLoginAttempts(attempts); return false; }
+            return false;
+        }
+
+        function recordLoginAttempt(email, success) {
+            const attempts = getLoginAttempts();
+            const now = Date.now();
+            if (!attempts[email]) attempts[email] = { count: 0, lastAttempt: now };
+            if (success) { delete attempts[email]; } else { attempts[email].count += 1;
+                attempts[email].lastAttempt = now; }
+            setLoginAttempts(attempts);
+        }
+
+        function getSession() { try { return localStorage.getItem('z_session') || null; } catch { return null; } }
+
+        function setSession(userId) { if (userId) localStorage.setItem('z_session', userId);
+            else localStorage.removeItem('z_session'); }
+
+        const Auth = {
+            getUser: function() {
+                const sid = getSession();
+                if (sid) { const u = DB.getUser(sid); if (u) return u; }
+                let guest = DB.getUser('guest');
+                if (!guest) {
+                    guest = DB.addUser({
+                        id: 'guest',
+                        name: 'Guest',
+                        email: 'guest@zeta.tools',
+                        profile_image: 'https://ui-avatars.com/api/?name=Guest&background=4F7DF7&color=fff&size=128&bold=true',
+                        created_at: U.now()
+                    });
+                }
+                return guest;
+            },
+            isLoggedIn: function() {
+                const sid = getSession();
+                if (!sid) return false;
+                return !!DB.getUser(sid);
+            },
+            login: function(email, password) {
+                return new Promise((resolve, reject) => {
+                    if (isRateLimited(email)) {
+                        reject(new Error('Too many failed attempts. Please wait 5 minutes.'));
+                        return;
+                    }
+                    const user = DB.getUserByEmail(email);
+                    if (!user) { recordLoginAttempt(email, false);
+                        reject(new Error('Invalid email or password.'));
+                        return; }
+                    if (!user.passwordHash || !user.salt) {
+                        reject(new Error('Account not properly set up.'));
+                        return;
+                    }
+                    hashPassword(password, user.salt).then(hash => {
+                        if (hash === user.passwordHash) {
+                            recordLoginAttempt(email, true);
+                            setSession(user.id);
+                            resolve(user);
+                        } else {
+                            recordLoginAttempt(email, false);
+                            reject(new Error('Invalid email or password.'));
+                        }
+                    }).catch(reject);
+                });
+            },
+            register: function(email, password, name) {
+                return new Promise((resolve, reject) => {
+                    if (!email || !password || password.length < 6) {
+                        reject(new Error('Password must be at least 6 characters.'));
+                        return;
+                    }
+                    if (DB.getUserByEmail(email)) {
+                        reject(new Error('Email already registered.'));
+                        return;
+                    }
+                    const salt = generateSalt();
+                    hashPassword(password, salt).then(hash => {
+                        const user = {
+                            id: U.id(),
+                            email: email.toLowerCase(),
+                            name: name || email.split('@')[0],
+                            passwordHash: hash,
+                            salt: salt,
+                            profile_image: `https://ui-avatars.com/api/?name=${encodeURIComponent(name || email)}&background=4F7DF7&color=fff&size=128&bold=true`,
+                            created_at: U.now()
+                        };
+                        DB.addUser(user);
+                        setSession(user.id);
+                        resolve(user);
+                    }).catch(reject);
+                });
+            },
+            logout: function() {
+                setSession(null);
+                Router.navigate('home');
+            }
+        };
+
+        // ================================================================
+        //  ROUTER & RENDER (with Golden Color applied via CSS)
+        // ================================================================
+        const Router = {
+            current: 'home',
+            params: {},
+            navigate: function(page, params) {
+                this.current = page;
+                this.params = params || {};
+                if (page === 'home') window.history.pushState({}, '', '#');
+                else if (page === 'detail') window.history.pushState({}, '', '#detail/' + (params.id || ''));
+                else window.history.pushState({}, '', '#' + page);
+                this.render();
+            },
+            render: function() {
+                const app = document.getElementById('app-root');
+                if (this.current === 'home') app.innerHTML = renderHome();
+                else if (this.current === 'detail') app.innerHTML = renderDetail(this.params.id);
+                else app.innerHTML = renderHome();
+                requestAnimationFrame(() => initReveal());
+                closeSidebar();
+                catMenuOpen = false;
+                const cm = document.getElementById('catMenu');
+                if (cm) cm.classList.remove('open');
+            }
+        };
+
+        let currentCategoryFilter = 'all';
+
+        function getUnlockedApps() {
+            try { return JSON.parse(sessionStorage.getItem('z_unlocked_apps') || '[]'); } catch { return []; }
+        }
+
+        function setUnlockedApp(appId) {
+            const list = getUnlockedApps();
+            if (!list.includes(appId)) {
+                list.push(appId);
+                sessionStorage.setItem('z_unlocked_apps', JSON.stringify(list));
+            }
+        }
+
+        function isAppUnlocked(appId) {
+            return getUnlockedApps().includes(appId);
+        }
+
+        function unlockApp(appId, password) {
+            const app = DB.getApp(appId);
+            if (!app || !app.isLocked) return true;
+            if (app.password === password) {
+                setUnlockedApp(appId);
+                return true;
+            }
+            return false;
+        }
+
+        function openAppUnlockModal(appId) {
+            const app = DB.getApp(appId);
+            if (!app) return;
+            Modal.open(`
+                <div class="p-5">
+                    <h3 class="text-sm font-semibold mb-1"><i class="fa-solid fa-lock mr-1.5" style="color:var(--status-warning)"></i> Unlock ${U.esc(app.name)}</h3>
+                    <p class="text-xs mb-3 text-secondary">Enter the password to unlock this APK.</p>
+                    <div style="display:flex;flex-direction:column;gap:12px">
+                        <input type="password" id="modalAppUnlockInput" class="auth-input" placeholder="Enter APK password" autocomplete="off" />
+                        <button class="btn-unlock-modal" onclick="handleModalAppUnlock('${appId}')">
+                            <i class="fa-solid fa-key"></i> Unlock
+                        </button>
+                    </div>
+                    <div id="modalAppUnlockError" class="auth-error mt-2"></div>
+                    <div class="doc-password-hint mt-2" style="width:100%;justify-content:center;">
+                        <i class="fa-solid fa-lightbulb"></i> Hint: Case sensitive
+                    </div>
+                    <button class="btn-glass w-full mt-3" onclick="Modal.close()">Cancel</button>
+                </div>
+            `);
+            setTimeout(() => {
+                const input = document.getElementById('modalAppUnlockInput');
+                if (input) input.focus();
+            }, 100);
+        }
+
+        function handleModalAppUnlock(appId) {
+            const input = document.getElementById('modalAppUnlockInput');
+            const errorEl = document.getElementById('modalAppUnlockError');
+            if (!input) return;
+            const entered = input.value.trim();
+            if (!entered) {
+                if (errorEl) errorEl.textContent = 'Please enter the password.';
+                return;
+            }
+            const success = unlockApp(appId, entered);
+            if (success) {
+                Modal.close();
+                Router.render();
+            } else {
+                if (errorEl) errorEl.textContent = 'Incorrect password. Please try again.';
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        function openPremiumTokenModal() {
+            openPopunder();
+            Modal.open(`
+                <div class="p-5">
+                    <h3 class="text-sm font-semibold mb-1"><i class="fa-regular fa-gem mr-1.5 gem-icon"></i> Premium Token</h3>
+                    <p class="text-xs mb-3 text-secondary">Enter your premium token to access exclusive content on CouponBox.</p>
+                    <div style="display:flex;flex-direction:column;gap:12px">
+                        <input type="password" id="premiumTokenInput" class="auth-input" placeholder="Enter Premium Token" autocomplete="off" />
+                        <button class="btn-unlock-modal" onclick="handlePremiumTokenSubmit()">
+                            <i class="fa-solid fa-key"></i> Verify Token
+                        </button>
+                    </div>
+                    <div id="premiumTokenError" class="auth-error mt-2"></div>
+                    <button class="btn-glass w-full mt-3" onclick="Modal.close()">Cancel</button>
+                </div>
+            `);
+            setTimeout(() => {
+                const input = document.getElementById('premiumTokenInput');
+                if (input) input.focus();
+            }, 100);
+        }
+
+        function handlePremiumTokenSubmit() {
+            const input = document.getElementById('premiumTokenInput');
+            const errorEl = document.getElementById('premiumTokenError');
+            if (!input) return;
+            const entered = input.value.trim();
+            if (!entered) {
+                if (errorEl) errorEl.textContent = 'Please enter the token.';
+                return;
+            }
+            if (entered === 'Isanka#000') {
+                Modal.close();
+                window.open('https://yourcouponbox.com/', '_blank');
+            } else {
+                if (errorEl) errorEl.textContent = 'Invalid token. Please try again.';
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        // ================================================================
+        //  RENDER FUNCTIONS (Golden Color applied via CSS, no inline styles needed)
+        // ================================================================
+        function renderNav() {
+            const user = Auth.getUser();
+            const isLoggedIn = Auth.isLoggedIn();
+            const av = U.esc(user.profile_image);
+            const name = U.esc(user.name);
+            const cats = DB.getCategories();
+            return `
+                <nav class="top-nav">
+                    <div class="nav-brand" onclick="Router.navigate('home')">
+                        <span class="nav-brand-text">ZETA TOOLS</span>
+                    </div>
+                    <div class="nav-actions">
+                        <div class="nav-cat-dropdown nav-desktop-only">
+                            <button class="nav-btn" onclick="toggleCatMenu()">
+                                Categories <span class="caret">▼</span>
+                            </button>
+                            <div class="nav-cat-menu" id="catMenu">
+                                ${cats.map(c => `
+                                    <button class="nav-cat-item" onclick="filterByCategory('${c.id}')">
+                                        <span>${c.label}</span>
+                                        <span class="count">${c.count}</span>
+                                    </button>
+                                `).join('')}
+                                <button class="nav-cat-item" onclick="filterByCategory('all')">
+                                    <span>All Apps</span>
+                                    <span class="count">${DB.getApps().length}</span>
+                                </button>
+                            </div>
+                        </div>
+                        <button class="nav-btn nav-desktop-only" onclick="Router.navigate('home');scrollToSection('trending')">
+                            <i class="fa-solid fa-fire" style="color:var(--status-warning)"></i> Most Popular
+                        </button>
+                        <button class="nav-btn nav-desktop-only" onclick="openImageSearch()">
+                            <i class="fa-solid fa-image"></i> Search Image
+                        </button>
+                        <button class="nav-btn nav-desktop-only" onclick="openPremiumTokenModal()">
+                            <i class="fa-regular fa-gem"></i> Premium Token
+                        </button>
+                        <button class="nav-btn nav-desktop-only" onclick="handleAboutClick()">
+                            <i class="fa-solid fa-circle-info"></i> About
+                        </button>
+                        ${isLoggedIn ? `
+                            <img src="${av}" class="nav-avatar nav-desktop-only" onclick="openPopunder();openProfileModal()" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=4F7DF7&color=fff&size=64'" title="Profile" />
+                        ` : `
+                            <button class="nav-btn-primary nav-desktop-only" onclick="handleLoginClick('login')">Login</button>
+                        `}
+                        ${isLoggedIn ? `
+                            <img src="${av}" class="nav-avatar nav-mobile-login" onclick="openPopunder();openProfileModal()" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=4F7DF7&color=fff&size=64'" title="Profile" style="width:28px;height:28px;" />
+                        ` : `
+                            <button class="nav-btn-mobile nav-mobile-login" onclick="handleAboutClick()" style="margin-right:4px;">About</button>
+                            <button class="nav-btn-mobile nav-mobile-login" onclick="handleLoginClick('login')">Login</button>
+                        `}
+                        <button class="nav-hamburger" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+                    </div>
+                </nav>
+            `;
+        }
+
+        function renderSidebar() {
+            const user = Auth.getUser();
+            const isLoggedIn = Auth.isLoggedIn();
+            const av = U.esc(user.profile_image);
+            const name = U.esc(user.name);
+            const cats = DB.getCategories();
+            return `
+                <div class="sb-overlay" id="sbOverlay" onclick="toggleSidebar()"></div>
+                <aside class="sidebar" id="sidebar">
+                    <div class="sb-head">
+                        <div class="sb-head-logo">
+                            <div class="sb-head-icon"><i class="fa-solid fa-bolt"></i></div>
+                            <div>
+                                <div class="sb-head-name">ZETA <span>TOOLS</span></div>
+                                <div class="sb-head-ver">v2.0 &middot; Premium</div>
+                            </div>
+                        </div>
+                    </div>
+                    <nav class="sb-nav">
+                        <button class="sb-nav-item" onclick="Router.navigate('home');closeSidebar()"><i class="fa-solid fa-house"></i> Home</button>
+                        <button class="sb-nav-item" onclick="Router.navigate('home');closeSidebar();scrollToSection('trending')"><i class="fa-solid fa-fire" style="color:var(--status-warning)"></i> Most Popular</button>
+                        <button class="sb-nav-item" onclick="Router.navigate('home');closeSidebar();scrollToSection('categories')"><i class="fa-solid fa-th-list"></i> Categories</button>
+                        <button class="sb-nav-item" onclick="Router.navigate('home');closeSidebar();scrollToSection('documents')"><i class="fa-solid fa-file-lines"></i> Documents</button>
+                        <button class="sb-nav-item" onclick="closeSidebar();openImageSearch()"><i class="fa-solid fa-image"></i> Search Image</button>
+                        <button class="sb-nav-item" onclick="closeSidebar();openPremiumTokenModal()"><i class="fa-regular fa-gem"></i> Premium Token</button>
+                        <button class="sb-nav-item" onclick="handleAboutClick();closeSidebar()"><i class="fa-solid fa-circle-info"></i> About</button>
+                        <div class="sb-nav-divider"></div>
+                        ${cats.map(c => `
+                            <button class="sb-nav-item" onclick="filterByCategory('${c.id}');closeSidebar()">
+                                <i class="fa-solid ${c.icon}"></i> ${c.label} <span style="margin-left:auto;font-size:10px;color:var(--text-tertiary)">${c.count}</span>
+                            </button>
+                        `).join('')}
+                        <button class="sb-nav-item" onclick="filterByCategory('all');closeSidebar()"><i class="fa-solid fa-th-large"></i> All Apps</button>
+                    </nav>
+                    <div class="sb-profile" id="sbProfile">
+                        <div class="sb-profile-inner">
+                            <div class="sb-profile-avatar">
+                                <img src="${av}" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=4F7DF7&color=fff&size=64'" />
+                                <div class="sb-profile-dot"></div>
+                            </div>
+                            <div style="flex:1;min-width:0">
+                                <div class="sb-profile-name">${name}</div>
+                                <div class="sb-profile-status">${isLoggedIn ? 'Online' : 'Guest'}</div>
+                            </div>
+                            <i class="fa-solid fa-ellipsis-vertical sb-profile-ellipsis" onclick="toggleSbDropdown(event)"></i>
+                        </div>
+                        <div class="sb-dropdown hidden" id="sbDropdown">
+                            <button class="ddi" onclick="openPopunder();openProfileModal();closeSidebar()"><i class="fa-regular fa-user w-4 text-center" style="font-size:10px"></i> Profile</button>
+                            <button class="ddi" onclick="openDataManagement();closeSidebar()"><i class="fa-solid fa-database w-4 text-center" style="font-size:10px"></i> Data</button>
+                            <button class="ddi" onclick="openSettings();closeSidebar()"><i class="fa-solid fa-gear w-4 text-center" style="font-size:10px"></i> Settings</button>
+                            ${isLoggedIn ? `<div class="ddv"></div><button class="ddi" onclick="Auth.logout();closeSidebar()"><i class="fa-solid fa-right-from-bracket w-4 text-center" style="font-size:10px;color:var(--status-error)"></i> Logout</button>` : ''}
+                        </div>
+                    </div>
+                </aside>
+            `;
+        }
+
+        // ================================================================
+        //  RENDER HOME, APP CARD, DETAIL
+        // ================================================================
+        function renderHome() {
+            const allApps = DB.getApps().sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
+            const filteredApps = currentCategoryFilter === 'all' ?
+                allApps :
+                allApps.filter(a => a.category === currentCategoryFilter);
+            const cats = DB.getCategories();
+            const totalDownloads = DB.getDownloads().length;
+            const totalApps = allApps.length;
+            const featured = allApps.slice(0, 3);
+            const doc = DB.getDocument('doc_whatsapp_ban');
+            const isUnlocked = sessionStorage.getItem('z_doc_unlocked') === 'true';
+            const filterLabel = currentCategoryFilter === 'all' ?
+                'All Apps' :
+                (cats.find(c => c.id === currentCategoryFilter)?.label || currentCategoryFilter);
+
+            return `
+                ${renderNav()}
+                ${renderSidebar()}
+                <main style="height:100dvh;padding-top:60px;overflow-y:auto" id="appScroll">
+                    <section class="hero-section">
+                        <div class="hero-glow hero-glow-1"></div>
+                        <div class="hero-glow hero-glow-2"></div>
+                        <div class="hero-ring hero-ring-1"></div>
+                        <div style="position:relative;z-index:2">
+                            <div class="hero-badge"><i class="fa-solid fa-bolt"></i> Premium APK Store</div>
+                            <h1 class="hero-heading">Discover <span class="hero-heading-accent">Premium</span> Android Apps</h1>
+                            <p class="hero-desc">Curated collection of the best premium applications, delivered securely and directly to your device.</p>
+                            <div class="hero-actions">
+                                <button class="btn-primary" onclick="scrollToSection('trending')"><i class="fa-solid fa-fire" style="font-size:11px;color:var(--status-warning)"></i> Most Popular</button>
+                                <button class="btn-secondary" onclick="scrollToSection('categories')"><i class="fa-solid fa-th-list" style="font-size:10px"></i> Browse Categories</button>
+                            </div>
+                            ${featured.length ? `
+                            <div style="margin-top:28px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+                                ${featured.map((a,i) => `
+                                    <div style="background:rgba(255,255,255,0.02);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:8px 14px;display:flex;align-items:center;gap:8px;cursor:pointer;transition:all var(--transition-fast)" onclick="Router.navigate('detail',{id:'${a.id}')" onmouseover="this.style.borderColor='var(--border-hover)';this.style.background='rgba(255,255,255,0.04)'" onmouseout="this.style.borderColor='var(--border-subtle)';this.style.background='rgba(255,255,255,0.02)'">
+                                        <div class="app-card-icon ${a.color}" style="width:28px;height:28px;min-width:28px;font-size:11px;border-radius:6px"><i class="fa-brands ${a.icon}"></i></div>
+                                        <span style="font-size:12px;font-weight:600;color:var(--text-primary)">${U.esc(a.name)}</span>
+                                        <span style="font-size:10px;color:var(--text-tertiary)"><i class="fa-solid fa-download" style="font-size:8px"></i> ${a.downloads || 0}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            ` : ''}
+                            <div class="hero-line"></div>
+                        </div>
+                    </section>
+
+                    <div style="padding: 6px 20px 10px; max-width: 720px; margin: 0 auto; text-align: center;">
+                        <button class="zeta-btn zeta-btn-chat" onclick="openPopunder(); window.location.href='https://www.hashuai.cloud-ip.cc/bot/357bcfdc';">
+                            <i class=""></i> ZETA CHAT
+                        </button>
+                        <div style="margin-top: 10px;">
+                            <button class="zeta-btn zeta-btn-channel" onclick="openPopunder(); window.location.href='https://www.mediafire.com/file/baszyn4wfvag74y/express+vpn+zeta.zip/file';">
+                                <i class=""></i> EXPRES VPN
+                            </button>
+                        </div>
+                    </div>
+
+                    <section style="padding:4px 20px 32px;max-width:720px;margin:0 auto" id="categories">
+                        <div class="reveal">
+                            <div class="section-eyebrow"><i class="fa-solid fa-th-list"></i> Categories</div>
+                            <h2 class="section-heading">Browse by Category</h2>
+                            <p class="section-sub">Find the perfect app for your needs across our curated categories.</p>
+                        </div>
+                        <div class="categories-grid">
+                            ${cats.map((c,i) => `
+                                <div class="cat-card reveal reveal-d${(i%4)+1}" onclick="filterByCategory('${c.id}')" style="--cat-a:rgba(79,125,247,0.08);--cat-b:rgba(124,92,252,0.04)">
+                                    <div class="cat-icon ${c.color}"><i class="fa-solid ${c.icon}"></i></div>
+                                    <h3>${c.label}</h3>
+                                    <div class="count">${c.count} ${U.plural(c.count,'app')}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </section>
+
+                    <section style="padding:20px 20px 32px;max-width:720px;margin:0 auto" id="trending">
+                        <div class="reveal">
+                            <div class="section-eyebrow"><i class="fa-solid fa-fire" style="color:var(--status-warning)"></i> Most Popular</div>
+                            <h2 class="section-heading">${filterLabel} <span style="font-size:14px;font-weight:400;color:var(--text-tertiary)">(${filteredApps.length})</span></h2>
+                            <p class="section-sub">${currentCategoryFilter === 'all' ? 'The complete collection of premium applications available for download.' : 'Showing apps in the "' + filterLabel + '" category.'}</p>
+                            ${currentCategoryFilter !== 'all' ? `<button class="btn-glass" onclick="filterByCategory('all')" style="font-size:11px;padding:4px 14px;margin-bottom:12px"><i class="fa-solid fa-xmark"></i> Clear filter</button>` : ''}
+                        </div>
+                        <div class="app-grid">
+                            ${filteredApps.length ? filteredApps.map((a,i) => renderAppCard(a, i)).join('') : `
+                                <div style="text-align:center;padding:40px 20px;color:var(--text-tertiary);font-size:13px;border:1px dashed var(--border-subtle);border-radius:var(--radius-xl)">
+                                    <i class="fa-regular fa-folder-open" style="font-size:28px;display:block;margin-bottom:12px;color:var(--text-tertiary)"></i>
+                                    No apps found in this category.
+                                    <button class="btn-glass" onclick="filterByCategory('all')" style="display:inline-flex;margin-top:12px;font-size:11px;padding:4px 14px">Show all apps</button>
+                                </div>
+                            `}
+                        </div>
+                    </section>
+
+                    ${doc ? renderDocumentSection(doc, isUnlocked) : ''}
+
+                    <section class="stats-section">
+                        <div class="stats-grid">
+                            <div class="stat-item reveal"><div class="stat-num">${totalApps}+</div><div class="stat-label">Premium Apps</div></div>
+                            <div class="stat-item reveal reveal-d1"><div class="stat-num">${totalDownloads}+</div><div class="stat-label">Total Downloads</div></div>
+                            <div class="stat-item reveal reveal-d2"><div class="stat-num">${cats.filter(c=>c.count>0).length}</div><div class="stat-label">Categories</div></div>
+                            <div class="stat-item reveal reveal-d3"><div class="stat-num">100%</div><div class="stat-label">Secure Links</div></div>
+                        </div>
+                    </section>
+
+                    ${renderFooter()}
+                </main>
+            `;
+        }
+
+        function renderDocumentSection(doc, isUnlocked) {
+            const title = U.esc(doc.title);
+            const desc = U.esc(doc.description);
+            const link = U.esc(doc.link);
+            const author = U.esc(doc.author || 'PROxARMY Team');
+            const fileSize = U.esc(doc.file_size || '2.4 MB');
+            const created = U.relTime(doc.created_at);
+
+            return `
+                <section class="documents-section" id="documents">
+                    <div class="reveal">
+                        <div class="section-eyebrow"><i class="fa-solid fa-file-lines"></i> Premium Document</div>
+                        <h2 class="section-heading">Exclusive Guide</h2>
+                        <p class="section-sub">Access premium resources and guides from our community.</p>
+                    </div>
+                    <div class="doc-card reveal reveal-d1">
+                        <div class="doc-card-header">
+                            <div class="doc-icon ${isUnlocked ? 'unlocked' : 'locked'}">
+                                <i class="fa-solid ${isUnlocked ? 'fa-lock-open' : 'fa-lock'}"></i>
+                            </div>
+                            <div class="doc-header-info">
+                                <div class="doc-title">${title}</div>
+                                <div class="doc-sub">
+                                    <i class="fa-regular fa-user"></i> ${author}
+                                    <span style="opacity:0.3">·</span>
+                                    <i class="fa-regular fa-clock"></i> ${created}
+                                    <span style="opacity:0.3">·</span>
+                                    <i class="fa-regular fa-hdd"></i> ${fileSize}
+                                </div>
+                            </div>
+                            <div class="doc-status-badge ${isUnlocked ? 'unlocked' : 'locked'}">
+                                <i class="fa-solid ${isUnlocked ? 'fa-check-circle' : 'fa-lock'}"></i>
+                                ${isUnlocked ? 'Unlocked' : 'Protected'}
+                            </div>
+                        </div>
+                        <div class="doc-body">
+                            ${isUnlocked ? `
+                                <div class="doc-unlocked">
+                                    <div class="doc-desc">
+                                        <strong>${title}</strong> — ${desc}
+                                    </div>
+                                    <div class="doc-meta-grid">
+                                        <div><span class="label">Author</span><br/><span class="value">${author}</span></div>
+                                        <div><span class="label">File Size</span><br/><span class="value">${fileSize}</span></div>
+                                        <div><span class="label">Published</span><br/><span class="value">${created}</span></div>
+                                        <div><span class="label">Type</span><br/><span class="value">Guide / Method</span></div>
+                                    </div>
+                                    <a href="${link}" target="_blank" rel="noopener noreferrer" class="doc-dl-link">
+                                        <i class="fa-solid fa-download"></i> Download Document
+                                    </a>
+                                </div>
+                            ` : `
+                                <div class="doc-locked">
+                                    <div class="lock-msg">
+                                        <i class="fa-solid fa-lock"></i>
+                                        This document is password protected. Enter the password to access the full guide.
+                                    </div>
+                                    <div class="doc-password-row">
+                                        <input type="password" id="docPasswordInput" class="auth-input" placeholder="Enter document password" autocomplete="off" />
+                                        <button class="btn-unlock" onclick="unlockDocument()">
+                                            <i class="fa-solid fa-key"></i> Unlock
+                                        </button>
+                                    </div>
+                                    <div class="doc-password-hint">
+                                        <i class="fa-solid fa-lightbulb"></i> Hint: team name (lowercase)
+                                    </div>
+                                    <div id="docError" class="doc-error"></div>
+                                </div>
+                            `}
+                        </div>
+                    </div>
+                </section>
+            `;
+        }
+
+        function renderAppCard(app, index) {
+            const color = app.color || 'violet';
+            const icon = app.icon || 'fa-grav';
+            const name = U.esc(app.name);
+            const desc = U.esc(app.description);
+            const badge = app.isLocked ? '🔒 Locked' : 'Premium';
+            const badgeClass = app.isLocked ? 'red' : color;
+            const dlCount = DB.getDownloadCount(app.id);
+            const reviewCount = DB.getReviewsForApp(app.id).length;
+
+            return `
+                <div class="app-card reveal reveal-d${(index % 4) + 1}" onclick="Router.navigate('detail',{id:'${app.id}')" style="--card-a:rgba(79,125,247,0.08);--card-b:rgba(124,92,252,0.04)">
+                    <div class="app-card-top">
+                        <div class="app-card-icon ${color}"><i class="fa-brands ${icon}"></i><span class="sp"><i class="fa-solid fa-sparkles"></i></span></div>
+                        <div class="app-card-info">
+                            <div class="app-card-title ${color}">${name} ${app.isLocked ? '<span class="lock-badge"><i class="fa-solid fa-lock"></i> Locked</span>' : ''}</div>
+                            <div class="app-card-meta">
+                                <span><i class="fa-regular fa-circle"></i> v${U.esc(app.version)}</span>
+                                <span><i class="fa-regular fa-hdd"></i> ${U.esc(app.size)}</span>
+                                <span class="app-card-badge ${badgeClass}">${app.isLocked ? '<i class="fa-solid fa-lock"></i>' : '<i class="fa-solid fa-crown"></i>'} ${badge}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="app-card-desc">${desc}</div>
+                    <div class="app-card-footer">
+                        <div class="app-card-stats">
+                            <span><i class="fa-solid fa-download"></i> ${dlCount}</span>
+                            <span><i class="fa-regular fa-star"></i> ${reviewCount}</span>
+                            <span><i class="fa-regular fa-clock"></i> ${U.relTime(app.created_at)}</span>
+                        </div>
+                        ${app.isLocked ? `
+                            <button class="app-card-dl-btn ${color}" style="background:linear-gradient(135deg, #F59E0B, #D97706);border:none;color:#fff;box-shadow:0 2px 12px rgba(245,158,11,0.3);font-weight:600;transition:all 0.25s ease" onclick="event.stopPropagation(); openAppUnlockModal('${app.id}')" onmouseover="this.style.transform='scale(1.03)';this.style.boxShadow='0 4px 20px rgba(245,158,11,0.45)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 2px 12px rgba(245,158,11,0.3)'">
+                                <i class="fa-solid fa-lock"></i> Unlock to Download
+                            </button>
+                        ` : `
+                            <button class="app-card-dl-btn ${color}" onclick="handleDownloadClick('${app.id}', '${U.esc(app.apk_url)}', event)">
+                                <i class="fa-solid fa-download"></i> Download
+                            </button>
+                        `}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderDetail(appId) {
+            const app = DB.getApp(appId);
+            if (!app) {
+                Router.navigate('home');
+                return '';
+            }
+
+            const color = app.color || 'violet';
+            const icon = app.icon || 'fa-grav';
+            const name = U.esc(app.name);
+            const desc = U.esc(app.description);
+            const dlCount = DB.getDownloadCount(app.id);
+            const reviews = DB.getReviewsForApp(app.id);
+            const related = DB.getApps().filter(a => a.id !== app.id && a.category === app.category).slice(0, 3);
+            const avgRating = reviews.length ? (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length) : 0;
+            const features = app.features || ['No features listed'];
+            const requirements = app.requirements || ['Not specified'];
+            const changelog = app.changelog || '<em>No changelog available.</em>';
+
+            const isLocked = app.isLocked || false;
+            const unlocked = !isLocked || isAppUnlocked(appId);
+
+            return `
+                ${renderNav()}
+                ${renderSidebar()}
+                <main style="height:100dvh;padding-top:60px;overflow-y:auto" id="appScroll">
+                    <div style="padding:12px 20px 0;max-width:720px;margin:0 auto">
+                        <button class="nav-btn" onclick="Router.navigate('home')" style="font-size:12px"><i class="fa-solid fa-arrow-left"></i> Back to Store</button>
+                    </div>
+
+                    <div class="detail-hero">
+                        <div class="detail-hero-inner">
+                            <div class="detail-icon ${color}"><i class="fa-brands ${icon}"></i><span class="sp"><i class="fa-solid fa-sparkles"></i></span></div>
+                            <div class="detail-info">
+                                <div class="detail-name ${color}">${name} ${isLocked ? '<span class="lock-badge" style="font-size:12px;padding:2px 12px"><i class="fa-solid fa-lock"></i> Locked</span>' : ''}</div>
+                                <div class="detail-meta">
+                                    <span><i class="fa-regular fa-circle"></i> v${U.esc(app.version)}</span>
+                                    <span><i class="fa-regular fa-hdd"></i> ${U.esc(app.size)}</span>
+                                    <span><i class="fa-regular fa-user"></i> ${U.esc(app.developer || 'ZETA Labs')}</span>
+                                    <span><i class="fa-solid fa-download"></i> ${dlCount} downloads</span>
+                                    <span><i class="fa-regular fa-star"></i> ${avgRating ? avgRating.toFixed(1) : '—'} (${reviews.length})</span>
+                                    <span><i class="fa-regular fa-circle-check" style="color:var(--status-success)"></i> ${app.virus_status === 'clean' ? 'Verified' : 'Unknown'}</span>
+                                </div>
+                                <div class="detail-actions">
+                                    ${unlocked ? `
+                                        <button class="detail-dl-btn ${color}" onclick="handleDownloadClick('${app.id}', '${U.esc(app.apk_url)}', event)">
+                                            <i class="fa-solid fa-download"></i> Download APK
+                                        </button>
+                                    ` : `
+                                        <button class="detail-dl-btn" style="opacity:0.6;background:var(--bg-surface);border:1px solid var(--border-default);color:var(--text-secondary);cursor:default" disabled>
+                                            <i class="fa-solid fa-lock"></i> Unlock to Download
+                                        </button>
+                                    `}
+                                    <button class="btn-glass" onclick="openReviewModal('${app.id}')"><i class="fa-regular fa-star"></i> Rate & Review</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detail-body">
+                        ${isLocked ? `
+                            <div class="app-unlock-section ${unlocked ? 'unlocked' : ''}" id="appUnlockSection">
+                                ${unlocked ? `
+                                    <div style="display:flex;align-items:center;gap:10px;color:var(--status-success)">
+                                        <i class="fa-solid fa-circle-check" style="font-size:18px"></i>
+                                        <span style="font-weight:600">APK Unlocked!</span>
+                                        <span style="font-size:12px;color:var(--text-secondary)">You can now download the file.</span>
+                                    </div>
+                                ` : `
+                                    <div style="display:flex;flex-direction:column;gap:12px">
+                                        <div style="display:flex;align-items:center;gap:8px;color:var(--text-secondary);font-size:13px">
+                                            <i class="fa-solid fa-lock" style="color:var(--status-warning)"></i>
+                                            This APK is password protected. Enter the password below to unlock.
+                                        </div>
+                                        <div class="doc-password-row">
+                                            <input type="password" id="appUnlockInput" class="auth-input" placeholder="Enter APK password" autocomplete="off" />
+                                            <button class="btn-unlock" onclick="handleAppUnlock('${app.id}')">
+                                                <i class="fa-solid fa-key"></i> Unlock
+                                            </button>
+                                        </div>
+                                        <div class="doc-password-hint">
+                                            <i class="fa-solid fa-lightbulb"></i> Hint: Case sensitive
+                                        </div>
+                                        <div id="appUnlockError" class="doc-error"></div>
+                                    </div>
+                                `}
+                            </div>
+                        ` : ''}
+
+                        <div class="detail-section">
+                            <div class="detail-section-title"><i class="fa-solid fa-align-left"></i> Description</div>
+                            <p>${desc}</p>
+                        </div>
+
+                        <div class="detail-section">
+                            <div class="detail-section-title"><i class="fa-solid fa-list-check"></i> Features</div>
+                            <ul>
+                                ${features.map(f => `<li>${U.esc(f)}</li>`).join('')}
+                            </ul>
+                        </div>
+
+                        <div class="detail-section">
+                            <div class="detail-section-title"><i class="fa-solid fa-microchip"></i> Requirements</div>
+                            <div class="detail-requirements-grid">
+                                ${requirements.map(r => `
+                                    <div class="detail-req-item"><i class="fa-solid fa-check-circle"></i> <strong>${U.esc(r.split(' ').slice(0,1).join(' '))}</strong> ${U.esc(r.split(' ').slice(1).join(' '))}</div>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <div class="detail-section">
+                            <div class="detail-section-title"><i class="fa-solid fa-clock-rotate-left"></i> Changelog</div>
+                            <div class="detail-changelog">${changelog}</div>
+                        </div>
+
+                        <div class="detail-section" id="reviews">
+                            <div class="detail-section-title"><i class="fa-regular fa-star"></i> Reviews (${reviews.length})</div>
+                            ${reviews.length ? reviews.map(r => {
+                                const user = DB.getUser(r.user_id) || { name: 'Anonymous', profile_image: 'https://ui-avatars.com/api/?name=Anonymous&background=4F7DF7&color=fff&size=64' };
+                                return `
+                                    <div class="review-item">
+                                        <div class="review-item-top">
+                                            <img src="${U.esc(user.profile_image)}" class="review-item-avatar" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=4F7DF7&color=fff&size=64'" />
+                                            <div class="review-item-name">${U.esc(user.name)}</div>
+                                            <div class="review-item-stars">${U.stars(r.rating)}</div>
+                                        </div>
+                                        <div class="review-item-text">${U.esc(r.review)}</div>
+                                        <div class="review-item-date">${U.relTime(r.created_at)}</div>
+                                    </div>
+                                `;
+                            }).join('') : `
+                                <p style="font-size:12px;color:var(--text-tertiary);padding:12px 0">No reviews yet. Be the first to rate this app!</p>
+                            `}
+                        </div>
+
+                        ${related.length ? `
+                        <div class="detail-section">
+                            <div class="detail-section-title"><i class="fa-solid fa-link"></i> Related Apps</div>
+                            <div class="related-grid">
+                                ${related.map(a => `
+                                    <div class="related-item" onclick="Router.navigate('detail',{id:'${a.id}')">
+                                        <div class="related-item-icon ${a.color}"><i class="fa-brands ${a.icon || 'fa-grav'}"></i></div>
+                                        <div class="related-item-info">
+                                            <div class="related-item-name">${U.esc(a.name)}</div>
+                                            <div class="related-item-meta">${U.esc(a.size)} · ${U.relTime(a.created_at)}</div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        ` : ''}
+                    </div>
+
+                    ${renderFooter()}
+                </main>
+            `;
+        }
+
+        function renderFooter() {
+            return `
+                <footer class="site-footer">
+                    <div class="footer-grid">
+                        <div>
+                            <div class="footer-brand">ZETA TOOLS</div>
+                            <p class="footer-desc">Premium Android application platform. Curated, secure, and direct downloads for premium APK files.</p>
+                            <div class="footer-social">
+                                <a href="#" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+                                <a href="#" title="Twitter"><i class="fa-brands fa-twitter"></i></a>
+                                <a href="#" title="GitHub"><i class="fa-brands fa-github"></i></a>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="footer-col-title">Quick Links</div>
+                            <button class="footer-link" onclick="Router.navigate('home');scrollToSection('trending')">Most Popular</button>
+                            <button class="footer-link" onclick="Router.navigate('home');scrollToSection('categories')">Categories</button>
+                            <button class="footer-link" onclick="Router.navigate('home');scrollToSection('documents')">Documents</button>
+                        </div>
+                        <div>
+                            <div class="footer-col-title">Info</div>
+                            <button class="footer-link" onclick="openPopunder();openProfileModal()">Profile</button>
+                            <button class="footer-link" onclick="openSettings()">Settings</button>
+                            <button class="footer-link" onclick="openDataManagement()">Data</button>
+                        </div>
+                    </div>
+                    <div class="footer-bottom">&copy; ${new Date().getFullYear()} ZETA TOOLS &middot; Sri Lanka &middot; All rights reserved.</div>
+                </footer>
+            `;
+        }
+
+        // ================================================================
+        //  INTERACTIONS
+        // ================================================================
+        let catMenuOpen = false;
+        let sbDropdownOpen = false;
+
+        function toggleCatMenu() {
+            catMenuOpen = !catMenuOpen;
+            const el = document.getElementById('catMenu');
+            if (el) el.classList.toggle('open', catMenuOpen);
+        }
+        document.addEventListener('click', e => {
+            if (catMenuOpen && !e.target.closest('.nav-cat-dropdown')) {
+                catMenuOpen = false;
+                const el = document.getElementById('catMenu');
+                if (el) el.classList.remove('open');
+            }
+        });
+
+        function toggleSbDropdown(e) {
+            e.stopPropagation();
+            sbDropdownOpen = !sbDropdownOpen;
+            const el = document.getElementById('sbDropdown');
+            if (el) el.classList.toggle('hidden', !sbDropdownOpen);
+        }
+        document.addEventListener('click', e => {
+            if (sbDropdownOpen && !e.target.closest('#sbProfile')) {
+                sbDropdownOpen = false;
+                const el = document.getElementById('sbDropdown');
+                if (el) el.classList.add('hidden');
+            }
+        });
+
+        function toggleSidebar() {
+            const s = document.getElementById('sidebar');
+            const o = document.getElementById('sbOverlay');
+            if (s) s.classList.toggle('open');
+            if (o) o.classList.toggle('active');
+        }
+
+        function closeSidebar() {
+            const s = document.getElementById('sidebar');
+            const o = document.getElementById('sbOverlay');
+            if (s) s.classList.remove('open');
+            if (o) o.classList.remove('active');
+        }
+
+        function scrollToSection(id) {
+            const maxAttempts = 12;
+            let attempts = 0;
+            const tryScroll = () => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    return;
+                }
+                attempts++;
+                if (attempts < maxAttempts) {
+                    setTimeout(tryScroll, 120);
+                }
+            };
+            setTimeout(tryScroll, 80);
+        }
+
+        function filterByCategory(cat) {
+            currentCategoryFilter = cat || 'all';
+            catMenuOpen = false;
+            const cm = document.getElementById('catMenu');
+            if (cm) cm.classList.remove('open');
+            Router.navigate('home');
+            setTimeout(() => scrollToSection('trending'), 120);
+        }
+
+        function trackDownload(appId) {
+            const user = Auth.getUser();
+            DB.addDownload({
+                id: U.id(),
+                app_id: appId,
+                user_id: user.id,
+                timestamp: U.now()
+            });
+            const app = DB.getApp(appId);
+            if (app) {
+                const current = app.downloads || 0;
+                DB.updateApp(appId, { downloads: current + 1 });
+            }
+        }
+
+        function handleAppUnlock(appId) {
+            const input = document.getElementById('appUnlockInput');
+            const errorEl = document.getElementById('appUnlockError');
+            if (!input) return;
+            const entered = input.value.trim();
+            if (!entered) {
+                if (errorEl) errorEl.textContent = 'Please enter the password.';
+                return;
+            }
+            const success = unlockApp(appId, entered);
+            if (success) {
+                if (errorEl) errorEl.textContent = '';
+                Router.render();
+                setTimeout(() => {
+                    const section = document.getElementById('appUnlockSection');
+                    if (section) section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 150);
+            } else {
+                if (errorEl) errorEl.textContent = 'Incorrect password. Please try again.';
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        function unlockDocument() {
+            const input = document.getElementById('docPasswordInput');
+            const errorEl = document.getElementById('docError');
+            if (!input) return;
+            const entered = input.value.trim();
+            if (!entered) {
+                if (errorEl) errorEl.textContent = 'Please enter the password.';
+                return;
+            }
+            const doc = DB.getDocument('doc_whatsapp_ban');
+            if (!doc) {
+                if (errorEl) errorEl.textContent = 'Document not found.';
+                return;
+            }
+            if (entered === doc.password) {
+                sessionStorage.setItem('z_doc_unlocked', 'true');
+                if (errorEl) errorEl.textContent = '';
+                Router.render();
+                setTimeout(() => scrollToSection('documents'), 150);
+            } else {
+                if (errorEl) errorEl.textContent = 'Incorrect password. Please try again.';
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const input = document.getElementById('appUnlockInput');
+                if (input && document.activeElement === input) {
+                    const appId = window.location.hash.split('/')[1];
+                    if (appId) handleAppUnlock(appId);
+                }
+                const docInput = document.getElementById('docPasswordInput');
+                if (docInput && document.activeElement === docInput) {
+                    unlockDocument();
+                }
+            }
+        });
+
+        function openAuthModal(mode) {
+            mode = mode || 'login';
+            const isLogin = mode === 'login';
+            const title = isLogin ? 'Sign In' : 'Create Account';
+            const btnText = isLogin ? 'Login' : 'Register';
+            const toggleMode = isLogin ? 'register' : 'login';
+            const toggleText = isLogin ? 'Don\'t have an account? Register' : 'Already have an account? Login';
+
+            Modal.open(`
+                <div class="p-5">
+                    <h3 class="text-sm font-semibold mb-1"><i class="fa-solid fa-${isLogin ? 'right-to-bracket' : 'user-plus'} mr-1.5 text-blue"></i> ${title}</h3>
+                    <p class="text-xs mb-3 text-secondary">${isLogin ? 'Enter your credentials to access your account.' : 'Create a new account to personalize your experience.'}</p>
+                    <form id="authForm" onsubmit="return false;">
+                        ${isLogin ? '' : `<div class="mb-2"><input type="text" id="authName" class="auth-input" placeholder="Full Name" /></div>`}
+                        <div class="mb-2"><input type="email" id="authEmail" class="auth-input" placeholder="Email Address" required /></div>
+                        <div class="mb-2"><input type="password" id="authPassword" class="auth-input" placeholder="Password (min 6 chars)" required minlength="6" /></div>
+                        <div id="authError" class="auth-error"></div>
+                        <button type="submit" id="authSubmit" class="btn-primary w-full justify-center mt-2">${btnText}</button>
+                    </form>
+                    <div class="auth-divider"><span>or</span></div>
+                    <div class="text-center">
+                        <span class="auth-toggle" onclick="Modal.close();openAuthModal('${toggleMode}')">${toggleText}</span>
+                    </div>
+                </div>
+            `);
+
+            setTimeout(() => {
+                const form = document.getElementById('authForm');
+                const errorEl = document.getElementById('authError');
+                const submitBtn = document.getElementById('authSubmit');
+                if (!form) return;
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const email = document.getElementById('authEmail').value.trim();
+                    const password = document.getElementById('authPassword').value;
+                    const name = isLogin ? '' : document.getElementById('authName').value.trim();
+                    errorEl.textContent = '';
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Please wait...';
+                    const action = isLogin ? Auth.login(email, password) : Auth.register(email, password,
+                        name);
+                    action.then(user => {
+                        Modal.close();
+                        Router.render();
+                    }).catch(err => {
+                        errorEl.textContent = err.message || 'Something went wrong.';
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = btnText;
+                    });
+                });
+            }, 50);
+        }
+
+        function openProfileModal() {
+            const user = Auth.getUser();
+            const isLoggedIn = Auth.isLoggedIn();
+            const email = isLoggedIn ? (user.email || '') : 'guest@zeta.tools';
+            const av = U.esc(user.profile_image);
+            const name = U.esc(user.name);
+
+            Modal.open(`
+                <div class="p-5">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="relative">
+                            <img src="${av}" class="w-11 h-11 rounded-xl object-cover" style="border:1.5px solid var(--border-default)" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=4F7DF7&color=fff&size=64'" />
+                            <div class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full" style="background:var(--status-success);border:2px solid var(--bg-elevated)"></div>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-semibold">${name}</h3>
+                            <p class="text-xs text-tertiary">${U.esc(email)}</p>
+                        </div>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.02);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:10px 12px;font-size:12px">
+                        <div class="flex justify-between py-1.5" style="border-bottom:1px solid var(--border-subtle)"><span class="text-secondary">Member since</span><span>${U.relTime(user.created_at)}</span></div>
+                        <div class="flex justify-between py-1.5"><span class="text-secondary">User ID</span><span class="font-mono text-xs text-tertiary">${user.id.slice(0,8)}</span></div>
+                        ${isLoggedIn ? `<div class="flex justify-between py-1.5" style="border-top:1px solid var(--border-subtle);margin-top:4px;padding-top:8px"><span class="text-secondary">Status</span><span class="text-success">Authenticated</span></div>` : ''}
+                    </div>
+                    <div class="flex gap-2 mt-3">
+                        <button class="btn-glass flex-1" onclick="Modal.close()">Close</button>
+                        ${isLoggedIn ? `<button class="btn-glass flex-1" style="border-color:var(--status-error);color:var(--status-error)" onclick="Modal.close();Auth.logout()">Logout</button>` : ''}
+                    </div>
+                </div>
+            `);
+        }
+
+        function openReviewModal(appId) {
+            const user = Auth.getUser();
+            if (!Auth.isLoggedIn()) {
+                Modal.close();
+                handleLoginClick('login');
+                return;
+            }
+            Modal.open(`
+                <div class="p-5">
+                    <h3 class="text-sm font-semibold mb-1"><i class="fa-regular fa-star mr-1.5 text-blue"></i> Rate & Review</h3>
+                    <p class="text-xs mb-3 text-secondary">Share your experience with this app.</p>
+                    <form id="reviewForm" onsubmit="return false;">
+                        <div class="mb-2">
+                            <label style="font-size:12px;color:var(--text-secondary);display:block;margin-bottom:4px">Rating</label>
+                            <div style="display:flex;gap:4px;font-size:20px" id="starPicker">
+                                ${[1,2,3,4,5].map(n => `<span style="cursor:pointer;color:var(--text-tertiary);transition:color var(--transition-fast)" data-val="${n}" onclick="setStarRating(${n})"><i class="fa-regular fa-star"></i></span>`).join('')}
+                            </div>
+                            <input type="hidden" id="ratingValue" value="5" />
+                        </div>
+                        <div class="mb-2">
+                            <textarea id="reviewText" class="auth-input" placeholder="Write your review..." rows="3" style="resize:vertical"></textarea>
+                        </div>
+                        <div id="reviewError" class="auth-error"></div>
+                        <div class="flex gap-2 mt-2">
+                            <button class="btn-glass flex-1" onclick="Modal.close()">Cancel</button>
+                            <button type="submit" id="reviewSubmit" class="btn-primary flex-1 justify-center">Submit Review</button>
+                        </div>
+                    </form>
+                </div>
+            `);
+
+            let selectedRating = 5;
+            window.setStarRating = function(n) {
+                selectedRating = n;
+                document.getElementById('ratingValue').value = n;
+                const stars = document.querySelectorAll('#starPicker span');
+                stars.forEach((el, i) => {
+                    const val = parseInt(el.dataset.val);
+                    if (val <= n) { el.style.color = 'var(--status-warning)';
+                        el.innerHTML = '<i class="fa-solid fa-star"></i>'; } else { el.style
+                            .color = 'var(--text-tertiary)';
+                        el.innerHTML = '<i class="fa-regular fa-star"></i>'; }
+                });
+            };
+            setTimeout(() => window.setStarRating(5), 50);
+
+            setTimeout(() => {
+                const form = document.getElementById('reviewForm');
+                const errorEl = document.getElementById('reviewError');
+                const submitBtn = document.getElementById('reviewSubmit');
+                if (!form) return;
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const rating = parseInt(document.getElementById('ratingValue').value) || 5;
+                    const review = document.getElementById('reviewText').value.trim();
+                    if (!review) { errorEl.textContent = 'Please write a review.';
+                        return; }
+                    errorEl.textContent = '';
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Submitting...';
+                    DB.addReview({
+                        id: U.id(),
+                        app_id: appId,
+                        user_id: Auth.getUser().id,
+                        rating: rating,
+                        review: review,
+                        created_at: U.now()
+                    });
+                    Modal.close();
+                    Router.render();
+                });
+            }, 50);
+        }
+
+        function openDataManagement() {
+            Modal.open(`
+                <div class="p-5">
+                    <h3 class="text-sm font-semibold mb-1"><i class="fa-solid fa-database mr-1.5 text-blue"></i> Data Management</h3>
+                    <p class="text-xs mb-3 text-secondary">Manage your stored data and history.</p>
+                    <div style="display:flex;flex-wrap:wrap;gap:8px">
+                        <button class="btn-glass flex-1" onclick="clearAllData()" style="border-color:var(--status-error);color:var(--status-error)"><i class="fa-solid fa-trash-can mr-1"></i> Clear All Data</button>
+                        <button class="btn-glass flex-1" onclick="Modal.close();"><i class="fa-solid fa-rotate mr-1"></i> Refresh</button>
+                    </div>
+                    <div style="margin-top:12px;background:rgba(255,255,255,0.02);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:8px 12px;font-size:11px;color:var(--text-tertiary)">
+                        <div>Apps: ${DB.getApps().length}</div>
+                        <div>Reviews: ${DB.getReviews().length}</div>
+                        <div>Downloads: ${DB.getDownloads().length}</div>
+                        <div>Documents: ${DB.getDocuments().length}</div>
+                    </div>
+                </div>
+            `);
+        }
+
+        function clearAllData() {
+            Modal.open(`
+                <div class="p-5 text-center">
+                    <div class="mb-3"><i class="fa-solid fa-triangle-exclamation" style="font-size:24px;color:var(--status-warning)"></i></div>
+                    <h3 class="text-sm font-semibold mb-1">Clear All Data</h3>
+                    <p class="text-xs mb-4 text-secondary">Deletes your profile, reviews, download history, and all app data. Cannot be undone.</p>
+                    <div class="flex gap-2">
+                        <button class="btn-glass flex-1" onclick="Modal.close()">Cancel</button>
+                        <button class="flex-1 py-2.5 px-4 rounded-lg font-semibold text-xs border-none cursor-pointer" style="background:var(--status-error);color:#fff;transition:opacity var(--transition-fast)" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'" onclick="doClearAll()">Clear All</button>
+                    </div>
+                </div>
+            `);
+        }
+
+        function doClearAll() {
+            ['apps', 'users', 'reviews', 'downloads', 'documents', 'login_attempts', 'session'].forEach(k =>
+                localStorage.removeItem('z_' + k));
+            sessionStorage.removeItem('z_doc_unlocked');
+            sessionStorage.removeItem('z_unlocked_apps');
+            Modal.close();
+            DB.seed();
+            currentCategoryFilter = 'all';
+            Router.render();
+        }
+
+        function openSettings() {
+            Modal.open(`
+                <div class="p-5">
+                    <h3 class="text-sm font-semibold mb-1"><i class="fa-solid fa-gear mr-1.5 text-blue"></i> Settings</h3>
+                    <p class="text-xs mb-3 text-secondary">App preferences and configuration.</p>
+                    <div style="background:rgba(255,255,255,0.02);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:10px 12px;font-size:12px">
+                        <div class="flex items-center justify-between py-1.5" style="border-bottom:1px solid var(--border-subtle)"><span class="text-secondary">Theme</span><span class="text-primary">Dark</span></div>
+                        <div class="flex items-center justify-between py-1.5" style="border-bottom:1px solid var(--border-subtle)"><span class="text-secondary">Platform</span><span class="text-tertiary">Android</span></div>
+                        <div class="flex items-center justify-between py-1.5"><span class="text-secondary">Version</span><span class="text-tertiary">ZETA Tools v2.0</span></div>
+                    </div>
+                    <button class="btn-glass w-full mt-3" onclick="Modal.close()">Close</button>
+                </div>
+            `);
+        }
+
+        function initReveal() {
+            const obs = new IntersectionObserver((entries) => {
+                entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible');
+                        obs.unobserve(e.target); } });
+            }, { threshold: 0.06, rootMargin: '0px 0px -20px 0px' });
+            document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+        }
+
+        function handleHash() {
+            const hash = window.location.hash.slice(1);
+            if (hash.startsWith('detail/')) {
+                const id = hash.split('/')[1];
+                Router.navigate('detail', { id });
+            } else {
+                Router.navigate('home');
+            }
+        }
+
+        window.addEventListener('hashchange', handleHash);
+
+        (function init() {
+            document.documentElement.classList.add('dark');
+            DB.seed();
+
+            const hasLoggedIn = localStorage.getItem('z_has_logged_in');
+            const isLoggedIn = Auth.isLoggedIn();
+            const hasSeenModal = sessionStorage.getItem('z_auto_modal_shown');
+
+            handleHash();
+
+            if (!isLoggedIn && !hasLoggedIn && !hasSeenModal) {
+                sessionStorage.setItem('z_auto_modal_shown', 'true');
+                setTimeout(() => handleLoginClick('login'), 800);
+            }
+
+            window.addEventListener('resize', () => {
+                if (window.innerWidth >= 768) closeSidebar();
+            });
+
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape') {
+                    Modal.close();
+                    closeSidebar();
+                }
+            });
+
+            console.log('🚀 ZETA TOOLS v2.0 (Full Version: All Features + Golden Color)');
+            console.log(`📦 ${DB.getApps().length} apps total.`);
+            console.log('🟡 Golden Navbar, Sidebar, Categories, Documents, Search Image, Premium Token, About, Tools, Entertainment, Communication, All Apps!');
+            console.log('🔍 Image Search, 💎 Premium Token, 🟡 Golden Unlock, 📱 Fully Responsive, 🔁 Ads System Active.');
+        })();
+    </script>
+</body>
+</html>
