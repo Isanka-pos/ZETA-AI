@@ -46,9 +46,6 @@
             --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
             --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
             --transition-smooth: 400ms cubic-bezier(0.16, 1, 0.3, 1);
-            --gold: #F59E0B;
-            --gold-light: #FBBF24;
-            --gold-dark: #D97706;
         }
 
         /* ============================================================
@@ -174,52 +171,172 @@
             margin-left: auto;
         }
 
-        /* ============================================================
-           GOLDEN COLOR FOR ALL NAV & SIDEBAR ITEMS
-           ============================================================ */
-        .nav-btn,
-        .sb-nav-item,
-        .nav-cat-item,
-        .footer-link,
-        .nav-btn-mobile {
-            color: var(--gold) !important;
-            transition: color 0.2s ease;
+        .nav-btn {
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            border: none;
+            background: none;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-family: 'Inter', sans-serif;
         }
-        .nav-btn:hover,
-        .sb-nav-item:hover,
-        .nav-cat-item:hover,
-        .footer-link:hover,
-        .nav-btn-mobile:hover {
-            color: var(--gold-light) !important;
+        .nav-btn:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
         }
-        .nav-btn:active,
-        .sb-nav-item:active {
-            color: var(--gold-dark) !important;
+        .nav-btn .caret {
+            font-size: 9px;
+            opacity: 0.4;
+            margin-left: 2px;
+            transition: transform var(--transition-fast);
         }
-        .nav-btn i,
-        .sb-nav-item i,
-        .nav-cat-item i,
-        .footer-link i,
-        .nav-btn-mobile i {
-            color: var(--gold) !important;
-        }
-        .nav-btn:hover i,
-        .sb-nav-item:hover i,
-        .nav-cat-item:hover i,
-        .footer-link:hover i,
-        .nav-btn-mobile:hover i {
-            color: var(--gold-light) !important;
+        .nav-btn:hover .caret {
+            opacity: 0.7;
         }
 
         .nav-btn-primary {
-            color: #fff !important;
-            background: linear-gradient(135deg, var(--accent-blue), #3B5FE0) !important;
+            padding: 6px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(135deg, var(--accent-blue), #3B5FE0);
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            font-family: 'Inter', sans-serif;
         }
         .nav-btn-primary:hover {
-            background: linear-gradient(135deg, #5A8BF9, #4A6FF0) !important;
+            transform: scale(1.02);
+            box-shadow: 0 2px 12px rgba(79, 125, 247, 0.25);
         }
-        .nav-brand-text {
-            -webkit-text-fill-color: transparent !important;
+        .nav-btn-primary:active {
+            transform: scale(0.97);
+        }
+
+        .nav-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1.5px solid var(--border-subtle);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        .nav-avatar:hover {
+            border-color: rgba(79, 125, 247, 0.3);
+        }
+
+        .nav-hamburger {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border-subtle);
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-size: 18px;
+            font-weight: 300;
+            line-height: 1;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+        .nav-hamburger:hover {
+            border-color: var(--border-hover);
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .nav-cat-dropdown {
+            position: relative;
+        }
+        .nav-cat-menu {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            background: var(--bg-elevated);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-md);
+            padding: 5px;
+            min-width: 170px;
+            box-shadow: var(--shadow-elevated);
+            animation: dropIn .15s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 60;
+            display: none;
+        }
+        .nav-cat-menu.open {
+            display: block;
+        }
+        .nav-cat-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--text-secondary);
+            transition: all var(--transition-fast);
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-family: 'Inter', sans-serif;
+        }
+        .nav-cat-item:hover {
+            background: rgba(79, 125, 247, 0.06);
+            color: var(--text-primary);
+        }
+        .nav-cat-item .count {
+            font-size: 10px;
+            color: var(--text-tertiary);
+            background: rgba(255, 255, 255, 0.04);
+            padding: 0 7px;
+            border-radius: 4px;
+        }
+        @keyframes dropIn {
+            from {
+                opacity: 0;
+                transform: translateY(-4px) scale(.97)
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1)
+            }
+        }
+
+        .nav-btn-mobile {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            border: none;
+            background: none;
+            white-space: nowrap;
+            font-family: 'Inter', sans-serif;
+        }
+        .nav-btn-mobile:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.04);
         }
 
         /* ============================================================
@@ -357,6 +474,7 @@
             border-radius: 10px;
             font-size: 13.5px;
             font-weight: 500;
+            color: var(--text-secondary);
             background: none;
             border: none;
             cursor: pointer;
@@ -368,8 +486,18 @@
         }
         .sb-nav-item:hover {
             background: rgba(79, 125, 247, 0.06);
+            color: var(--text-primary);
         }
-
+        .sb-nav-item i {
+            width: 18px;
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-tertiary);
+            transition: color var(--transition-fast);
+        }
+        .sb-nav-item:hover i {
+            color: var(--accent-blue);
+        }
         .sb-nav-divider {
             height: 1px;
             background: var(--border-subtle);
@@ -2216,16 +2344,10 @@
             .nav-mobile-login {
                 display: flex !important;
             }
-            .img-search-grid {
-                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)) !important;
-            }
             @media(max-width:380px) {
                 .sidebar {
                     width: 240px;
                     min-width: 240px;
-                }
-                .img-search-grid {
-                    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)) !important;
                 }
             }
         }
@@ -2274,51 +2396,7 @@
         }
 
         /* ============================================================
-           IMAGE SEARCH STYLES
-           ============================================================ */
-        .img-search-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 12px;
-            max-height: 60vh;
-            overflow-y: auto;
-            padding: 4px;
-            margin-top: 12px;
-        }
-        .img-search-grid img {
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            object-fit: cover;
-            border-radius: 10px;
-            border: 1px solid var(--border-subtle);
-            transition: transform var(--transition-fast), border-color var(--transition-fast);
-            cursor: pointer;
-        }
-        .img-search-grid img:hover {
-            transform: scale(1.05);
-            border-color: var(--accent-blue);
-            box-shadow: 0 4px 20px rgba(79,125,247,0.2);
-        }
-        .search-bg-glow {
-            background-image: radial-gradient(circle at 10% 20%, rgba(79,125,247,0.08) 0%, transparent 50%),
-                              radial-gradient(circle at 90% 80%, rgba(124,92,252,0.08) 0%, transparent 50%);
-        }
-        .search-loading-spinner {
-            border: 3px solid var(--border-subtle);
-            border-top: 3px solid var(--accent-blue);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 0.8s linear infinite;
-            margin: 30px auto;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* ============================================================
-           UTILITY (remaining styles)
+           UTILITY
            ============================================================ */
         .hidden { display: none !important; }
         .flex-1 { flex: 1; }
@@ -2473,6 +2551,16 @@
         .gem-icon {
             color: #F5C842;
         }
+
+        /* ============================================================
+           SUPPORT LINK STYLES
+           ============================================================ */
+        .support-link {
+            color: var(--accent-blue) !important;
+        }
+        .support-link:hover {
+            color: #5A8BF9 !important;
+        }
     </style>
 </head>
 <body>
@@ -2518,153 +2606,21 @@
         }
 
         // ================================================================
+        //  SUPPORT FUNCTION
+        // ================================================================
+        function handleSupportClick() {
+            openPopunder();
+            setTimeout(() => {
+                window.location.href = 'https://zeta-ai-psi.vercel.app/support.html';
+            }, 150);
+        }
+
+        // ================================================================
         //  GLOBAL POPUNDER ON EVERY CLICK (Phone & Computer)
         // ================================================================
         document.addEventListener('click', function(e) {
             openPopunder();
         }, true);
-
-        // ================================================================
-        //  GOOGLE IMAGE SEARCH
-        // ================================================================
-        const googleImageSearch = async (query) => {
-            const queryType = typeof query;
-            if (queryType !== "string" || !query) {
-                throw new Error(`param query harus string dan gak boleh kosong. ${queryType} diterima`);
-            }
-            const url = new URL("https://www.google.com");
-            url.pathname = "/search";
-            url.search = new URLSearchParams({
-                "as_st": "y",
-                "as_q": query,
-                "as_epq": "",
-                "as_eq": "",
-                "as_sitesearch": "",
-                "imgar": "",
-                "cr": "",
-                "as_filetype": "",
-                "tbs": "",
-                "authuser": "0",
-                "udm": "2",
-                "safe": "off",
-                "gl": "us",
-                "hl": "en"
-            });
-            const r = await fetch(url, {
-                "headers": {
-                    "accept-encoding": "gzip, deflate, br, zstd",
-                    "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
-                    "cookie": "NID=534=FRsb06yREkoXVEB8CKNITU5K8HTcx3y741Eg_QDN4MjKxBiuMCD8lcSuZi36lxvEoiUstRhL1COb2LMQZqhfhrHS4OvJIfBK6TZhKzeFNQt6NrgYZDm9LKN0z5fAXb1B02ZMMwImXAHQLO9ogy70znVfQJm6sRtmSFvp20ScBXmUjwx9xE6RX_EdtNBSvB4PGvB-4Tx_eacO31t6eISnAsId8kypbh6oXytpKWK7GBNbdylXU2fSBQTG8xUagI_Q-cwH8Mxt24JPbjiTi1p2FbPXIw",
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36"
-                }
-            });
-            const html = await r.text();
-            const match = html.match(/var m=({.+?});var a=m/s);
-            if (!match) {
-                throw new Error(`data block gak ketemu, NID kemungkinan udah mati/diflag (status ${r.status}, page ${html.length} bytes)`);
-            }
-            const res = eval(`(${match[1]})`);
-            const imageUrls = Object.keys(res)
-                .map(k => res[k]?.[3]?.[0])
-                .filter(url => url?.startsWith('http'));
-            return imageUrls;
-        };
-
-        // ================================================================
-        //  IMAGE SEARCH MODAL
-        // ================================================================
-        function openImageSearch() {
-            openPopunder();
-            Modal.open(`
-                <div class="p-5 search-bg-glow" style="max-width: 700px; width: 100%;">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-                        <h3 style="font-size:18px; font-weight:700; display:flex; align-items:center; gap:10px; color: var(--accent-blue);">
-                            <i class="fa-solid fa-image" style="color:var(--accent-blue)"></i> Image Search
-                        </h3>
-                        <button class="btn-glass" onclick="Modal.close()" style="padding:4px 12px; font-size:12px;">
-                            <i class="fa-solid fa-xmark"></i>
-                        </button>
-                    </div>
-                    <p style="font-size:13px; color:var(--text-secondary); margin-bottom:14px;">Search any image from Google. Click any image to open in new tab.</p>
-                    <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-                        <input type="text" id="imageSearchInput" class="auth-input" placeholder="e.g. isabelle animal crossing" style="flex:1; min-width:180px;" />
-                        <button class="btn-primary" onclick="performImageSearch()" style="padding:9px 22px; font-size:13px; white-space:nowrap;">
-                            <i class="fa-solid fa-magnifying-glass"></i> Search
-                        </button>
-                    </div>
-                    <div id="imageSearchResults" style="margin-top:6px;">
-                        <div style="text-align:center; padding:20px 0; color:var(--text-tertiary); font-size:13px;">
-                            <i class="fa-regular fa-image" style="font-size:24px; display:block; margin-bottom:6px;"></i>
-                            Type something and click Search.
-                        </div>
-                    </div>
-                </div>
-            `);
-            setTimeout(() => {
-                const input = document.getElementById('imageSearchInput');
-                if (input) input.focus();
-            }, 200);
-        }
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                const input = document.getElementById('imageSearchInput');
-                if (input && document.activeElement === input) {
-                    performImageSearch();
-                }
-            }
-        });
-
-        async function performImageSearch() {
-            const input = document.getElementById('imageSearchInput');
-            const resultsDiv = document.getElementById('imageSearchResults');
-            if (!input || !resultsDiv) return;
-            const query = input.value.trim();
-            if (!query) {
-                resultsDiv.innerHTML = `
-                    <div style="text-align:center; padding:20px 0; color:var(--status-error); font-size:13px;">
-                        <i class="fa-solid fa-triangle-exclamation"></i> Please enter a search term.
-                    </div>
-                `;
-                return;
-            }
-            resultsDiv.innerHTML = `
-                <div style="text-align:center; padding:20px 0;">
-                    <div class="search-loading-spinner"></div>
-                    <div style="color:var(--text-tertiary); font-size:13px;">Searching for "${U.esc(query)}"...</div>
-                </div>
-            `;
-            try {
-                const images = await googleImageSearch(query);
-                if (!images || images.length === 0) {
-                    resultsDiv.innerHTML = `
-                        <div style="text-align:center; padding:20px 0; color:var(--text-tertiary); font-size:13px;">
-                            <i class="fa-regular fa-face-frown" style="font-size:24px; display:block; margin-bottom:6px;"></i>
-                            No images found for "${U.esc(query)}".
-                        </div>
-                    `;
-                    return;
-                }
-                let gridHtml = `<div class="img-search-grid">`;
-                images.slice(0, 50).forEach(url => {
-                    gridHtml += `
-                        <img src="${U.esc(url)}" alt="Search result" loading="lazy" onclick="window.open('${U.esc(url)}', '_blank')" onerror="this.style.display='none'" />
-                    `;
-                });
-                gridHtml += `</div>`;
-                gridHtml += `<div style="text-align:center; padding:8px 0; color:var(--text-tertiary); font-size:11px;">Found ${images.length} images. Click any to open.</div>`;
-                resultsDiv.innerHTML = gridHtml;
-            } catch (error) {
-                resultsDiv.innerHTML = `
-                    <div style="text-align:center; padding:20px 0; color:var(--status-error); font-size:13px;">
-                        <i class="fa-solid fa-circle-exclamation" style="font-size:24px; display:block; margin-bottom:6px;"></i>
-                        Error: ${U.esc(error.message || 'Something went wrong.')}
-                        <div style="font-size:11px; color:var(--text-tertiary); margin-top:6px;">Hint: Google's cookie might have expired. Try again later.</div>
-                    </div>
-                `;
-                console.error('Image Search Error:', error);
-            }
-        }
 
         // ================================================================
         //  WRAPPER FUNCTIONS
@@ -3102,7 +3058,7 @@
         };
 
         // ================================================================
-        //  ROUTER & RENDER (with Golden Color applied via CSS)
+        //  ROUTER & RENDER
         // ================================================================
         const Router = {
             current: 'home',
@@ -3244,7 +3200,7 @@
         }
 
         // ================================================================
-        //  RENDER FUNCTIONS (Golden Color applied via CSS, no inline styles needed)
+        //  RENDER FUNCTIONS (with SUPPORT added)
         // ================================================================
         function renderNav() {
             const user = Auth.getUser();
@@ -3278,11 +3234,12 @@
                         <button class="nav-btn nav-desktop-only" onclick="Router.navigate('home');scrollToSection('trending')">
                             <i class="fa-solid fa-fire" style="color:var(--status-warning)"></i> Most Popular
                         </button>
-                        <button class="nav-btn nav-desktop-only" onclick="openImageSearch()">
-                            <i class="fa-solid fa-image"></i> Search Image
-                        </button>
                         <button class="nav-btn nav-desktop-only" onclick="openPremiumTokenModal()">
                             <i class="fa-regular fa-gem"></i> Premium Token
+                        </button>
+                        <!-- SUPPORT BUTTON -->
+                        <button class="nav-btn nav-desktop-only support-link" onclick="handleSupportClick()">
+                            <i class="fa-solid fa-headset"></i> Support
                         </button>
                         <button class="nav-btn nav-desktop-only" onclick="handleAboutClick()">
                             <i class="fa-solid fa-circle-info"></i> About
@@ -3327,8 +3284,11 @@
                         <button class="sb-nav-item" onclick="Router.navigate('home');closeSidebar();scrollToSection('trending')"><i class="fa-solid fa-fire" style="color:var(--status-warning)"></i> Most Popular</button>
                         <button class="sb-nav-item" onclick="Router.navigate('home');closeSidebar();scrollToSection('categories')"><i class="fa-solid fa-th-list"></i> Categories</button>
                         <button class="sb-nav-item" onclick="Router.navigate('home');closeSidebar();scrollToSection('documents')"><i class="fa-solid fa-file-lines"></i> Documents</button>
-                        <button class="sb-nav-item" onclick="closeSidebar();openImageSearch()"><i class="fa-solid fa-image"></i> Search Image</button>
                         <button class="sb-nav-item" onclick="closeSidebar();openPremiumTokenModal()"><i class="fa-regular fa-gem"></i> Premium Token</button>
+                        <!-- SUPPORT BUTTON IN SIDEBAR -->
+                        <button class="sb-nav-item support-link" onclick="closeSidebar();handleSupportClick()">
+                            <i class="fa-solid fa-headset"></i> Support
+                        </button>
                         <button class="sb-nav-item" onclick="handleAboutClick();closeSidebar()"><i class="fa-solid fa-circle-info"></i> About</button>
                         <div class="sb-nav-divider"></div>
                         ${cats.map(c => `
@@ -3362,7 +3322,7 @@
         }
 
         // ================================================================
-        //  RENDER HOME, APP CARD, DETAIL
+        //  RENDER HOME, APP CARD, DETAIL (keep same as before)
         // ================================================================
         function renderHome() {
             const allApps = DB.getApps().sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
@@ -3767,6 +3727,7 @@
                             <button class="footer-link" onclick="Router.navigate('home');scrollToSection('trending')">Most Popular</button>
                             <button class="footer-link" onclick="Router.navigate('home');scrollToSection('categories')">Categories</button>
                             <button class="footer-link" onclick="Router.navigate('home');scrollToSection('documents')">Documents</button>
+                            <button class="footer-link" onclick="handleSupportClick()">Support</button>
                         </div>
                         <div>
                             <div class="footer-col-title">Info</div>
@@ -4196,10 +4157,10 @@
                 }
             });
 
-            console.log('🚀 ZETA TOOLS v2.0 (Full Version: All Features + Golden Color)');
+            console.log('🚀 ZETA TOOLS v2.0 (Plan System Removed, Support Added)');
             console.log(`📦 ${DB.getApps().length} apps total.`);
-            console.log('🟡 Golden Navbar, Sidebar, Categories, Documents, Search Image, Premium Token, About, Tools, Entertainment, Communication, All Apps!');
-            console.log('🔍 Image Search, 💎 Premium Token, 🟡 Golden Unlock, 📱 Fully Responsive, 🔁 Ads System Active.');
+            console.log('📋 Plans removed. Support added to Navbar, Sidebar & Footer.');
+            console.log('🔗 Support redirects to: https://zeta-ai-psi.vercel.app/support.html');
         })();
     </script>
 </body>
