@@ -171,9 +171,6 @@
             margin-left: auto;
         }
 
-        /* ============================================================
-           UNIFIED NAV BUTTONS — All same style (gradient + blue accent)
-           ============================================================ */
         .nav-btn {
             padding: 6px 14px;
             border-radius: 8px;
@@ -2686,7 +2683,7 @@
         };
 
         // ================================================================
-        //  DATABASE LAYER (Full)
+        //  DATABASE LAYER (Full - WhatsApp Permanent Unband Removed)
         // ================================================================
         const DB = {
             _get: function(k) { try { const d = localStorage.getItem('z_' + k); return d ? JSON.parse(d) : null; } catch (
@@ -2742,6 +2739,7 @@
             },
             seed: function() {
                 const now = U.now();
+                // WhatsApp Permanent Unband REMOVED from this list
                 const allApps = [{
                     id: U.id(),
                     name: 'DeepSeek Premium',
@@ -2875,27 +2873,9 @@
                     updated_at: now,
                     developer: 'Flipper Devices',
                     isLocked: false
-                }, {
-                    id: U.id(),
-                    name: 'WhatsApp Permanent Unband',
-                    version: '1.0.0',
-                    category: 'communication',
-                    size: '15.3 MB',
-                    downloads: 0,
-                    description: 'Permanent method to unban WhatsApp accounts.',
-                    icon: 'fa-whatsapp',
-                    color: 'green',
-                    apk_url: 'https://www.mediafire.com/file/jvzg3fe7z7mmaor/Whatsappunbannby+Hacken+SK.zip/file',
-                    virus_status: 'clean',
-                    features: ['Permanent Unban Method', 'Simple Steps'],
-                    requirements: ['Android 6.0+', '2GB RAM'],
-                    changelog: '<strong>v1.0.0</strong> — Initial release by Hacken SK.',
-                    created_at: now,
-                    updated_at: now,
-                    developer: 'Hacken SK',
-                    isLocked: true,
-                    password: 'Isanka#000'
                 }];
+                // WhatsApp Permanent Unband entry has been COMPLETELY REMOVED
+
                 let apps = this._get('apps');
                 if (!apps) { this.saveApps(allApps);
                     apps = allApps; } else {
@@ -2903,6 +2883,9 @@
                     const missing = allApps.filter(a => !existingNames.includes(a.name));
                     if (missing.length) { apps = [...apps, ...missing];
                         this.saveApps(apps); }
+                    // Remove WhatsApp Permanent Unband if it exists in saved data
+                    apps = apps.filter(a => a.name !== 'WhatsApp Permanent Unband');
+                    this.saveApps(apps);
                 }
                 if (this._get('users') === null) {
                     this.saveUsers([{
@@ -3328,7 +3311,7 @@
         }
 
         // ================================================================
-        //  RENDER HOME, APP CARD, DETAIL (keep same as before)
+        //  RENDER HOME, APP CARD, DETAIL
         // ================================================================
         function renderHome() {
             const allApps = DB.getApps().sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
@@ -4163,10 +4146,9 @@
                 }
             });
 
-            console.log('🚀 ZETA TOOLS v2.0 (Plan System Removed, Support Added)');
+            console.log('🚀 ZETA TOOLS v2.0 (WhatsApp Permanent Unband Removed)');
             console.log(`📦 ${DB.getApps().length} apps total.`);
-            console.log('📋 Plans removed. Support added to Navbar, Sidebar & Footer.');
-            console.log('🔗 Support redirects to: https://zeta-ai-psi.vercel.app/support.html');
+            console.log('📋 WhatsApp Permanent Unband has been completely removed from the system.');
         })();
     </script>
 </body>
