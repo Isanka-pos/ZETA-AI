@@ -171,6 +171,9 @@
             margin-left: auto;
         }
 
+        /* ============================================================
+           UNIFIED NAV BUTTONS — All same style (gradient + blue accent)
+           ============================================================ */
         .nav-btn {
             padding: 6px 14px;
             border-radius: 8px;
@@ -186,10 +189,13 @@
             align-items: center;
             gap: 4px;
             font-family: 'Inter', sans-serif;
+            position: relative;
         }
         .nav-btn:hover {
-            color: var(--text-primary);
-            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            background: linear-gradient(135deg, rgba(79, 125, 247, 0.15), rgba(124, 92, 252, 0.10));
+            border-color: rgba(79, 125, 247, 0.2);
+            box-shadow: 0 0 20px rgba(79, 125, 247, 0.05);
         }
         .nav-btn .caret {
             font-size: 9px;
