@@ -1,0 +1,1784 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Hack Code Generator — ZETA TOOLS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <style>
+        /* ===== RESET & ROOT ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+            --bg-deep: #03050C;
+            --bg-surface: #0A0D1A;
+            --bg-elevated: #10142A;
+            --bg-glass: rgba(10, 13, 26, 0.78);
+            --border-glow: rgba(79, 125, 247, 0.18);
+            --border-subtle: rgba(255, 255, 255, 0.04);
+            --border-default: rgba(255, 255, 255, 0.07);
+            --text-primary: #F0F2FA;
+            --text-secondary: #8992B5;
+            --text-tertiary: #4E567A;
+            --accent-blue: #4F7DF7;
+            --accent-purple: #8B7CF8;
+            --accent-cyan: #2DD4E8;
+            --accent-green: #22C990;
+            --accent-red: #F0564A;
+            --accent-orange: #F5A623;
+            --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.6);
+            --transition-smooth: 350ms cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-fast: 180ms cubic-bezier(0.4, 0, 0.2, 1);
+            --radius-xl: 20px;
+            --radius-md: 14px;
+            --radius-sm: 10px;
+        }
+        html,
+        body {
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-deep);
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+        }
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+        }
+        ::selection {
+            background: rgba(79, 125, 247, 0.25);
+        }
+
+        /* ===== LAYOUT ===== */
+        .app-wrapper {
+            display: flex;
+            min-height: 100dvh;
+            background: var(--bg-deep);
+        }
+        .main-area {
+            flex: 1;
+            padding: 24px 28px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* ===== HEADER ===== */
+        .app-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-subtle);
+            margin-bottom: 28px;
+        }
+        .app-header-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .app-header-left .back-btn {
+            color: var(--text-tertiary);
+            font-size: 18px;
+            transition: color var(--transition-fast);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 8px;
+        }
+        .app-header-left .back-btn:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.03);
+        }
+        .app-header-left h1 {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .app-header-left h1 span {
+            color: var(--accent-cyan);
+        }
+        .app-header .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            padding: 6px 14px;
+            border-radius: 100px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-subtle);
+        }
+        .app-header .status-badge .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent-green);
+            animation: pulse-dot 2.2s ease-in-out infinite;
+        }
+        @keyframes pulse-dot {
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(0.8);
+            }
+        }
+
+        /* ===== CARDS ===== */
+        .card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            padding: 22px 24px;
+            margin-bottom: 20px;
+            transition: border-color var(--transition-smooth), box-shadow var(--transition-smooth);
+        }
+        .card:hover {
+            border-color: var(--border-default);
+        }
+        .card-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-title i {
+            color: var(--accent-cyan);
+            font-size: 14px;
+        }
+        .card-title .badge-limit {
+            font-size: 10px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-left: auto;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 2px 12px;
+            border-radius: 100px;
+            border: 1px solid var(--border-subtle);
+        }
+        .card-title .badge-limit .num {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* ===== FORM ELEMENTS ===== */
+        textarea,
+        input[type="text"] {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: var(--radius-sm);
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-default);
+            color: var(--text-primary);
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+            resize: vertical;
+        }
+        textarea:focus,
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(79, 125, 247, 0.08);
+        }
+        textarea::placeholder,
+        input::placeholder {
+            color: var(--text-tertiary);
+        }
+        textarea {
+            min-height: 80px;
+            max-height: 200px;
+            font-family: 'Inter', sans-serif;
+        }
+        .input-group {
+            position: relative;
+        }
+        .input-group .char-count {
+            position: absolute;
+            bottom: 10px;
+            right: 14px;
+            font-size: 11px;
+            color: var(--text-tertiary);
+            font-weight: 450;
+            pointer-events: none;
+        }
+        .input-group .char-count.warning {
+            color: var(--accent-orange);
+        }
+        .input-group .char-count.danger {
+            color: var(--accent-red);
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 22px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-family: 'Inter', sans-serif;
+            text-decoration: none;
+            justify-content: center;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-blue), #3B5FE0);
+            color: #fff;
+            box-shadow: 0 2px 14px rgba(79, 125, 247, 0.18);
+        }
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 22px rgba(79, 125, 247, 0.28);
+        }
+        .btn-primary:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-default);
+        }
+        .btn-secondary:hover {
+            color: var(--text-primary);
+            border-color: var(--border-hover);
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .btn-success {
+            background: linear-gradient(135deg, var(--accent-green), #0ea56a);
+            color: #fff;
+            box-shadow: 0 2px 12px rgba(34, 201, 144, 0.18);
+        }
+        .btn-success:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(34, 201, 144, 0.28);
+        }
+        .btn-danger {
+            background: linear-gradient(135deg, var(--accent-red), #c0392b);
+            color: #fff;
+        }
+        .btn-danger:hover {
+            transform: translateY(-1px);
+        }
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 11px;
+        }
+        .btn-xs {
+            padding: 4px 10px;
+            font-size: 10px;
+            border-radius: 6px;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border-default);
+            color: var(--text-secondary);
+        }
+        .btn-outline:hover {
+            border-color: var(--text-secondary);
+            color: var(--text-primary);
+        }
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .btn-group .btn {
+            flex: 1 1 auto;
+            min-width: 80px;
+        }
+
+        /* ===== GENERATED CODE DISPLAY ===== */
+        .code-display {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-sm);
+            padding: 16px 18px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            word-break: break-all;
+            color: var(--accent-cyan);
+            min-height: 56px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            margin-top: 8px;
+        }
+        .code-display .placeholder-text {
+            color: var(--text-tertiary);
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+        }
+        .code-display .copy-toast {
+            position: absolute;
+            top: -10px;
+            right: 10px;
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--accent-green);
+            background: rgba(34, 201, 144, 0.12);
+            padding: 2px 12px;
+            border-radius: 100px;
+            border: 1px solid rgba(34, 201, 144, 0.15);
+            opacity: 0;
+            transition: opacity var(--transition-fast);
+        }
+        .code-display .copy-toast.show {
+            opacity: 1;
+        }
+        .code-display .code-text {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-cyan);
+            width: 100%;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        /* ===== DECODED RESULT ===== */
+        .decoded-result {
+            background: rgba(34, 201, 144, 0.04);
+            border: 1px solid rgba(34, 201, 144, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 16px 18px;
+            margin-top: 8px;
+            color: var(--text-primary);
+            font-size: 15px;
+            line-height: 1.6;
+            min-height: 48px;
+        }
+        .decoded-result .placeholder-text {
+            color: var(--text-tertiary);
+            font-size: 13px;
+        }
+        .decoded-result.error {
+            border-color: rgba(240, 86, 74, 0.2);
+            background: rgba(240, 86, 74, 0.04);
+            color: var(--accent-red);
+        }
+
+        /* ===== HISTORY ===== */
+        .history-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-subtle);
+            transition: background var(--transition-fast);
+        }
+        .history-item:last-child {
+            border-bottom: none;
+        }
+        .history-item:hover {
+            background: rgba(255, 255, 255, 0.01);
+        }
+        .history-item .h-index {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            min-width: 28px;
+            padding-top: 2px;
+        }
+        .history-item .h-content {
+            flex: 1;
+            min-width: 0;
+        }
+        .history-item .h-original {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-primary);
+            word-break: break-word;
+        }
+        .history-item .h-code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--accent-cyan);
+            word-break: break-all;
+            margin-top: 2px;
+        }
+        .history-item .h-meta {
+            font-size: 10px;
+            color: var(--text-tertiary);
+            margin-top: 4px;
+        }
+        .history-item .h-actions {
+            display: flex;
+            gap: 4px;
+            flex-shrink: 0;
+            padding-top: 2px;
+        }
+        .history-item .h-actions button {
+            background: none;
+            border: none;
+            color: var(--text-tertiary);
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 6px;
+            transition: all var(--transition-fast);
+            font-size: 12px;
+        }
+        .history-item .h-actions button:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.03);
+        }
+        .history-item .h-actions button.copy-h:hover {
+            color: var(--accent-cyan);
+        }
+        .history-item .h-actions button.decode-h:hover {
+            color: var(--accent-green);
+        }
+        .history-item .h-actions button.delete-h:hover {
+            color: var(--accent-red);
+        }
+
+        .history-empty {
+            text-align: center;
+            padding: 30px 10px;
+            color: var(--text-tertiary);
+            font-size: 13px;
+        }
+        .history-empty i {
+            font-size: 28px;
+            margin-bottom: 10px;
+            opacity: 0.3;
+        }
+
+        /* ===== COLLAPSIBLE ===== */
+        .collapsible-toggle {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 0;
+            font-family: 'Inter', sans-serif;
+            transition: color var(--transition-fast);
+        }
+        .collapsible-toggle:hover {
+            color: var(--text-primary);
+        }
+        .collapsible-toggle i {
+            transition: transform var(--transition-fast);
+            font-size: 11px;
+        }
+        .collapsible-toggle.open i {
+            transform: rotate(180deg);
+        }
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+            opacity: 0;
+        }
+        .collapsible-content.open {
+            max-height: 800px;
+            opacity: 1;
+        }
+        .collapsible-content-inner {
+            padding-top: 14px;
+        }
+
+        /* ===== OPTIONS ===== */
+        .option-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px 24px;
+            align-items: center;
+            padding: 6px 0;
+        }
+        .option-row label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        .option-row label input[type="checkbox"] {
+            accent-color: var(--accent-blue);
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+        .option-row select {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-default);
+            border-radius: 6px;
+            padding: 4px 10px;
+            color: var(--text-primary);
+            font-size: 12px;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+        }
+        .option-row select:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        /* ===== TOAST ===== */
+        .toast-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-width: 360px;
+            width: 100%;
+            pointer-events: none;
+        }
+        .toast {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-sm);
+            padding: 12px 18px;
+            box-shadow: var(--shadow-card);
+            backdrop-filter: blur(12px);
+            font-size: 13px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateX(calc(100% + 40px));
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: auto;
+        }
+        .toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        .toast.success {
+            border-left: 3px solid var(--accent-green);
+        }
+        .toast.error {
+            border-left: 3px solid var(--accent-red);
+        }
+        .toast.info {
+            border-left: 3px solid var(--accent-blue);
+        }
+        .toast i {
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        .toast.success i {
+            color: var(--accent-green);
+        }
+        .toast.error i {
+            color: var(--accent-red);
+        }
+        .toast.info i {
+            color: var(--accent-blue);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media(max-width:768px) {
+            .main-area {
+                padding: 16px;
+            }
+            .app-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            .app-header .status-badge {
+                align-self: flex-start;
+            }
+            .card {
+                padding: 16px 18px;
+            }
+            .card-title {
+                font-size: 13px;
+                flex-wrap: wrap;
+            }
+            .card-title .badge-limit {
+                font-size: 9px;
+                padding: 2px 10px;
+            }
+            .btn-group {
+                flex-direction: column;
+            }
+            .btn-group .btn {
+                flex: 1 1 auto;
+                width: 100%;
+                justify-content: center;
+            }
+            .option-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .history-item {
+                flex-wrap: wrap;
+            }
+            .history-item .h-actions {
+                width: 100%;
+                justify-content: flex-end;
+                padding-top: 6px;
+            }
+            .toast-container {
+                bottom: 16px;
+                right: 16px;
+                left: 16px;
+                max-width: none;
+            }
+            .toast {
+                font-size: 12px;
+                padding: 10px 14px;
+            }
+            .code-display {
+                font-size: 12px;
+                padding: 12px 14px;
+            }
+            .app-header-left h1 {
+                font-size: 18px;
+            }
+            textarea {
+                min-height: 60px;
+                font-size: 13px;
+            }
+        }
+        @media(max-width:480px) {
+            .main-area {
+                padding: 12px;
+            }
+            .card {
+                padding: 14px 14px;
+                border-radius: var(--radius-md);
+            }
+            .btn {
+                font-size: 12px;
+                padding: 8px 16px;
+            }
+            .app-header-left h1 {
+                font-size: 16px;
+            }
+        }
+
+        /* ===== HELP SECTION ===== */
+        .help-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .help-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px 12px;
+            background: rgba(255, 255, 255, 0.01);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-subtle);
+        }
+        .help-step .num {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            min-width: 22px;
+            padding-top: 1px;
+        }
+        .help-step .text {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        .help-step .text strong {
+            color: var(--text-primary);
+        }
+        @media(max-width:600px) {
+            .help-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ===== PRIVACY NOTE ===== */
+        .privacy-note {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            text-align: center;
+            padding: 12px 0 4px;
+            border-top: 1px solid var(--border-subtle);
+            margin-top: 16px;
+        }
+        .privacy-note i {
+            margin-right: 4px;
+        }
+
+        /* reduced motion */
+        @media(prefers-reduced-motion:reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* ===== LIMIT BANNER ===== */
+        .limit-banner {
+            background: rgba(245, 166, 35, 0.06);
+            border: 1px solid rgba(245, 166, 35, 0.12);
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+        .limit-banner i {
+            color: var(--accent-orange);
+            font-size: 16px;
+        }
+        .limit-banner .msg {
+            font-size: 12px;
+            color: var(--text-secondary);
+            flex: 1;
+        }
+        .limit-banner .countdown {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent-orange);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .limit-banner.reached {
+            background: rgba(240, 86, 74, 0.06);
+            border-color: rgba(240, 86, 74, 0.15);
+        }
+        .limit-banner.reached i {
+            color: var(--accent-red);
+        }
+        .limit-banner.reached .countdown {
+            color: var(--accent-red);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-wrapper">
+        <div class="main-area">
+
+            <!-- HEADER -->
+            <header class="app-header">
+                <div class="app-header-left">
+                    <button class="back-btn" onclick="location.href='index.html'" aria-label="Back to ZETA TOOLS">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <h1>Hack <span>Generator</span></h1>
+                </div>
+                <div class="status-badge">
+                    <span class="dot"></span>
+                    <span>System Online</span>
+                </div>
+            </header>
+
+            <!-- GENERATOR CARD -->
+            <section class="card" id="generatorCard">
+                <div class="card-title">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    Generate Code
+                    <span class="badge-limit" id="limitBadge">
+                        <i class="fa-regular fa-clock" style="margin-right:4px;"></i>
+                        <span class="num" id="remainingCount">5</span> / 5 remaining
+                    </span>
+                </div>
+
+                <div class="input-group">
+                    <textarea id="inputText" placeholder="Type your English or Sinhala sentence here..." maxlength="5000" spellcheck="false"></textarea>
+                    <span class="char-count" id="charCount">0 / 5000</span>
+                </div>
+
+                <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center;">
+                    <button class="btn btn-primary" id="generateBtn">
+                        <i class="fa-solid fa-bolt"></i>
+                        <span id="genBtnText">Generate Code</span>
+                    </button>
+                    <button class="btn btn-secondary btn-sm" id="clearBtn">
+                        <i class="fa-solid fa-eraser"></i> Clear
+                    </button>
+                    <span style="font-size:11px;color:var(--text-tertiary);margin-left:auto;" id="genStatus"></span>
+                </div>
+
+                <!-- Limit banner -->
+                <div id="limitBanner" class="limit-banner" style="display:none;">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span class="msg" id="limitMsg">Daily limit reached. Please come back tomorrow.</span>
+                    <span class="countdown" id="limitCountdown">--:--</span>
+                </div>
+
+                <!-- Generated result -->
+                <div style="margin-top:16px;">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                        <span style="font-size:12px;font-weight:600;color:var(--text-secondary);">Generated Code</span>
+                        <span style="font-size:10px;color:var(--text-tertiary);" id="genTimestamp"></span>
+                    </div>
+                    <div class="code-display" id="codeDisplay">
+                        <span class="placeholder-text" id="codePlaceholder">Your generated code will appear here...</span>
+                        <span class="copy-toast" id="copyToast">Copied!</span>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-success btn-sm" id="copyCodeBtn" disabled>
+                            <i class="fa-regular fa-copy"></i> Copy Code
+                        </button>
+                        <button class="btn btn-secondary btn-sm" id="regenerateBtn" disabled>
+                            <i class="fa-solid fa-rotate-right"></i> Regenerate
+                        </button>
+                        <button class="btn btn-secondary btn-sm" id="clearResultBtn" disabled>
+                            <i class="fa-solid fa-xmark"></i> Clear
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DECODER CARD -->
+            <section class="card">
+                <div class="card-title">
+                    <i class="fa-solid fa-unlock"></i>
+                    Decode Code
+                </div>
+                <div class="input-group" style="margin-bottom:10px;">
+                    <input type="text" id="decodeInput" placeholder="Paste generated code here..." spellcheck="false" />
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                    <button class="btn btn-primary" id="decodeBtn">
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i> Decode
+                    </button>
+                    <button class="btn btn-secondary btn-sm" id="clearDecodeBtn">
+                        <i class="fa-solid fa-eraser"></i> Clear
+                    </button>
+                </div>
+                <div style="margin-top:12px;">
+                    <span style="font-size:12px;font-weight:600;color:var(--text-secondary);">Original Message</span>
+                    <div class="decoded-result" id="decodedResult">
+                        <span class="placeholder-text">Decoded message will appear here...</span>
+                    </div>
+                    <div class="btn-group" style="margin-top:6px;">
+                        <button class="btn btn-success btn-sm" id="copyDecodedBtn" disabled>
+                            <i class="fa-regular fa-copy"></i> Copy Original
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ADVANCED OPTIONS -->
+            <section class="card">
+                <button class="collapsible-toggle" id="optionsToggle">
+                    <i class="fa-solid fa-chevron-down"></i> Advanced Options
+                </button>
+                <div class="collapsible-content" id="optionsContent">
+                    <div class="collapsible-content-inner">
+                        <div class="option-row">
+                            <label>
+                                <input type="checkbox" id="optChecksum" checked />
+                                Add Checksum
+                            </label>
+                            <label>
+                                <input type="checkbox" id="optUrlSafe" checked />
+                                URL-safe Mode
+                            </label>
+                            <label>
+                                Output Format:
+                                <select id="optFormat">
+                                    <option value="standard">Standard</option>
+                                    <option value="compact">Compact</option>
+                                </select>
+                            </label>
+                            <label>
+                                <input type="checkbox" id="optMonospace" checked />
+                                Monospace Display
+                            </label>
+                        </div>
+                        <div style="font-size:11px;color:var(--text-tertiary);margin-top:6px;">
+                            <i class="fa-regular fa-circle-question"></i> Changes apply to new generations. Existing codes remain decodable.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- LOCAL HISTORY -->
+            <section class="card">
+                <div class="card-title">
+                    <i class="fa-regular fa-clock"></i>
+                    Generation History
+                    <span style="margin-left:auto;font-size:11px;font-weight:400;color:var(--text-tertiary);" id="historyCount">0 items</span>
+                </div>
+                <div id="historyContainer">
+                    <div class="history-empty">
+                        <i class="fa-regular fa-folder-open"></i>
+                        <div>No history yet. Generate your first code!</div>
+                    </div>
+                </div>
+                <div class="btn-group" style="margin-top:8px;">
+                    <button class="btn btn-secondary btn-sm" id="exportHistoryBtn">
+                        <i class="fa-solid fa-download"></i> Export
+                    </button>
+                    <button class="btn btn-secondary btn-sm" id="importHistoryBtn">
+                        <i class="fa-solid fa-upload"></i> Import
+                    </button>
+                    <input type="file" id="importFileInput" accept=".json" style="display:none;" />
+                    <button class="btn btn-danger btn-sm" id="clearHistoryBtn">
+                        <i class="fa-solid fa-trash-can"></i> Clear All
+                    </button>
+                </div>
+            </section>
+
+            <!-- HOW IT WORKS -->
+            <section class="card">
+                <div class="card-title">
+                    <i class="fa-regular fa-circle-question"></i>
+                    How does this work?
+                </div>
+                <div class="help-grid">
+                    <div class="help-step">
+                        <span class="num">1</span>
+                        <span class="text"><strong>Type</strong> your message in English, Sinhala, or mixed.</span>
+                    </div>
+                    <div class="help-step">
+                        <span class="num">2</span>
+                        <span class="text"><strong>Generate</strong> — the message is converted into a reversible code.</span>
+                    </div>
+                    <div class="help-step">
+                        <span class="num">3</span>
+                        <span class="text"><strong>Copy</strong> the generated code and share it.</span>
+                    </div>
+                    <div class="help-step">
+                        <span class="num">4</span>
+                        <span class="text"><strong>Decode</strong> — paste any code to recover the original message.</span>
+                    </div>
+                </div>
+                <div style="margin-top:10px;font-size:12px;color:var(--text-tertiary);border-top:1px solid var(--border-subtle);padding-top:10px;">
+                    <i class="fa-regular fa-shield-halved"></i> Data is processed in your browser. No database, no server, no external storage.
+                </div>
+            </section>
+
+            <!-- PRIVACY NOTE -->
+            <div class="privacy-note">
+                <i class="fa-regular fa-lock"></i> Your generated data is stored locally in this browser. No database is used.
+            </div>
+
+        </div>
+    </div>
+
+    <!-- TOAST CONTAINER -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // ============================================================
+            //  CONSTANTS & DOM REFS
+            // ============================================================
+            const MAX_HISTORY = 20;
+            const MAX_INPUT_LENGTH = 5000;
+            const DAILY_LIMIT = 5;
+            const STORAGE_KEY = 'hack_generator_data';
+            const HISTORY_KEY = 'hack_history';
+
+            const inputText = document.getElementById('inputText');
+            const charCount = document.getElementById('charCount');
+            const generateBtn = document.getElementById('generateBtn');
+            const genBtnText = document.getElementById('genBtnText');
+            const genStatus = document.getElementById('genStatus');
+            const clearBtn = document.getElementById('clearBtn');
+            const codeDisplay = document.getElementById('codeDisplay');
+            const codePlaceholder = document.getElementById('codePlaceholder');
+            const copyToast = document.getElementById('copyToast');
+            const copyCodeBtn = document.getElementById('copyCodeBtn');
+            const regenerateBtn = document.getElementById('regenerateBtn');
+            const clearResultBtn = document.getElementById('clearResultBtn');
+            const genTimestamp = document.getElementById('genTimestamp');
+            const limitBadge = document.getElementById('limitBadge');
+            const remainingCount = document.getElementById('remainingCount');
+            const limitBanner = document.getElementById('limitBanner');
+            const limitMsg = document.getElementById('limitMsg');
+            const limitCountdown = document.getElementById('limitCountdown');
+
+            const decodeInput = document.getElementById('decodeInput');
+            const decodeBtn = document.getElementById('decodeBtn');
+            const clearDecodeBtn = document.getElementById('clearDecodeBtn');
+            const decodedResult = document.getElementById('decodedResult');
+            const copyDecodedBtn = document.getElementById('copyDecodedBtn');
+
+            const historyContainer = document.getElementById('historyContainer');
+            const historyCount = document.getElementById('historyCount');
+            const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+            const exportHistoryBtn = document.getElementById('exportHistoryBtn');
+            const importHistoryBtn = document.getElementById('importHistoryBtn');
+            const importFileInput = document.getElementById('importFileInput');
+
+            const optionsToggle = document.getElementById('optionsToggle');
+            const optionsContent = document.getElementById('optionsContent');
+            const optChecksum = document.getElementById('optChecksum');
+            const optUrlSafe = document.getElementById('optUrlSafe');
+            const optFormat = document.getElementById('optFormat');
+            const optMonospace = document.getElementById('optMonospace');
+
+            const toastContainer = document.getElementById('toastContainer');
+
+            let currentCode = null;
+            let currentOriginal = null;
+            let isGenerating = false;
+
+            // ============================================================
+            //  STORAGE HELPERS
+            // ============================================================
+            function getLimitData() {
+                try {
+                    const raw = localStorage.getItem(STORAGE_KEY);
+                    if (!raw) return { count: 0, date: getToday() };
+                    const data = JSON.parse(raw);
+                    if (data.date !== getToday()) {
+                        data.count = 0;
+                        data.date = getToday();
+                        saveLimitData(data);
+                    }
+                    return data;
+                } catch (e) {
+                    return { count: 0, date: getToday() };
+                }
+            }
+
+            function saveLimitData(data) {
+                try {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+                } catch (e) { /* ignore */ }
+            }
+
+            function getToday() {
+                return new Date().toISOString().split('T')[0];
+            }
+
+            function getRemaining() {
+                const data = getLimitData();
+                return Math.max(0, DAILY_LIMIT - data.count);
+            }
+
+            function incrementGeneration() {
+                const data = getLimitData();
+                data.count = Math.min(DAILY_LIMIT, data.count + 1);
+                saveLimitData(data);
+                return data.count;
+            }
+
+            function getHistory() {
+                try {
+                    const raw = localStorage.getItem(HISTORY_KEY);
+                    if (!raw) return [];
+                    const arr = JSON.parse(raw);
+                    return Array.isArray(arr) ? arr : [];
+                } catch (e) {
+                    return [];
+                }
+            }
+
+            function saveHistory(history) {
+                try {
+                    const trimmed = history.slice(0, MAX_HISTORY);
+                    localStorage.setItem(HISTORY_KEY, JSON.stringify(trimmed));
+                } catch (e) { /* ignore */ }
+            }
+
+            function addHistoryEntry(original, code) {
+                const history = getHistory();
+                const entry = {
+                    original: original,
+                    code: code,
+                    timestamp: Date.now(),
+                    date: new Date().toISOString()
+                };
+                history.unshift(entry);
+                saveHistory(history);
+                return history;
+            }
+
+            function deleteHistoryEntry(index) {
+                const history = getHistory();
+                if (index >= 0 && index < history.length) {
+                    history.splice(index, 1);
+                    saveHistory(history);
+                }
+                return history;
+            }
+
+            function clearAllHistory() {
+                saveHistory([]);
+            }
+
+            // ============================================================
+            //  CORE ENCODING / DECODING
+            // ============================================================
+            function encodeText(text, options) {
+                // options: { checksum: bool, urlSafe: bool, format: 'standard'|'compact' }
+                const opts = options || { checksum: true, urlSafe: true, format: 'standard' };
+                try {
+                    // 1. UTF-8 encode
+                    const encoder = new TextEncoder();
+                    const bytes = encoder.encode(text);
+
+                    // 2. Base64URL
+                    let base64 = btoa(String.fromCharCode(...bytes));
+                    if (opts.urlSafe) {
+                        base64 = base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+                    }
+
+                    // 3. Build payload
+                    let payload = base64;
+
+                    // 4. Add checksum if enabled
+                    let checksum = '';
+                    if (opts.checksum) {
+                        // Simple checksum: first 6 chars of SHA-256 (simulated with a simple hash for demo)
+                        // For production, use Web Crypto API. Here we use a simple but reversible-friendly hash.
+                        checksum = simpleHash(text);
+                        payload = payload + '.' + checksum;
+                    }
+
+                    // 5. Version prefix
+                    const version = 'HC1';
+                    let result = version + '.' + payload;
+
+                    // 6. Compact mode: remove dots (not recommended for readability but allowed)
+                    if (opts.format === 'compact') {
+                        result = result.replace(/\./g, '');
+                    }
+
+                    return result;
+                } catch (e) {
+                    throw new Error('Encoding failed: ' + e.message);
+                }
+            }
+
+            function simpleHash(str) {
+                // Simple but deterministic hash for checksum (not cryptographic)
+                let hash = 0;
+                for (let i = 0; i < str.length; i++) {
+                    const char = str.charCodeAt(i);
+                    hash = ((hash << 5) - hash) + char;
+                    hash = hash & hash; // Convert to 32bit integer
+                }
+                // Return as 6-char hex
+                return ('000000' + Math.abs(hash).toString(16).slice(0, 6)).slice(-6);
+            }
+
+            function decodeText(encoded) {
+                try {
+                    let code = encoded.trim();
+                    if (!code) throw new Error('Empty code');
+
+                    // Try to detect format
+                    let version, payload, checksum = '';
+
+                    // Check if it's compact (no dots) or standard
+                    if (code.includes('.')) {
+                        // Standard format: version.payload[.checksum]
+                        const parts = code.split('.');
+                        if (parts.length < 2) throw new Error('Invalid format');
+                        version = parts[0];
+                        payload = parts.slice(1).join('.');
+                        // Check if last part looks like checksum (6 hex chars)
+                        if (parts.length === 3 && /^[0-9a-f]{6}$/i.test(parts[2])) {
+                            checksum = parts[2];
+                            payload = parts[1];
+                        } else if (parts.length === 2) {
+                            // No checksum
+                            checksum = '';
+                        } else {
+                            // More than 2 parts, treat all but first as payload
+                            payload = parts.slice(1).join('.');
+                            // Try to extract checksum from end
+                            const last = parts[parts.length - 1];
+                            if (/^[0-9a-f]{6}$/i.test(last) && parts.length > 2) {
+                                checksum = last;
+                                payload = parts.slice(1, -1).join('.');
+                            }
+                        }
+                    } else {
+                        // Compact format: no dots
+                        // Try to extract version (first 3 chars)
+                        if (code.length < 4) throw new Error('Invalid format');
+                        version = code.slice(0, 3);
+                        let rest = code.slice(3);
+                        // Try to find checksum at end (6 hex chars)
+                        if (rest.length > 6) {
+                            const maybeChecksum = rest.slice(-6);
+                            if (/^[0-9a-f]{6}$/i.test(maybeChecksum)) {
+                                checksum = maybeChecksum;
+                                payload = rest.slice(0, -6);
+                            } else {
+                                payload = rest;
+                            }
+                        } else {
+                            payload = rest;
+                        }
+                    }
+
+                    if (version !== 'HC1') throw new Error('Unsupported version: ' + version);
+
+                    // Decode base64
+                    let base64 = payload;
+                    if (base64.includes('-') || base64.includes('_')) {
+                        // URL-safe to standard
+                        base64 = base64.replace(/-/g, '+').replace(/_/g, '/');
+                        // Add padding
+                        while (base64.length % 4) base64 += '=';
+                    }
+
+                    const binaryString = atob(base64);
+                    const bytes = new Uint8Array(binaryString.length);
+                    for (let i = 0; i < binaryString.length; i++) {
+                        bytes[i] = binaryString.charCodeAt(i);
+                    }
+                    const decoder = new TextDecoder();
+                    const original = decoder.decode(bytes);
+
+                    // Verify checksum if present
+                    if (checksum) {
+                        const computed = simpleHash(original);
+                        if (computed !== checksum) {
+                            throw new Error('Checksum mismatch — code may be corrupted');
+                        }
+                    }
+
+                    return original;
+                } catch (e) {
+                    throw new Error('Decoding failed: ' + e.message);
+                }
+            }
+
+            // ============================================================
+            //  UI HELPERS
+            // ============================================================
+            function showToast(message, type = 'info') {
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                const iconMap = {
+                    success: 'fa-regular fa-circle-check',
+                    error: 'fa-regular fa-circle-xmark',
+                    info: 'fa-regular fa-circle-info'
+                };
+                toast.innerHTML = `<i class="${iconMap[type] || iconMap.info}"></i> ${message}`;
+                toastContainer.appendChild(toast);
+                requestAnimationFrame(() => {
+                    toast.classList.add('show');
+                });
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => {
+                        if (toast.parentNode) toast.remove();
+                    }, 400);
+                }, 2800);
+            }
+
+            function updateCharCount() {
+                const len = inputText.value.length;
+                charCount.textContent = `${len} / ${MAX_INPUT_LENGTH}`;
+                charCount.className = 'char-count' + (len > MAX_INPUT_LENGTH * 0.9 ? ' warning' : '') +
+                    (len >= MAX_INPUT_LENGTH ? ' danger' : '');
+            }
+
+            function updateLimitUI() {
+                const remaining = getRemaining();
+                remainingCount.textContent = remaining;
+                const data = getLimitData();
+                const used = data.count;
+
+                if (remaining <= 0) {
+                    generateBtn.disabled = true;
+                    limitBanner.style.display = 'flex';
+                    limitBanner.className = 'limit-banner reached';
+                    limitMsg.textContent = 'Daily limit reached. Your 5 generations for today have been used. Please come back tomorrow.';
+                    limitCountdown.textContent = '--:--';
+                } else {
+                    generateBtn.disabled = false;
+                    limitBanner.style.display = 'none';
+                }
+                updateCountdown();
+            }
+
+            function updateCountdown() {
+                const now = new Date();
+                const tomorrow = new Date(now);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                tomorrow.setHours(0, 0, 0, 0);
+                const diff = tomorrow - now;
+                if (diff <= 0) {
+                    limitCountdown.textContent = '00:00';
+                    return;
+                }
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                limitCountdown.textContent =
+                    `${String(hours).padStart(2,'0')}h ${String(minutes).padStart(2,'0')}m`;
+            }
+
+            function displayGeneratedCode(code, original) {
+                currentCode = code;
+                currentOriginal = original;
+                const isMonospace = optMonospace.checked;
+                codeDisplay.innerHTML = '';
+                const codeEl = document.createElement('span');
+                codeEl.className = 'code-text';
+                codeEl.style.fontFamily = isMonospace ? "'JetBrains Mono', monospace" : "'Inter', sans-serif";
+                codeEl.textContent = code;
+                codeDisplay.appendChild(codeEl);
+
+                // Add copy toast
+                const toast = document.createElement('span');
+                toast.className = 'copy-toast';
+                toast.id = 'copyToast';
+                toast.textContent = 'Copied!';
+                codeDisplay.appendChild(toast);
+
+                codePlaceholder.style.display = 'none';
+                copyCodeBtn.disabled = false;
+                regenerateBtn.disabled = false;
+                clearResultBtn.disabled = false;
+
+                const now = new Date();
+                genTimestamp.textContent = now.toLocaleTimeString();
+                genStatus.textContent = '✅ Generated';
+                genStatus.style.color = 'var(--accent-green)';
+            }
+
+            function clearGeneratedCode() {
+                currentCode = null;
+                currentOriginal = null;
+                codeDisplay.innerHTML = '';
+                const placeholder = document.createElement('span');
+                placeholder.className = 'placeholder-text';
+                placeholder.textContent = 'Your generated code will appear here...';
+                codeDisplay.appendChild(placeholder);
+                copyCodeBtn.disabled = true;
+                regenerateBtn.disabled = true;
+                clearResultBtn.disabled = true;
+                genTimestamp.textContent = '';
+                genStatus.textContent = '';
+                codePlaceholder.style.display = 'block';
+            }
+
+            function displayDecodedResult(text, error = false) {
+                decodedResult.innerHTML = '';
+                if (error) {
+                    decodedResult.className = 'decoded-result error';
+                    const span = document.createElement('span');
+                    span.textContent = text;
+                    decodedResult.appendChild(span);
+                    copyDecodedBtn.disabled = true;
+                    return;
+                }
+                decodedResult.className = 'decoded-result';
+                const span = document.createElement('span');
+                span.textContent = text;
+                decodedResult.appendChild(span);
+                copyDecodedBtn.disabled = false;
+                copyDecodedBtn.dataset.text = text;
+            }
+
+            function renderHistory() {
+                const history = getHistory();
+                historyCount.textContent = `${history.length} items`;
+                if (history.length === 0) {
+                    historyContainer.innerHTML = `
+                        <div class="history-empty">
+                            <i class="fa-regular fa-folder-open"></i>
+                            <div>No history yet. Generate your first code!</div>
+                        </div>
+                    `;
+                    return;
+                }
+                let html = '';
+                history.forEach((item, index) => {
+                    const time = new Date(item.timestamp || Date.now());
+                    const timeStr = time.toLocaleTimeString();
+                    const dateStr = time.toLocaleDateString();
+                    html += `
+                        <div class="history-item">
+                            <span class="h-index">#${index + 1}</span>
+                            <div class="h-content">
+                                <div class="h-original">${escapeHtml(item.original)}</div>
+                                <div class="h-code">${escapeHtml(item.code)}</div>
+                                <div class="h-meta">${dateStr} ${timeStr}</div>
+                            </div>
+                            <div class="h-actions">
+                                <button class="copy-h" data-code="${escapeHtml(item.code)}" title="Copy code" aria-label="Copy code"><i class="fa-regular fa-copy"></i></button>
+                                <button class="decode-h" data-code="${escapeHtml(item.code)}" title="Decode" aria-label="Decode"><i class="fa-solid fa-arrow-right-to-bracket"></i></button>
+                                <button class="delete-h" data-index="${index}" title="Delete" aria-label="Delete"><i class="fa-regular fa-trash-can"></i></button>
+                            </div>
+                        </div>
+                    `;
+                });
+                historyContainer.innerHTML = html;
+
+                // Attach events
+                historyContainer.querySelectorAll('.copy-h').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const code = this.dataset.code;
+                        copyToClipboard(code, 'Code copied!');
+                    });
+                });
+                historyContainer.querySelectorAll('.decode-h').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const code = this.dataset.code;
+                        decodeInput.value = code;
+                        performDecode();
+                    });
+                });
+                historyContainer.querySelectorAll('.delete-h').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const index = parseInt(this.dataset.index, 10);
+                        deleteHistoryEntry(index);
+                        renderHistory();
+                        showToast('History entry deleted.', 'info');
+                    });
+                });
+            }
+
+            function escapeHtml(str) {
+                const div = document.createElement('div');
+                div.textContent = str;
+                return div.innerHTML;
+            }
+
+            function copyToClipboard(text, successMsg) {
+                if (!text) return;
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text).then(() => {
+                        showToast(successMsg || 'Copied to clipboard!', 'success');
+                    }).catch(() => {
+                        fallbackCopy(text, successMsg);
+                    });
+                } else {
+                    fallbackCopy(text, successMsg);
+                }
+            }
+
+            function fallbackCopy(text, successMsg) {
+                try {
+                    const ta = document.createElement('textarea');
+                    ta.value = text;
+                    ta.style.position = 'fixed';
+                    ta.style.opacity = '0';
+                    document.body.appendChild(ta);
+                    ta.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(ta);
+                    showToast(successMsg || 'Copied to clipboard!', 'success');
+                } catch (e) {
+                    showToast('Failed to copy. Please select and copy manually.', 'error');
+                }
+            }
+
+            // ============================================================
+            //  GENERATE ACTION
+            // ============================================================
+            function performGenerate() {
+                if (isGenerating) return;
+                const text = inputText.value.trim();
+                if (!text) {
+                    showToast('Please enter a message first.', 'error');
+                    return;
+                }
+                if (text.length > MAX_INPUT_LENGTH) {
+                    showToast(`Message exceeds ${MAX_INPUT_LENGTH} characters.`, 'error');
+                    return;
+                }
+                const remaining = getRemaining();
+                if (remaining <= 0) {
+                    showToast('Daily limit reached. Come back tomorrow.', 'error');
+                    updateLimitUI();
+                    return;
+                }
+
+                isGenerating = true;
+                generateBtn.disabled = true;
+                genBtnText.textContent = 'Generating...';
+                genStatus.textContent = '⏳ Processing...';
+                genStatus.style.color = 'var(--accent-cyan)';
+
+                setTimeout(() => {
+                    try {
+                        const options = {
+                            checksum: optChecksum.checked,
+                            urlSafe: optUrlSafe.checked,
+                            format: optFormat.value
+                        };
+                        const code = encodeText(text, options);
+                        incrementGeneration();
+
+                        // Add to history
+                        addHistoryEntry(text, code);
+
+                        displayGeneratedCode(code, text);
+                        renderHistory();
+                        updateLimitUI();
+
+                        showToast('Code generated successfully!', 'success');
+                    } catch (e) {
+                        showToast('Generation failed: ' + e.message, 'error');
+                        genStatus.textContent = '❌ Error';
+                        genStatus.style.color = 'var(--accent-red)';
+                    } finally {
+                        isGenerating = false;
+                        generateBtn.disabled = false;
+                        genBtnText.textContent = 'Generate Code';
+                        if (genStatus.textContent === '⏳ Processing...') {
+                            genStatus.textContent = '';
+                        }
+                        updateLimitUI();
+                    }
+                }, 200);
+            }
+
+            // ============================================================
+            //  DECODE ACTION
+            // ============================================================
+            function performDecode() {
+                const code = decodeInput.value.trim();
+                if (!code) {
+                    showToast('Please paste a generated code.', 'error');
+                    return;
+                }
+                try {
+                    const original = decodeText(code);
+                    displayDecodedResult(original, false);
+                    showToast('Decoded successfully!', 'success');
+                } catch (e) {
+                    displayDecodedResult('Invalid or corrupted code: ' + e.message, true);
+                    showToast('Decoding failed: ' + e.message, 'error');
+                }
+            }
+
+            // ============================================================
+            //  EVENT LISTENERS
+            // ============================================================
+            // Input
+            inputText.addEventListener('input', updateCharCount);
+            updateCharCount();
+
+            // Generate
+            generateBtn.addEventListener('click', performGenerate);
+
+            // Clear input
+            clearBtn.addEventListener('click', function() {
+                inputText.value = '';
+                updateCharCount();
+                inputText.focus();
+            });
+
+            // Copy code
+            copyCodeBtn.addEventListener('click', function() {
+                if (currentCode) {
+                    copyToClipboard(currentCode, 'Code copied!');
+                }
+            });
+
+            // Regenerate (re-encode same text)
+            regenerateBtn.addEventListener('click', function() {
+                if (currentOriginal) {
+                    inputText.value = currentOriginal;
+                    updateCharCount();
+                    performGenerate();
+                }
+            });
+
+            // Clear result
+            clearResultBtn.addEventListener('click', clearGeneratedCode);
+
+            // Decode
+            decodeBtn.addEventListener('click', performDecode);
+
+            // Clear decode
+            clearDecodeBtn.addEventListener('click', function() {
+                decodeInput.value = '';
+                displayDecodedResult('Decoded message will appear here...', false);
+                copyDecodedBtn.disabled = true;
+            });
+
+            // Copy decoded
+            copyDecodedBtn.addEventListener('click', function() {
+                const text = copyDecodedBtn.dataset.text;
+                if (text) {
+                    copyToClipboard(text, 'Original text copied!');
+                }
+            });
+
+            // Clear history
+            clearHistoryBtn.addEventListener('click', function() {
+                if (confirm('Are you sure you want to clear all history?')) {
+                    clearAllHistory();
+                    renderHistory();
+                    showToast('History cleared.', 'info');
+                }
+            });
+
+            // Export history
+            exportHistoryBtn.addEventListener('click', function() {
+                const history = getHistory();
+                if (history.length === 0) {
+                    showToast('No history to export.', 'error');
+                    return;
+                }
+                const data = JSON.stringify(history, null, 2);
+                const blob = new Blob([data], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'hack-history.json';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                showToast('History exported!', 'success');
+            });
+
+            // Import history
+            importHistoryBtn.addEventListener('click', function() {
+                importFileInput.click();
+            });
+            importFileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    try {
+                        const data = JSON.parse(ev.target.result);
+                        if (!Array.isArray(data)) throw new Error('Invalid format: expected array');
+                        // Validate each entry
+                        data.forEach((item, idx) => {
+                            if (!item.original || !item.code) {
+                                throw new Error(`Invalid entry at index ${idx}: missing original or code`);
+                            }
+                            if (typeof item.original !== 'string' || typeof item.code !== 'string') {
+                                throw new Error(`Invalid entry at index ${idx}: original and code must be strings`);
+                            }
+                            if (!item.timestamp) item.timestamp = Date.now();
+                            if (!item.date) item.date = new Date().toISOString();
+                        });
+                        // Merge: keep existing, add imported (dedupe by code)
+                        const existing = getHistory();
+                        const existingCodes = new Set(existing.map(h => h.code));
+                        const newEntries = data.filter(h => !existingCodes.has(h.code));
+                        const merged = [...newEntries, ...existing];
+                        saveHistory(merged);
+                        renderHistory();
+                        showToast(`Imported ${newEntries.length} entries.`, 'success');
+                    } catch (e) {
+                        showToast('Import failed: ' + e.message, 'error');
+                    }
+                };
+                reader.readAsText(file);
+                this.value = '';
+            });
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                // Ctrl+Enter on inputText
+                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                    if (document.activeElement === inputText) {
+                        e.preventDefault();
+                        performGenerate();
+                    }
+                }
+                // Escape: clear result
+                if (e.key === 'Escape') {
+                    if (document.activeElement === inputText || document.activeElement === decodeInput) {
+                        // Don't clear if user is typing
+                        return;
+                    }
+                    clearGeneratedCode();
+                    decodeInput.value = '';
+                    displayDecodedResult('Decoded message will appear here...', false);
+                    copyDecodedBtn.disabled = true;
+                }
+            });
+
+            // Options toggle
+            optionsToggle.addEventListener('click', function() {
+                const isOpen = optionsContent.classList.toggle('open');
+                this.classList.toggle('open', isOpen);
+                this.querySelector('i').style.transform = isOpen ? 'rotate(180deg)' : 'rotate(0)';
+            });
+
+            // Monospace toggle affects display
+            optMonospace.addEventListener('change', function() {
+                if (currentCode) {
+                    const codeEl = codeDisplay.querySelector('.code-text');
+                    if (codeEl) {
+                        codeEl.style.fontFamily = this.checked ? "'JetBrains Mono', monospace" : "'Inter', sans-serif";
+                    }
+                }
+            });
+
+            // ============================================================
+            //  INIT
+            // ============================================================
+            updateLimitUI();
+            renderHistory();
+            clearGeneratedCode();
+
+            // Auto-decode if URL has ?code=... param
+            const urlParams = new URLSearchParams(window.location.search);
+            const codeParam = urlParams.get('code');
+            if (codeParam) {
+                decodeInput.value = codeParam;
+                setTimeout(performDecode, 300);
+            }
+
+            // Countdown timer update
+            setInterval(updateCountdown, 60000);
+
+            console.log('🔧 Hack Generator v1.0 — ZETA TOOLS');
+            console.log('📊 Daily limit:', DAILY_LIMIT, 'generations');
+            console.log('💾 Data stored in localStorage');
+
+            // Expose for debugging
+            window.__hack = {
+                encode: encodeText,
+                decode: decodeText,
+                getHistory: getHistory,
+                getLimitData: getLimitData,
+                clearAllHistory: clearAllHistory
+            };
+
+        })();
+    </script>
+
+</body>
+</html>
