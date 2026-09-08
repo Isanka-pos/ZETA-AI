@@ -307,6 +307,8 @@
         .zeta-btn-chat:hover { box-shadow:0 8px 32px rgba(79,125,247,0.45); background:linear-gradient(135deg, #5A8BF9, #4A6FF0); }
         .zeta-btn-channel { background:linear-gradient(135deg, #25D366, #128C7E); color:#fff; box-shadow:0 4px 20px rgba(37,211,102,0.30); }
         .zeta-btn-channel:hover { box-shadow:0 8px 32px rgba(37,211,102,0.45); background:linear-gradient(135deg, #31D96E, #1A9B89); }
+        .zeta-btn-download { background:linear-gradient(135deg, #F59E0B, #D97706); color:#fff; box-shadow:0 4px 20px rgba(245,158,11,0.30); }
+        .zeta-btn-download:hover { box-shadow:0 8px 32px rgba(245,158,11,0.45); background:linear-gradient(135deg, #FBB03B, #E08812); }
 
         /* ============================================================
            NEW UPDATES POPUP — FULL UI
@@ -682,9 +684,10 @@
                         <button class="btn-primary" onclick="document.getElementById('appsSection').scrollIntoView({behavior:'smooth'})"><i class="fa-solid fa-fire" style="font-size:11px;color:var(--status-warning)"></i> Most Popular</button>
                         <button class="btn-secondary" onclick="document.getElementById('appsSection').scrollIntoView({behavior:'smooth'})"><i class="fa-solid fa-th-list" style="font-size:10px"></i> Browse Apps</button>
                     </div>
-                    <div style="margin-top:20px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+                    <div style="margin-top:20px; display:flex; flex-direction:column; gap:12px; align-items:center;">
                         <button class="zeta-btn zeta-btn-chat" onclick="alert('🚀 ZETA CHAT — Coming soon!')"><i class="fa-solid fa-comment"></i> ZETA CHAT</button>
                         <button class="zeta-btn zeta-btn-channel" onclick="alert('🔗 Express VPN — Coming soon!')"><i class="fa-solid fa-shield-halved"></i> EXPRESS VPN</button>
+                        <button class="zeta-btn zeta-btn-download" onclick="location.href='https://zeta-mini-8e229a0a0f1e.herokuapp.com/Download.html'"><i class="fa-solid fa-download"></i> DOWNLOAD</button>
                     </div>
                     <div class="hero-line"></div>
                 </div>
