@@ -332,6 +332,7 @@
         #resultContainer {
             display: flex;
             justify-content: center;
+            width: 100%;
         }
         #resultContainer > * {
             width: 100%;
@@ -352,6 +353,13 @@
             gap: 24px;
             flex-wrap: wrap;
             justify-content: center;
+        }
+
+        /* Center download button in result */
+        .download-btn-wrapper {
+            display: flex;
+            justify-content: center;
+            width: 100%;
         }
     </style>
 </head>
@@ -445,7 +453,7 @@
                     <div class="hud-corner hud-corner-br" style="bottom:12px;right:12px;"></div>
 
                     <form id="downloadForm" style="display:flex;flex-direction:column;gap:16px;">
-                        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                        <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
                             <input type="text" id="videoUrl" class="neon-input" placeholder="Paste TikTok video URL here..." style="flex:1;min-width:200px;" required>
                             <button type="submit" id="downloadBtn" class="neon-btn" style="padding:16px 32px;font-size:15px;white-space:nowrap;min-width:140px;">
                                 <i data-lucide="download" style="width:18px;height:18px;"></i>
@@ -459,7 +467,7 @@
                 </div>
 
                 <!-- Result Container - Centered -->
-                <div id="resultContainer" style="margin-top:24px;display:flex;justify-content:center;width:100%;">
+                <div id="resultContainer" style="margin-top:24px;">
                     <!-- Results will appear here -->
                 </div>
             </div>
@@ -683,7 +691,6 @@
             const icon = element.querySelector('i[data-lucide="chevron-down"]');
             const isActive = element.classList.contains('active');
 
-            // Close all other FAQs
             document.querySelectorAll('.glass-card.active').forEach(card => {
                 if (card !== element) {
                     card.classList.remove('active');
@@ -755,7 +762,6 @@
         const downloadBtn = document.getElementById('downloadBtn');
         const resultContainer = document.getElementById('resultContainer');
 
-        // Loading state management
         let isLoading = false;
 
         form.addEventListener('submit', async (e) => {
@@ -775,7 +781,6 @@
                 return;
             }
 
-            // Show loading state
             isLoading = true;
             downloadBtn.disabled = true;
             downloadBtn.innerHTML = '<i data-lucide="loader" style="width:18px;height:18px;animation:spin 1s linear infinite;"></i> Processing...';
@@ -793,8 +798,9 @@
             lucide.createIcons();
 
             try {
-                // FIXED: Use 'url' parameter instead of 'text'
-                const apiUrl = `${API_URL}?apiKey=${API_KEY}&url=${encodeURIComponent(url)}`;
+                // FIXED: Use 'text' parameter (matches your API)
+                const encodedUrl = encodeURIComponent(url);
+                const apiUrl = `${API_URL}?apiKey=${API_KEY}&text=${encodedUrl}`;
                 
                 console.log('Fetching:', apiUrl);
 
@@ -805,8 +811,19 @@
                     }
                 });
 
+                console.log('Response status:', response.status);
+
                 if (!response.ok) {
-                    throw new Error(`Server error: ${response.status}`);
+                    let errorMsg = `Server error: ${response.status}`;
+                    try {
+                        const errorData = await response.json();
+                        if (errorData.message) {
+                            errorMsg = errorData.message;
+                        }
+                    } catch (e) {
+                        errorMsg = `Server error: ${response.status} ${response.statusText}`;
+                    }
+                    throw new Error(errorMsg);
                 }
 
                 const data = await response.json();
@@ -872,8 +889,8 @@
                             ${title ? `<p style="font-weight:600;font-size:16px;color:#E0E8F0;margin:0;text-align:center;">${title}</p>` : ''}
                             ${author ? `<p style="font-size:14px;color:rgba(224,232,240,0.4);margin:-8px 0 0 0;text-align:center;">@${author}</p>` : ''}
                             
-                            <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;width:100%;">
-                                <a href="${videoUrl}" download class="neon-btn" style="padding:14px 36px;font-size:16px;text-decoration:none;min-width:200px;justify-content:center;">
+                            <div class="download-btn-wrapper">
+                                <a href="${videoUrl}" download class="neon-btn" style="padding:14px 36px;font-size:16px;text-decoration:none;min-width:200px;">
                                     <i data-lucide="download" style="width:20px;height:20px;"></i>
                                     Download Video
                                 </a>
