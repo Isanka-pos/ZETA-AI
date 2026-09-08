@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TikTok Video Downloader | ZETA TOOLS</title>
-    <meta name="description" content="Download TikTok videos without watermark using ZETA TOOLS. Fast, free and easy to use.">
-    <meta name="keywords" content="TikTok downloader, TikTok video download, no watermark, ZETA TOOLS">
+    <title>Video Downloader | ZETA TOOLS</title>
+    <meta name="description" content="Download TikTok and Facebook videos without watermark using ZETA TOOLS. Fast, free and easy to use.">
+    <meta name="keywords" content="TikTok downloader, Facebook downloader, video download, no watermark, ZETA TOOLS">
     <meta name="robots" content="index, follow">
-    <meta property="og:title" content="TikTok Video Downloader | ZETA TOOLS">
-    <meta property="og:description" content="Download TikTok videos without watermark for free.">
+    <meta property="og:title" content="Video Downloader | ZETA TOOLS">
+    <meta property="og:description" content="Download TikTok and Facebook videos without watermark for free.">
     <meta property="og:type" content="website">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -355,7 +355,32 @@
             justify-content: center;
         }
 
-        /* Center download button in result */
+        /* Platform selector tabs */
+        .platform-tab {
+            padding: 10px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0,163,255,0.1);
+            background: rgba(13,17,32,0.5);
+            color: rgba(224,232,240,0.5);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .platform-tab:hover {
+            border-color: rgba(0,163,255,0.2);
+            color: #E0E8F0;
+        }
+        .platform-tab.active {
+            background: rgba(0,163,255,0.1);
+            border-color: #00A3FF;
+            color: #00D4FF;
+            box-shadow: 0 0 20px rgba(0,163,255,0.1);
+        }
+
         .download-btn-wrapper {
             display: flex;
             justify-content: center;
@@ -383,7 +408,7 @@
     <div class="mobile-menu" id="mobileMenu">
         <a href="index.html" onclick="closeMobileMenu()">HOME</a>
         <a href="support.html" onclick="closeMobileMenu()">SUPPORT</a>
-        <a href="#downloader" onclick="closeMobileMenu()" style="color:#00D4FF;">TIKTOK DL</a>
+        <a href="#downloader" onclick="closeMobileMenu()" style="color:#00D4FF;">DOWNLOADER</a>
         <a href="#faq" onclick="closeMobileMenu()">FAQ</a>
         <button onclick="closeMobileMenu()" style="margin-top:20px;background:none;border:1px solid rgba(0,163,255,0.2);color:#00D4FF;padding:12px 32px;border-radius:10px;font-family:'Orbitron',sans-serif;font-size:13px;cursor:pointer;letter-spacing:2px;">CLOSE</button>
     </div>
@@ -401,7 +426,7 @@
                 <div class="hidden md:flex items-center gap-8">
                     <a href="index.html" style="font-size:14px;color:rgba(224,232,240,0.6);text-decoration:none;font-weight:500;transition:color 0.3s;letter-spacing:0.5px;" onmouseover="this.style.color='#00D4FF'" onmouseout="this.style.color='rgba(224,232,240,0.6)'">HOME</a>
                     <a href="support.html" style="font-size:14px;color:rgba(224,232,240,0.6);text-decoration:none;font-weight:500;transition:color 0.3s;letter-spacing:0.5px;" onmouseover="this.style.color='#00D4FF'" onmouseout="this.style.color='rgba(224,232,240,0.6)'">SUPPORT</a>
-                    <a href="#downloader" style="font-size:14px;color:#00D4FF;text-decoration:none;font-weight:600;letter-spacing:0.5px;">TIKTOK DL</a>
+                    <a href="#downloader" style="font-size:14px;color:#00D4FF;text-decoration:none;font-weight:600;letter-spacing:0.5px;">DOWNLOADER</a>
                     <a href="#faq" style="font-size:14px;color:rgba(224,232,240,0.6);text-decoration:none;font-weight:500;transition:color 0.3s;letter-spacing:0.5px;" onmouseover="this.style.color='#00D4FF'" onmouseout="this.style.color='rgba(224,232,240,0.6)'">FAQ</a>
                 </div>
                 <button class="md:hidden" onclick="toggleMobileMenu()" style="background:none;border:none;color:#E0E8F0;cursor:pointer;padding:8px;">
@@ -432,18 +457,30 @@
                 <div class="reveal" style="margin-bottom:28px;text-align:center;">
                     <span class="badge-glow">
                         <i data-lucide="video" style="width:16px;height:16px;"></i>
-                        TIKTOK DOWNLOADER
+                        VIDEO DOWNLOADER
                     </span>
                 </div>
 
                 <h1 class="reveal reveal-delay-1" style="font-family:'Orbitron',sans-serif;font-size:clamp(28px,5vw,48px);font-weight:800;line-height:1.15;margin-bottom:16px;text-align:center;letter-spacing:-0.5px;">
-                    Download TikTok <br>
-                    <span style="background:linear-gradient(135deg,#00D4FF,#00A3FF,#0066FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Videos Without Watermark</span>
+                    Download Videos <br>
+                    <span style="background:linear-gradient(135deg,#00D4FF,#00A3FF,#0066FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">From TikTok & Facebook</span>
                 </h1>
 
                 <p class="reveal reveal-delay-2" style="font-size:16px;color:rgba(224,232,240,0.5);line-height:1.7;text-align:center;margin-bottom:32px;max-width:500px;margin-left:auto;margin-right:auto;">
-                    Paste any TikTok video link and download it in high quality. Free & fast.
+                    Paste any TikTok or Facebook video link and download it in high quality. Free & fast.
                 </p>
+
+                <!-- Platform Selector -->
+                <div class="reveal reveal-delay-3" style="display:flex;gap:12px;justify-content:center;margin-bottom:24px;flex-wrap:wrap;">
+                    <div class="platform-tab active" data-platform="tiktok" onclick="switchPlatform('tiktok')">
+                        <i data-lucide="music" style="width:18px;height:18px;"></i>
+                        TikTok
+                    </div>
+                    <div class="platform-tab" data-platform="facebook" onclick="switchPlatform('facebook')">
+                        <i data-lucide="facebook" style="width:18px;height:18px;"></i>
+                        Facebook
+                    </div>
+                </div>
 
                 <!-- Input Form -->
                 <div class="glass-card reveal reveal-delay-3" style="padding:32px 28px;">
@@ -454,22 +491,20 @@
 
                     <form id="downloadForm" style="display:flex;flex-direction:column;gap:16px;">
                         <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
-                            <input type="text" id="videoUrl" class="neon-input" placeholder="Paste TikTok video URL here..." style="flex:1;min-width:200px;" required>
+                            <input type="text" id="videoUrl" class="neon-input" placeholder="Paste video URL here..." style="flex:1;min-width:200px;" required>
                             <button type="submit" id="downloadBtn" class="neon-btn" style="padding:16px 32px;font-size:15px;white-space:nowrap;min-width:140px;">
                                 <i data-lucide="download" style="width:18px;height:18px;"></i>
                                 Download
                             </button>
                         </div>
-                        <p style="font-size:12px;color:rgba(224,232,240,0.25);text-align:center;margin-top:4px;">
-                            Supports TikTok video links (e.g., https://www.tiktok.com/@user/video/123456789)
+                        <p id="urlHint" style="font-size:12px;color:rgba(224,232,240,0.25);text-align:center;margin-top:4px;">
+                            Supports TikTok & Facebook video links
                         </p>
                     </form>
                 </div>
 
-                <!-- Result Container - Centered -->
-                <div id="resultContainer" style="margin-top:24px;">
-                    <!-- Results will appear here -->
-                </div>
+                <!-- Result Container -->
+                <div id="resultContainer" style="margin-top:24px;"></div>
             </div>
         </section>
 
@@ -489,17 +524,17 @@
                     <div class="glass-card reveal" style="padding:32px 24px;text-align:center;">
                         <div style="font-size:42px;margin-bottom:16px;filter:drop-shadow(0 0 12px rgba(0,163,255,0.3));">1️⃣</div>
                         <h3 style="font-weight:700;font-size:17px;margin-bottom:8px;color:#E0E8F0;">Copy Link</h3>
-                        <p style="font-size:14px;color:rgba(224,232,240,0.45);line-height:1.6;">Copy the URL of any TikTok video.</p>
+                        <p style="font-size:14px;color:rgba(224,232,240,0.45);line-height:1.6;">Copy the URL of any TikTok or Facebook video.</p>
                     </div>
                     <div class="glass-card reveal reveal-delay-1" style="padding:32px 24px;text-align:center;">
                         <div style="font-size:42px;margin-bottom:16px;filter:drop-shadow(0 0 12px rgba(0,163,255,0.3));">2️⃣</div>
-                        <h3 style="font-weight:700;font-size:17px;margin-bottom:8px;color:#E0E8F0;">Paste & Download</h3>
-                        <p style="font-size:14px;color:rgba(224,232,240,0.45);line-height:1.6;">Paste the link and click Download.</p>
+                        <h3 style="font-weight:700;font-size:17px;margin-bottom:8px;color:#E0E8F0;">Select Platform</h3>
+                        <p style="font-size:14px;color:rgba(224,232,240,0.45);line-height:1.6;">Choose TikTok or Facebook.</p>
                     </div>
                     <div class="glass-card reveal reveal-delay-2" style="padding:32px 24px;text-align:center;">
                         <div style="font-size:42px;margin-bottom:16px;filter:drop-shadow(0 0 12px rgba(0,163,255,0.3));">3️⃣</div>
-                        <h3 style="font-weight:700;font-size:17px;margin-bottom:8px;color:#E0E8F0;">Save Video</h3>
-                        <p style="font-size:14px;color:rgba(224,232,240,0.45);line-height:1.6;">Download the video without watermark.</p>
+                        <h3 style="font-weight:700;font-size:17px;margin-bottom:8px;color:#E0E8F0;">Download</h3>
+                        <p style="font-size:14px;color:rgba(224,232,240,0.45);line-height:1.6;">Paste, select platform and download.</p>
                     </div>
                 </div>
             </div>
@@ -524,16 +559,16 @@
                             <i data-lucide="chevron-down" style="width:20px;height:20px;color:#00A3FF;transition:transform 0.3s;flex-shrink:0;"></i>
                         </div>
                         <div class="faq-answer" style="max-height:0;overflow:hidden;transition:max-height 0.3s ease, padding 0.3s ease;padding:0;color:rgba(224,232,240,0.5);font-size:14px;line-height:1.7;">
-                            Yes! ZETA TOOLS TikTok downloader is completely free to use. No registration required.
+                            Yes! ZETA TOOLS video downloader is completely free to use. No registration required.
                         </div>
                     </div>
                     <div class="glass-card reveal reveal-delay-1" style="padding:20px 24px;cursor:pointer;" onclick="toggleFaq(this)">
                         <div style="display:flex;justify-content:space-between;align-items:center;">
-                            <span style="font-weight:600;font-size:15px;">Does it remove the watermark?</span>
+                            <span style="font-weight:600;font-size:15px;">Does it remove watermarks?</span>
                             <i data-lucide="chevron-down" style="width:20px;height:20px;color:#00A3FF;transition:transform 0.3s;flex-shrink:0;"></i>
                         </div>
                         <div class="faq-answer" style="max-height:0;overflow:hidden;transition:max-height 0.3s ease, padding 0.3s ease;padding:0;color:rgba(224,232,240,0.5);font-size:14px;line-height:1.7;">
-                            Yes, all videos downloaded through our tool are without the TikTok watermark.
+                            Yes, TikTok videos are downloaded without watermark. Facebook videos are downloaded in original quality.
                         </div>
                     </div>
                     <div class="glass-card reveal reveal-delay-2" style="padding:20px 24px;cursor:pointer;" onclick="toggleFaq(this)">
@@ -542,7 +577,7 @@
                             <i data-lucide="chevron-down" style="width:20px;height:20px;color:#00A3FF;transition:transform 0.3s;flex-shrink:0;"></i>
                         </div>
                         <div class="faq-answer" style="max-height:0;overflow:hidden;transition:max-height 0.3s ease, padding 0.3s ease;padding:0;color:rgba(224,232,240,0.5);font-size:14px;line-height:1.7;">
-                            We support the highest available quality for the video. Most videos are available in HD.
+                            We support the highest available quality. Facebook videos include both SD and HD options.
                         </div>
                     </div>
                     <div class="glass-card reveal reveal-delay-3" style="padding:20px 24px;cursor:pointer;" onclick="toggleFaq(this)">
@@ -551,7 +586,7 @@
                             <i data-lucide="chevron-down" style="width:20px;height:20px;color:#00A3FF;transition:transform 0.3s;flex-shrink:0;"></i>
                         </div>
                         <div class="faq-answer" style="max-height:0;overflow:hidden;transition:max-height 0.3s ease, padding 0.3s ease;padding:0;color:rgba(224,232,240,0.5);font-size:14px;line-height:1.7;">
-                            No, only public TikTok videos can be downloaded using our tool.
+                            No, only public videos can be downloaded using our tool.
                         </div>
                     </div>
                 </div>
@@ -560,7 +595,7 @@
 
         <div class="section-divider"></div>
 
-        <!-- ===== FOOTER - CENTERED ===== -->
+        <!-- ===== FOOTER ===== -->
         <footer style="border-top:1px solid rgba(0,163,255,0.06);padding:40px 20px;">
             <div class="max-w-7xl mx-auto footer-center">
                 <div style="display:flex;align-items:center;gap:10px;">
@@ -574,7 +609,7 @@
                     <a href="index.html" style="font-size:13px;color:rgba(224,232,240,0.3);text-decoration:none;transition:color 0.3s;" onmouseover="this.style.color='#00D4FF'" onmouseout="this.style.color='rgba(224,232,240,0.3)'">Home</a>
                     <a href="support.html" style="font-size:13px;color:rgba(224,232,240,0.3);text-decoration:none;transition:color 0.3s;" onmouseover="this.style.color='#00D4FF'" onmouseout="this.style.color='rgba(224,232,240,0.3)'">Support</a>
                     <a href="#faq" style="font-size:13px;color:rgba(224,232,240,0.3);text-decoration:none;transition:color 0.3s;" onmouseover="this.style.color='#00D4FF'" onmouseout="this.style.color='rgba(224,232,240,0.3)'">FAQ</a>
-                    <a href="#downloader" style="font-size:13px;color:rgba(224,232,240,0.3);text-decoration:none;transition:color 0.3s;" onmouseover="this.style.color='#00D4FF'" onmouseout="this.style.color='rgba(224,232,240,0.3)'">TikTok DL</a>
+                    <a href="#downloader" style="font-size:13px;color:rgba(224,232,240,0.3);text-decoration:none;transition:color 0.3s;" onmouseover="this.style.color='#00D4FF'" onmouseout="this.style.color='rgba(224,232,240,0.3)'">Downloader</a>
                 </div>
             </div>
         </footer>
@@ -727,6 +762,28 @@
             }
         }
 
+        // ===== Platform Switch =====
+        let currentPlatform = 'tiktok';
+
+        function switchPlatform(platform) {
+            currentPlatform = platform;
+            document.querySelectorAll('.platform-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.platform === platform);
+            });
+            
+            const hint = document.getElementById('urlHint');
+            if (platform === 'tiktok') {
+                hint.textContent = 'Supports TikTok video links (e.g., https://www.tiktok.com/@user/video/123456789)';
+                document.querySelector('#videoUrl').placeholder = 'Paste TikTok video URL here...';
+            } else {
+                hint.textContent = 'Supports Facebook video links (e.g., https://www.facebook.com/watch?v=123456789)';
+                document.querySelector('#videoUrl').placeholder = 'Paste Facebook video URL here...';
+            }
+            
+            // Clear previous results
+            document.getElementById('resultContainer').innerHTML = '';
+        }
+
         // ===== Mobile Menu =====
         function toggleMobileMenu() {
             document.getElementById('mobileMenu').classList.toggle('open');
@@ -751,10 +808,11 @@
         });
 
         // ============================================================
-        // ===== TIKTOK DOWNLOADER API INTEGRATION (FIXED) =====
+        // ===== VIDEO DOWNLOADER API INTEGRATION =====
         // ============================================================
 
-        const API_URL = 'https://hashu-apis-production.up.railway.app/api/tiktok/dl';
+        const TIKTOK_API = 'https://hashu-apis-production.up.railway.app/api/tiktok/dl';
+        const FACEBOOK_API = 'https://hashu-apis-production.up.railway.app/api/fb/dl';
         const API_KEY = 'hashu_cd4b0a9d325539de660602e7d8d38d61';
 
         const form = document.getElementById('downloadForm');
@@ -771,14 +829,21 @@
 
             const url = urlInput.value.trim();
             if (!url) {
-                showResult('error', 'Please enter a TikTok video URL.');
+                showResult('error', 'Please enter a video URL.');
                 return;
             }
 
-            // Validate TikTok URL
-            if (!url.includes('tiktok.com') && !url.includes('vt.tiktok.com')) {
-                showResult('error', 'Please enter a valid TikTok video URL.');
-                return;
+            // Validate URL based on platform
+            if (currentPlatform === 'tiktok') {
+                if (!url.includes('tiktok.com') && !url.includes('vt.tiktok.com')) {
+                    showResult('error', 'Please enter a valid TikTok video URL.');
+                    return;
+                }
+            } else {
+                if (!url.includes('facebook.com') && !url.includes('fb.watch')) {
+                    showResult('error', 'Please enter a valid Facebook video URL.');
+                    return;
+                }
             }
 
             isLoading = true;
@@ -798,9 +863,9 @@
             lucide.createIcons();
 
             try {
-                // FIXED: Use 'text' parameter (matches your API)
-                const encodedUrl = encodeURIComponent(url);
-                const apiUrl = `${API_URL}?apiKey=${API_KEY}&text=${encodedUrl}`;
+                const apiUrl = currentPlatform === 'tiktok' 
+                    ? `${TIKTOK_API}?apiKey=${API_KEY}&text=${encodeURIComponent(url)}`
+                    : `${FACEBOOK_API}?apiKey=${API_KEY}&text=${encodeURIComponent(url)}`;
                 
                 console.log('Fetching:', apiUrl);
 
@@ -829,20 +894,26 @@
                 const data = await response.json();
                 console.log('API Response:', data);
 
-                // Check if we have a valid response with results
                 if (data.success === true && data.results) {
                     const videoData = data.results;
                     
-                    // Try to get the best available video URL
-                    let videoUrl = videoData.no_watermark || videoData.direct_link || videoData.watermark;
+                    let videoUrl, thumbnail = '', title = '', author = '';
+                    
+                    if (currentPlatform === 'tiktok') {
+                        videoUrl = videoData.no_watermark || videoData.direct_link || videoData.watermark;
+                        thumbnail = videoData.thumbnail || '';
+                        title = videoData.title || 'TikTok Video';
+                        author = videoData.author || '';
+                    } else {
+                        // Facebook
+                        videoUrl = videoData.hd_link || videoData.sd_link;
+                        title = videoData.title || 'Facebook Video';
+                        thumbnail = videoData.thumbnail || '';
+                    }
                     
                     if (!videoUrl) {
                         throw new Error('No video URL found in response');
                     }
-
-                    const thumbnail = videoData.thumbnail || '';
-                    const title = videoData.title || 'TikTok Video';
-                    const author = videoData.author || '';
 
                     showResult('success', videoUrl, thumbnail, title, author);
                 } else {
@@ -873,6 +944,9 @@
                 `;
             } else if (type === 'success') {
                 const videoUrl = content;
+                const platformIcon = currentPlatform === 'tiktok' ? 'music' : 'facebook';
+                const platformName = currentPlatform === 'tiktok' ? 'TikTok' : 'Facebook';
+                
                 resultContainer.innerHTML = `
                     <div class="glass-card result-card" style="padding:28px;width:100%;max-width:600px;animation:fadeUp 0.5s ease forwards;">
                         <div class="hud-corner hud-corner-tl" style="top:8px;left:8px;"></div>
@@ -881,13 +955,17 @@
                         <div class="hud-corner hud-corner-br" style="bottom:8px;right:8px;"></div>
 
                         <div style="display:flex;flex-direction:column;gap:16px;align-items:center;">
+                            <span style="font-size:12px;color:rgba(0,212,255,0.6);font-weight:600;letter-spacing:1px;text-transform:uppercase;">
+                                <i data-lucide="${platformIcon}" style="width:14px;height:14px;display:inline;margin-right:4px;"></i>
+                                ${platformName}
+                            </span>
                             ${thumbnail ? `
                                 <div style="border-radius:12px;overflow:hidden;background:rgba(0,0,0,0.3);max-height:300px;width:100%;display:flex;justify-content:center;">
                                     <img src="${thumbnail}" alt="Video thumbnail" style="width:100%;object-fit:cover;max-height:300px;" onerror="this.style.display='none'">
                                 </div>
                             ` : ''}
                             ${title ? `<p style="font-weight:600;font-size:16px;color:#E0E8F0;margin:0;text-align:center;">${title}</p>` : ''}
-                            ${author ? `<p style="font-size:14px;color:rgba(224,232,240,0.4);margin:-8px 0 0 0;text-align:center;">@${author}</p>` : ''}
+                            ${author && currentPlatform === 'tiktok' ? `<p style="font-size:14px;color:rgba(224,232,240,0.4);margin:-8px 0 0 0;text-align:center;">@${author}</p>` : ''}
                             
                             <div class="download-btn-wrapper">
                                 <a href="${videoUrl}" download class="neon-btn" style="padding:14px 36px;font-size:16px;text-decoration:none;min-width:200px;">
@@ -895,7 +973,7 @@
                                     Download Video
                                 </a>
                             </div>
-                            <p style="font-size:12px;color:rgba(224,232,240,0.3);text-align:center;margin:0;">No watermark • High quality</p>
+                            <p style="font-size:12px;color:rgba(224,232,240,0.3);text-align:center;margin:0;">${currentPlatform === 'tiktok' ? 'No watermark' : 'Original quality'} • High quality</p>
                         </div>
                     </div>
                 `;
