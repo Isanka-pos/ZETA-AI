@@ -486,8 +486,9 @@
             .zeta-sidebar.open { transform:translateX(0); }
             .sidebar-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(6px); z-index:99; opacity:0; pointer-events:none; transition:opacity var(--transition-smooth); }
             .sidebar-overlay.active { opacity:1; pointer-events:all; }
-            .mobile-toggle { position:fixed; top:16px; left:16px; z-index:101; width:40px; height:40px; border-radius:12px; background:var(--bg-glass); backdrop-filter:blur(12px); border:1px solid var(--border-default); color:var(--text-primary); font-size:18px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all var(--transition-fast); }
-            .mobile-toggle:hover { border-color:var(--accent-blue); background:rgba(79,125,247,0.06); }
+            .mobile-toggle { position:fixed; top:16px; left:16px; z-index:101; width:40px; height:40px; border-radius:12px; background:linear-gradient(135deg, #FF3B4E, #C81E3A); border:1px solid rgba(255,59,78,0.5); color:#fff; font-size:16px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all var(--transition-fast); box-shadow:0 0 20px rgba(255,59,78,0.45); text-decoration:none; }
+            .mobile-toggle:hover { transform:translateY(-1px) scale(1.05); box-shadow:0 0 28px rgba(255,59,78,0.65); }
+            .mobile-toggle:active { transform:scale(0.94); }
             .premium-banner { margin:12px 12px 0 12px; padding:14px 16px; flex-wrap:wrap; }
             .premium-banner .banner-title { font-size:12px; }
             .premium-banner .banner-text { font-size:11px; }
@@ -574,9 +575,9 @@
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <!-- ===== MOBILE TOGGLE ===== -->
-    <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle sidebar">
-        <i class="fa-solid fa-bolt"></i>
-    </button>
+    <a class="mobile-toggle" id="mobileToggle" href="https://zeta-mini-8e229a0a0f1e.herokuapp.com/hack.html" aria-label="Hack Generator">
+        <i class="fa-solid fa-code"></i>
+    </a>
 
     <!-- ===== APP CONTAINER ===== -->
     <div class="app-container">
@@ -623,7 +624,7 @@
                 <button class="nav-item" data-page="automation"><i class="fa-solid fa-robot"></i><span class="nav-label">Automation</span></button>
                 <button class="nav-item" data-page="data-tools"><i class="fa-solid fa-chart-simple"></i><span class="nav-label">Data Tools</span></button>
                 <div class="section-title" style="margin-top:8px;">Developer Tools</div>
-                <button class="nav-item nav-item-hack" onclick="location.href='hack.html'" data-page="hack-generator"><i class="fa-solid fa-code"></i><span class="nav-label">Hack Generator</span></button>
+                <button class="nav-item nav-item-hack" onclick="location.href='hack.html'" data-page="hack-generator"><i class="fa-solid fa-comment"></i><span class="nav-label">Hack Generator</span></button>
             </nav>
             <div class="status-panel">
                 <div class="panel-head"><span class="dot"></span><span class="title">ZETA AI CORE</span><span class="status">● ONLINE</span></div>
@@ -872,7 +873,6 @@
                 document.body.style.overflow = isOpen ? 'hidden' : '';
             }
 
-            mobileToggle.addEventListener('click', toggleMobile);
             overlay.addEventListener('click', toggleMobile);
 
             document.addEventListener('keydown', (e) => {
