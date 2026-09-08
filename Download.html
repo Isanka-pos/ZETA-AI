@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Downloader | ZETA TOOLS</title>
-    <meta name="description" content="Download TikTok and Facebook videos without watermark using ZETA TOOLS. Fast, free and easy to use.">
-    <meta name="keywords" content="TikTok downloader, Facebook downloader, video download, no watermark, ZETA TOOLS">
+    <meta name="description" content="Download TikTok, Facebook and YouTube videos without watermark using ZETA TOOLS. Fast, free and easy to use.">
+    <meta name="keywords" content="TikTok downloader, Facebook downloader, YouTube downloader, video download, no watermark, ZETA TOOLS">
     <meta name="robots" content="index, follow">
     <meta property="og:title" content="Video Downloader | ZETA TOOLS">
-    <meta property="og:description" content="Download TikTok and Facebook videos without watermark for free.">
+    <meta property="og:description" content="Download TikTok, Facebook and YouTube videos without watermark for free.">
     <meta property="og:type" content="website">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -162,6 +162,33 @@
         }
         .neon-input::placeholder {
             color: rgba(224,232,240,0.3);
+        }
+
+        .neon-select {
+            background: rgba(13,17,32,0.6);
+            border: 1px solid rgba(0,163,255,0.15);
+            border-radius: 14px;
+            padding: 16px 20px;
+            color: #E0E8F0;
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            min-width: 100px;
+            transition: all 0.3s ease;
+            outline: none;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2300A3FF' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
+        }
+        .neon-select:focus {
+            border-color: #00A3FF;
+            box-shadow: 0 0 20px rgba(0,163,255,0.1);
+        }
+        .neon-select option {
+            background: #0A0E1A;
+            color: #E0E8F0;
         }
 
         .result-card {
@@ -384,6 +411,23 @@
             justify-content: center;
             width: 100%;
         }
+
+        /* YouTube quality selector */
+        .quality-selector {
+            display: none;
+            gap: 12px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .quality-selector.visible {
+            display: flex;
+        }
+        .quality-selector label {
+            font-size: 14px;
+            color: rgba(224,232,240,0.5);
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
@@ -461,11 +505,11 @@
 
                 <h1 class="reveal reveal-delay-1" style="font-family:'Orbitron',sans-serif;font-size:clamp(28px,5vw,48px);font-weight:800;line-height:1.15;margin-bottom:16px;text-align:center;letter-spacing:-0.5px;">
                     Download Videos <br>
-                    <span style="background:linear-gradient(135deg,#00D4FF,#00A3FF,#0066FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">From TikTok & Facebook</span>
+                    <span style="background:linear-gradient(135deg,#00D4FF,#00A3FF,#0066FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">From TikTok, Facebook & YouTube</span>
                 </h1>
 
                 <p class="reveal reveal-delay-2" style="font-size:16px;color:rgba(224,232,240,0.5);line-height:1.7;text-align:center;margin-bottom:32px;max-width:500px;margin-left:auto;margin-right:auto;">
-                    Paste any TikTok or Facebook video link and download it in high quality. Free & fast.
+                    Paste any TikTok, Facebook or YouTube video link and download it in high quality. Free & fast.
                 </p>
 
                 <!-- Platform Selector -->
@@ -477,6 +521,10 @@
                     <div class="platform-tab" data-platform="facebook" onclick="switchPlatform('facebook')">
                         <i data-lucide="facebook" style="width:18px;height:18px;"></i>
                         Facebook
+                    </div>
+                    <div class="platform-tab" data-platform="youtube" onclick="switchPlatform('youtube')">
+                        <i data-lucide="youtube" style="width:18px;height:18px;"></i>
+                        YouTube
                     </div>
                 </div>
 
@@ -495,6 +543,17 @@
                                 Download
                             </button>
                         </div>
+                        
+                        <!-- YouTube Quality Selector -->
+                        <div id="qualitySelector" class="quality-selector">
+                            <label for="qualitySelect">Quality:</label>
+                            <select id="qualitySelect" class="neon-select">
+                                <option value="360">360p</option>
+                                <option value="720" selected>720p</option>
+                                <option value="1080">1080p</option>
+                            </select>
+                        </div>
+                        
                         <p id="urlHint" style="font-size:12px;color:rgba(224,232,240,0.25);text-align:center;margin-top:4px;">
                             Supports TikTok video links (e.g., https://www.tiktok.com/@user/video/123456789)
                         </p>
@@ -522,12 +581,12 @@
                     <div class="glass-card reveal" style="padding:32px 24px;text-align:center;">
                         <div style="font-size:42px;margin-bottom:16px;filter:drop-shadow(0 0 12px rgba(0,163,255,0.3));">1️⃣</div>
                         <h3 style="font-weight:700;font-size:17px;margin-bottom:8px;color:#E0E8F0;">Copy Link</h3>
-                        <p style="font-size:14px;color:rgba(224,232,240,0.45);line-height:1.6;">Copy the URL of any TikTok or Facebook video.</p>
+                        <p style="font-size:14px;color:rgba(224,232,240,0.45);line-height:1.6;">Copy the URL of any video.</p>
                     </div>
                     <div class="glass-card reveal reveal-delay-1" style="padding:32px 24px;text-align:center;">
                         <div style="font-size:42px;margin-bottom:16px;filter:drop-shadow(0 0 12px rgba(0,163,255,0.3));">2️⃣</div>
                         <h3 style="font-weight:700;font-size:17px;margin-bottom:8px;color:#E0E8F0;">Select Platform</h3>
-                        <p style="font-size:14px;color:rgba(224,232,240,0.45);line-height:1.6;">Choose TikTok or Facebook.</p>
+                        <p style="font-size:14px;color:rgba(224,232,240,0.45);line-height:1.6;">Choose TikTok, Facebook or YouTube.</p>
                     </div>
                     <div class="glass-card reveal reveal-delay-2" style="padding:32px 24px;text-align:center;">
                         <div style="font-size:42px;margin-bottom:16px;filter:drop-shadow(0 0 12px rgba(0,163,255,0.3));">3️⃣</div>
@@ -562,20 +621,20 @@
                     </div>
                     <div class="glass-card reveal reveal-delay-1" style="padding:20px 24px;cursor:pointer;" onclick="toggleFaq(this)">
                         <div style="display:flex;justify-content:space-between;align-items:center;">
-                            <span style="font-weight:600;font-size:15px;">Does it remove watermarks?</span>
-                            <i data-lucide="chevron-down" style="width:20px;height:20px;color:#00A3FF;transition:transform 0.3s;flex-shrink:0;"></i>
-                        </div>
-                        <div class="faq-answer" style="max-height:0;overflow:hidden;transition:max-height 0.3s ease, padding 0.3s ease;padding:0;color:rgba(224,232,240,0.5);font-size:14px;line-height:1.7;">
-                            Yes, TikTok videos are downloaded without watermark. Facebook videos are downloaded in original quality.
-                        </div>
-                    </div>
-                    <div class="glass-card reveal reveal-delay-2" style="padding:20px 24px;cursor:pointer;" onclick="toggleFaq(this)">
-                        <div style="display:flex;justify-content:space-between;align-items:center;">
                             <span style="font-weight:600;font-size:15px;">What video quality is supported?</span>
                             <i data-lucide="chevron-down" style="width:20px;height:20px;color:#00A3FF;transition:transform 0.3s;flex-shrink:0;"></i>
                         </div>
                         <div class="faq-answer" style="max-height:0;overflow:hidden;transition:max-height 0.3s ease, padding 0.3s ease;padding:0;color:rgba(224,232,240,0.5);font-size:14px;line-height:1.7;">
-                            We support the highest available quality. Facebook videos include both SD and HD options.
+                            TikTok and Facebook: highest available quality. YouTube: select from 360p, 720p, or 1080p.
+                        </div>
+                    </div>
+                    <div class="glass-card reveal reveal-delay-2" style="padding:20px 24px;cursor:pointer;" onclick="toggleFaq(this)">
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <span style="font-weight:600;font-size:15px;">Does it remove watermarks?</span>
+                            <i data-lucide="chevron-down" style="width:20px;height:20px;color:#00A3FF;transition:transform 0.3s;flex-shrink:0;"></i>
+                        </div>
+                        <div class="faq-answer" style="max-height:0;overflow:hidden;transition:max-height 0.3s ease, padding 0.3s ease;padding:0;color:rgba(224,232,240,0.5);font-size:14px;line-height:1.7;">
+                            Yes, TikTok videos are downloaded without watermark. Facebook and YouTube videos are downloaded in original quality.
                         </div>
                     </div>
                     <div class="glass-card reveal reveal-delay-3" style="padding:20px 24px;cursor:pointer;" onclick="toggleFaq(this)">
@@ -760,7 +819,7 @@
             }
         }
 
-        // ===== Platform Switch - CLEARS INPUT FIELD =====
+        // ===== Platform Switch =====
         let currentPlatform = 'tiktok';
 
         function switchPlatform(platform) {
@@ -771,20 +830,25 @@
             
             const input = document.getElementById('videoUrl');
             const hint = document.getElementById('urlHint');
+            const qualitySelector = document.getElementById('qualitySelector');
+            
+            // Clear input when switching
+            input.value = '';
+            document.getElementById('resultContainer').innerHTML = '';
             
             if (platform === 'tiktok') {
                 input.placeholder = 'Paste TikTok video URL here...';
                 hint.textContent = 'Supports TikTok video links (e.g., https://www.tiktok.com/@user/video/123456789)';
-            } else {
+                qualitySelector.classList.remove('visible');
+            } else if (platform === 'facebook') {
                 input.placeholder = 'Paste Facebook video URL here...';
                 hint.textContent = 'Supports Facebook video links (e.g., https://www.facebook.com/watch?v=123456789)';
+                qualitySelector.classList.remove('visible');
+            } else if (platform === 'youtube') {
+                input.placeholder = 'Paste YouTube video URL here...';
+                hint.textContent = 'Supports YouTube video links (e.g., https://www.youtube.com/watch?v=VIDEO_ID)';
+                qualitySelector.classList.add('visible');
             }
-            
-            // 🔥 CLEAR THE INPUT FIELD WHEN SWITCHING PLATFORMS
-            input.value = '';
-            
-            // Clear previous results
-            document.getElementById('resultContainer').innerHTML = '';
         }
 
         // ===== Mobile Menu =====
@@ -816,12 +880,15 @@
 
         const TIKTOK_API = 'https://hashu-apis-production.up.railway.app/api/tiktok/dl';
         const FACEBOOK_API = 'https://hashu-apis-production.up.railway.app/api/fb/dl';
+        const YOUTUBE_API = 'https://sasa-dev-api.xyz/api/ytmp4';
         const API_KEY = 'hashu_cd4b0a9d325539de660602e7d8d38d61';
+        const YOUTUBE_API_KEY = 'Sasa_Dev_Api_e101b64c0549417f720ec1a9fb4f2b938a0214aa';
 
         const form = document.getElementById('downloadForm');
         const urlInput = document.getElementById('videoUrl');
         const downloadBtn = document.getElementById('downloadBtn');
         const resultContainer = document.getElementById('resultContainer');
+        const qualitySelect = document.getElementById('qualitySelect');
 
         let isLoading = false;
 
@@ -842,9 +909,14 @@
                     showResult('error', 'Please enter a valid TikTok video URL.');
                     return;
                 }
-            } else {
+            } else if (currentPlatform === 'facebook') {
                 if (!url.includes('facebook.com') && !url.includes('fb.watch')) {
                     showResult('error', 'Please enter a valid Facebook video URL.');
+                    return;
+                }
+            } else if (currentPlatform === 'youtube') {
+                if (!url.includes('youtube.com') && !url.includes('youtu.be')) {
+                    showResult('error', 'Please enter a valid YouTube video URL.');
                     return;
                 }
             }
@@ -866,9 +938,16 @@
             lucide.createIcons();
 
             try {
-                const apiUrl = currentPlatform === 'tiktok' 
-                    ? `${TIKTOK_API}?apiKey=${API_KEY}&text=${encodeURIComponent(url)}`
-                    : `${FACEBOOK_API}?apiKey=${API_KEY}&text=${encodeURIComponent(url)}`;
+                let apiUrl;
+                
+                if (currentPlatform === 'tiktok') {
+                    apiUrl = `${TIKTOK_API}?apiKey=${API_KEY}&text=${encodeURIComponent(url)}`;
+                } else if (currentPlatform === 'facebook') {
+                    apiUrl = `${FACEBOOK_API}?apiKey=${API_KEY}&text=${encodeURIComponent(url)}`;
+                } else if (currentPlatform === 'youtube') {
+                    const quality = qualitySelect.value;
+                    apiUrl = `${YOUTUBE_API}?apikey=${YOUTUBE_API_KEY}&url=${encodeURIComponent(url)}&quality=${quality}`;
+                }
                 
                 console.log('Fetching:', apiUrl);
 
@@ -897,6 +976,26 @@
                 const data = await response.json();
                 console.log('API Response:', data);
 
+                // YouTube API response handling
+                if (currentPlatform === 'youtube') {
+                    if (data.status === 'success' && data.result) {
+                        const videoData = data.result;
+                        const videoUrl = videoData.download_link || videoData.url;
+                        const thumbnail = videoData.thumbnail || '';
+                        const title = videoData.title || 'YouTube Video';
+                        
+                        if (!videoUrl) {
+                            throw new Error('No video URL found in response');
+                        }
+                        showResult('success', videoUrl, thumbnail, title, '');
+                    } else {
+                        const errorMsg = data.message || 'Failed to fetch YouTube video. Please check the URL and try again.';
+                        showResult('error', errorMsg);
+                    }
+                    return;
+                }
+
+                // TikTok and Facebook response handling
                 if (data.success === true && data.results) {
                     const videoData = data.results;
                     
@@ -947,8 +1046,8 @@
                 `;
             } else if (type === 'success') {
                 const videoUrl = content;
-                const platformIcon = currentPlatform === 'tiktok' ? 'music' : 'facebook';
-                const platformName = currentPlatform === 'tiktok' ? 'TikTok' : 'Facebook';
+                const platformIcon = currentPlatform === 'tiktok' ? 'music' : (currentPlatform === 'facebook' ? 'facebook' : 'youtube');
+                const platformName = currentPlatform === 'tiktok' ? 'TikTok' : (currentPlatform === 'facebook' ? 'Facebook' : 'YouTube');
                 
                 resultContainer.innerHTML = `
                     <div class="glass-card result-card" style="padding:28px;width:100%;max-width:600px;animation:fadeUp 0.5s ease forwards;">
@@ -961,6 +1060,7 @@
                             <span style="font-size:12px;color:rgba(0,212,255,0.6);font-weight:600;letter-spacing:1px;text-transform:uppercase;">
                                 <i data-lucide="${platformIcon}" style="width:14px;height:14px;display:inline;margin-right:4px;"></i>
                                 ${platformName}
+                                ${currentPlatform === 'youtube' ? ` • ${qualitySelect.value}p` : ''}
                             </span>
                             ${thumbnail ? `
                                 <div style="border-radius:12px;overflow:hidden;background:rgba(0,0,0,0.3);max-height:300px;width:100%;display:flex;justify-content:center;">
@@ -976,7 +1076,9 @@
                                     Download Video
                                 </a>
                             </div>
-                            <p style="font-size:12px;color:rgba(224,232,240,0.3);text-align:center;margin:0;">${currentPlatform === 'tiktok' ? 'No watermark' : 'Original quality'} • High quality</p>
+                            <p style="font-size:12px;color:rgba(224,232,240,0.3);text-align:center;margin:0;">
+                                ${currentPlatform === 'tiktok' ? 'No watermark' : 'Original quality'} • High quality
+                            </p>
                         </div>
                     </div>
                 `;
