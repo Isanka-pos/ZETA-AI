@@ -328,7 +328,6 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Center the download button and result */
         #resultContainer {
             display: flex;
             justify-content: center;
@@ -339,7 +338,6 @@
             max-width: 600px;
         }
 
-        /* Center footer */
         .footer-center {
             display: flex;
             flex-direction: column;
@@ -355,7 +353,6 @@
             justify-content: center;
         }
 
-        /* Platform selector tabs */
         .platform-tab {
             padding: 10px 24px;
             border-radius: 12px;
@@ -369,6 +366,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            user-select: none;
         }
         .platform-tab:hover {
             border-color: rgba(0,163,255,0.2);
@@ -491,14 +489,14 @@
 
                     <form id="downloadForm" style="display:flex;flex-direction:column;gap:16px;">
                         <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
-                            <input type="text" id="videoUrl" class="neon-input" placeholder="Paste video URL here..." style="flex:1;min-width:200px;" required>
+                            <input type="text" id="videoUrl" class="neon-input" placeholder="Paste TikTok video URL here..." style="flex:1;min-width:200px;" required>
                             <button type="submit" id="downloadBtn" class="neon-btn" style="padding:16px 32px;font-size:15px;white-space:nowrap;min-width:140px;">
                                 <i data-lucide="download" style="width:18px;height:18px;"></i>
                                 Download
                             </button>
                         </div>
                         <p id="urlHint" style="font-size:12px;color:rgba(224,232,240,0.25);text-align:center;margin-top:4px;">
-                            Supports TikTok & Facebook video links
+                            Supports TikTok video links (e.g., https://www.tiktok.com/@user/video/123456789)
                         </p>
                     </form>
                 </div>
@@ -762,7 +760,7 @@
             }
         }
 
-        // ===== Platform Switch =====
+        // ===== Platform Switch - CLEARS INPUT FIELD =====
         let currentPlatform = 'tiktok';
 
         function switchPlatform(platform) {
@@ -771,14 +769,19 @@
                 tab.classList.toggle('active', tab.dataset.platform === platform);
             });
             
+            const input = document.getElementById('videoUrl');
             const hint = document.getElementById('urlHint');
+            
             if (platform === 'tiktok') {
+                input.placeholder = 'Paste TikTok video URL here...';
                 hint.textContent = 'Supports TikTok video links (e.g., https://www.tiktok.com/@user/video/123456789)';
-                document.querySelector('#videoUrl').placeholder = 'Paste TikTok video URL here...';
             } else {
+                input.placeholder = 'Paste Facebook video URL here...';
                 hint.textContent = 'Supports Facebook video links (e.g., https://www.facebook.com/watch?v=123456789)';
-                document.querySelector('#videoUrl').placeholder = 'Paste Facebook video URL here...';
             }
+            
+            // 🔥 CLEAR THE INPUT FIELD WHEN SWITCHING PLATFORMS
+            input.value = '';
             
             // Clear previous results
             document.getElementById('resultContainer').innerHTML = '';
