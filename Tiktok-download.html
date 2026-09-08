@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok Video Downloader | ZETA TOOLS</title>
+    <meta name="description" content="Download TikTok videos without watermark using ZETA TOOLS. Fast, free and easy to use.">
+    <meta name="keywords" content="TikTok downloader, TikTok video download, no watermark, ZETA TOOLS">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="TikTok Video Downloader | ZETA TOOLS">
+    <meta property="og:description" content="Download TikTok videos without watermark for free.">
+    <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        zeta: {
+                            bg: '#04060C',
+                            surface: '#0A0E1A',
+                            card: '#0D1120',
+                            border: '#1A2035',
+                            blue: '#00A3FF',
+                            cyan: '#00D4FF',
+                            glow: '#0088FF',
+                            deep: '#003366',
+                        }
+                    },
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        inter: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #04060C;
+            color: #E0E8F0;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #04060C; }
+        ::-webkit-scrollbar-thumb { background: #00A3FF33; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00A3FF66; }
+
+        .cyber-grid {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image:
+                linear-gradient(rgba(0,163,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,163,255,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: 0;
+            animation: gridMove 20s linear infinite;
+        }
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(60px, 60px); }
+        }
+
+        #particles-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .mouse-glow {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,163,255,0.06), transparent 70%);
+            pointer-events: none;
+            z-index: 1;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-blur {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            background: rgba(4,6,12,0.8);
+            border-bottom: 1px solid rgba(0,163,255,0.06);
+        }
+
+        .glass-card {
+            background: linear-gradient(135deg, rgba(13,17,32,0.8), rgba(10,14,26,0.6));
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(0,163,255,0.08);
+            border-radius: 20px;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0,163,255,0.3), transparent);
+        }
+
+        .neon-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #00A3FF, #0066CC);
+            color: white;
+            font-weight: 600;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
+            box-shadow: 0 0 15px rgba(0,163,255,0.3), 0 0 30px rgba(0,163,255,0.1), inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+        .neon-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 0 25px rgba(0,163,255,0.5), 0 0 50px rgba(0,163,255,0.2);
+        }
+        .neon-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .neon-input {
+            background: rgba(13,17,32,0.6);
+            border: 1px solid rgba(0,163,255,0.15);
+            border-radius: 14px;
+            padding: 16px 20px;
+            color: #E0E8F0;
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            width: 100%;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+        .neon-input:focus {
+            border-color: #00A3FF;
+            box-shadow: 0 0 20px rgba(0,163,255,0.1);
+        }
+        .neon-input::placeholder {
+            color: rgba(224,232,240,0.3);
+        }
+
+        .result-card {
+            animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .badge-glow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            background: rgba(0,163,255,0.06);
+            border: 1px solid rgba(0,163,255,0.15);
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #00D4FF;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            animation: badgePulse 3s ease-in-out infinite;
+        }
+        @keyframes badgePulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(0,163,255,0.1); }
+            50% { box-shadow: 0 0 20px rgba(0,163,255,0.2); }
+        }
+
+        .section-divider {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0,163,255,0.15), transparent);
+        }
+
+        .hero-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            animation: orbFloat 8s ease-in-out infinite;
+        }
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -20px) scale(1.1); }
+            66% { transform: translate(-20px, 15px) scale(0.95); }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+
+        .page-loader {
+            position: fixed;
+            inset: 0;
+            background: #04060C;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 24px;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        .page-loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .loader-ring {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid rgba(0,163,255,0.1);
+            border-top-color: #00A3FF;
+            animation: loaderSpin 1s linear infinite;
+        }
+        @keyframes loaderSpin {
+            to { transform: rotate(360deg); }
+        }
+        .loader-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            color: #00A3FF;
+            letter-spacing: 4px;
+            animation: loaderPulse 1.5s ease-in-out infinite;
+        }
+        @keyframes loaderPulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(4,6,12,0.95);
+            backdrop-filter: blur(20px);
+            z-index: 100;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 32px;
+        }
+        .mobile-menu.open { display: flex; }
+        .mobile-menu a {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            color: #E0E8F0;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            letter-spacing: 2px;
+        }
+        .mobile-menu a:hover { color: #00D4FF; }
+
+        .hud-corner {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+        }
+        .hud-corner::before, .hud-corner::after {
+            content: '';
+            position: absolute;
+            background: rgba(0,163,255,0.3);
+        }
+        .hud-corner-tl::before { top: 0; left: 0; width: 20px; height: 1px; }
+        .hud-corner-tl::after { top: 0; left: 0; width: 1px; height: 20px; }
+        .hud-corner-tr::before { top: 0; right: 0; width: 20px; height: 1px; }
+        .hud-corner-tr::after { top: 0; right: 0; width: 1px; height: 20px; }
+        .hud-corner-bl::before { bottom: 0; left: 0; width: 20px; height: 1px; }
+        .hud-corner-bl::after { bottom: 0; left: 0; width: 1px; height: 20px; }
+        .hud-corner-br::before { bottom: 0; right: 0; width: 20px; height: 1px; }
+        .hud-corner-br::after { bottom: 0; right: 0; width: 1px; height: 20px; }
+
+        .scan-line {
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0,163,255,0.15), transparent);
+            animation: scanDown 6s linear infinite;
+        }
+        @keyframes scanDown {
+            0% { top: -1px; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+
+        @keyframes holoPulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Center the download button and result */
+        #resultContainer {
+            display: flex;
+            justify-content: center;
+        }
+        #resultContainer > * {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        /* Center footer */
+        .footer-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Page Loader -->
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-ring"></div>
+        <div class="loader-text">ZETA TOOLS</div>
+    </div>
+
+    <!-- Mouse Glow -->
+    <div class="mouse-glow" id="mouseGlow"></div>
+
+    <!-- Cyber Grid -->
+    <div class="cyber-grid"></div>
+
+    <!-- Particles -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html" onclick="closeMobileMenu()">HOME</a>
+        <a href="support.html" onclick="closeMobileMenu()">SUPPORT</a>
+        <a href="#downloader" onclick="closeMobileMenu()" style="color:#00D4FF;">TIKTOK DL</a>
+        <a href="#faq" onclick="closeMobileMenu()">FAQ</a>
+        <button onclick="closeMobileMenu()" style="margin-top:20px;background:none;border:1px solid rgba(0,163,255,0.2);color:#00D4FF;padding:12px 32px;border-radius:10px;font-family:'Orbitron',sans-serif;font-size:13px;cursor:pointer;letter-spacing:2px;">CLOSE</button>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav-blur fixed top-0 left-0 right-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-18">
+                <a href="index.html" class="flex items-center gap-3 text-decoration-none">
+                    <div style="width:36px;height:36px;background:linear-gradient(135deg,#00A3FF,#0066CC);border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 15px rgba(0,163,255,0.3);">
+                        <span style="font-family:'Orbitron',sans-serif;font-weight:900;font-size:16px;color:white;">Z</span>
+                    </div>
+                    <span style="font-family:'Orbitron',sans-serif;font-weight:700;font-size:16px;color:#E0E8F0;letter-spacing:2px;">ZETA TOOLS</span>
+                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="index.html" style="font-size:14px;color:rgba(224,232,240,0.6);text-decoration:none;font-weight:500;transition:color 0.3s;letter-spacing:0.5px;" onmouseover="this.style.color='#00D4FF'" onmouseout="this.style.color='rgba(224,232,240,0.6)'">HOME</a>
+                    <a href="support.html" style="font-size:14px;color:rgba(224,232,240,0.6);text-decoration:none;font-weight:500;transition:color 0.3s;letter-spacing:0.5px;" onmouseover="this.style.color='#00D4FF'" onmouseout="this.style.color='rgba(224,232,240,0.6)'">SUPPORT</a>
+                    <a href="#downloader" style="font-size:14px;color:#00D4FF;text-decoration:none;font-weight:600;letter-spacing:0.5px;">TIKTOK DL</a>
+                    <a href="#faq" style="font-size:14px;color:rgba(224,232,240,0.6);text-decoration:none;font-weight:500;transition:color 0.3s;letter-spacing:0.5px;" onmouseover="this.style.color='#00D4FF'" onmouseout="this.style.color='rgba(224,232,240,0.6)'">FAQ</a>
+                </div>
+                <button class="md:hidden" onclick="toggleMobileMenu()" style="background:none;border:none;color:#E0E8F0;cursor:pointer;padding:8px;">
+                    <i data-lucide="menu" style="width:24px;height:24px;"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main style="position:relative;z-index:2;">
+
+        <!-- ===== HERO / DOWNLOADER SECTION ===== -->
+        <section id="downloader" style="min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:120px 20px 80px;">
+            <!-- Hero Orbs -->
+            <div class="hero-orb" style="width:500px;height:500px;background:rgba(0,163,255,0.06);top:-100px;right:-150px;"></div>
+            <div class="hero-orb" style="width:400px;height:400px;background:rgba(0,100,255,0.04);bottom:-80px;left:-100px;animation-delay:-3s;"></div>
+            <div class="hero-orb" style="width:300px;height:300px;background:rgba(0,212,255,0.03);top:40%;left:60%;animation-delay:-5s;"></div>
+
+            <!-- Holographic Circles -->
+            <div class="holo-circle" style="position:absolute;width:300px;height:300px;border-radius:50%;border:1px solid rgba(0,163,255,0.1);animation:holoPulse 4s ease-in-out infinite;top:10%;left:-50px;"></div>
+            <div class="holo-circle" style="position:absolute;width:200px;height:200px;border-radius:50%;border:1px solid rgba(0,163,255,0.1);animation:holoPulse 4s ease-in-out infinite;bottom:15%;right:-30px;animation-delay:-2s;"></div>
+
+            <!-- Scan Line -->
+            <div class="scan-line"></div>
+
+            <!-- Main Content -->
+            <div style="max-width:700px;width:100%;position:relative;z-index:5;">
+                <div class="reveal" style="margin-bottom:28px;text-align:center;">
+                    <span class="badge-glow">
+                        <i data-lucide="video" style="width:16px;height:16px;"></i>
+                        TIKTOK DOWNLOADER
+                    </span>
+                </div>
+
+                <h1 class="reveal reveal-delay-1" style="font-family:'Orbitron',sans-serif;font-size:clamp(28px,5vw,48px);font-weight:800;line-height:1.15;margin-bottom:16px;text-align:center;letter-spacing:-0.5px;">
+                    Download TikTok <br>
+                    <span style="background:linear-gradient(135deg,#00D4FF,#00A3FF,#0066FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Videos Without Watermark</span>
+                </h1>
+
+                <p class="reveal reveal-delay-2" style="font-size:16px;color:rgba(224,232,240,0.5);line-height:1.7;text-align:center;margin-bottom:32px;max-width:500px;margin-left:auto;margin-right:auto;">
+                    Paste any TikTok video link and download it in high quality. Free & fast.
+                </p>
+
+                <!-- Input Form -->
+                <div class="glass-card reveal reveal-delay-3" style="padding:32px 28px;">
+                    <div class="hud-corner hud-corner-tl" style="top:12px;left:12px;"></div>
+                    <div class="hud-corner hud-corner-tr" style="top:12px;right:12px;"></div>
+                    <div class="hud-corner hud-corner-bl" style="bottom:12px;left:12px;"></div>
+                    <div class="hud-corner hud-corner-br" style="bottom:12px;right:12px;"></div>
+
+                    <form id="downloadForm" style="display:flex;flex-direction:column;gap:16px;">
+                        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                            <input type="text" id="videoUrl" class="neon-input" placeholder="Paste TikTok video URL here..." style="flex:1;min-width:200px;" required>
+                            <button type="submit" id="downloadBtn" class="neon-btn" style="padding:16px 32px;font-size:15px;white-space:nowrap;min-width:140px;">
+                                <i data-lucide="download" style="width:18px;height:18px;"></i>
+                                Download
+                            </button>
+                        </div>
+                        <p style="font-size:12px;color:rgba(224,232,240,0.25);text-align:center;margin-top:4px;">
+                            Supports TikTok video links (e.g., https://www.tiktok.com/@user/video/123456789)
+                        </p>
+                    </form>
+                </div>
+
+                <!-- Result Container - Centered -->
+                <div id="resultContainer" style="margin-top:24px;display:flex;justify-content:center;width:100%;">
+                    <!-- Results will appear here -->
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- ===== HOW TO USE SECTION ===== -->
+        <section style="padding:80px 20px;position:relative;">
+            <div class="max-w-5xl mx-auto">
+                <div style="text-align:center;margin-bottom:48px;">
+                    <span class="badge-glow reveal" style="margin-bottom:20px;display:inline-flex;">HOW TO USE</span>
+                    <h2 class="reveal reveal-delay-1" style="font-family:'Orbitron',sans-serif;font-size:clamp(24px,3.5vw,36px);font-weight:700;margin-bottom:12px;letter-spacing:-0.5px;">
+                        Simple <span style="color:#00D4FF;">3 Steps</span>
+                    </h2>
+                </div>
+
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:24px;">
+                    <div class="glass-card reveal" style="padding:32px 24px;text-align:center;">
+                        <div style="font-size:42px;margin-bottom:16px;filter:drop-shadow(0 0 12px rgba(0,163,255,0.3));">1️⃣</div>
+                        <h3 style="font-weight:700;font-size:17px;margin-bottom:8px;color:#E0E8F0;">Copy Link</h3>
+                        <p style="font-size:14px;color:rgba(224,232,240,0.45);line-height:1.6;">Copy the URL of any TikTok video.</p>
+                    </div>
+                    <div class="glass-card reveal reveal-delay-1" style="padding:32px 24px;text-align:center;">
+                        <div style="font-size:42px;margin-bottom:16px;filter:drop-shadow(0 0 12px rgba(0,163,255,0.3));">2️⃣</div>
+                        <h3 style="font-weight:700;font-size:17px;margin-bottom:8px;color:#E0E8F0;">Paste & Download</h3>
+                        <p style="font-size:14px;color:rgba(224,232,240,0.45);line-height:1.6;">Paste the link and click Download.</p>
+                    </div>
+                    <div class="glass-card reveal reveal-delay-2" style="padding:32px 24px;text-align:center;">
+                        <div style="font-size:42px;margin-bottom:16px;filter:drop-shadow(0 0 12px rgba(0,163,255,0.3));">3️⃣</div>
+                        <h3 style="font-weight:700;font-size:17px;margin-bottom:8px;color:#E0E8F0;">Save Video</h3>
+                        <p style="font-size:14px;color:rgba(224,232,240,0.45);line-height:1.6;">Download the video without watermark.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- ===== FAQ SECTION ===== -->
+        <section id="faq" style="padding:80px 20px;position:relative;">
+            <div class="max-w-3xl mx-auto">
+                <div style="text-align:center;margin-bottom:48px;">
+                    <span class="badge-glow reveal" style="margin-bottom:20px;display:inline-flex;">FAQ</span>
+                    <h2 class="reveal reveal-delay-1" style="font-family:'Orbitron',sans-serif;font-size:clamp(24px,3.5vw,36px);font-weight:700;margin-bottom:12px;letter-spacing:-0.5px;">
+                        Frequently Asked <span style="color:#00D4FF;">Questions</span>
+                    </h2>
+                </div>
+
+                <div style="display:flex;flex-direction:column;gap:12px;">
+                    <div class="glass-card reveal" style="padding:20px 24px;cursor:pointer;" onclick="toggleFaq(this)">
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <span style="font-weight:600;font-size:15px;">Is this service free?</span>
+                            <i data-lucide="chevron-down" style="width:20px;height:20px;color:#00A3FF;transition:transform 0.3s;flex-shrink:0;"></i>
+                        </div>
+                        <div class="faq-answer" style="max-height:0;overflow:hidden;transition:max-height 0.3s ease, padding 0.3s ease;padding:0;color:rgba(224,232,240,0.5);font-size:14px;line-height:1.7;">
+                            Yes! ZETA TOOLS TikTok downloader is completely free to use. No registration required.
+                        </div>
+                    </div>
+                    <div class="glass-card reveal reveal-delay-1" style="padding:20px 24px;cursor:pointer;" onclick="toggleFaq(this)">
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <span style="font-weight:600;font-size:15px;">Does it remove the watermark?</span>
+                            <i data-lucide="chevron-down" style="width:20px;height:20px;color:#00A3FF;transition:transform 0.3s;flex-shrink:0;"></i>
+                        </div>
+                        <div class="faq-answer" style="max-height:0;overflow:hidden;transition:max-height 0.3s ease, padding 0.3s ease;padding:0;color:rgba(224,232,240,0.5);font-size:14px;line-height:1.7;">
+                            Yes, all videos downloaded through our tool are without the TikTok watermark.
+                        </div>
+                    </div>
+                    <div class="glass-card reveal reveal-delay-2" style="padding:20px 24px;cursor:pointer;" onclick="toggleFaq(this)">
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <span style="font-weight:600;font-size:15px;">What video quality is supported?</span>
+                            <i data-lucide="chevron-down" style="width:20px;height:20px;color:#00A3FF;transition:transform 0.3s;flex-shrink:0;"></i>
+                        </div>
+                        <div class="faq-answer" style="max-height:0;overflow:hidden;transition:max-height 0.3s ease, padding 0.3s ease;padding:0;color:rgba(224,232,240,0.5);font-size:14px;line-height:1.7;">
+                            We support the highest available quality for the video. Most videos are available in HD.
+                        </div>
+                    </div>
+                    <div class="glass-card reveal reveal-delay-3" style="padding:20px 24px;cursor:pointer;" onclick="toggleFaq(this)">
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <span style="font-weight:600;font-size:15px;">Are private videos supported?</span>
+                            <i data-lucide="chevron-down" style="width:20px;height:20px;color:#00A3FF;transition:transform 0.3s;flex-shrink:0;"></i>
+                        </div>
+                        <div class="faq-answer" style="max-height:0;overflow:hidden;transition:max-height 0.3s ease, padding 0.3s ease;padding:0;color:rgba(224,232,240,0.5);font-size:14px;line-height:1.7;">
+                            No, only public TikTok videos can be downloaded using our tool.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- ===== FOOTER - CENTERED ===== -->
+        <footer style="border-top:1px solid rgba(0,163,255,0.06);padding:40px 20px;">
+            <div class="max-w-7xl mx-auto footer-center">
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <div style="width:28px;height:28px;background:linear-gradient(135deg,#00A3FF,#0066CC);border-radius:8px;display:flex;align-items:center;justify-content:center;">
+                        <span style="font-family:'Orbitron',sans-serif;font-weight:900;font-size:12px;color:white;">Z</span>
+                    </div>
+                    <span style="font-family:'Orbitron',sans-serif;font-size:12px;color:rgba(224,232,240,0.3);letter-spacing:2px;">ZETA TOOLS</span>
+                </div>
+                <p style="font-size:13px;color:rgba(224,232,240,0.2);margin:0;">© 2025 ZETA TOOLS. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="index.html" style="font-size:13px;color:rgba(224,232,240,0.3);text-decoration:none;transition:color 0.3s;" onmouseover="this.style.color='#00D4FF'" onmouseout="this.style.color='rgba(224,232,240,0.3)'">Home</a>
+                    <a href="support.html" style="font-size:13px;color:rgba(224,232,240,0.3);text-decoration:none;transition:color 0.3s;" onmouseover="this.style.color='#00D4FF'" onmouseout="this.style.color='rgba(224,232,240,0.3)'">Support</a>
+                    <a href="#faq" style="font-size:13px;color:rgba(224,232,240,0.3);text-decoration:none;transition:color 0.3s;" onmouseover="this.style.color='#00D4FF'" onmouseout="this.style.color='rgba(224,232,240,0.3)'">FAQ</a>
+                    <a href="#downloader" style="font-size:13px;color:rgba(224,232,240,0.3);text-decoration:none;transition:color 0.3s;" onmouseover="this.style.color='#00D4FF'" onmouseout="this.style.color='rgba(224,232,240,0.3)'">TikTok DL</a>
+                </div>
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+        // ===== Page Loader =====
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('pageLoader').classList.add('hidden');
+            }, 800);
+        });
+
+        // ===== Mouse Glow =====
+        const mouseGlow = document.getElementById('mouseGlow');
+        let mouseX = 0, mouseY = 0, glowX = 0, glowY = 0;
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+        function animateGlow() {
+            glowX += (mouseX - glowX) * 0.08;
+            glowY += (mouseY - glowY) * 0.08;
+            mouseGlow.style.left = glowX + 'px';
+            mouseGlow.style.top = glowY + 'px';
+            requestAnimationFrame(animateGlow);
+        }
+        animateGlow();
+
+        // ===== Particles =====
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 1.5 + 0.3;
+                this.speedX = (Math.random() - 0.5) * 0.3;
+                this.speedY = (Math.random() - 0.5) * 0.3;
+                this.opacity = Math.random() * 0.5 + 0.1;
+                this.pulse = Math.random() * Math.PI * 2;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.pulse += 0.02;
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                    this.reset();
+                }
+            }
+            draw() {
+                const o = this.opacity * (0.5 + 0.5 * Math.sin(this.pulse));
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(0, 163, 255, ${o})`;
+                ctx.fill();
+            }
+        }
+
+        const particleCount = Math.min(80, Math.floor(window.innerWidth / 15));
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 120) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(0, 163, 255, ${0.06 * (1 - dist / 120)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+                    }
+                }
+            }
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // ===== Scroll Reveal =====
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // ===== FAQ Toggle =====
+        function toggleFaq(element) {
+            const answer = element.querySelector('.faq-answer');
+            const icon = element.querySelector('i[data-lucide="chevron-down"]');
+            const isActive = element.classList.contains('active');
+
+            // Close all other FAQs
+            document.querySelectorAll('.glass-card.active').forEach(card => {
+                if (card !== element) {
+                    card.classList.remove('active');
+                    const otherAnswer = card.querySelector('.faq-answer');
+                    const otherIcon = card.querySelector('i[data-lucide="chevron-down"]');
+                    if (otherAnswer) {
+                        otherAnswer.style.maxHeight = '0';
+                        otherAnswer.style.padding = '0';
+                    }
+                    if (otherIcon) {
+                        otherIcon.style.transform = 'rotate(0deg)';
+                    }
+                }
+            });
+
+            if (isActive) {
+                element.classList.remove('active');
+                if (answer) {
+                    answer.style.maxHeight = '0';
+                    answer.style.padding = '0';
+                }
+                if (icon) {
+                    icon.style.transform = 'rotate(0deg)';
+                }
+            } else {
+                element.classList.add('active');
+                if (answer) {
+                    answer.style.maxHeight = answer.scrollHeight + 40 + 'px';
+                    answer.style.padding = '12px 0 0 0';
+                }
+                if (icon) {
+                    icon.style.transform = 'rotate(180deg)';
+                }
+            }
+        }
+
+        // ===== Mobile Menu =====
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('open');
+        }
+        function closeMobileMenu() {
+            document.getElementById('mobileMenu').classList.remove('open');
+        }
+
+        // ===== Init Lucide Icons =====
+        lucide.createIcons();
+
+        // ===== Nav scroll effect =====
+        const nav = document.querySelector('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.style.borderBottomColor = 'rgba(0,163,255,0.1)';
+                nav.style.background = 'rgba(4,6,12,0.92)';
+            } else {
+                nav.style.borderBottomColor = 'rgba(0,163,255,0.06)';
+                nav.style.background = 'rgba(4,6,12,0.8)';
+            }
+        });
+
+        // ============================================================
+        // ===== TIKTOK DOWNLOADER API INTEGRATION =====
+        // ============================================================
+
+        const API_URL = 'https://hashu-apis-production.up.railway.app/api/tiktok/dl';
+        const API_KEY = 'hashu_cd4b0a9d325539de660602e7d8d38d61';
+
+        const form = document.getElementById('downloadForm');
+        const urlInput = document.getElementById('videoUrl');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const resultContainer = document.getElementById('resultContainer');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const url = urlInput.value.trim();
+            if (!url) {
+                showResult('error', 'Please enter a TikTok video URL.');
+                return;
+            }
+
+            // Validate TikTok URL
+            if (!url.includes('tiktok.com') && !url.includes('vt.tiktok.com')) {
+                showResult('error', 'Please enter a valid TikTok video URL.');
+                return;
+            }
+
+            // Show loading state
+            downloadBtn.disabled = true;
+            downloadBtn.innerHTML = '<i data-lucide="loader" style="width:18px;height:18px;animation:spin 1s linear infinite;"></i> Processing...';
+            lucide.createIcons();
+
+            try {
+                const response = await fetch(`${API_URL}?apiKey=${API_KEY}&url=${encodeURIComponent(url)}`);
+
+                if (!response.ok) {
+                    throw new Error(`Server responded with status ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data.status === true && data.data && data.data.video) {
+                    const videoUrl = data.data.video;
+                    const thumbnail = data.data.thumbnail || '';
+                    const title = data.data.title || 'TikTok Video';
+
+                    showResult('success', videoUrl, thumbnail, title);
+                } else {
+                    const errorMsg = data.message || 'Failed to fetch video. Please check the URL and try again.';
+                    showResult('error', errorMsg);
+                }
+
+            } catch (error) {
+                console.error('Download error:', error);
+                showResult('error', 'Network error. Please check your connection and try again.');
+            } finally {
+                downloadBtn.disabled = false;
+                downloadBtn.innerHTML = '<i data-lucide="download" style="width:18px;height:18px;"></i> Download';
+                lucide.createIcons();
+            }
+        });
+
+        function showResult(type, content, thumbnail = '', title = '') {
+            if (type === 'error') {
+                resultContainer.innerHTML = `
+                    <div class="glass-card result-card" style="padding:24px 28px;border-left:3px solid #FF4444;width:100%;max-width:600px;">
+                        <div style="display:flex;align-items:center;gap:12px;">
+                            <i data-lucide="alert-circle" style="width:24px;height:24px;color:#FF4444;flex-shrink:0;"></i>
+                            <p style="color:#FF6B6B;font-weight:500;margin:0;">${content}</p>
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'success') {
+                const videoUrl = content;
+                resultContainer.innerHTML = `
+                    <div class="glass-card result-card" style="padding:28px;width:100%;max-width:600px;animation:fadeUp 0.5s ease forwards;">
+                        <div class="hud-corner hud-corner-tl" style="top:8px;left:8px;"></div>
+                        <div class="hud-corner hud-corner-tr" style="top:8px;right:8px;"></div>
+                        <div class="hud-corner hud-corner-bl" style="bottom:8px;left:8px;"></div>
+                        <div class="hud-corner hud-corner-br" style="bottom:8px;right:8px;"></div>
+
+                        <div style="display:flex;flex-direction:column;gap:16px;align-items:center;">
+                            ${thumbnail ? `
+                                <div style="border-radius:12px;overflow:hidden;background:rgba(0,0,0,0.3);max-height:300px;width:100%;display:flex;justify-content:center;">
+                                    <img src="${thumbnail}" alt="Video thumbnail" style="width:100%;object-fit:cover;max-height:300px;" onerror="this.style.display='none'">
+                                </div>
+                            ` : ''}
+                            ${title ? `<p style="font-weight:600;font-size:16px;color:#E0E8F0;margin:0;text-align:center;">${title}</p>` : ''}
+                            <a href="${videoUrl}" download class="neon-btn" style="padding:14px 36px;font-size:16px;text-decoration:none;width:100%;max-width:300px;justify-content:center;">
+                                <i data-lucide="download" style="width:20px;height:20px;"></i>
+                                Download Video
+                            </a>
+                            <p style="font-size:12px;color:rgba(224,232,240,0.3);text-align:center;margin:0;">No watermark • High quality</p>
+                        </div>
+                    </div>
+                `;
+            }
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>
