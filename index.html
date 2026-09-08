@@ -486,7 +486,7 @@
             .zeta-sidebar.open { transform:translateX(0); }
             .sidebar-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(6px); z-index:99; opacity:0; pointer-events:none; transition:opacity var(--transition-smooth); }
             .sidebar-overlay.active { opacity:1; pointer-events:all; }
-            .mobile-toggle { position:fixed; top:16px; left:16px; z-index:101; width:40px; height:40px; border-radius:12px; background:linear-gradient(135deg, #FF3B4E, #C81E3A); border:1px solid rgba(255,59,78,0.5); color:#fff; font-size:16px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all var(--transition-fast); box-shadow:0 0 20px rgba(255,59,78,0.45); text-decoration:none; }
+            .mobile-toggle { position:fixed; top:16px; left:16px; z-index:101; width:40px; height:40px; border-radius:12px; background:linear-gradient(135deg, #FF3B4E, #C81E3A); border:1px solid rgba(255,59,78,0.5); color:#fff; font-size:16px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:opacity 0.25s ease, transform 0.25s ease, box-shadow var(--transition-fast); box-shadow:0 0 20px rgba(255,59,78,0.45); text-decoration:none; opacity:1; }
             .mobile-toggle:hover { transform:translateY(-1px) scale(1.05); box-shadow:0 0 28px rgba(255,59,78,0.65); }
             .mobile-toggle:active { transform:scale(0.94); }
             .premium-banner { margin:12px 12px 0 12px; padding:14px 16px; flex-wrap:wrap; }
@@ -916,6 +916,29 @@
                     if (searchInput) { searchInput.focus(); searchInput.select(); }
                 }
             });
+
+            // ===== MOBILE TOGGLE (fa-code button) — FADE ON SCROLL =====
+            // Scrolling down gradually hides the button; scrolling back up
+            // near the top gradually brings it back into view.
+            (function() {
+                const mainContent = document.getElementById('mainContent');
+                if (!mobileToggle || !mainContent) return;
+
+                const FADE_DISTANCE = 90; // px of scroll over which the fade happens
+
+                function updateToggleOpacity() {
+                    const scrollTop = mainContent.scrollTop;
+                    const ratio = Math.min(Math.max(scrollTop / FADE_DISTANCE, 0), 1);
+                    const opacity = 1 - ratio;
+                    mobileToggle.style.opacity = opacity;
+                    mobileToggle.style.transform = 'translateY(' + (-14 * ratio) + 'px) scale(' + (1 - 0.15 * ratio) + ')';
+                    mobileToggle.style.pointerEvents = opacity < 0.05 ? 'none' : 'auto';
+                }
+
+                mainContent.addEventListener('scroll', updateToggleOpacity, { passive: true });
+                // set initial state
+                updateToggleOpacity();
+            })();
 
             // ===== REVEAL OBSERVER =====
             const observer = new IntersectionObserver((entries) => {
