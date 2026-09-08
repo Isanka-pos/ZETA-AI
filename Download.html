@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Downloader | ZETA TOOLS</title>
-    <meta name="description" content="Download TikTok, Facebook and YouTube videos without watermark using ZETA TOOLS. Fast, free and easy to use.">
-    <meta name="keywords" content="TikTok downloader, Facebook downloader, YouTube downloader, video download, no watermark, ZETA TOOLS">
+    <meta name="description" content="Download TikTok and Facebook videos without watermark, or generate a free temporary email, using ZETA TOOLS. Fast, free and easy to use.">
+    <meta name="keywords" content="TikTok downloader, Facebook downloader, video download, no watermark, temp mail, temporary email, ZETA TOOLS">
     <meta name="robots" content="index, follow">
     <meta property="og:title" content="Video Downloader | ZETA TOOLS">
-    <meta property="og:description" content="Download TikTok, Facebook and YouTube videos without watermark for free.">
+    <meta property="og:description" content="Download TikTok and Facebook videos without watermark, or generate a free temporary email.">
     <meta property="og:type" content="website">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -466,6 +466,16 @@
         <button onclick="closeMobileMenu()" style="margin-top:20px;background:none;border:1px solid rgba(0,163,255,0.2);color:#00D4FF;padding:12px 32px;border-radius:10px;font-family:'Orbitron',sans-serif;font-size:13px;cursor:pointer;letter-spacing:2px;">CLOSE</button>
     </div>
 
+    <!-- Temp Mail Read Modal -->
+    <div id="mailReadModal" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(4,6,12,0.88);align-items:center;justify-content:center;padding:20px;">
+        <div class="glass-card" style="max-width:600px;width:100%;max-height:80vh;overflow-y:auto;padding:28px;position:relative;">
+            <button onclick="closeMailModal()" style="position:absolute;top:16px;right:16px;background:none;border:none;color:rgba(224,232,240,0.5);cursor:pointer;padding:4px;">
+                <i data-lucide="x" style="width:20px;height:20px;"></i>
+            </button>
+            <div id="mailReadContent"></div>
+        </div>
+    </div>
+
     <!-- Navigation -->
     <nav class="nav-blur fixed top-0 left-0 right-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -516,11 +526,11 @@
 
                 <h1 class="reveal reveal-delay-1" style="font-family:'Orbitron',sans-serif;font-size:clamp(28px,5vw,48px);font-weight:800;line-height:1.15;margin-bottom:16px;text-align:center;letter-spacing:-0.5px;">
                     Download Videos <br>
-                    <span style="background:linear-gradient(135deg,#00D4FF,#00A3FF,#0066FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">From TikTok, Facebook & YouTube</span>
+                    <span style="background:linear-gradient(135deg,#00D4FF,#00A3FF,#0066FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">From TikTok & Facebook</span>
                 </h1>
 
                 <p class="reveal reveal-delay-2" style="font-size:16px;color:rgba(224,232,240,0.5);line-height:1.7;text-align:center;margin-bottom:32px;max-width:500px;margin-left:auto;margin-right:auto;">
-                    Paste any TikTok, Facebook or YouTube video link and download it in high quality. Free & fast.
+                    Paste any TikTok or Facebook video link and download it in high quality — or generate a free temporary email under Temp Mail. Free & fast.
                 </p>
 
                 <!-- Platform Selector -->
@@ -530,17 +540,17 @@
                         TikTok
                     </div>
                     <div class="platform-tab" data-platform="facebook" onclick="switchPlatform('facebook')">
-                        <i data-lucide="facebook" style="width:18px;height:18px;"></i>
+                        <i data-lucide="users" style="width:18px;height:18px;"></i>
                         Facebook
                     </div>
-                    <div class="platform-tab" data-platform="youtube" onclick="switchPlatform('youtube')">
-                        <i data-lucide="youtube" style="width:18px;height:18px;"></i>
-                        YouTube
+                    <div class="platform-tab" data-platform="tempmail" onclick="switchPlatform('tempmail')">
+                        <i data-lucide="mail" style="width:18px;height:18px;"></i>
+                        Temp Mail
                     </div>
                 </div>
 
                 <!-- Input Form -->
-                <div class="glass-card reveal reveal-delay-3" style="padding:32px 28px;">
+                <div id="videoFormCard" class="glass-card reveal reveal-delay-3" style="padding:32px 28px;">
                     <div class="hud-corner hud-corner-tl" style="top:12px;left:12px;"></div>
                     <div class="hud-corner hud-corner-tr" style="top:12px;right:12px;"></div>
                     <div class="hud-corner hud-corner-bl" style="bottom:12px;left:12px;"></div>
@@ -554,21 +564,54 @@
                                 Download
                             </button>
                         </div>
-                        
-                        <!-- YouTube Quality Selector -->
-                        <div id="qualitySelector" class="quality-selector">
-                            <label for="qualitySelect">Quality:</label>
-                            <select id="qualitySelect" class="neon-select">
-                                <option value="360">360p</option>
-                                <option value="720" selected>720p</option>
-                                <option value="1080">1080p</option>
-                            </select>
-                        </div>
-                        
+
                         <p id="urlHint" style="font-size:12px;color:rgba(224,232,240,0.25);text-align:center;margin-top:4px;">
                             Supports TikTok video links (e.g., https://www.tiktok.com/@user/video/123456789)
                         </p>
                     </form>
+                </div>
+
+                <!-- Temp Mail Panel -->
+                <div id="tempMailPanel" class="glass-card reveal reveal-delay-3" style="padding:32px 28px;display:none;">
+                    <div class="hud-corner hud-corner-tl" style="top:12px;left:12px;"></div>
+                    <div class="hud-corner hud-corner-tr" style="top:12px;right:12px;"></div>
+                    <div class="hud-corner hud-corner-bl" style="bottom:12px;left:12px;"></div>
+                    <div class="hud-corner hud-corner-br" style="bottom:12px;right:12px;"></div>
+
+                    <div id="tempMailGenerateView" style="display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;">
+                        <i data-lucide="mail-plus" style="width:36px;height:36px;color:#00A3FF;"></i>
+                        <p style="font-size:14px;color:rgba(224,232,240,0.5);line-height:1.6;max-width:380px;">
+                            Generate a free, disposable email address to receive messages instantly. No sign up needed.
+                        </p>
+                        <button id="generateMailBtn" class="neon-btn" style="padding:16px 32px;font-size:15px;" onclick="generateTempMail()">
+                            <i data-lucide="mail-plus" style="width:18px;height:18px;"></i>
+                            Generate Email
+                        </button>
+                        <p id="tempMailErrorMsg" style="font-size:13px;color:#FF6B6B;margin:0;display:none;"></p>
+                    </div>
+
+                    <div id="tempMailActiveView" style="display:none;flex-direction:column;gap:16px;">
+                        <div style="display:flex;gap:10px;align-items:stretch;flex-wrap:wrap;justify-content:center;">
+                            <div id="tempMailAddress" class="neon-input" style="flex:1;min-width:200px;text-align:center;font-weight:600;cursor:pointer;user-select:all;" title="Tap to copy" onclick="copyTempMailAddress()"></div>
+                            <button class="neon-btn" style="padding:0 18px;" onclick="copyTempMailAddress()" title="Copy address">
+                                <i data-lucide="copy" style="width:16px;height:16px;"></i>
+                            </button>
+                        </div>
+                        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+                            <button id="refreshInboxBtn" class="neon-btn" style="padding:10px 20px;font-size:13px;" onclick="refreshInbox(true)">
+                                <i data-lucide="refresh-cw" style="width:14px;height:14px;"></i>
+                                Refresh Inbox
+                            </button>
+                            <button class="neon-btn" style="padding:10px 20px;font-size:13px;background:linear-gradient(135deg,#2A3550,#1B2438);box-shadow:none;" onclick="generateNewMail()">
+                                <i data-lucide="rotate-ccw" style="width:14px;height:14px;"></i>
+                                New Email
+                            </button>
+                        </div>
+                        <div id="inboxList" style="display:flex;flex-direction:column;gap:8px;max-height:340px;overflow-y:auto;"></div>
+                        <p id="inboxEmptyHint" style="font-size:13px;color:rgba(224,232,240,0.3);text-align:center;margin:0;">
+                            Inbox is empty. New messages will appear here automatically.
+                        </p>
+                    </div>
                 </div>
 
                 <!-- Result Container -->
@@ -597,7 +640,7 @@
                     <div class="glass-card reveal reveal-delay-1" style="padding:32px 24px;text-align:center;">
                         <div style="font-size:42px;margin-bottom:16px;filter:drop-shadow(0 0 12px rgba(0,163,255,0.3));">2️⃣</div>
                         <h3 style="font-weight:700;font-size:17px;margin-bottom:8px;color:#E0E8F0;">Select Platform</h3>
-                        <p style="font-size:14px;color:rgba(224,232,240,0.45);line-height:1.6;">Choose TikTok, Facebook or YouTube.</p>
+                        <p style="font-size:14px;color:rgba(224,232,240,0.45);line-height:1.6;">Choose TikTok, Facebook, or Temp Mail.</p>
                     </div>
                     <div class="glass-card reveal reveal-delay-2" style="padding:32px 24px;text-align:center;">
                         <div style="font-size:42px;margin-bottom:16px;filter:drop-shadow(0 0 12px rgba(0,163,255,0.3));">3️⃣</div>
@@ -636,7 +679,7 @@
                             <i data-lucide="chevron-down" style="width:20px;height:20px;color:#00A3FF;transition:transform 0.3s;flex-shrink:0;"></i>
                         </div>
                         <div class="faq-answer" style="max-height:0;overflow:hidden;transition:max-height 0.3s ease, padding 0.3s ease;padding:0;color:rgba(224,232,240,0.5);font-size:14px;line-height:1.7;">
-                            TikTok and Facebook: highest available quality. YouTube: select from 360p, 720p, or 1080p.
+                            TikTok and Facebook: highest available quality. Temp Mail: an instant disposable inbox, no download needed.
                         </div>
                     </div>
                     <div class="glass-card reveal reveal-delay-2" style="padding:20px 24px;cursor:pointer;" onclick="toggleFaq(this)">
@@ -645,7 +688,7 @@
                             <i data-lucide="chevron-down" style="width:20px;height:20px;color:#00A3FF;transition:transform 0.3s;flex-shrink:0;"></i>
                         </div>
                         <div class="faq-answer" style="max-height:0;overflow:hidden;transition:max-height 0.3s ease, padding 0.3s ease;padding:0;color:rgba(224,232,240,0.5);font-size:14px;line-height:1.7;">
-                            Yes, TikTok videos are downloaded without watermark. Facebook and YouTube videos are downloaded in original quality.
+                            Yes, TikTok videos are downloaded without watermark. Facebook videos are downloaded in original quality.
                         </div>
                     </div>
                     <div class="glass-card reveal reveal-delay-3" style="padding:20px 24px;cursor:pointer;" onclick="toggleFaq(this)">
@@ -868,27 +911,34 @@
             document.querySelectorAll('.platform-tab').forEach(tab => {
                 tab.classList.toggle('active', tab.dataset.platform === platform);
             });
-            
+
+            const videoFormCard = document.getElementById('videoFormCard');
+            const tempMailPanel = document.getElementById('tempMailPanel');
             const input = document.getElementById('videoUrl');
             const hint = document.getElementById('urlHint');
-            const qualitySelector = document.getElementById('qualitySelector');
-            
-            // Clear input when switching
-            input.value = '';
+
             document.getElementById('resultContainer').innerHTML = '';
-            
+
+            if (platform === 'tempmail') {
+                videoFormCard.style.display = 'none';
+                tempMailPanel.style.display = 'block';
+                // No point polling an inbox the user has navigated away from.
+                if (!tempMailState) stopInboxPolling();
+                else startInboxPolling();
+                return;
+            }
+
+            tempMailPanel.style.display = 'none';
+            videoFormCard.style.display = 'block';
+            stopInboxPolling();
+
+            input.value = '';
             if (platform === 'tiktok') {
                 input.placeholder = 'Paste TikTok video URL here...';
                 hint.textContent = 'Supports TikTok video links (e.g., https://www.tiktok.com/@user/video/123456789)';
-                qualitySelector.classList.remove('visible');
             } else if (platform === 'facebook') {
                 input.placeholder = 'Paste Facebook video URL here...';
                 hint.textContent = 'Supports Facebook video links (e.g., https://www.facebook.com/watch?v=123456789)';
-                qualitySelector.classList.remove('visible');
-            } else if (platform === 'youtube') {
-                input.placeholder = 'Paste YouTube video URL here...';
-                hint.textContent = 'Supports YouTube video links (e.g., https://www.youtube.com/watch?v=VIDEO_ID)';
-                qualitySelector.classList.add('visible');
             }
         }
 
@@ -916,20 +966,17 @@
         });
 
         // ============================================================
-        // ===== VIDEO DOWNLOADER API INTEGRATION =====
+        // ===== VIDEO DOWNLOADER API INTEGRATION (TikTok / Facebook) =====
         // ============================================================
 
         const TIKTOK_API = 'https://hashu-apis-production.up.railway.app/api/tiktok/dl';
         const FACEBOOK_API = 'https://hashu-apis-production.up.railway.app/api/fb/dl';
-        const YOUTUBE_API = 'https://whiteshadow-x-api.onrender.com/api/download/ytdlfast';
         const API_KEY = 'hashu_cd4b0a9d325539de660602e7d8d38d61';
-        const YOUTUBE_API_TOKEN = 'aWK0z4';
 
         const form = document.getElementById('downloadForm');
         const urlInput = document.getElementById('videoUrl');
         const downloadBtn = document.getElementById('downloadBtn');
         const resultContainer = document.getElementById('resultContainer');
-        const qualitySelect = document.getElementById('qualitySelect');
 
         let isLoading = false;
 
@@ -937,6 +984,7 @@
             e.preventDefault();
 
             if (isLoading) return;
+            if (currentPlatform === 'tempmail') return;
 
             const url = urlInput.value.trim();
             if (!url) {
@@ -955,11 +1003,6 @@
                     showResult('error', 'Please enter a valid Facebook video URL.');
                     return;
                 }
-            } else if (currentPlatform === 'youtube') {
-                if (!url.includes('youtube.com') && !url.includes('youtu.be')) {
-                    showResult('error', 'Please enter a valid YouTube video URL.');
-                    return;
-                }
             }
 
             isLoading = true;
@@ -967,51 +1010,28 @@
             downloadBtn.innerHTML = '<i data-lucide="loader" style="width:18px;height:18px;animation:spin 1s linear infinite;"></i> Processing...';
             lucide.createIcons();
 
-            // YouTube (ytdlfast) can take up to ~2 minutes to respond, so show
-            // a live elapsed-time counter instead of a static "please wait" —
-            // reassures the user it's still working rather than stuck.
-            let elapsedSeconds = 0;
-            let elapsedTimer = null;
-            const loadingNote = currentPlatform === 'youtube'
-                ? 'This can take up to ~2 minutes for YouTube — please keep this page open.'
-                : 'Downloading video... Please wait.';
-
             resultContainer.innerHTML = `
                 <div class="glass-card result-card" style="padding:24px 28px;width:100%;max-width:600px;">
-                    <div style="display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;">
+                    <div style="display:flex;align-items:center;gap:12px;justify-content:center;">
                         <i data-lucide="loader" style="width:24px;height:24px;color:#00A3FF;animation:spin 1s linear infinite;"></i>
-                        <p style="color:rgba(224,232,240,0.6);margin:0;">${loadingNote}</p>
-                        ${currentPlatform === 'youtube' ? `<p id="elapsedTimeLabel" style="color:rgba(224,232,240,0.35);font-size:12px;margin:0;">0s elapsed</p>` : ''}
+                        <p style="color:rgba(224,232,240,0.6);margin:0;">Downloading video... Please wait.</p>
                     </div>
                 </div>
             `;
             lucide.createIcons();
 
-            if (currentPlatform === 'youtube') {
-                elapsedTimer = setInterval(() => {
-                    elapsedSeconds++;
-                    const label = document.getElementById('elapsedTimeLabel');
-                    if (label) label.textContent = `${elapsedSeconds}s elapsed`;
-                }, 1000);
-            }
-
-            // Give the YouTube API extra time (it's a slow, on-demand backend)
-            // before giving up, instead of the browser's default timeout.
             const controller = new AbortController();
-            const timeoutMs = currentPlatform === 'youtube' ? 180000 : 30000;
-            const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+            const timeoutId = setTimeout(() => controller.abort(), 30000);
 
             try {
                 let apiUrl;
-                
+
                 if (currentPlatform === 'tiktok') {
                     apiUrl = `${TIKTOK_API}?apiKey=${API_KEY}&text=${encodeURIComponent(url)}`;
                 } else if (currentPlatform === 'facebook') {
                     apiUrl = `${FACEBOOK_API}?apiKey=${API_KEY}&text=${encodeURIComponent(url)}`;
-                } else if (currentPlatform === 'youtube') {
-                    apiUrl = `${YOUTUBE_API}?url=${encodeURIComponent(url)}&apitoken=${YOUTUBE_API_TOKEN}`;
                 }
-                
+
                 console.log('Fetching:', apiUrl);
 
                 const response = await fetch(apiUrl, {
@@ -1040,46 +1060,12 @@
                 const data = await response.json();
                 console.log('API Response:', data);
 
-                // YouTube API response handling
-                if (currentPlatform === 'youtube') {
-                    // The API's exact response shape can vary, so we look in a few
-                    // common places for the video link / title / thumbnail instead
-                    // of assuming one fixed structure.
-                    const root = data.result || data.data || data;
-
-                    const videoUrl =
-                        root.download_link || root.downloadUrl || root.download_url ||
-                        root.download || root.url || root.link || root.dl_link ||
-                        data.download_link || data.downloadUrl || data.download_url ||
-                        data.download || data.url || data.link;
-
-                    const thumbnail =
-                        root.thumbnail || root.thumb || root.image ||
-                        data.thumbnail || data.thumb || '';
-
-                    const title =
-                        root.title || data.title || 'YouTube Video';
-
-                    const looksSuccessful =
-                        data.status === true || data.status === 'success' ||
-                        data.success === true || !!videoUrl;
-
-                    if (looksSuccessful && videoUrl) {
-                        showResult('success', videoUrl, thumbnail, title, '');
-                    } else {
-                        console.error('Unrecognized YouTube API response:', data);
-                        const errorMsg = data.message || data.error || 'Failed to fetch YouTube video. Please check the URL and try again.';
-                        showResult('error', errorMsg);
-                    }
-                    return;
-                }
-
                 // TikTok and Facebook response handling
                 if (data.success === true && data.results) {
                     const videoData = data.results;
-                    
+
                     let videoUrl, thumbnail = '', title = '', author = '';
-                    
+
                     if (currentPlatform === 'tiktok') {
                         videoUrl = videoData.no_watermark || videoData.direct_link || videoData.watermark;
                         thumbnail = videoData.thumbnail || '';
@@ -1091,7 +1077,7 @@
                         title = videoData.title || 'Facebook Video';
                         thumbnail = videoData.thumbnail || '';
                     }
-                    
+
                     if (!videoUrl) {
                         throw new Error('No video URL found in response');
                     }
@@ -1105,13 +1091,12 @@
             } catch (error) {
                 console.error('Download error:', error);
                 if (error.name === 'AbortError') {
-                    showResult('error', 'The server is taking too long to respond (over ' + Math.round(timeoutMs / 1000) + 's). It may be waking up from sleep — please try again in a moment.');
+                    showResult('error', 'The server is taking too long to respond. Please try again in a moment.');
                 } else {
                     showResult('error', `Error: ${error.message || 'Please check your connection and try again.'}`);
                 }
             } finally {
                 clearTimeout(timeoutId);
-                if (elapsedTimer) clearInterval(elapsedTimer);
                 isLoading = false;
                 downloadBtn.disabled = false;
                 downloadBtn.innerHTML = '<i data-lucide="download" style="width:18px;height:18px;"></i> Download';
@@ -1131,9 +1116,9 @@
                 `;
             } else if (type === 'success') {
                 const videoUrl = content;
-                const platformIcon = currentPlatform === 'tiktok' ? 'music' : (currentPlatform === 'facebook' ? 'facebook' : 'youtube');
-                const platformName = currentPlatform === 'tiktok' ? 'TikTok' : (currentPlatform === 'facebook' ? 'Facebook' : 'YouTube');
-                
+                const platformIcon = currentPlatform === 'tiktok' ? 'music' : 'facebook';
+                const platformName = currentPlatform === 'tiktok' ? 'TikTok' : 'Facebook';
+
                 resultContainer.innerHTML = `
                     <div class="glass-card result-card" style="padding:28px;width:100%;max-width:600px;animation:fadeUp 0.5s ease forwards;">
                         <div class="hud-corner hud-corner-tl" style="top:8px;left:8px;"></div>
@@ -1145,7 +1130,6 @@
                             <span style="font-size:12px;color:rgba(0,212,255,0.6);font-weight:600;letter-spacing:1px;text-transform:uppercase;">
                                 <i data-lucide="${platformIcon}" style="width:14px;height:14px;display:inline;margin-right:4px;"></i>
                                 ${platformName}
-                                ${currentPlatform === 'youtube' ? ` • ${qualitySelect.value}p` : ''}
                             </span>
                             ${thumbnail ? `
                                 <div style="border-radius:12px;overflow:hidden;background:rgba(0,0,0,0.3);max-height:300px;width:100%;display:flex;justify-content:center;">
@@ -1154,7 +1138,7 @@
                             ` : ''}
                             ${title ? `<p style="font-weight:600;font-size:16px;color:#E0E8F0;margin:0;text-align:center;">${title}</p>` : ''}
                             ${author && currentPlatform === 'tiktok' ? `<p style="font-size:14px;color:rgba(224,232,240,0.4);margin:-8px 0 0 0;text-align:center;">@${author}</p>` : ''}
-                            
+
                             <div class="download-btn-wrapper">
                                 <a href="${videoUrl}" download class="neon-btn" style="padding:14px 36px;font-size:16px;text-decoration:none;min-width:200px;">
                                     <i data-lucide="download" style="width:20px;height:20px;"></i>
@@ -1169,6 +1153,220 @@
                 `;
             }
             lucide.createIcons();
+        }
+
+        // ============================================================
+        // ===== TEMP MAIL INTEGRATION =====
+        // ============================================================
+        // Note: the exact JSON shape these endpoints return couldn't be
+        // verified directly (network access to this domain isn't available
+        // in this environment), so the parsing below checks several common
+        // field names at once and logs every raw response to the console.
+        // If something doesn't populate correctly, open devtools console —
+        // the actual response shape will be right there to adjust against.
+
+        const TEMPMAIL_CREATE_API = 'https://hashu-apis-production.up.railway.app/api/tempmail/create';
+        const TEMPMAIL_INBOX_API = 'https://hashu-apis-production.up.railway.app/api/tempmail/inbox';
+        const TEMPMAIL_READ_API = 'https://hashu-apis-production.up.railway.app/api/tempmail/read';
+
+        let tempMailState = null;       // holds whatever fields create() returned (email, token, id, ...)
+        let currentInboxMessages = [];
+        let inboxPollTimer = null;
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str == null ? '' : String(str);
+            return div.innerHTML;
+        }
+
+        function tempMailQueryParams(extra = {}) {
+            const params = new URLSearchParams({ apiKey: API_KEY });
+            if (tempMailState) {
+                ['email', 'address', 'mail', 'token', 'id'].forEach((key) => {
+                    if (tempMailState[key] !== undefined && tempMailState[key] !== null) {
+                        params.set(key, tempMailState[key]);
+                    }
+                });
+            }
+            Object.entries(extra).forEach(([key, value]) => {
+                if (value !== undefined && value !== null) params.set(key, value);
+            });
+            return params.toString();
+        }
+
+        async function generateTempMail() {
+            const btn = document.getElementById('generateMailBtn');
+            const errorMsg = document.getElementById('tempMailErrorMsg');
+            errorMsg.style.display = 'none';
+            btn.disabled = true;
+            btn.innerHTML = '<i data-lucide="loader" style="width:18px;height:18px;animation:spin 1s linear infinite;"></i> Generating...';
+            lucide.createIcons();
+
+            try {
+                const res = await fetch(`${TEMPMAIL_CREATE_API}?apiKey=${API_KEY}`, {
+                    headers: { 'Accept': 'application/json' }
+                });
+                if (!res.ok) throw new Error(`Server error: ${res.status}`);
+                const data = await res.json();
+                console.log('TempMail create response:', data);
+
+                const root = data.results || data.result || data.data || data;
+                const email = root.email || root.address || root.mail || root.emailAddress || root.username;
+                if (!email) throw new Error(data.message || 'Could not generate an email address. Please try again.');
+
+                tempMailState = { ...root, email };
+                currentInboxMessages = [];
+
+                document.getElementById('tempMailAddress').textContent = email;
+                document.getElementById('tempMailGenerateView').style.display = 'none';
+                document.getElementById('tempMailActiveView').style.display = 'flex';
+                renderInbox([]);
+                startInboxPolling();
+            } catch (err) {
+                console.error('TempMail create error:', err);
+                errorMsg.textContent = err.message || 'Failed to generate email. Please try again.';
+                errorMsg.style.display = 'block';
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i data-lucide="mail-plus" style="width:18px;height:18px;"></i> Generate Email';
+                lucide.createIcons();
+            }
+        }
+
+        function generateNewMail() {
+            stopInboxPolling();
+            tempMailState = null;
+            currentInboxMessages = [];
+            document.getElementById('tempMailActiveView').style.display = 'none';
+            document.getElementById('tempMailGenerateView').style.display = 'flex';
+            document.getElementById('tempMailAddress').textContent = '';
+            renderInbox([]);
+        }
+
+        function copyTempMailAddress() {
+            if (!tempMailState || !tempMailState.email) return;
+            const el = document.getElementById('tempMailAddress');
+            navigator.clipboard.writeText(tempMailState.email).then(() => {
+                const original = tempMailState.email;
+                el.textContent = 'Copied!';
+                setTimeout(() => { el.textContent = original; }, 1100);
+            }).catch(() => {});
+        }
+
+        async function refreshInbox(showSpinner) {
+            if (!tempMailState) return;
+            const refreshBtn = document.getElementById('refreshInboxBtn');
+            if (showSpinner && refreshBtn) {
+                refreshBtn.disabled = true;
+                refreshBtn.querySelector('i')?.setAttribute('style', 'width:14px;height:14px;animation:spin 1s linear infinite;');
+            }
+            try {
+                const url = `${TEMPMAIL_INBOX_API}?${tempMailQueryParams()}`;
+                const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+                if (!res.ok) throw new Error(`Server error: ${res.status}`);
+                const data = await res.json();
+                console.log('TempMail inbox response:', data);
+
+                const root = data.results || data.result || data.data || data.messages || data;
+                const messages = Array.isArray(root) ? root : (Array.isArray(root?.messages) ? root.messages : []);
+                currentInboxMessages = messages;
+                renderInbox(messages);
+            } catch (err) {
+                console.error('TempMail inbox error:', err);
+            } finally {
+                if (showSpinner && refreshBtn) {
+                    refreshBtn.disabled = false;
+                    refreshBtn.querySelector('i')?.setAttribute('style', 'width:14px;height:14px;');
+                    lucide.createIcons();
+                }
+            }
+        }
+
+        function renderInbox(messages) {
+            const listEl = document.getElementById('inboxList');
+            const emptyHint = document.getElementById('inboxEmptyHint');
+            if (!messages || messages.length === 0) {
+                listEl.innerHTML = '';
+                emptyHint.style.display = 'block';
+                return;
+            }
+            emptyHint.style.display = 'none';
+            listEl.innerHTML = messages.map((m, idx) => {
+                const from = m.from || m.sender || m.from_email || 'Unknown sender';
+                const subject = m.subject || m.title || '(No subject)';
+                const date = m.date || m.time || m.created_at || '';
+                return `
+                    <div class="glass-card" style="padding:14px 16px;cursor:pointer;text-align:left;" onclick="openMailMessage(${idx})">
+                        <div style="display:flex;justify-content:space-between;gap:8px;align-items:center;">
+                            <span style="font-weight:600;font-size:14px;color:#E0E8F0;">${escapeHtml(subject)}</span>
+                            <span style="font-size:11px;color:rgba(224,232,240,0.35);white-space:nowrap;">${escapeHtml(date)}</span>
+                        </div>
+                        <p style="margin:4px 0 0;font-size:12px;color:rgba(224,232,240,0.45);">${escapeHtml(from)}</p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function openMailMessage(idx) {
+            const msg = currentInboxMessages[idx];
+            if (!msg) return;
+
+            showMailModal(`
+                <div style="display:flex;justify-content:center;padding:24px;">
+                    <i data-lucide="loader" style="width:24px;height:24px;color:#00A3FF;animation:spin 1s linear infinite;"></i>
+                </div>
+            `);
+
+            let full = msg;
+            const hasBodyAlready = msg.body || msg.html || msg.text || msg.content || msg.message;
+
+            if (!hasBodyAlready) {
+                const msgId = msg.id || msg._id || msg.messageId || msg.mailId;
+                try {
+                    const url = `${TEMPMAIL_READ_API}?${tempMailQueryParams({ id: msgId, messageId: msgId })}`;
+                    const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+                    if (res.ok) {
+                        const data = await res.json();
+                        console.log('TempMail read response:', data);
+                        full = data.results || data.result || data.data || data;
+                    }
+                } catch (err) {
+                    console.error('TempMail read error:', err);
+                }
+            }
+
+            const subject = full.subject || msg.subject || full.title || '(No subject)';
+            const from = full.from || msg.from || full.sender || 'Unknown sender';
+            const date = full.date || msg.date || full.time || '';
+            const content = full.body || full.html || full.text || full.content || full.message || 'No content available.';
+
+            showMailModal(`
+                <h3 style="font-family:'Orbitron',sans-serif;font-size:16px;margin:0 0 6px;padding-right:24px;">${escapeHtml(subject)}</h3>
+                <p style="font-size:12px;color:rgba(224,232,240,0.4);margin:0 0 16px;">${escapeHtml(from)}${date ? ' • ' + escapeHtml(date) : ''}</p>
+                <div style="font-size:14px;color:#E0E8F0;line-height:1.6;white-space:pre-wrap;">${escapeHtml(content)}</div>
+            `);
+        }
+
+        function showMailModal(innerHtml) {
+            document.getElementById('mailReadContent').innerHTML = innerHtml;
+            document.getElementById('mailReadModal').style.display = 'flex';
+            lucide.createIcons();
+        }
+
+        function closeMailModal() {
+            document.getElementById('mailReadModal').style.display = 'none';
+        }
+
+        function startInboxPolling() {
+            stopInboxPolling();
+            inboxPollTimer = setInterval(() => refreshInbox(false), 10000);
+        }
+
+        function stopInboxPolling() {
+            if (inboxPollTimer) {
+                clearInterval(inboxPollTimer);
+                inboxPollTimer = null;
+            }
         }
     </script>
 </body>
