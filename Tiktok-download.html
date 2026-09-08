@@ -744,7 +744,7 @@
         });
 
         // ============================================================
-        // ===== TIKTOK DOWNLOADER API INTEGRATION =====
+        // ===== TIKTOK DOWNLOADER API INTEGRATION (FIXED) =====
         // ============================================================
 
         const API_URL = 'https://hashu-apis-production.up.railway.app/api/tiktok/dl';
@@ -755,8 +755,13 @@
         const downloadBtn = document.getElementById('downloadBtn');
         const resultContainer = document.getElementById('resultContainer');
 
+        // Loading state management
+        let isLoading = false;
+
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
+
+            if (isLoading) return;
 
             const url = urlInput.value.trim();
             if (!url) {
@@ -771,25 +776,58 @@
             }
 
             // Show loading state
+            isLoading = true;
             downloadBtn.disabled = true;
             downloadBtn.innerHTML = '<i data-lucide="loader" style="width:18px;height:18px;animation:spin 1s linear infinite;"></i> Processing...';
             lucide.createIcons();
 
+            // Show loading message
+            resultContainer.innerHTML = `
+                <div class="glass-card result-card" style="padding:24px 28px;width:100%;max-width:600px;">
+                    <div style="display:flex;align-items:center;gap:12px;justify-content:center;">
+                        <i data-lucide="loader" style="width:24px;height:24px;color:#00A3FF;animation:spin 1s linear infinite;"></i>
+                        <p style="color:rgba(224,232,240,0.6);margin:0;">Downloading video... Please wait.</p>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+
             try {
-                const response = await fetch(`${API_URL}?apiKey=${API_KEY}&url=${encodeURIComponent(url)}`);
+                // FIXED: Use 'url' parameter instead of 'text'
+                const apiUrl = `${API_URL}?apiKey=${API_KEY}&url=${encodeURIComponent(url)}`;
+                
+                console.log('Fetching:', apiUrl);
+
+                const response = await fetch(apiUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                    }
+                });
 
                 if (!response.ok) {
-                    throw new Error(`Server responded with status ${response.status}`);
+                    throw new Error(`Server error: ${response.status}`);
                 }
 
                 const data = await response.json();
+                console.log('API Response:', data);
 
-                if (data.status === true && data.data && data.data.video) {
-                    const videoUrl = data.data.video;
-                    const thumbnail = data.data.thumbnail || '';
-                    const title = data.data.title || 'TikTok Video';
+                // Check if we have a valid response with results
+                if (data.success === true && data.results) {
+                    const videoData = data.results;
+                    
+                    // Try to get the best available video URL
+                    let videoUrl = videoData.no_watermark || videoData.direct_link || videoData.watermark;
+                    
+                    if (!videoUrl) {
+                        throw new Error('No video URL found in response');
+                    }
 
-                    showResult('success', videoUrl, thumbnail, title);
+                    const thumbnail = videoData.thumbnail || '';
+                    const title = videoData.title || 'TikTok Video';
+                    const author = videoData.author || '';
+
+                    showResult('success', videoUrl, thumbnail, title, author);
                 } else {
                     const errorMsg = data.message || 'Failed to fetch video. Please check the URL and try again.';
                     showResult('error', errorMsg);
@@ -797,15 +835,16 @@
 
             } catch (error) {
                 console.error('Download error:', error);
-                showResult('error', 'Network error. Please check your connection and try again.');
+                showResult('error', `Error: ${error.message || 'Please check your connection and try again.'}`);
             } finally {
+                isLoading = false;
                 downloadBtn.disabled = false;
                 downloadBtn.innerHTML = '<i data-lucide="download" style="width:18px;height:18px;"></i> Download';
                 lucide.createIcons();
             }
         });
 
-        function showResult(type, content, thumbnail = '', title = '') {
+        function showResult(type, content, thumbnail = '', title = '', author = '') {
             if (type === 'error') {
                 resultContainer.innerHTML = `
                     <div class="glass-card result-card" style="padding:24px 28px;border-left:3px solid #FF4444;width:100%;max-width:600px;">
@@ -831,10 +870,14 @@
                                 </div>
                             ` : ''}
                             ${title ? `<p style="font-weight:600;font-size:16px;color:#E0E8F0;margin:0;text-align:center;">${title}</p>` : ''}
-                            <a href="${videoUrl}" download class="neon-btn" style="padding:14px 36px;font-size:16px;text-decoration:none;width:100%;max-width:300px;justify-content:center;">
-                                <i data-lucide="download" style="width:20px;height:20px;"></i>
-                                Download Video
-                            </a>
+                            ${author ? `<p style="font-size:14px;color:rgba(224,232,240,0.4);margin:-8px 0 0 0;text-align:center;">@${author}</p>` : ''}
+                            
+                            <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;width:100%;">
+                                <a href="${videoUrl}" download class="neon-btn" style="padding:14px 36px;font-size:16px;text-decoration:none;min-width:200px;justify-content:center;">
+                                    <i data-lucide="download" style="width:20px;height:20px;"></i>
+                                    Download Video
+                                </a>
+                            </div>
                             <p style="font-size:12px;color:rgba(224,232,240,0.3);text-align:center;margin:0;">No watermark • High quality</p>
                         </div>
                     </div>
