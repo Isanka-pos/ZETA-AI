@@ -921,7 +921,7 @@
 
         const TIKTOK_API = 'https://hashu-apis-production.up.railway.app/api/tiktok/dl';
         const FACEBOOK_API = 'https://hashu-apis-production.up.railway.app/api/fb/dl';
-        const YOUTUBE_API = 'https://whiteshadow-x-api.onrender.com/api/download/yt';
+        const YOUTUBE_API = 'https://whiteshadow-x-api.onrender.com/api/download/ytdlfast';
         const API_KEY = 'hashu_cd4b0a9d325539de660602e7d8d38d61';
         const YOUTUBE_API_TOKEN = 'aWK0z4';
 
@@ -967,16 +967,39 @@
             downloadBtn.innerHTML = '<i data-lucide="loader" style="width:18px;height:18px;animation:spin 1s linear infinite;"></i> Processing...';
             lucide.createIcons();
 
-            // Show loading message
+            // YouTube (ytdlfast) can take up to ~2 minutes to respond, so show
+            // a live elapsed-time counter instead of a static "please wait" —
+            // reassures the user it's still working rather than stuck.
+            let elapsedSeconds = 0;
+            let elapsedTimer = null;
+            const loadingNote = currentPlatform === 'youtube'
+                ? 'This can take up to ~2 minutes for YouTube — please keep this page open.'
+                : 'Downloading video... Please wait.';
+
             resultContainer.innerHTML = `
                 <div class="glass-card result-card" style="padding:24px 28px;width:100%;max-width:600px;">
-                    <div style="display:flex;align-items:center;gap:12px;justify-content:center;">
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;">
                         <i data-lucide="loader" style="width:24px;height:24px;color:#00A3FF;animation:spin 1s linear infinite;"></i>
-                        <p style="color:rgba(224,232,240,0.6);margin:0;">Downloading video... Please wait.</p>
+                        <p style="color:rgba(224,232,240,0.6);margin:0;">${loadingNote}</p>
+                        ${currentPlatform === 'youtube' ? `<p id="elapsedTimeLabel" style="color:rgba(224,232,240,0.35);font-size:12px;margin:0;">0s elapsed</p>` : ''}
                     </div>
                 </div>
             `;
             lucide.createIcons();
+
+            if (currentPlatform === 'youtube') {
+                elapsedTimer = setInterval(() => {
+                    elapsedSeconds++;
+                    const label = document.getElementById('elapsedTimeLabel');
+                    if (label) label.textContent = `${elapsedSeconds}s elapsed`;
+                }, 1000);
+            }
+
+            // Give the YouTube API extra time (it's a slow, on-demand backend)
+            // before giving up, instead of the browser's default timeout.
+            const controller = new AbortController();
+            const timeoutMs = currentPlatform === 'youtube' ? 180000 : 30000;
+            const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
             try {
                 let apiUrl;
@@ -995,7 +1018,8 @@
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json',
-                    }
+                    },
+                    signal: controller.signal
                 });
 
                 console.log('Response status:', response.status);
@@ -1080,8 +1104,14 @@
 
             } catch (error) {
                 console.error('Download error:', error);
-                showResult('error', `Error: ${error.message || 'Please check your connection and try again.'}`);
+                if (error.name === 'AbortError') {
+                    showResult('error', 'The server is taking too long to respond (over ' + Math.round(timeoutMs / 1000) + 's). It may be waking up from sleep — please try again in a moment.');
+                } else {
+                    showResult('error', `Error: ${error.message || 'Please check your connection and try again.'}`);
+                }
             } finally {
+                clearTimeout(timeoutId);
+                if (elapsedTimer) clearInterval(elapsedTimer);
                 isLoading = false;
                 downloadBtn.disabled = false;
                 downloadBtn.innerHTML = '<i data-lucide="download" style="width:18px;height:18px;"></i> Download';
