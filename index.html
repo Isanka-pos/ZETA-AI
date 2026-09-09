@@ -629,7 +629,187 @@
         .blur-error-box { margin-top:16px; background:rgba(240,86,74,0.08); border:1px solid rgba(240,86,74,0.25); border-radius:12px; padding:13px 15px; color:#F58B82; font-size:12.5px; line-height:1.6; display:flex; align-items:flex-start; gap:10px; }
         .blur-status-text { text-align:center; font-size:12px; color:var(--text-tertiary); letter-spacing:0.4px; margin-top:14px; }
         .blur-section-label { font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--text-tertiary); margin:18px 0 8px; opacity:0.7; }
+    
+        /* ============================================================
+           IMAGE BLUR STUDIO — SECTION (support.html style, zs- prefix)
+           ============================================================ */
+        .zs-studio { padding:56px 20px 60px; max-width:760px; margin:0 auto; width:100%; flex-shrink:0; }
+        .zs-head { text-align:center; margin-bottom:32px; }
+        .zs-badge { display:inline-flex; align-items:center; gap:6px; padding:6px 16px; border-radius:100px; font-size:10px; font-weight:600; letter-spacing:1.2px; text-transform:uppercase; background:rgba(45,212,232,0.06); border:1px solid rgba(45,212,232,0.12); color:var(--accent-cyan); margin-bottom:16px; }
+        .zs-badge i { font-size:9px; }
+        .zs-title { font-size:clamp(20px,3.5vw,30px); font-weight:800; letter-spacing:-0.5px; margin-bottom:10px; }
+        .zs-title span { color:var(--accent-cyan); }
+        .zs-sub { font-size:13px; color:var(--text-secondary); max-width:440px; margin:0 auto; line-height:1.7; }
+        .zs-card { background:var(--bg-surface); border:1px solid var(--border-subtle); border-radius:var(--radius-xl); padding:28px 26px; position:relative; overflow:hidden; }
+        .zs-card::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg, transparent, rgba(45,212,232,0.35), transparent); }
+        .zs-tabs { display:flex; gap:10px; margin-bottom:22px; }
+        .zs-tab { flex:1; padding:12px 14px; border-radius:12px; border:1px solid var(--border-default); background:rgba(255,255,255,0.02); color:var(--text-secondary); font-family:'Inter',sans-serif; font-size:12.5px; font-weight:600; cursor:pointer; transition:all var(--transition-fast); display:flex; align-items:center; justify-content:center; gap:7px; }
+        .zs-tab i { font-size:11px; }
+        .zs-tab:hover { border-color:rgba(45,212,232,0.25); color:var(--accent-cyan); }
+        .zs-tab.active { background:linear-gradient(135deg, rgba(45,212,232,0.10), rgba(45,212,232,0.03)); border-color:rgba(45,212,232,0.35); color:var(--accent-cyan); box-shadow:0 0 16px rgba(45,212,232,0.08); }
+        .zs-input-row { display:flex; gap:10px; flex-wrap:wrap; }
+        .zs-input { flex:1; min-width:220px; padding:12px 16px; background:rgba(3,5,12,0.6); border:1px solid var(--border-default); border-radius:12px; color:var(--text-primary); font-size:13.5px; font-family:'Inter',sans-serif; outline:none; transition:all var(--transition-fast); }
+        .zs-input:focus { border-color:var(--accent-cyan); box-shadow:0 0 0 3px rgba(45,212,232,0.10); }
+        .zs-input::placeholder { color:var(--text-tertiary); }
+        .zs-btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:12px 24px; border-radius:12px; font-size:13.5px; font-weight:700; color:#fff; background:linear-gradient(135deg, #2DD4E8, #0E9BB0); border:none; cursor:pointer; transition:all var(--transition-fast); box-shadow:0 2px 14px rgba(45,212,232,0.20); font-family:'Inter',sans-serif; text-decoration:none; }
+        .zs-btn:hover { transform:translateY(-2px); box-shadow:0 6px 24px rgba(45,212,232,0.35); }
+        .zs-btn-ghost { background:rgba(255,255,255,0.03); border:1px solid var(--border-default); color:var(--text-secondary); box-shadow:none; }
+        .zs-btn-ghost:hover { color:var(--text-primary); border-color:rgba(255,255,255,0.15); background:rgba(255,255,255,0.05); box-shadow:none; }
+        .zs-sample-row { margin-top:12px; }
+        .zs-sample { background:none; border:1px solid rgba(45,212,232,0.15); color:rgba(45,212,232,0.7); padding:7px 14px; border-radius:8px; font-size:11.5px; cursor:pointer; font-family:'Inter',sans-serif; transition:all var(--transition-fast); }
+        .zs-sample:hover { border-color:rgba(45,212,232,0.35); color:var(--accent-cyan); }
+        .zs-drop { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; padding:36px 20px; border:2px dashed rgba(45,212,232,0.18); border-radius:16px; cursor:pointer; transition:all var(--transition-fast); text-align:center; }
+        .zs-drop:hover { border-color:rgba(45,212,232,0.4); background:rgba(45,212,232,0.04); }
+        .zs-drop i { font-size:26px; color:var(--accent-cyan); opacity:0.8; }
+        .zs-drop-main { font-size:13.5px; color:var(--text-secondary); font-weight:500; }
+        .zs-drop-sub { font-size:11px; color:var(--text-tertiary); }
+        .zs-strength-head { display:flex; justify-content:space-between; align-items:center; margin:20px 0 10px; }
+        .zs-strength-head span:first-child { font-size:11px; color:var(--text-secondary); font-weight:600; letter-spacing:0.8px; text-transform:uppercase; }
+        .zs-strength-head span:last-child { font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--accent-cyan); font-weight:600; }
+        .zs-range { -webkit-appearance:none; appearance:none; width:100%; height:5px; border-radius:6px; background:linear-gradient(90deg, rgba(45,212,232,0.5), rgba(45,212,232,0.10)); outline:none; cursor:pointer; }
+        .zs-range::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; border-radius:50%; background:#2DD4E8; border:3px solid #03050C; box-shadow:0 0 12px rgba(45,212,232,0.5); cursor:pointer; }
+        .zs-range::-moz-range-thumb { width:18px; height:18px; border-radius:50%; background:#2DD4E8; border:3px solid #03050C; cursor:pointer; }
+        .zs-status { display:flex; align-items:center; justify-content:center; gap:12px; padding:16px; color:var(--text-secondary); font-size:13px; }
+        .zs-spinner { width:20px; height:20px; border-radius:50%; border:2px solid rgba(45,212,232,0.15); border-top-color:#2DD4E8; animation:zsSpin 0.9s linear infinite; }
+        @keyframes zsSpin { to { transform:rotate(360deg); } }
+        .zs-error { margin-top:18px; padding:13px 16px; border-radius:12px; background:rgba(240,86,74,0.08); border:1px solid rgba(240,86,74,0.22); color:#F58B82; font-size:12.5px; line-height:1.6; }
+        .zs-compare { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:26px; }
+        .zs-frame { border-radius:14px; overflow:hidden; border:1px solid var(--border-default); background:rgba(3,5,12,0.5); position:relative; }
+        .zs-frame img { width:100%; height:220px; object-fit:cover; display:block; }
+        .zs-tag { position:absolute; top:10px; left:10px; padding:4px 10px; border-radius:6px; font-size:9px; font-weight:700; letter-spacing:1px; background:rgba(3,5,12,0.8); color:var(--accent-cyan); border:1px solid rgba(45,212,232,0.22); font-family:'Orbitron',sans-serif; }
+        .zs-tag-ok { color:var(--status-success); border-color:rgba(34,201,144,0.25); }
+        .zs-actions { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:24px; }
+        @media (max-width:640px) {
+            .zs-compare { grid-template-columns:1fr; }
+            .zs-card { padding:20px 16px; }
+            .zs-tabs { flex-direction:column; }
+            .zs-btn { width:100%; }
+        }
+    
+        /* ============================================================
+           GLOSSY 3D BUTTONS — photo style (glossy pill + light effect)
+           ============================================================ */
+        .zeta-btn {
+            position:relative;
+            border-radius:50px;
+            padding:15px 44px;
+            font-family:'Orbitron','Inter',sans-serif;
+            font-size:12.5px;
+            font-weight:800;
+            letter-spacing:2.5px;
+            text-transform:uppercase;
+            color:#fff;
+            border:1px solid rgba(255,255,255,0.28);
+            overflow:hidden;
+            text-shadow:0 1px 3px rgba(0,0,0,0.40);
+            box-shadow:
+                0 6px 0 rgba(0,0,0,0.18),
+                0 10px 26px rgba(0,0,0,0.45),
+                inset 0 1px 0 rgba(255,255,255,0.35);
+            transform-style:preserve-3d;
+        }
+        /* glossy top sheen — the light effect */
+        .zeta-btn::before {
+            content:'';
+            position:absolute;
+            left:5%; right:5%; top:4%;
+            height:46%;
+            border-radius:50px;
+            background:linear-gradient(180deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.18) 55%, rgba(255,255,255,0) 100%);
+            pointer-events:none;
+            z-index:1;
+        }
+        /* darker bottom edge — the 3D depth */
+        .zeta-btn::after {
+            content:'';
+            position:absolute;
+            left:4%; right:4%; bottom:2%;
+            height:34%;
+            border-radius:50px;
+            background:linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.30) 100%);
+            pointer-events:none;
+            z-index:1;
+        }
+        /* moving light sweep across the gloss */
+        .zeta-btn .sweep {
+            position:absolute;
+            top:-20%; left:-30%;
+            width:24%; height:140%;
+            background:linear-gradient(90deg, transparent, rgba(255,255,255,0.50), transparent);
+            transform:rotate(22deg);
+            animation:btnSweep 4.2s ease-in-out infinite;
+            pointer-events:none;
+            z-index:2;
+        }
+        @keyframes btnSweep { 0% { left:-40%; } 55% { left:130%; } 100% { left:130%; } }
+        .zeta-btn i, .zeta-btn { z-index:3; }
+        .zeta-btn i { position:relative; z-index:3; text-shadow:0 1px 3px rgba(0,0,0,0.35); }
+        .zeta-btn:hover {
+            transform:translateY(-3px) scale(1.03);
+            filter:brightness(1.08) saturate(1.05);
+            box-shadow:
+                0 9px 0 rgba(0,0,0,0.16),
+                0 16px 38px rgba(0,0,0,0.5),
+                0 0 34px var(--btn-glow, rgba(79,125,247,0.35)),
+                inset 0 1px 0 rgba(255,255,255,0.45);
+        }
+        .zeta-btn:active {
+            transform:translateY(2px) scale(0.98);
+            box-shadow:
+                0 2px 0 rgba(0,0,0,0.18),
+                0 6px 16px rgba(0,0,0,0.4),
+                inset 0 1px 0 rgba(255,255,255,0.25);
+        }
+        /* vertical gradient stacks — bright top → deep bottom (photo look) */
+        .zeta-btn-chat     { background:linear-gradient(180deg,#6FB1FF 0%,#3B74F0 52%,#1E4FC4 100%); --btn-glow:rgba(79,125,247,0.45); }
+        .zeta-btn-channel  { background:linear-gradient(180deg,#4BEB8C 0%,#18B565 52%,#0B7A44 100%); --btn-glow:rgba(37,211,102,0.45); }
+        .zeta-btn-download { background:linear-gradient(180deg,#FFD066 0%,#F59E0B 52%,#C26203 100%); --btn-glow:rgba(245,158,11,0.45); }
+        .zeta-btn-apk      { background:linear-gradient(180deg,#CE8BFF 0%,#A855F7 52%,#7525D6 100%); --btn-glow:rgba(168,85,247,0.45); }
+        .zeta-btn-blur     { background:linear-gradient(180deg,#6BF0FC 0%,#2DD4E8 52%,#0B86A0 100%); --btn-glow:rgba(45,212,232,0.45); }
+
+        /* ============================================================
+           SCROLL SPEED CONTROL — floating toggle (SLOW / NORMAL / FAST)
+           ============================================================ */
+        .scroll-speed-btn {
+            position:fixed;
+            bottom:22px; right:22px;
+            z-index:101;
+            display:flex; align-items:center; gap:9px;
+            padding:11px 18px;
+            border-radius:60px;
+            background:rgba(10,13,26,0.82);
+            backdrop-filter:blur(16px) saturate(1.3);
+            -webkit-backdrop-filter:blur(16px) saturate(1.3);
+            border:1px solid rgba(79,125,247,0.25);
+            color:var(--text-primary);
+            font-family:'Orbitron',sans-serif;
+            font-size:10px; font-weight:700;
+            letter-spacing:1.6px;
+            cursor:pointer;
+            transition:all var(--transition-fast);
+            box-shadow:0 6px 24px rgba(0,0,0,0.5), 0 0 18px rgba(79,125,247,0.12);
+        }
+        .scroll-speed-btn:hover {
+            transform:translateY(-2px);
+            border-color:rgba(45,212,232,0.45);
+            box-shadow:0 10px 30px rgba(0,0,0,0.55), 0 0 26px rgba(45,212,232,0.2);
+        }
+        .scroll-speed-btn:active { transform:scale(0.96); }
+        .scroll-speed-btn .ss-icon {
+            font-size:13px;
+            color:var(--accent-cyan);
+            width:16px; text-align:center;
+            filter:drop-shadow(0 0 6px rgba(45,212,232,0.5));
+            transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        .scroll-speed-btn:hover .ss-icon { transform:scale(1.2); }
+        .scroll-speed-btn .ss-label { color:var(--text-secondary); }
+        @media (max-width:480px) {
+            .scroll-speed-btn { bottom:16px; right:16px; padding:10px 14px; font-size:9px; }
+            .zeta-btn { padding:13px 34px; font-size:11.5px; letter-spacing:2px; }
+        }
     </style>
+<base target="_blank">
 <base target="_blank">
 </head>
 <body>
@@ -728,11 +908,11 @@
                     <h1 class="hero-heading">Welcome to <span class="hero-heading-accent">ZETA TOOLS</span></h1>
                     <p class="hero-desc">Your all-in-one toolkit — chat, downloads, and more, all in one place.</p>
                     <div id="ztButtons" style="margin-top:20px; display:flex; flex-direction:column; gap:12px; align-items:center;">
-                        <button class="zeta-btn zeta-btn-chat" onclick="alert('🚀 ZETA CHAT — Coming soon!')"><i class="fa-solid fa-comment"></i> ZETA CHAT</button>
-                        <button class="zeta-btn zeta-btn-channel" onclick="alert('🔗 Express VPN — Coming soon!')"><i class="fa-solid fa-shield-halved"></i> EXPRESS VPN</button>
-                        <button class="zeta-btn zeta-btn-download" onclick="location.href='https://zeta-mini-8e229a0a0f1e.herokuapp.com/Download.html'"><i class="fa-solid fa-download"></i> DOWNLOAD</button>
-                        <button class="zeta-btn zeta-btn-apk" onclick="location.href='https://zeta-mini-8e229a0a0f1e.herokuapp.com/Apk.html'"><i class="fa-solid fa-mobile-screen-button"></i> APK DOWNLOAD</button>
-                        <button class="zeta-btn zeta-btn-blur" onclick="openBlurModal()"><i class="fa-solid fa-droplet"></i> IMAGE BLUR</button>
+                        <button class="zeta-btn zeta-btn-chat" onclick="alert('🚀 ZETA CHAT — Coming soon!')"><span class="sweep"></span><i class="fa-solid fa-comment"></i> ZETA CHAT</button>
+                        <button class="zeta-btn zeta-btn-channel" onclick="alert('🔗 Express VPN — Coming soon!')"><span class="sweep"></span><i class="fa-solid fa-shield-halved"></i> EXPRESS VPN</button>
+                        <button class="zeta-btn zeta-btn-download" onclick="location.href='https://zeta-mini-8e229a0a0f1e.herokuapp.com/Download.html'"><span class="sweep"></span><i class="fa-solid fa-download"></i> DOWNLOAD</button>
+                        <button class="zeta-btn zeta-btn-apk" onclick="location.href='https://zeta-mini-8e229a0a0f1e.herokuapp.com/Apk.html'"><span class="sweep"></span><i class="fa-solid fa-mobile-screen-button"></i> APK DOWNLOAD</button>
+                        <button class="zeta-btn zeta-btn-blur" onclick="openBlurModal()"><span class="sweep"></span><i class="fa-solid fa-droplet"></i> IMAGE BLUR</button>
                     </div>
                     <div class="hero-chips reveal">
                         <span class="hero-chip"><i class="fa-solid fa-bolt"></i> Super Fast</span>
@@ -744,6 +924,66 @@
                         <div class="marquee-track"><span>ZETA CHAT</span><span class="mq-dot"></span><span>EXPRESS VPN</span><span class="mq-dot"></span><span>VIDEO DOWNLOADER</span><span class="mq-dot"></span><span>APK STORE</span><span class="mq-dot"></span><span>AI GENERATOR</span><span class="mq-dot"></span><span>IMAGE STUDIO</span><span class="mq-dot"></span><span>CODE LAB</span><span class="mq-dot"></span><span>ZETA CHAT</span><span class="mq-dot"></span><span>EXPRESS VPN</span><span class="mq-dot"></span><span>VIDEO DOWNLOADER</span><span class="mq-dot"></span><span>APK STORE</span><span class="mq-dot"></span><span>AI GENERATOR</span><span class="mq-dot"></span><span>IMAGE STUDIO</span><span class="mq-dot"></span><span>CODE LAB</span><span class="mq-dot"></span></div>
                     </div>
                     <div class="hero-line"></div>
+                </div>
+            </section>
+
+            <!-- ===== IMAGE BLUR STUDIO (support.html system + Hashu API) ===== -->
+            <section class="zs-studio" id="blurStudio">
+                <div class="zs-head">
+                    <span class="zs-badge"><i class="fa-solid fa-droplet"></i> Image Tools</span>
+                    <h2 class="zs-title">Image Blur <span>Studio</span></h2>
+                    <p class="zs-sub">Photo එකක් upload කරලා හෝ image link එකක් paste කරලා, තත්පර කීපයකින් blur කරගන්න. Blur strength එකත් ඔයාට අනුව වෙනස් කරන්න පුළුවන්.</p>
+                </div>
+                <div class="zs-card">
+                    <div class="zs-tabs">
+                        <button class="zs-tab active" data-tab="url" onclick="zsSwitchTab('url')"><i class="fa-solid fa-link"></i> Image URL</button>
+                        <button class="zs-tab" data-tab="upload" onclick="zsSwitchTab('upload')"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Photo</button>
+                    </div>
+
+                    <!-- URL panel — Hashu API -->
+                    <div id="zsPanelUrl">
+                        <div class="zs-input-row">
+                            <input type="text" id="zsUrlInput" class="zs-input" placeholder="Paste a direct image link (.jpg / .png)…" onkeydown="if(event.key==='Enter')zsBlurFromUrl()">
+                            <button class="zs-btn" onclick="zsBlurFromUrl()"><i class="fa-solid fa-wand-magic-sparkles"></i> Blur Image</button>
+                        </div>
+                        <div class="zs-sample-row">
+                            <button class="zs-sample" onclick="document.getElementById('zsUrlInput').value='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80';zsBlurFromUrl();">✨ Try a sample image</button>
+                        </div>
+                    </div>
+
+                    <!-- Upload panel — file → public URL → Hashu API -->
+                    <div id="zsPanelUpload" class="hidden">
+                        <input type="file" id="zsFileInput" accept="image/*" style="display:none;" onchange="zsHandleUpload(this)">
+                        <label for="zsFileInput" class="zs-drop">
+                            <i class="fa-solid fa-image"></i>
+                            <span class="zs-drop-main">Tap to choose a photo from your device</span>
+                            <span class="zs-drop-sub">JPG / PNG / WEBP &middot; up to 8MB</span>
+                        </label>
+                        <div id="zsStrengthWrap" class="hidden">
+                            <div class="zs-strength-head">
+                                <span>Blur Strength</span>
+                                <span id="zsStrengthVal">8</span>
+                            </div>
+                            <input type="range" class="zs-range" id="zsStrength" min="1" max="20" value="8" oninput="document.getElementById('zsStrengthVal').textContent=this.value">
+                            <button class="zs-btn" style="width:100%;margin-top:18px;" onclick="zsBlurUpload()"><i class="fa-solid fa-droplet"></i> Blur Image</button>
+                        </div>
+                    </div>
+
+                    <!-- Status / Error -->
+                    <div id="zsStatus" class="hidden"><div class="zs-status"><div class="zs-spinner"></div> Processing image…</div></div>
+                    <div id="zsError" class="zs-error hidden"></div>
+
+                    <!-- Result -->
+                    <div id="zsResult" class="hidden">
+                        <div class="zs-compare">
+                            <div class="zs-frame"><span class="zs-tag">ORIGINAL</span><img id="zsOrigImg" alt="original"></div>
+                            <div class="zs-frame"><span class="zs-tag zs-tag-ok">BLURRED</span><img id="zsOutImg" alt="blurred"></div>
+                        </div>
+                        <div class="zs-actions">
+                            <a id="zsDownload" class="zs-btn" download="zeta-blurred.jpg"><i class="fa-solid fa-download"></i> Download</a>
+                            <button class="zs-btn zs-btn-ghost" onclick="zsReset()"><i class="fa-solid fa-rotate-left"></i> New Image</button>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -1315,6 +1555,253 @@
             }
 
             console.log('🖼 Image Blur Tool loaded — button: IMAGE BLUR');
+        })();
+    </script>
+
+
+    <!-- ============================================================
+    IMAGE BLUR STUDIO — SCRIPT (Hashu API + upload via catbox)
+    ============================================================ -->
+    <script>
+        (function() {
+            // ===== CONFIG =====
+            const BLUR_API = 'https://hashu-apis-production.up.railway.app/api/image/blur?apiKey=hashu_cd4b0a9d325539de660602e7d8d38d61';
+            // Free anonymous file host used to get a public URL for uploaded
+            // photos, since the blur API expects an image URL.
+            const UPLOAD_HOST = 'https://catbox.moe/user/api.php';
+
+            let lastUploadFile = null;
+            let lastUploadSrc = null;
+
+            // ===== TABS =====
+            window.zsSwitchTab = function(tab) {
+                document.querySelectorAll('.zs-tab').forEach(function(t) {
+                    t.classList.toggle('active', t.dataset.tab === tab);
+                });
+                document.getElementById('zsPanelUrl').classList.toggle('hidden', tab !== 'url');
+                document.getElementById('zsPanelUpload').classList.toggle('hidden', tab !== 'upload');
+                hideMsgs();
+            };
+
+            function hideMsgs() {
+                document.getElementById('zsStatus').classList.add('hidden');
+                document.getElementById('zsError').classList.add('hidden');
+            }
+            function showError(msg) {
+                const el = document.getElementById('zsError');
+                el.textContent = msg;
+                el.classList.remove('hidden');
+                document.getElementById('zsStatus').classList.add('hidden');
+            }
+            function showStatus() {
+                document.getElementById('zsError').classList.add('hidden');
+                document.getElementById('zsResult').classList.add('hidden');
+                document.getElementById('zsStatus').classList.remove('hidden');
+            }
+            function showResult(origSrc, outSrc, downloadUrl) {
+                document.getElementById('zsStatus').classList.add('hidden');
+                document.getElementById('zsError').classList.add('hidden');
+                document.getElementById('zsOrigImg').src = origSrc;
+                document.getElementById('zsOutImg').src = outSrc;
+                document.getElementById('zsDownload').href = downloadUrl;
+                const res = document.getElementById('zsResult');
+                res.classList.remove('hidden');
+                res.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            // ===== MODE 1: image URL via Hashu API (same as support.html) =====
+            window.zsBlurFromUrl = function() {
+                const input = document.getElementById('zsUrlInput');
+                const url = (input.value || '').trim();
+                if (!url) { showError('⚠️ කරුණාකර image link එකක් paste කරන්න.'); return; }
+                if (!/^https?:\/\//i.test(url)) { showError('⚠️ Link එක http:// හෝ https:// වලින් පටන් ගත යුතුයි.'); return; }
+                showStatus();
+                const level = document.getElementById('zsStrength').value;
+                const blurred = BLUR_API + '&url=' + encodeURIComponent(url) + '&level=' + level + '&blur=' + level;
+                const probe = new Image();
+                probe.onload = function() { showResult(url, blurred, blurred); };
+                probe.onerror = function() {
+                    showError('❌ Blur කරන්න බැරි වුනා. Direct image link එකක් ද (.jpg / .png) කියලා check කරලා ආයේ try කරන්න.');
+                };
+                probe.src = blurred;
+            };
+
+            // ===== MODE 2: upload photo → public URL → Hashu API =====
+            window.zsHandleUpload = function(inputEl) {
+                const file = inputEl.files && inputEl.files[0];
+                if (!file) return;
+                if (!file.type.startsWith('image/')) { showError('⚠️ කරුණාකර image file එකක් තෝරන්න.'); return; }
+                if (file.size > 8 * 1024 * 1024) { showError('⚠️ Photo එක 8MB ට වඩා අඩු වෙන්න ඕන.'); return; }
+                lastUploadFile = file;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    lastUploadSrc = e.target.result;
+                    document.getElementById('zsStrengthWrap').classList.remove('hidden');
+                    hideMsgs();
+                };
+                reader.readAsDataURL(file);
+            };
+
+            async function uploadForPublicUrl(file) {
+                const fd = new FormData();
+                fd.append('reqtype', 'fileupload');
+                fd.append('fileToUpload', file);
+                const res = await fetch(UPLOAD_HOST, { method: 'POST', body: fd });
+                if (!res.ok) throw new Error('UPLOAD_FAILED');
+                const text = (await res.text()).trim();
+                if (!text.startsWith('http')) throw new Error('UPLOAD_FAILED');
+                return text;
+            }
+
+            function pick(obj, paths) {
+                for (const path of paths) {
+                    const parts = path.split('.');
+                    let cur = obj, ok = true;
+                    for (const p of parts) {
+                        if (cur && typeof cur === 'object' && p in cur) { cur = cur[p]; } else { ok = false; break; }
+                    }
+                    if (ok && typeof cur === 'string' && cur) return cur;
+                }
+                return null;
+            }
+            function extractImageUrl(json) {
+                const roots = [json, json.result, json.data, json.response].filter(Boolean);
+                for (const root of roots) {
+                    const found = pick(root, ['url', 'image', 'blurred', 'output', 'download', 'downloadUrl', 'result_url', 'imageUrl']);
+                    if (found) return found;
+                }
+                return null;
+            }
+
+            window.zsBlurUpload = async function() {
+                if (!lastUploadFile || !lastUploadSrc) {
+                    showError('⚠️ කරුණාකර පලමුව photo එකක් තෝරන්න.');
+                    return;
+                }
+                showStatus();
+                try {
+                    const publicUrl = await uploadForPublicUrl(lastUploadFile);
+                    const level = document.getElementById('zsStrength').value;
+                    const apiUrl = BLUR_API + '&url=' + encodeURIComponent(publicUrl) + '&level=' + level + '&blur=' + level;
+                    const res = await fetch(apiUrl);
+                    if (!res.ok) throw new Error('API_STATUS_' + res.status);
+                    const ct = res.headers.get('content-type') || '';
+                    if (ct.startsWith('image/')) {
+                        const blob = await res.blob();
+                        showResult(lastUploadSrc, URL.createObjectURL(blob), URL.createObjectURL(blob));
+                    } else {
+                        const json = await res.json();
+                        const imgUrl = extractImageUrl(json);
+                        if (!imgUrl) throw new Error('NO_IMAGE_FOUND');
+                        showResult(lastUploadSrc, imgUrl, imgUrl);
+                    }
+                } catch (err) {
+                    console.error('Blur upload error:', err);
+                    if (err.message === 'UPLOAD_FAILED') {
+                        showError('❌ Photo upload කරන්න බැරි වුනා. connection එක check කරලා ආයේ try කරන්න.');
+                    } else if (String(err.message).startsWith('API_STATUS_')) {
+                        showError('❌ Blur API එකෙන් error එකක් ආවා. ආයේ try කරන්න.');
+                    } else {
+                        showError('❌ Service එකට connect වෙන්න බැරි වුනා. ආයේ try කරන්න.');
+                    }
+                }
+            };
+
+            window.zsReset = function() {
+                document.getElementById('zsResult').classList.add('hidden');
+                document.getElementById('zsUrlInput').value = '';
+                document.getElementById('zsFileInput').value = '';
+                document.getElementById('zsStrengthWrap').classList.add('hidden');
+                lastUploadFile = null;
+                lastUploadSrc = null;
+                hideMsgs();
+            };
+
+            console.log('🖼 Image Blur Studio loaded (Hashu API)');
+        })();
+    </script>
+
+
+    <!-- ===== SCROLL SPEED CONTROL ===== -->
+    <button class="scroll-speed-btn" id="scrollSpeedBtn" title="Scroll speed — click to change">
+        <i class="fa-solid fa-person-walking ss-icon" id="ssIcon"></i>
+        <span class="ss-label" id="ssLabel">NORMAL</span>
+    </button>
+
+    <!-- ============================================================
+    SMOOTH SCROLL — SLOW / NORMAL / FAST SPEED CONTROL
+    ============================================================ -->
+    <script>
+        (function() {
+            const container = document.getElementById('mainContent');
+            const btn = document.getElementById('scrollSpeedBtn');
+            const icon = document.getElementById('ssIcon');
+            const label = document.getElementById('ssLabel');
+            if (!container || !btn) return;
+
+            // mult = wheel distance multiplier, ease = smoothing factor
+            const MODES = [
+                { name: 'SLOW',   icon: 'fa-solid fa-mound',          mult: 0.45, ease: 0.055 },
+                { name: 'NORMAL', icon: 'fa-solid fa-person-walking', mult: 1.0,  ease: 0.14  },
+                { name: 'FAST',   icon: 'fa-solid fa-bolt',           mult: 2.3,  ease: 0.30  }
+            ];
+            let modeIdx = 1;
+            let target = container.scrollTop;
+            let current = target;
+            let rafId = null;
+            let programmatic = false;
+
+            function clamp(v) {
+                return Math.max(0, Math.min(v, container.scrollHeight - container.clientHeight));
+            }
+
+            function tick() {
+                const m = MODES[modeIdx];
+                current += (target - current) * m.ease;
+                if (Math.abs(target - current) < 0.5) {
+                    current = target;
+                    programmatic = true;
+                    container.scrollTop = current;
+                    programmatic = false;
+                    rafId = null;
+                    return;
+                }
+                programmatic = true;
+                container.scrollTop = current;
+                programmatic = false;
+                rafId = requestAnimationFrame(tick);
+            }
+            function ensureRaf() {
+                if (rafId === null) rafId = requestAnimationFrame(tick);
+            }
+
+            // wheel → smooth inertial scroll with chosen speed
+            container.addEventListener('wheel', function(e) {
+                // let inner scrollable popups/modals scroll naturally
+                if (e.target.closest('.blur-modal, .update-popup')) return;
+                e.preventDefault();
+                target = clamp(target + e.deltaY * MODES[modeIdx].mult);
+                ensureRaf();
+            }, { passive: false });
+
+            // keep target in sync when user scrolls by touch/keyboard/scrollbar
+            container.addEventListener('scroll', function() {
+                if (!programmatic) { target = container.scrollTop; current = container.scrollTop; }
+            }, { passive: true });
+
+            // cycle SLOW → NORMAL → FAST on click
+            btn.addEventListener('click', function() {
+                modeIdx = (modeIdx + 1) % MODES.length;
+                const m = MODES[modeIdx];
+                icon.className = m.icon + ' ss-icon';
+                label.textContent = m.name;
+                // little pop animation
+                btn.style.transform = 'scale(0.92)';
+                setTimeout(function() { btn.style.transform = ''; }, 140);
+                console.log('🎚 Scroll speed:', m.name);
+            });
+
+            console.log('🎚 Scroll speed control loaded — click the floating button to cycle SLOW / NORMAL / FAST');
         })();
     </script>
 
