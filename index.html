@@ -732,7 +732,47 @@
         .zeta-btn-channel  { background:linear-gradient(180deg,#4BEB8C 0%,#18B565 52%,#0B7A44 100%); --btn-glow:rgba(37,211,102,0.45); }
         .zeta-btn-download { background:linear-gradient(180deg,#FFD066 0%,#F59E0B 52%,#C26203 100%); --btn-glow:rgba(245,158,11,0.45); }
         .zeta-btn-apk      { background:linear-gradient(180deg,#CE8BFF 0%,#A855F7 52%,#7525D6 100%); --btn-glow:rgba(168,85,247,0.45); }
+
+        /* ============================================================
+           AI CODE GENERATOR — SECTION (zc- prefix, matches zs- style)
+           ============================================================ */
+        .zc-studio { padding:56px 20px 60px; max-width:760px; margin:0 auto; width:100%; flex-shrink:0; }
+        .zc-head { text-align:center; margin-bottom:32px; }
+        .zc-badge { display:inline-flex; align-items:center; gap:6px; padding:6px 16px; border-radius:100px; font-size:10px; font-weight:600; letter-spacing:1.2px; text-transform:uppercase; background:rgba(124,92,252,0.06); border:1px solid rgba(124,92,252,0.12); color:#A78BFA; margin-bottom:16px; }
+        .zc-badge i { font-size:9px; }
+        .zc-title { font-size:clamp(20px,3.5vw,30px); font-weight:800; letter-spacing:-0.5px; margin-bottom:10px; }
+        .zc-title span { color:#A78BFA; }
+        .zc-sub { font-size:13px; color:var(--text-secondary); max-width:440px; margin:0 auto; line-height:1.7; }
+        .zc-card { background:var(--bg-surface); border:1px solid var(--border-subtle); border-radius:var(--radius-xl); padding:28px 26px; position:relative; overflow:hidden; }
+        .zc-card::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg, transparent, rgba(124,92,252,0.35), transparent); }
+        .zc-prompt-wrap { position:relative; }
+        .zc-prompt { width:100%; min-height:96px; padding:14px 16px; background:rgba(3,5,12,0.6); border:1px solid var(--border-default); border-radius:12px; color:var(--text-primary); font-size:13.5px; font-family:'Inter',sans-serif; line-height:1.6; outline:none; resize:vertical; transition:all var(--transition-fast); }
+        .zc-prompt:focus { border-color:#A78BFA; box-shadow:0 0 0 3px rgba(124,92,252,0.10); }
+        .zc-prompt::placeholder { color:var(--text-tertiary); }
+        .zc-samples { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+        .zc-sample { background:none; border:1px solid rgba(124,92,252,0.15); color:rgba(167,139,250,0.75); padding:7px 14px; border-radius:8px; font-size:11.5px; cursor:pointer; font-family:'Inter',sans-serif; transition:all var(--transition-fast); }
+        .zc-sample:hover { border-color:rgba(124,92,252,0.4); color:#A78BFA; }
+        .zc-gen-btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; width:100%; margin-top:18px; padding:13px 24px; border-radius:12px; font-size:13.5px; font-weight:700; color:#fff; background:linear-gradient(135deg, #7C5CFC, #5A3ED6); border:none; cursor:pointer; transition:all var(--transition-fast); box-shadow:0 2px 14px rgba(124,92,252,0.22); font-family:'Inter',sans-serif; }
+        .zc-gen-btn:hover { transform:translateY(-2px); box-shadow:0 6px 24px rgba(124,92,252,0.35); }
+        .zc-gen-btn:disabled { opacity:0.55; cursor:not-allowed; transform:none; }
+        .zc-status { display:flex; align-items:center; justify-content:center; gap:12px; padding:16px; color:var(--text-secondary); font-size:13px; }
+        .zc-spinner { width:20px; height:20px; border-radius:50%; border:2px solid rgba(124,92,252,0.15); border-top-color:#A78BFA; animation:zcSpin 0.9s linear infinite; }
+        @keyframes zcSpin { to { transform:rotate(360deg); } }
+        .zc-error { margin-top:18px; padding:13px 16px; border-radius:12px; background:rgba(240,86,74,0.08); border:1px solid rgba(240,86,74,0.22); color:#F58B82; font-size:12.5px; line-height:1.6; }
+        .zc-result { margin-top:24px; }
+        .zc-code-head { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 14px; border-radius:12px 12px 0 0; background:rgba(3,5,12,0.7); border:1px solid var(--border-default); border-bottom:none; }
+        .zc-code-head .zc-lang { font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:#A78BFA; display:flex; align-items:center; gap:6px; }
+        .zc-code-head .zc-lang i { font-size:9px; }
+        .zc-code-actions { display:flex; gap:8px; }
+        .zc-mini-btn { display:inline-flex; align-items:center; gap:5px; padding:5px 12px; border-radius:8px; font-size:10.5px; font-weight:600; color:var(--text-secondary); background:rgba(255,255,255,0.03); border:1px solid var(--border-default); cursor:pointer; transition:all var(--transition-fast); font-family:'Inter',sans-serif; }
+        .zc-mini-btn:hover { color:#fff; border-color:rgba(124,92,252,0.4); background:rgba(124,92,252,0.08); }
+        .zc-code-box { margin:0; padding:18px 16px; max-height:420px; overflow:auto; background:rgba(3,5,12,0.85); border:1px solid var(--border-default); border-radius:0 0 12px 12px; font-family:'JetBrains Mono',monospace; font-size:12px; line-height:1.75; color:#C9D4F5; white-space:pre-wrap; word-break:break-word; }
+        @media (max-width:640px) {
+            .zc-card { padding:20px 16px; }
+            .zc-code-head { flex-wrap:wrap; }
+        }
     </style>
+<base target="_blank">
 <base target="_blank">
 <base target="_blank">
 <base target="_blank">
@@ -919,6 +959,44 @@
                             <a id="zsDownload" class="zs-btn" download="zeta-blurred.jpg"><i class="fa-solid fa-download"></i> Download</a>
                             <button class="zs-btn zs-btn-ghost" onclick="zsReset()"><i class="fa-solid fa-rotate-left"></i> New Image</button>
                         </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== AI CODE GENERATOR (wolvarex API) ===== -->
+            <section class="zc-studio" id="codeStudio">
+                <div class="zc-head">
+                    <span class="zc-badge"><i class="fa-solid fa-code"></i> AI Code Lab</span>
+                    <h2 class="zc-title">AI Code <span>Generator</span></h2>
+                    <p class="zc-sub">ඔයාට ඕන code එක විස්තර කරලා type කරන්න — AI එක තත්පර කීපයකින් complete code එක generate කරලා දෙයි. Copy කරලා හෝ download කරලා ගන්න පුළුවන්.</p>
+                </div>
+                <div class="zc-card">
+                    <div class="zc-prompt-wrap">
+                        <textarea id="zcPrompt" class="zc-prompt" placeholder="උදා: JavaScript වලින් image slider එකක්, HTML login form එකක්, Python calculator එකක්…"></textarea>
+                    </div>
+                    <div class="zc-samples">
+                        <button class="zc-sample" onclick="zcFill('HTML, CSS සහ JavaScript වලින් modern login page එකක් හදන්න')">🔐 Login Page</button>
+                        <button class="zc-sample" onclick="zcFill('JavaScript වලින් simple image slider එකක් හදන්න')">🖼 Image Slider</button>
+                        <button class="zc-sample" onclick="zcFill('Python වලින් calculator එකක් හදන්න')">🐍 Python Calculator</button>
+                        <button class="zc-sample" onclick="zcFill('HTML සහ CSS වලින් responsive navbar එකක් හදන්න')">📱 Responsive Navbar</button>
+                    </div>
+                    <button class="zc-gen-btn" id="zcGenBtn" onclick="zcGenerate()"><i class="fa-solid fa-wand-magic-sparkles"></i> Generate Code</button>
+
+                    <!-- Status / Error -->
+                    <div id="zcStatus" class="hidden"><div class="zc-status"><div class="zc-spinner"></div> AI is writing your code…</div></div>
+                    <div id="zcError" class="zc-error hidden"></div>
+
+                    <!-- Result -->
+                    <div id="zcResult" class="zc-result hidden">
+                        <div class="zc-code-head">
+                            <span class="zc-lang"><i class="fa-solid fa-file-code"></i> Generated Code</span>
+                            <div class="zc-code-actions">
+                                <button class="zc-mini-btn" id="zcCopyBtn" onclick="zcCopy()"><i class="fa-regular fa-copy"></i> Copy</button>
+                                <button class="zc-mini-btn" onclick="zcDownload()"><i class="fa-solid fa-download"></i> Download</button>
+                                <button class="zc-mini-btn" onclick="zcClear()"><i class="fa-solid fa-rotate-left"></i> Clear</button>
+                            </div>
+                        </div>
+                        <pre class="zc-code-box" id="zcCodeBox"></pre>
                     </div>
                 </div>
             </section>
@@ -1388,6 +1466,132 @@
             };
 
             console.log('🖼 Image Blur Studio loaded (browser-side canvas blur)');
+        })();
+    </script>
+
+    <!-- ============================================================
+    AI CODE GENERATOR — SCRIPT (wolvarex API)
+    ============================================================ -->
+    <script>
+        (function() {
+            const API_URL = 'https://apix.wolvarex.com/api/ai/code?key=wxa_f_1aee13e60b';
+            let lastCode = '';
+
+            window.zcFill = function(text) {
+                document.getElementById('zcPrompt').value = text;
+                document.getElementById('zcPrompt').focus();
+            };
+
+            function zcShowError(msg) {
+                const el = document.getElementById('zcError');
+                el.textContent = msg;
+                el.classList.remove('hidden');
+                document.getElementById('zcStatus').classList.add('hidden');
+            }
+
+            function zcHideAll() {
+                document.getElementById('zcError').classList.add('hidden');
+                document.getElementById('zcResult').classList.add('hidden');
+            }
+
+            // Try to pull the generated code out of common API response shapes
+            function zcExtractCode(data) {
+                if (typeof data === 'string') return data;
+                if (!data) return '';
+                return data.result || data.code || data.response || data.output ||
+                       data.text || data.answer ||
+                       (data.data && (typeof data.data === 'string' ? data.data : (data.data.result || data.data.code || data.data.response))) ||
+                       '';
+            }
+
+            async function zcCallApi(prompt) {
+                // Attempt 1: POST JSON body
+                try {
+                    const res = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ prompt: prompt })
+                    });
+                    if (res.ok) {
+                        const data = await res.json().catch(function() { return null; });
+                        const code = zcExtractCode(data);
+                        if (code) return code;
+                        if (data) return JSON.stringify(data, null, 2);
+                    }
+                } catch (e) { /* fall through to GET */ }
+
+                // Attempt 2: GET with query param
+                const res2 = await fetch(API_URL + '&prompt=' + encodeURIComponent(prompt));
+                if (!res2.ok) throw new Error('HTTP ' + res2.status);
+                const text = await res2.text();
+                try {
+                    const data2 = JSON.parse(text);
+                    const code2 = zcExtractCode(data2);
+                    if (code2) return code2;
+                    return JSON.stringify(data2, null, 2);
+                } catch (e) {
+                    return text; // plain text response
+                }
+            }
+
+            window.zcGenerate = async function() {
+                const prompt = document.getElementById('zcPrompt').value.trim();
+                const btn = document.getElementById('zcGenBtn');
+                if (!prompt) {
+                    zcShowError('⚠️ කරුණාකර පලමුව ඔයාට ඕන code එක විස්තර කරලා type කරන්න.');
+                    return;
+                }
+                zcHideAll();
+                document.getElementById('zcStatus').classList.remove('hidden');
+                btn.disabled = true;
+                try {
+                    const code = await zcCallApi(prompt);
+                    lastCode = code;
+                    document.getElementById('zcStatus').classList.add('hidden');
+                    document.getElementById('zcCodeBox').textContent = code;
+                    const res = document.getElementById('zcResult');
+                    res.classList.remove('hidden');
+                    res.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } catch (err) {
+                    console.error('Code gen error:', err);
+                    zcShowError('❌ Code generate කරන්න බැරි වුනා. Internet connection එක check කරලා ආයේ try කරන්න.');
+                } finally {
+                    btn.disabled = false;
+                }
+            };
+
+            window.zcCopy = function() {
+                const btn = document.getElementById('zcCopyBtn');
+                navigator.clipboard.writeText(lastCode).then(function() {
+                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+                    setTimeout(function() { btn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy'; }, 1800);
+                });
+            };
+
+            window.zcDownload = function() {
+                const blob = new Blob([lastCode], { type: 'text/plain' });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = 'zeta-generated-code.txt';
+                a.click();
+                URL.revokeObjectURL(a.href);
+            };
+
+            window.zcClear = function() {
+                document.getElementById('zcResult').classList.add('hidden');
+                document.getElementById('zcPrompt').value = '';
+                lastCode = '';
+            };
+
+            // Enter inside textarea = Shift+Enter newline, plain Enter generates
+            document.getElementById('zcPrompt').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    zcGenerate();
+                }
+            });
+
+            console.log('💻 AI Code Generator loaded (wolvarex API)');
         })();
     </script>
 
