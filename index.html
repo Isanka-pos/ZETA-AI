@@ -6,7 +6,7 @@
     <title>ZETA TOOLS — AI Command Center</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..900&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <script src="https://cdn.tailwindcss.com">
     </script>
@@ -92,7 +92,7 @@
         .brand-icon svg { width:20px; height:20px; position:relative; z-index:2; filter:drop-shadow(0 0 6px rgba(255,255,255,0.5)); }
         .brand-icon .sweep { position:absolute; top:-10%; left:-10%; width:30%; height:120%; background:linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent); transform:rotate(25deg); animation:sweep 4.5s ease-in-out infinite; z-index:3; pointer-events:none; }
         @keyframes sweep { 0% { transform:translateX(-200%) rotate(25deg); } 60% { transform:translateX(400%) rotate(25deg); } 100% { transform:translateX(400%) rotate(25deg); } }
-        .brand-text { font-size:22px; font-weight:800; letter-spacing:-0.5px; line-height:1; color:#fff; text-shadow:0 0 30px rgba(79,125,247,0.15); }
+        .brand-text { font-family:'Orbitron',sans-serif; font-size:17px; font-weight:800; letter-spacing:1.5px; line-height:1; color:#fff; text-shadow:0 0 30px rgba(79,125,247,0.15); }
         .brand-text span { color:var(--accent-blue); }
         .brand-sub { display:flex; align-items:center; gap:8px; margin-top:4px; }
         .brand-sub .label { font-size:9px; font-weight:600; letter-spacing:1.6px; text-transform:uppercase; color:var(--text-secondary); opacity:0.6; }
@@ -274,7 +274,7 @@
         .stat-label { font-size:10px; color:var(--text-tertiary); margin-top:2px; font-weight:500; }
         .site-footer { padding:32px 20px 18px; border-top:1px solid var(--border-subtle); flex-shrink:0; }
         .footer-grid { max-width:720px; margin:0 auto; display:grid; grid-template-columns:2fr 1fr 1fr; gap:24px; }
-        .footer-brand { font-size:14px; font-weight:700; color:var(--text-primary); margin-bottom:5px; letter-spacing:-0.2px; }
+        .footer-brand { font-family:'Orbitron',sans-serif; font-size:14px; font-weight:700; color:var(--text-primary); margin-bottom:5px; letter-spacing:1.5px; }
         .footer-desc { font-size:11px; color:var(--text-tertiary); line-height:1.7; max-width:220px; }
         .footer-social { display:flex; gap:8px; margin-top:10px; }
         .footer-social a { width:30px; height:30px; border-radius:7px; border:1px solid var(--border-subtle); display:flex; align-items:center; justify-content:center; color:var(--text-tertiary); transition:all var(--transition-fast); text-decoration:none; font-size:12px; }
@@ -309,6 +309,8 @@
         .zeta-btn-channel:hover { box-shadow:0 8px 32px rgba(37,211,102,0.45); background:linear-gradient(135deg, #31D96E, #1A9B89); }
         .zeta-btn-download { background:linear-gradient(135deg, #F59E0B, #D97706); color:#fff; box-shadow:0 4px 20px rgba(245,158,11,0.30); }
         .zeta-btn-download:hover { box-shadow:0 8px 32px rgba(245,158,11,0.45); background:linear-gradient(135deg, #FBB03B, #E08812); }
+        .zeta-btn-apk { background:linear-gradient(135deg, #A855F7, #7C3AED); color:#fff; box-shadow:0 4px 20px rgba(168,85,247,0.30); }
+        .zeta-btn-apk:hover { box-shadow:0 8px 32px rgba(168,85,247,0.45); background:linear-gradient(135deg, #B968FA, #8B4FE8); }
 
         /* ============================================================
            NEW UPDATES POPUP — FULL UI
@@ -595,7 +597,7 @@
                         </svg>
                     </div>
                     <div>
-                        <div class="brand-text">ZETA<span>.</span></div>
+                        <div class="brand-text">ZETA TOOLS</div>
                         <div class="brand-sub"><span class="label">AI POWERED TOOLS</span><span class="status-dot"></span><span class="status-label">SYSTEM ONLINE</span></div>
                     </div>
                 </div>
@@ -658,97 +660,29 @@
         <!-- ===== MAIN CONTENT ===== -->
         <main class="main-content" id="mainContent">
 
-            <!-- ===== PREMIUM BANNER ===== -->
-            <div class="premium-banner" id="premiumBanner" role="alert">
-                <div class="sweep-line"></div>
-                <div class="banner-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
-                <div class="banner-content">
-                    <div class="banner-title"><span>⚠️ DEMO / PRANK APK COLLECTION</span><span class="badge-demo">Demo / Prank Only</span></div>
-                    <div class="banner-text">These APKs are intended for demonstration, testing, and entertainment only. Simulated payment screenshots, receipts, chats, SMS, and identity visuals must not be used as genuine proof, for fraud, impersonation, deception, or financial disputes.</div>
-                </div>
-                <div class="banner-actions">
-                    <button class="banner-btn" id="viewCollectionBtn"><i class="fa-regular fa-eye" style="font-size:10px;margin-right:4px;"></i> VIEW COLLECTION</button>
-                    <button class="banner-close" id="closeBannerBtn" aria-label="Close">×</button>
-                </div>
-            </div>
-
             <!-- ===== HERO ===== -->
             <section class="hero-section">
                 <div class="hero-glow hero-glow-1"></div>
                 <div class="hero-glow hero-glow-2"></div>
                 <div style="position:relative;z-index:2">
-                    <div class="hero-badge"><i class="fa-solid fa-bolt"></i> Premium APK Store</div>
-                    <h1 class="hero-heading">Discover <span class="hero-heading-accent">Premium</span> Android Apps</h1>
-                    <p class="hero-desc">Curated Android tools, demos, and entertainment apps. Explore the collection securely.</p>
-                    <div class="hero-actions">
-                        <button class="btn-primary" onclick="document.getElementById('appsSection').scrollIntoView({behavior:'smooth'})"><i class="fa-solid fa-fire" style="font-size:11px;color:var(--status-warning)"></i> Most Popular</button>
-                        <button class="btn-secondary" onclick="document.getElementById('appsSection').scrollIntoView({behavior:'smooth'})"><i class="fa-solid fa-th-list" style="font-size:10px"></i> Browse Apps</button>
-                    </div>
-                    <div style="margin-top:20px; display:flex; flex-direction:column; gap:12px; align-items:center;">
+                    <div class="hero-badge"><i class="fa-solid fa-bolt"></i> AI Powered Tools</div>
+                    <h1 class="hero-heading">Welcome to <span class="hero-heading-accent">ZETA TOOLS</span></h1>
+                    <p class="hero-desc">Your all-in-one toolkit — chat, downloads, and more, all in one place.</p>
+                    <div id="ztButtons" style="margin-top:20px; display:flex; flex-direction:column; gap:12px; align-items:center;">
                         <button class="zeta-btn zeta-btn-chat" onclick="alert('🚀 ZETA CHAT — Coming soon!')"><i class="fa-solid fa-comment"></i> ZETA CHAT</button>
                         <button class="zeta-btn zeta-btn-channel" onclick="alert('🔗 Express VPN — Coming soon!')"><i class="fa-solid fa-shield-halved"></i> EXPRESS VPN</button>
                         <button class="zeta-btn zeta-btn-download" onclick="location.href='https://zeta-mini-8e229a0a0f1e.herokuapp.com/Download.html'"><i class="fa-solid fa-download"></i> DOWNLOAD</button>
+                        <button class="zeta-btn zeta-btn-apk" onclick="location.href='https://zeta-mini-8e229a0a0f1e.herokuapp.com/Apk.html'"><i class="fa-solid fa-mobile-screen-button"></i> APK DOWNLOAD</button>
                     </div>
                     <div class="hero-line"></div>
-                </div>
-            </section>
-
-            <!-- ===== APPS SECTION ===== -->
-            <section class="apps-section" id="appsSection">
-                <div class="reveal">
-                    <div class="section-eyebrow"><i class="fa-solid fa-fire" style="color:var(--status-warning)"></i> Most Popular</div>
-                    <h2 class="section-heading">Premium Apps <span style="font-size:14px;font-weight:400;color:var(--text-tertiary)">(6)</span></h2>
-                    <p class="section-sub">The complete collection of premium applications available for download.</p>
-                </div>
-                <div class="app-grid">
-                    <div class="app-card reveal reveal-d1">
-                        <div class="app-card-top"><div class="app-card-icon violet"><i class="fa-brands fa-grav"></i><span class="sp"><i class="fa-solid fa-sparkles"></i></span></div><div class="app-card-info"><div class="app-card-title violet">DeepSeek Premium <span class="badge-demo">DEMO</span></div><div class="app-card-meta"><span><i class="fa-regular fa-circle"></i> v2.4.0</span><span><i class="fa-regular fa-hdd"></i> 18.2 MB</span><span class="app-card-badge violet"><i class="fa-solid fa-crown"></i> Premium</span></div></div></div>
-                        <div class="app-card-desc">Advanced AI assistant with deep learning capabilities.</div>
-                        <div class="app-card-footer"><div class="app-card-stats"><span><i class="fa-solid fa-download"></i> 2,847</span><span><i class="fa-regular fa-star"></i> 12</span><span><i class="fa-regular fa-clock"></i> 2d ago</span></div><button class="app-card-dl-btn violet" onclick="alert('📥 Downloading DeepSeek Premium...')"><i class="fa-solid fa-download"></i> Download</button></div>
-                    </div>
-                    <div class="app-card reveal reveal-d2">
-                        <div class="app-card-top"><div class="app-card-icon blue"><i class="fa-brands fa-telegram"></i><span class="sp"><i class="fa-solid fa-sparkles"></i></span></div><div class="app-card-info"><div class="app-card-title blue">Telegram Premium <span class="badge-demo">DEMO</span></div><div class="app-card-meta"><span><i class="fa-regular fa-circle"></i> v10.2.5</span><span><i class="fa-regular fa-hdd"></i> 42.8 MB</span><span class="app-card-badge blue"><i class="fa-solid fa-crown"></i> Premium</span></div></div></div>
-                        <div class="app-card-desc">Fast, secure messaging with premium features unlocked.</div>
-                        <div class="app-card-footer"><div class="app-card-stats"><span><i class="fa-solid fa-download"></i> 5,123</span><span><i class="fa-regular fa-star"></i> 8</span><span><i class="fa-regular fa-clock"></i> 5d ago</span></div><button class="app-card-dl-btn blue" onclick="alert('📥 Downloading Telegram Premium...')"><i class="fa-solid fa-download"></i> Download</button></div>
-                    </div>
-                    <div class="app-card reveal reveal-d3">
-                        <div class="app-card-top"><div class="app-card-icon red"><i class="fa-brands fa-youtube"></i><span class="sp"><i class="fa-solid fa-sparkles"></i></span></div><div class="app-card-info"><div class="app-card-title red">YouTube Premium <span class="badge-demo">DEMO</span></div><div class="app-card-meta"><span><i class="fa-regular fa-circle"></i> v19.16.39</span><span><i class="fa-regular fa-hdd"></i> 68.4 MB</span><span class="app-card-badge red"><i class="fa-solid fa-crown"></i> Premium</span></div></div></div>
-                        <div class="app-card-desc">Ad-free YouTube experience with background play.</div>
-                        <div class="app-card-footer"><div class="app-card-stats"><span><i class="fa-solid fa-download"></i> 8,932</span><span><i class="fa-regular fa-star"></i> 15</span><span><i class="fa-regular fa-clock"></i> 1d ago</span></div><button class="app-card-dl-btn red" onclick="alert('📥 Downloading YouTube Premium...')"><i class="fa-solid fa-download"></i> Download</button></div>
-                    </div>
-                    <div class="app-card reveal reveal-d4">
-                        <div class="app-card-top"><div class="app-card-icon green"><i class="fa-brands fa-grav"></i><span class="sp"><i class="fa-solid fa-sparkles"></i></span></div><div class="app-card-info"><div class="app-card-title green">Gemini AI <span class="badge-demo">DEMO</span></div><div class="app-card-meta"><span><i class="fa-regular fa-circle"></i> v1.0.0</span><span><i class="fa-regular fa-hdd"></i> 24.6 MB</span><span class="app-card-badge green"><i class="fa-solid fa-crown"></i> Premium</span></div></div></div>
-                        <div class="app-card-desc">Next-generation AI assistant from Google DeepMind.</div>
-                        <div class="app-card-footer"><div class="app-card-stats"><span><i class="fa-solid fa-download"></i> 4,102</span><span><i class="fa-regular fa-star"></i> 9</span><span><i class="fa-regular fa-clock"></i> 3d ago</span></div><button class="app-card-dl-btn green" onclick="alert('📥 Downloading Gemini AI...')"><i class="fa-solid fa-download"></i> Download</button></div>
-                    </div>
-                    <div class="app-card reveal reveal-d1">
-                        <div class="app-card-top"><div class="app-card-icon purple"><i class="fa-brands fa-grav"></i><span class="sp"><i class="fa-solid fa-sparkles"></i></span></div><div class="app-card-info"><div class="app-card-title purple">ZETA AI Pro <span class="lock-badge"><i class="fa-solid fa-lock"></i> Locked</span></div><div class="app-card-meta"><span><i class="fa-regular fa-circle"></i> v3.0.0</span><span><i class="fa-regular fa-hdd"></i> 32.1 MB</span><span class="app-card-badge red"><i class="fa-solid fa-lock"></i> Locked</span></div></div></div>
-                        <div class="app-card-desc">Premium AI assistant with advanced features. Password protected.</div>
-                        <div class="app-card-footer"><div class="app-card-stats"><span><i class="fa-solid fa-download"></i> 0</span><span><i class="fa-regular fa-star"></i> 0</span><span><i class="fa-regular fa-clock"></i> New</span></div><button class="app-card-dl-btn" style="background:linear-gradient(135deg, #F59E0B, #D97706);border:none;color:#fff;box-shadow:0 2px 12px rgba(245,158,11,0.3)" onclick="alert('🔒 Enter password to unlock this APK.')"><i class="fa-solid fa-lock"></i> Unlock to Download</button></div>
-                    </div>
-                    <div class="app-card reveal reveal-d2">
-                        <div class="app-card-top"><div class="app-card-icon cyan"><i class="fa-brands fa-grav"></i><span class="sp"><i class="fa-solid fa-sparkles"></i></span></div><div class="app-card-info"><div class="app-card-title cyan">Flipper Droid <span class="badge-demo">DEMO</span></div><div class="app-card-meta"><span><i class="fa-regular fa-circle"></i> v2.1.0</span><span><i class="fa-regular fa-hdd"></i> 8.5 MB</span><span class="app-card-badge cyan"><i class="fa-solid fa-crown"></i> Premium</span></div></div></div>
-                        <div class="app-card-desc">Manage and interact with Flipper Zero devices.</div>
-                        <div class="app-card-footer"><div class="app-card-stats"><span><i class="fa-solid fa-download"></i> 0</span><span><i class="fa-regular fa-star"></i> 0</span><span><i class="fa-regular fa-clock"></i> New</span></div><button class="app-card-dl-btn cyan" onclick="alert('📥 Downloading Flipper Droid...')"><i class="fa-solid fa-download"></i> Download</button></div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ===== STATS ===== -->
-            <section class="stats-section">
-                <div class="stats-grid">
-                    <div class="stat-item reveal"><div class="stat-num">6+</div><div class="stat-label">Premium Apps</div></div>
-                    <div class="stat-item reveal reveal-d1"><div class="stat-num">21,004+</div><div class="stat-label">Total Downloads</div></div>
-                    <div class="stat-item reveal reveal-d2"><div class="stat-num">4</div><div class="stat-label">Categories</div></div>
-                    <div class="stat-item reveal reveal-d3"><div class="stat-num">—</div><div class="stat-label">External Download Links</div></div>
                 </div>
             </section>
 
             <!-- ===== FOOTER ===== -->
             <footer class="site-footer">
                 <div class="footer-grid">
-                    <div><div class="footer-brand">ZETA TOOLS</div><p class="footer-desc">Premium Android application platform. Curated, secure, and direct downloads for premium APK files.</p><div class="footer-social"><a href="#" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a><a href="#" title="Twitter"><i class="fa-brands fa-twitter"></i></a><a href="#" title="GitHub"><i class="fa-brands fa-github"></i></a></div></div>
-                    <div><div class="footer-col-title">Quick Links</div><button class="footer-link" onclick="document.getElementById('appsSection').scrollIntoView({behavior:'smooth'})">Most Popular</button><button class="footer-link" onclick="alert('📂 Categories')">Categories</button><button class="footer-link" onclick="alert('📄 Documents')">Documents</button><button class="footer-link" onclick="alert('🆘 Support')">Support</button></div>
+                    <div><div class="footer-brand">ZETA TOOLS</div><p class="footer-desc">Your all-in-one AI-powered toolkit. Chat, video downloads, APK downloads and more, all in one place.</p><div class="footer-social"><a href="#" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a><a href="#" title="Twitter"><i class="fa-brands fa-twitter"></i></a><a href="#" title="GitHub"><i class="fa-brands fa-github"></i></a></div></div>
+                    <div><div class="footer-col-title">Quick Links</div><button class="footer-link" onclick="location.href='https://zeta-mini-8e229a0a0f1e.herokuapp.com/Download.html'">Video Downloader</button><button class="footer-link" onclick="location.href='https://zeta-mini-8e229a0a0f1e.herokuapp.com/Apk.html'">APK Downloader</button><button class="footer-link" onclick="alert('📄 Documents')">Documents</button><button class="footer-link" onclick="alert('🆘 Support')">Support</button></div>
                     <div><div class="footer-col-title">Info</div><button class="footer-link" onclick="alert('👤 Profile')">Profile</button><button class="footer-link" onclick="alert('⚙️ Settings')">Settings</button><button class="footer-link" onclick="alert('💾 Data')">Data</button></div>
                 </div>
                 <div class="footer-bottom">&copy; 2026 ZETA TOOLS &middot; Sri Lanka &middot; All rights reserved.</div>
@@ -796,9 +730,6 @@
             const mobileToggle = document.getElementById('mobileToggle');
             const brandToggle = document.getElementById('brandToggle');
             const searchInput = document.getElementById('searchInput');
-            const banner = document.getElementById('premiumBanner');
-            const closeBannerBtn = document.getElementById('closeBannerBtn');
-            const viewCollectionBtn = document.getElementById('viewCollectionBtn');
 
             // ===== POPUP refs =====
             const popupOverlay = document.getElementById('updatePopupOverlay');
@@ -810,58 +741,6 @@
             // ===== VERSION CONTROL =====
             const UPDATES_VERSION = 2; // increment to show popup again
             const STORAGE_KEY = 'zeta_updates_seen_v' + UPDATES_VERSION;
-
-            // ===== BANNER LOGIC (24h cooldown) =====
-            const BANNER_KEY = 'zeta_banner_dismissed';
-
-            function shouldShowBanner() {
-                const dismissed = localStorage.getItem(BANNER_KEY);
-                if (!dismissed) return true;
-                try {
-                    const ts = parseInt(dismissed, 10);
-                    return (Date.now() - ts) > 24 * 60 * 60 * 1000;
-                } catch(e) { return true; }
-            }
-
-            function dismissBanner(animate = true) {
-                if (!banner) return;
-                if (animate) {
-                    banner.classList.add('closing');
-                    setTimeout(() => {
-                        banner.classList.add('hidden-banner');
-                        banner.classList.remove('closing');
-                    }, 380);
-                } else {
-                    banner.classList.add('hidden-banner');
-                }
-                localStorage.setItem(BANNER_KEY, String(Date.now()));
-            }
-
-            if (banner) {
-                if (!shouldShowBanner()) {
-                    banner.classList.add('hidden-banner');
-                } else {
-                    banner.classList.remove('hidden-banner');
-                    setTimeout(() => {
-                        banner.style.animation = 'bannerSlideIn 0.5s cubic-bezier(0.16,1,0.3,1) 0s forwards';
-                    }, 50);
-                }
-            }
-
-            if (closeBannerBtn) {
-                closeBannerBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    dismissBanner(true);
-                });
-            }
-
-            if (viewCollectionBtn) {
-                viewCollectionBtn.addEventListener('click', function() {
-                    const target = document.getElementById('appsSection');
-                    if (target) target.scrollIntoView({ behavior: 'smooth' });
-                    dismissBanner(true);
-                });
-            }
 
             // ===== SIDEBAR TOGGLE =====
             brandToggle.addEventListener('click', function(e) {
@@ -991,10 +870,10 @@
                 closePopup(true);
             }
 
-            // handle view updates: scroll to apps section, close, remember
+            // handle view updates: scroll to the button group, close, remember
             function handleViewUpdates() {
                 markUpdatesSeen();
-                const target = document.getElementById('appsSection');
+                const target = document.getElementById('ztButtons');
                 if (target) {
                     target.scrollIntoView({ behavior: 'smooth' });
                 }
@@ -1048,7 +927,6 @@
             console.log('⚡ Click the Z logo to collapse/expand (desktop)');
             console.log('⚡ ⌘K to focus search');
             console.log('📱 Mobile responsive with slide-in sidebar');
-            console.log('📢 Premium announcement banner with 24h cooldown');
             console.log('🔧 Hack Generator added to navigation');
         })();
     </script>
