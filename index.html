@@ -771,7 +771,61 @@
             .zc-card { padding:20px 16px; }
             .zc-code-head { flex-wrap:wrap; }
         }
+        /* ============================================================
+           SONG DOWNLOADER — SECTION (ss- prefix, matches zc- style)
+           ============================================================ */
+        .ss-studio { padding:56px 20px 60px; max-width:760px; margin:0 auto; width:100%; flex-shrink:0; }
+        .ss-head { text-align:center; margin-bottom:32px; }
+        .ss-badge { display:inline-flex; align-items:center; gap:6px; padding:6px 16px; border-radius:100px; font-size:10px; font-weight:600; letter-spacing:1.2px; text-transform:uppercase; background:rgba(217,70,239,0.06); border:1px solid rgba(217,70,239,0.12); color:var(--accent-magenta); margin-bottom:16px; }
+        .ss-badge i { font-size:9px; }
+        .ss-title { font-size:clamp(20px,3.5vw,30px); font-weight:800; letter-spacing:-0.5px; margin-bottom:10px; }
+        .ss-title span { color:var(--accent-magenta); }
+        .ss-sub { font-size:13px; color:var(--text-secondary); max-width:440px; margin:0 auto; line-height:1.7; }
+        .ss-card { background:var(--bg-surface); border:1px solid var(--border-subtle); border-radius:var(--radius-xl); padding:28px 26px; position:relative; overflow:hidden; }
+        .ss-card::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg, transparent, rgba(217,70,239,0.35), transparent); }
+        .ss-tabs { display:flex; gap:10px; margin-bottom:22px; }
+        .ss-tab { flex:1; padding:12px 14px; border-radius:12px; border:1px solid var(--border-default); background:rgba(255,255,255,0.02); color:var(--text-secondary); font-family:'Inter',sans-serif; font-size:12.5px; font-weight:600; cursor:pointer; transition:all var(--transition-fast); display:flex; align-items:center; justify-content:center; gap:7px; }
+        .ss-tab i { font-size:11px; }
+        .ss-tab:hover { border-color:rgba(217,70,239,0.25); color:var(--accent-magenta); }
+        .ss-tab.active { background:linear-gradient(135deg, rgba(217,70,239,0.10), rgba(217,70,239,0.03)); border-color:rgba(217,70,239,0.35); color:var(--accent-magenta); box-shadow:0 0 16px rgba(217,70,239,0.08); }
+        .ss-input-row { display:flex; gap:10px; flex-wrap:wrap; }
+        .ss-input { flex:1; min-width:220px; padding:12px 16px; background:rgba(3,5,12,0.6); border:1px solid var(--border-default); border-radius:12px; color:var(--text-primary); font-size:13.5px; font-family:'Inter',sans-serif; outline:none; transition:all var(--transition-fast); }
+        .ss-input:focus { border-color:var(--accent-magenta); box-shadow:0 0 0 3px rgba(217,70,239,0.10); }
+        .ss-input::placeholder { color:var(--text-tertiary); }
+        .ss-btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:12px 24px; border-radius:12px; font-size:13.5px; font-weight:700; color:#fff; background:linear-gradient(135deg, #D946EF, #A21CAF); border:none; cursor:pointer; transition:all var(--transition-fast); box-shadow:0 2px 14px rgba(217,70,239,0.20); font-family:'Inter',sans-serif; text-decoration:none; }
+        .ss-btn:hover { transform:translateY(-2px); box-shadow:0 6px 24px rgba(217,70,239,0.35); }
+        .ss-btn-ghost { background:rgba(255,255,255,0.03); border:1px solid var(--border-default); color:var(--text-secondary); box-shadow:none; }
+        .ss-btn-ghost:hover { color:var(--text-primary); border-color:rgba(255,255,255,0.15); background:rgba(255,255,255,0.05); box-shadow:none; }
+        .ss-status { display:flex; align-items:center; justify-content:center; gap:12px; padding:16px; color:var(--text-secondary); font-size:13px; }
+        .ss-spinner { width:20px; height:20px; border-radius:50%; border:2px solid rgba(217,70,239,0.15); border-top-color:#D946EF; animation:ssSpin 0.9s linear infinite; }
+        @keyframes ssSpin { to { transform:rotate(360deg); } }
+        .ss-error { margin-top:18px; padding:13px 16px; border-radius:12px; background:rgba(240,86,74,0.08); border:1px solid rgba(240,86,74,0.22); color:#F58B82; font-size:12.5px; line-height:1.6; }
+        .ss-list { margin-top:24px; display:flex; flex-direction:column; gap:10px; }
+        .ss-song-item { display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:12px; background:rgba(3,5,12,0.45); border:1px solid var(--border-subtle); transition:all var(--transition-fast); }
+        .ss-song-item:hover { border-color:rgba(217,70,239,0.3); background:rgba(217,70,239,0.04); }
+        .ss-song-thumb { width:46px; height:46px; min-width:46px; border-radius:10px; object-fit:cover; border:1px solid var(--border-subtle); background:#000; }
+        .ss-song-info { flex:1; min-width:0; }
+        .ss-song-title { font-size:13px; font-weight:600; color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .ss-song-artist { font-size:11px; color:var(--text-tertiary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:2px; }
+        .ss-song-dl { display:inline-flex; align-items:center; justify-content:center; width:38px; height:38px; min-width:38px; border-radius:10px; border:none; color:#fff; background:linear-gradient(135deg, #D946EF, #A21CAF); cursor:pointer; transition:all var(--transition-fast); box-shadow:0 2px 10px rgba(217,70,239,0.18); font-size:13px; }
+        .ss-song-dl:hover { transform:translateY(-2px); box-shadow:0 4px 18px rgba(217,70,239,0.35); }
+        .ss-song-dl:disabled { opacity:0.45; cursor:not-allowed; transform:none; }
+        .ss-player { margin-top:24px; border-radius:16px; overflow:hidden; border:1px solid rgba(217,70,239,0.22); background:rgba(3,5,12,0.55); }
+        .ss-player-top { display:flex; gap:14px; padding:16px; align-items:center; }
+        .ss-player-thumb { width:74px; height:74px; min-width:74px; border-radius:12px; object-fit:cover; border:1px solid var(--border-subtle); background:#000; }
+        .ss-player-title { font-size:15px; font-weight:700; color:#fff; line-height:1.3; }
+        .ss-player-artist { font-size:12px; color:var(--text-secondary); margin-top:3px; }
+        .ss-player-audio { width:100%; padding:0 16px 14px; }
+        .ss-player-audio audio { width:100%; height:38px; outline:none; }
+        .ss-player-actions { display:flex; gap:10px; padding:0 16px 16px; flex-wrap:wrap; }
+        @media (max-width:640px) {
+            .ss-card { padding:20px 16px; }
+            .ss-tabs { flex-direction:column; }
+            .ss-btn { width:100%; }
+        }
+
     </style>
+<base target="_blank">
 <base target="_blank">
 <base target="_blank">
 <base target="_blank">
@@ -998,6 +1052,48 @@
                         </div>
                         <pre class="zc-code-box" id="zcCodeBox"></pre>
                     </div>
+                </div>
+            </section>
+
+
+            <!-- ===== SONG DOWNLOADER (WhiteShadow X API) ===== -->
+            <section class="ss-studio" id="songStudio">
+                <div class="ss-head">
+                    <span class="ss-badge"><i class="fa-solid fa-music"></i> Music Downloader</span>
+                    <h2 class="ss-title">Song <span>Downloader</span></h2>
+                    <p class="ss-sub">ගීතයක් නමින් search කරලා, හෝ songhub / YouTube link එකක් paste කරලා තත්පර කීපයකින් MP3 එක download කරගන්න. Play කරලා බලන්නත් පුළුවන්.</p>
+                </div>
+                <div class="ss-card">
+                    <div class="ss-tabs">
+                        <button class="ss-tab active" data-tab="search" onclick="ssSwitchTab('search')"><i class="fa-solid fa-magnifying-glass"></i> Search Songs</button>
+                        <button class="ss-tab" data-tab="link" onclick="ssSwitchTab('link')"><i class="fa-solid fa-link"></i> Paste Link</button>
+                    </div>
+
+                    <!-- Search panel -->
+                    <div id="ssPanelSearch">
+                        <div class="ss-input-row">
+                            <input type="text" id="ssQuery" class="ss-input" placeholder="Song name type කරන්න… (උදා: manike mage hithe)" onkeydown="if(event.key==='Enter')ssSearch()">
+                            <button class="ss-btn" onclick="ssSearch()"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+                        </div>
+                    </div>
+
+                    <!-- Link panel -->
+                    <div id="ssPanelLink" class="hidden">
+                        <div class="ss-input-row">
+                            <input type="text" id="ssLink" class="ss-input" placeholder="Songhub / YouTube video link එක paste කරන්න…" onkeydown="if(event.key==='Enter')ssDownloadFromLink()">
+                            <button class="ss-btn" onclick="ssDownloadFromLink()"><i class="fa-solid fa-download"></i> Get Download</button>
+                        </div>
+                    </div>
+
+                    <!-- Status / Error -->
+                    <div id="ssStatus" class="hidden"><div class="ss-status"><div class="ss-spinner"></div> Processing…</div></div>
+                    <div id="ssError" class="ss-error hidden"></div>
+
+                    <!-- Search results list -->
+                    <div id="ssResults" class="hidden"></div>
+
+                    <!-- Player / download card -->
+                    <div id="ssPlayerWrap" class="hidden"></div>
                 </div>
             </section>
 
@@ -1643,6 +1739,184 @@
             }, { passive: true });
 
             console.log('🧈 Smooth slow-scroll enabled (speed ' + SPEED + ')');
+        })();
+    </script>
+
+    <!-- ============================================================
+    SONG DOWNLOADER — SCRIPT (WhiteShadow X API)
+    ============================================================ -->
+    <script>
+        (function() {
+            const SS_API = 'https://whiteshadow-x-api.onrender.com/api';
+            const SS_TOKEN = 'aWK0z4';
+
+            // ===== TABS =====
+            window.ssSwitchTab = function(tab) {
+                document.querySelectorAll('.ss-tab').forEach(function(t) {
+                    t.classList.toggle('active', t.dataset.tab === tab);
+                });
+                document.getElementById('ssPanelSearch').classList.toggle('hidden', tab !== 'search');
+                document.getElementById('ssPanelLink').classList.toggle('hidden', tab !== 'link');
+                ssHideMsgs();
+            };
+
+            function ssHideMsgs() {
+                document.getElementById('ssStatus').classList.add('hidden');
+                document.getElementById('ssError').classList.add('hidden');
+            }
+            function ssError(msg) {
+                const el = document.getElementById('ssError');
+                el.textContent = msg;
+                el.classList.remove('hidden');
+                document.getElementById('ssStatus').classList.add('hidden');
+            }
+            function ssShowStatus() {
+                ssHideMsgs();
+                document.getElementById('ssResults').classList.add('hidden');
+                document.getElementById('ssPlayerWrap').classList.add('hidden');
+                document.getElementById('ssStatus').classList.remove('hidden');
+            }
+
+            // ===== HELPERS =====
+            function ssEsc(s) {
+                return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) {
+                    return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+                });
+            }
+            function ssField(obj, keys) {
+                if (!obj) return '';
+                for (let i = 0; i < keys.length; i++) {
+                    const v = obj[keys[i]];
+                    if (v !== undefined && v !== null && v !== '') return v;
+                }
+                return '';
+            }
+            // pull the song array out of any common API response shape
+            function ssExtractList(data) {
+                if (Array.isArray(data)) return data;
+                if (!data) return [];
+                const r = (data.result !== undefined && data.result !== null) ? data.result
+                      : (data.data !== undefined && data.data !== null) ? data.data
+                      : data;
+                if (Array.isArray(r)) return r;
+                if (r && typeof r === 'object') {
+                    if (r.title || r.mp3_url) return [r]; // single song object
+                    const keys = ['songs', 'results', 'data', 'list', 'items', 'tracks'];
+                    for (let i = 0; i < keys.length; i++) {
+                        if (Array.isArray(r[keys[i]])) return r[keys[i]];
+                    }
+                }
+                return [];
+            }
+            async function ssFetchJson(url) {
+                const res = await fetch(url);
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                return await res.json();
+            }
+
+            // ===== SEARCH =====
+            window.ssSearch = async function() {
+                const q = document.getElementById('ssQuery').value.trim();
+                if (!q) { ssError('⚠️ කරුණාකර song name එක type කරන්න.'); return; }
+                ssShowStatus();
+                try {
+                    const data = await ssFetchJson(SS_API + '/search/songhub?q=' + encodeURIComponent(q) + '&apitoken=' + SS_TOKEN);
+                    const list = ssExtractList(data);
+                    const wrap = document.getElementById('ssResults');
+                    document.getElementById('ssStatus').classList.add('hidden');
+                    if (!list.length) {
+                        ssError('😕 "' + q + '" සඳහා results හමු වුනේ නෑ. වෙනත් නමින් try කරන්න.');
+                        return;
+                    }
+                    let h = '';
+                    list.forEach(function(item, idx) {
+                        const title  = ssField(item, ['title', 'song', 'song_name', 'name', 'track']);
+                        const artist = ssField(item, ['artist', 'singer', 'artists', 'music', 'author']);
+                        const thumb  = ssField(item, ['thumb', 'image', 'cover', 'thumbnail', 'img', 'artwork']);
+                        const url    = ssField(item, ['url', 'link', 'page_url', 'song_url', 'songhub_url', 'page', 'download_page', 'lyrics_page_url']);
+                        const safeUrl = ssEsc(url);
+                        h += '<div class="ss-song-item">'
+                           +   (thumb ? '<img class="ss-song-thumb" src="' + ssEsc(thumb) + '" alt="" onerror="this.style.visibility='hidden'">' : '<div class="ss-song-thumb" style="display:flex;align-items:center;justify-content:center;color:var(--text-tertiary);"><i class="fa-solid fa-music"></i></div>')
+                           +   '<div class="ss-song-info">'
+                           +     '<div class="ss-song-title">' + ssEsc(title || ('Result ' + (idx + 1))) + '</div>'
+                           +     '<div class="ss-song-artist">' + ssEsc(artist || 'Unknown Artist') + '</div>'
+                           +   '</div>'
+                           +   (url
+                           ?     '<button class="ss-song-dl" title="Download" onclick="ssDownload(this,&quot;' + safeUrl + '&quot;)"><i class="fa-solid fa-download"></i></button>'
+                           :     '<button class="ss-song-dl" disabled title="No download link"><i class="fa-solid fa-ban"></i></button>')
+                           + '</div>';
+                    });
+                    wrap.innerHTML = h;
+                    wrap.classList.remove('hidden');
+                    wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                } catch (e) {
+                    console.error('Song search error:', e);
+                    ssError('❌ Search කරන්න බැරි වුනා. Internet connection එක check කරලා ආයේ try කරන්න.');
+                }
+            };
+
+            // ===== DOWNLOAD (shared: from search item or pasted link) =====
+            async function ssFetchSong(url, btn) {
+                if (btn) btn.disabled = true;
+                ssShowStatus();
+                try {
+                    const data = await ssFetchJson(SS_API + '/download/songhub?url=' + encodeURIComponent(url) + '&apitoken=' + SS_TOKEN);
+                    const r = (data && data.result) ? data.result : (data && data.data) ? data.data : data;
+                    if (!r || typeof r !== 'object') throw new Error('BAD_RESPONSE');
+                    const title  = ssField(r, ['title', 'song', 'song_name', 'name']);
+                    const artist = ssField(r, ['artist', 'singer', 'artists', 'author']);
+                    const music  = ssField(r, ['music', 'music_by', 'producer']);
+                    const thumb  = ssField(r, ['thumb', 'image', 'cover', 'thumbnail', 'img']);
+                    const mp3raw = ssField(r, ['mp3_url', 'mp3', 'audio_url', 'audio', 'download_url', 'song_url', 'url']);
+                    const mp3 = (typeof mp3raw === 'string' && (/\.mp3(\?|$)/i.test(mp3raw) || /^https?:\/\//i.test(mp3raw))) ? mp3raw : '';
+                    document.getElementById('ssStatus').classList.add('hidden');
+                    if (!mp3) {
+                        ssError('❌ Download link එක හමු වුනේ නෑ. වෙනත් song එකක් හෝ link එකක් try කරන්න.');
+                        return;
+                    }
+                    const meta = [artist, music ? 'Music: ' + music : ''].filter(Boolean).join(' &middot; ');
+                    document.getElementById('ssPlayerWrap').innerHTML =
+                        '<div class="ss-player">'
+                      +   '<div class="ss-player-top">'
+                      +     (thumb ? '<img class="ss-player-thumb" src="' + ssEsc(thumb) + '" alt="" onerror="this.style.display='none'">' : '')
+                      +     '<div style="min-width:0;">'
+                      +       '<div class="ss-player-title">' + ssEsc(title || 'Unknown Song') + '</div>'
+                      +       '<div class="ss-player-artist">' + (meta ? ssEsc(meta) : 'ZETA SONGS') + '</div>'
+                      +     '</div>'
+                      +   '</div>'
+                      +   '<div class="ss-player-audio"><audio controls preload="none" src="' + ssEsc(mp3) + '"></audio></div>'
+                      +   '<div class="ss-player-actions">'
+                      +     '<a class="ss-btn" href="' + ssEsc(mp3) + '" download="' + ssEsc((title || 'zeta-song') + '.mp3') + '"><i class="fa-solid fa-download"></i> Download MP3</a>'
+                      +     '<button class="ss-btn ss-btn-ghost" onclick="ssClosePlayer()"><i class="fa-solid fa-rotate-left"></i> Close</button>'
+                      +   '</div>'
+                      + '</div>';
+                    const pw = document.getElementById('ssPlayerWrap');
+                    pw.classList.remove('hidden');
+                    pw.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } catch (e) {
+                    console.error('Song download error:', e);
+                    ssError('❌ Download link එක ගන්න බැරි වුනා. Link එක හරි නම් check කරලා ආයේ try කරන්න.');
+                } finally {
+                    if (btn) btn.disabled = false;
+                }
+            }
+
+            window.ssDownload = function(btn, url) { ssFetchSong(url, btn); };
+
+            window.ssDownloadFromLink = function() {
+                const url = document.getElementById('ssLink').value.trim();
+                if (!url) { ssError('⚠️ කරුණාකර link එකක් paste කරන්න.'); return; }
+                if (!/^https?:\/\//i.test(url)) { ssError('⚠️ Link එක http:// හෝ https:// වලින් පටන් ගත යුතුයි.'); return; }
+                ssFetchSong(url, null);
+            };
+
+            window.ssClosePlayer = function() {
+                const pw = document.getElementById('ssPlayerWrap');
+                pw.innerHTML = '';
+                pw.classList.add('hidden');
+            };
+
+            console.log('🎵 Song Downloader loaded (WhiteShadow X API)');
         })();
     </script>
 
