@@ -1595,5 +1595,56 @@
         })();
     </script>
 
+    <!-- ============================================================
+    SMOOTH SLOW SCROLL — butter-smooth lerped scrolling on mainContent
+    (wheel only; touch/keyboard keep native feel)
+    ============================================================ -->
+    <script>
+        (function() {
+            const container = document.getElementById('mainContent');
+            if (!container) return;
+
+            const SPEED = 0.45;      // lower = slower scroll (0.2 - 1.0)
+            const EASE = 0.085;      // lower = smoother/slower catch-up
+
+            let target = 0, current = 0, rafId = null;
+
+            function clamp(v) {
+                const max = container.scrollHeight - container.clientHeight;
+                return Math.max(0, Math.min(max, v));
+            }
+
+            function animate() {
+                current += (target - current) * EASE;
+                if (Math.abs(target - current) < 0.5) {
+                    current = target;
+                    container.scrollTop = current;
+                    rafId = null;
+                    return;
+                }
+                container.scrollTop = current;
+                rafId = requestAnimationFrame(animate);
+            }
+
+            container.addEventListener('wheel', function(e) {
+                if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+                // Let inner scrollable elements (code box) scroll natively
+                const inner = e.target.closest('.zc-code-box, .nav-scroll');
+                if (inner) return;
+                e.preventDefault();
+                if (rafId === null) { current = container.scrollTop; target = current; }
+                target = clamp(target + e.deltaY * SPEED);
+                if (rafId === null) rafId = requestAnimationFrame(animate);
+            }, { passive: false });
+
+            // Keep target in sync when user scrolls by other means
+            container.addEventListener('scroll', function() {
+                if (rafId === null) { current = container.scrollTop; target = current; }
+            }, { passive: true });
+
+            console.log('🧈 Smooth slow-scroll enabled (speed ' + SPEED + ')');
+        })();
+    </script>
+
 </body>
 </html>
