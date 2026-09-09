@@ -481,6 +481,20 @@
             .update-popup-overlay.closing .update-popup { transform: none; opacity: 0; }
         }
 
+
+        /* ===== HERO FEATURE IMAGE ===== */
+        .hero-img-wrap { max-width:640px; margin:26px auto 0; padding:0 4px; position:relative; z-index:2; }
+        .hero-img-card { position:relative; border-radius:22px; overflow:hidden; border:1px solid rgba(79,125,247,0.22); box-shadow:0 20px 60px rgba(0,0,0,0.55), 0 0 40px rgba(79,125,247,0.10); animation:heroImgFloat 7s ease-in-out infinite; }
+        .hero-img-card::before { content:''; position:absolute; inset:0; border-radius:22px; padding:1px; background:linear-gradient(135deg, rgba(79,125,247,0.45), rgba(139,124,248,0.3), rgba(45,212,232,0.25)); -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none; z-index:2; }
+        .hero-img-card::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg, transparent 55%, rgba(3,5,12,0.55) 100%); pointer-events:none; z-index:1; }
+        .hero-img-card img { width:100%; display:block; object-fit:cover; max-height:360px; }
+        .hero-img-glow { position:absolute; inset:-30px; background:radial-gradient(ellipse at 50% 40%, rgba(79,125,247,0.14), transparent 65%); filter:blur(30px); z-index:-1; pointer-events:none; }
+        .hero-img-chip { position:absolute; bottom:14px; left:14px; z-index:3; display:inline-flex; align-items:center; gap:7px; padding:6px 14px; border-radius:100px; font-size:10px; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; font-family:'Orbitron',sans-serif; color:#fff; background:rgba(3,5,12,0.65); border:1px solid rgba(79,125,247,0.35); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); }
+        .hero-img-chip .dot { width:6px; height:6px; border-radius:50%; background:#22C990; box-shadow:0 0 10px #22C990; animation:pulse-dot 2.2s ease-in-out infinite; }
+        @keyframes heroImgFloat { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-7px); } }
+        @media (prefers-reduced-motion:reduce) { .hero-img-card { animation:none; } }
+        @media (max-width:640px) { .hero-img-card img { max-height:240px; } .hero-img-wrap { margin-top:20px; } }
+
         /* ===== HERO CHIPS + MARQUEE ===== */
         .hero-chips { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-top:26px; }
         .hero-chip { display:inline-flex; align-items:center; gap:6px; padding:6px 13px; border-radius:100px; font-size:10.5px; font-weight:600; letter-spacing:0.4px; color:var(--text-secondary); background:rgba(255,255,255,0.03); border:1px solid var(--border-default); transition:all var(--transition-fast); }
@@ -818,7 +832,14 @@
                     <div class="hero-badge"><i class="fa-solid fa-bolt"></i> AI Powered Tools</div>
                     <h1 class="hero-heading">Welcome to <span class="hero-heading-accent">ZETA TOOLS</span></h1>
                     <p class="hero-desc">Your all-in-one toolkit — chat, downloads, and more, all in one place.</p>
-                    <div id="ztButtons" style="margin-top:20px; display:flex; flex-direction:column; gap:12px; align-items:center;">
+                    <div class="hero-img-wrap reveal">
+                        <div class="hero-img-glow"></div>
+                        <div class="hero-img-card">
+                            <img src="https://files.catbox.moe/mu4e5j.png" alt="ZETA TOOLS" loading="eager" />
+                            <span class="hero-img-chip"><span class="dot"></span> ZETA TOOLS</span>
+                        </div>
+                    </div>
+                    <div id="ztButtons" style="margin-top:24px; display:flex; flex-direction:column; gap:12px; align-items:center;">
                         <button class="zeta-btn zeta-btn-chat" onclick="alert('🚀 ZETA CHAT — Coming soon!')"><span class="sweep"></span><i class="fa-solid fa-comment"></i> ZETA CHAT</button>
                         <button class="zeta-btn zeta-btn-channel" onclick="alert('🔗 Express VPN — Coming soon!')"><span class="sweep"></span><i class="fa-solid fa-shield-halved"></i> EXPRESS VPN</button>
                         <button class="zeta-btn zeta-btn-download" onclick="location.href='https://zeta-mini-8e229a0a0f1e.herokuapp.com/Download.html'"><span class="sweep"></span><i class="fa-solid fa-download"></i> DOWNLOAD</button>
