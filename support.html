@@ -535,6 +535,28 @@
             box-shadow: 0 0 20px rgba(0,163,255,0.15);
         }
 
+        /* ===== Image Blur Studio ===== */
+        .hidden { display:none !important; }
+        .blur-tab { flex:1; padding:12px 16px; border-radius:12px; border:1px solid rgba(0,163,255,0.1); background:rgba(0,163,255,0.03); color:rgba(224,232,240,0.5); font-family:'Inter',sans-serif; font-size:13px; font-weight:600; cursor:pointer; transition:all 0.3s ease; letter-spacing:0.5px; }
+        .blur-tab:hover { border-color:rgba(0,163,255,0.25); color:#00D4FF; }
+        .blur-tab.active { background:linear-gradient(135deg,rgba(0,163,255,0.12),rgba(0,163,255,0.04)); border-color:rgba(0,163,255,0.35); color:#00D4FF; box-shadow:0 0 15px rgba(0,163,255,0.1); }
+        .blur-input { width:100%; padding:13px 16px; background:rgba(4,6,12,0.6); border:1px solid rgba(0,163,255,0.12); border-radius:12px; color:#E0E8F0; font-size:14px; font-family:'Inter',sans-serif; outline:none; transition:all 0.3s ease; }
+        .blur-input:focus { border-color:rgba(0,163,255,0.4); box-shadow:0 0 0 3px rgba(0,163,255,0.08); }
+        .blur-input::placeholder { color:rgba(224,232,240,0.25); }
+        .file-drop { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; padding:36px 20px; border:2px dashed rgba(0,163,255,0.15); border-radius:14px; cursor:pointer; transition:all 0.3s ease; text-align:center; }
+        .file-drop:hover { border-color:rgba(0,163,255,0.35); background:rgba(0,163,255,0.03); }
+        .file-drop svg { width:28px; height:28px; color:#00A3FF; }
+        input[type=range].blur-range { -webkit-appearance:none; appearance:none; width:100%; height:4px; border-radius:4px; background:linear-gradient(90deg,#00A3FF var(--fill,30%), rgba(0,163,255,0.12) var(--fill,30%)); outline:none; }
+        input[type=range].blur-range::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; border-radius:50%; background:#00D4FF; border:3px solid #04060C; box-shadow:0 0 10px rgba(0,212,255,0.5); cursor:pointer; }
+        input[type=range].blur-range::-moz-range-thumb { width:18px; height:18px; border-radius:50%; background:#00D4FF; border:3px solid #04060C; cursor:pointer; }
+        .blur-compare { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+        @media (max-width:640px){ .blur-compare { grid-template-columns:1fr; } }
+        .blur-frame { border-radius:14px; overflow:hidden; border:1px solid rgba(0,163,255,0.12); background:rgba(4,6,12,0.5); position:relative; }
+        .blur-frame img { width:100%; height:220px; object-fit:cover; display:block; }
+        .blur-frame .tag { position:absolute; top:10px; left:10px; padding:4px 10px; border-radius:6px; font-size:10px; font-weight:700; letter-spacing:1px; background:rgba(4,6,12,0.8); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); color:#00D4FF; border:1px solid rgba(0,163,255,0.2); font-family:'Orbitron',sans-serif; }
+        .blur-status { display:flex; align-items:center; justify-content:center; gap:12px; padding:16px; color:rgba(224,232,240,0.5); font-size:13px; }
+        .blur-error { padding:12px 16px; border-radius:10px; background:rgba(255,60,80,0.08); border:1px solid rgba(255,60,80,0.2); color:#FF6B7E; font-size:13px; line-height:1.5; }
+
         /* Mobile menu */
         .mobile-menu {
             display: none;
@@ -559,6 +581,7 @@
         }
         .mobile-menu a:hover { color: #00D4FF; }
     </style>
+<base target="_blank">
 </head>
 <body>
     <!-- Page Loader -->
@@ -671,6 +694,78 @@
             <div class="hud-corner hud-corner-tr" style="top:100px;right:30px;"></div>
             <div class="hud-corner hud-corner-bl" style="bottom:40px;left:30px;"></div>
             <div class="hud-corner hud-corner-br" style="bottom:40px;right:30px;"></div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- ===== IMAGE BLUR TOOL ===== -->
+        <section id="blur-studio" style="padding:100px 20px;position:relative;">
+            <div class="max-w-4xl mx-auto">
+                <div style="text-align:center;margin-bottom:48px;">
+                    <span class="badge-glow reveal" style="margin-bottom:20px;display:inline-flex;"><span>🖼</span> IMAGE TOOLS</span>
+                    <h2 class="reveal reveal-delay-1" style="font-family:'Orbitron',sans-serif;font-size:clamp(26px,4vw,40px);font-weight:700;margin-bottom:16px;letter-spacing:-0.5px;">
+                        Image Blur <span style="color:#00D4FF;">Studio</span>
+                    </h2>
+                    <p class="reveal reveal-delay-2" style="font-size:16px;color:rgba(224,232,240,0.45);max-width:520px;margin:0 auto;">
+                        Paste an image link or upload a photo — blur it instantly with the ZETA blur engine.
+                    </p>
+                </div>
+
+                <div class="glass-card reveal reveal-delay-2" style="padding:36px 32px;">
+                    <!-- Tabs -->
+                    <div style="display:flex;gap:10px;margin-bottom:24px;">
+                        <button class="blur-tab active" data-tab="url" onclick="switchBlurTab('url')">🔗 IMAGE URL</button>
+                        <button class="blur-tab" data-tab="upload" onclick="switchBlurTab('upload')">📤 UPLOAD PHOTO</button>
+                    </div>
+
+                    <!-- URL panel (Hashu API) -->
+                    <div id="blurPanelUrl">
+                        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                            <input type="text" id="blurUrlInput" class="blur-input" style="flex:1;min-width:220px;" placeholder="Paste a direct image link (.jpg / .png)…" onkeydown="if(event.key==='Enter')blurFromUrl()">
+                            <button class="neon-btn" onclick="blurFromUrl()" style="justify-content:center;"><i data-lucide="wand-2" style="width:18px;height:18px;"></i> Blur Image</button>
+                        </div>
+                        <div style="margin-top:12px;">
+                            <button onclick="document.getElementById('blurUrlInput').value='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80';blurFromUrl();" style="background:none;border:1px solid rgba(0,163,255,0.15);color:rgba(0,212,255,0.6);padding:7px 14px;border-radius:8px;font-size:12px;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.3s;" onmouseover="this.style.borderColor='rgba(0,163,255,0.35)';this.style.color='#00D4FF'" onmouseout="this.style.borderColor='rgba(0,163,255,0.15)';this.style.color='rgba(0,212,255,0.6)'">✨ Try a sample image</button>
+                        </div>
+                    </div>
+
+                    <!-- Upload panel (on-device blur) -->
+                    <div id="blurPanelUpload" class="hidden">
+                        <input type="file" id="blurFileInput" accept="image/*" style="display:none;" onchange="handleBlurUpload(this)">
+                        <label for="blurFileInput" class="file-drop">
+                            <i data-lucide="image-plus"></i>
+                            <span style="font-size:14px;color:rgba(224,232,240,0.6);font-weight:500;">Tap to choose a photo from your device</span>
+                            <span style="font-size:11px;color:rgba(224,232,240,0.3);">JPG / PNG / WEBP</span>
+                        </label>
+                        <div id="blurStrengthWrap" class="hidden" style="margin-top:20px;">
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                                <span style="font-size:12px;color:rgba(224,232,240,0.5);font-weight:600;letter-spacing:0.5px;">BLUR STRENGTH</span>
+                                <span id="blurStrengthVal" style="font-family:'Orbitron',sans-serif;font-size:13px;color:#00D4FF;">8px</span>
+                            </div>
+                            <input type="range" class="blur-range" id="blurStrength" min="1" max="25" value="8" oninput="updateStrength(this.value)">
+                        </div>
+                    </div>
+
+                    <!-- Status -->
+                    <div id="blurStatus" class="hidden" style="margin-top:24px;">
+                        <div class="blur-status"><div class="loader-ring"></div> Processing image…</div>
+                    </div>
+                    <div id="blurError" class="blur-error hidden" style="margin-top:24px;"></div>
+
+                    <!-- Result -->
+                    <div id="blurResult" class="hidden" style="margin-top:28px;">
+                        <div class="blur-compare">
+                            <div class="blur-frame"><span class="tag">ORIGINAL</span><img id="blurOrigImg" alt="original"></div>
+                            <div class="blur-frame"><span class="tag" style="color:#00FF88;border-color:rgba(0,255,136,0.25);">BLURRED</span><img id="blurOutImg" alt="blurred"></div>
+                        </div>
+                        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:24px;">
+                            <a id="blurDownload" class="neon-btn" download="zeta-blurred.jpg"><i data-lucide="download" style="width:18px;height:18px;"></i> Download</a>
+                            <button class="neon-btn" style="background:linear-gradient(135deg,rgba(0,163,255,0.1),rgba(0,163,255,0.05));border:1px solid rgba(0,163,255,0.2);box-shadow:0 0 15px rgba(0,163,255,0.1);" onclick="copyBlurLink()"><i data-lucide="link" style="width:18px;height:18px;"></i><span id="blurCopyLabel"> Copy Link</span></button>
+                            <button class="neon-btn" style="background:rgba(255,60,80,0.08);border:1px solid rgba(255,60,80,0.25);box-shadow:none;" onclick="resetBlur()"><i data-lucide="rotate-ccw" style="width:18px;height:18px;"></i> New Image</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <div class="section-divider"></div>
@@ -1089,6 +1184,150 @@
         }
         function closeMobileMenu() {
             document.getElementById('mobileMenu').classList.remove('open');
+        }
+
+        // ===== Image Blur Studio =====
+        const BLUR_API = 'https://hashu-apis-production.up.railway.app/api/image/blur?apiKey=hashu_cd4b0a9d325539de660602e7d8d38d61';
+        let lastUploadSrc = null;
+        let currentDownloadUrl = null;
+
+        // slider fill sync
+        const blurRange = document.getElementById('blurStrength');
+        function syncRangeFill() {
+            const pct = ((blurRange.value - blurRange.min) / (blurRange.max - blurRange.min)) * 100;
+            blurRange.style.setProperty('--fill', pct + '%');
+        }
+        blurRange.addEventListener('input', syncRangeFill);
+        syncRangeFill();
+
+        function switchBlurTab(tab) {
+            document.querySelectorAll('.blur-tab').forEach(function(t) {
+                t.classList.toggle('active', t.dataset.tab === tab);
+            });
+            document.getElementById('blurPanelUrl').classList.toggle('hidden', tab !== 'url');
+            document.getElementById('blurPanelUpload').classList.toggle('hidden', tab !== 'upload');
+            hideBlurMessages();
+        }
+
+        function hideBlurMessages() {
+            document.getElementById('blurStatus').classList.add('hidden');
+            document.getElementById('blurError').classList.add('hidden');
+        }
+
+        function showBlurError(msg) {
+            const el = document.getElementById('blurError');
+            el.textContent = msg;
+            el.classList.remove('hidden');
+            document.getElementById('blurStatus').classList.add('hidden');
+        }
+
+        function showBlurResult(origSrc, outSrc, downloadUrl) {
+            document.getElementById('blurStatus').classList.add('hidden');
+            document.getElementById('blurError').classList.add('hidden');
+            document.getElementById('blurOrigImg').src = origSrc;
+            document.getElementById('blurOutImg').src = outSrc;
+            document.getElementById('blurDownload').href = downloadUrl;
+            currentDownloadUrl = downloadUrl;
+            const res = document.getElementById('blurResult');
+            res.classList.remove('hidden');
+            res.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // --- Mode 1: image URL via Hashu API ---
+        function blurFromUrl() {
+            const input = document.getElementById('blurUrlInput');
+            const url = (input.value || '').trim();
+            if (!url) { showBlurError('⚠️ Please paste an image link first.'); return; }
+            if (!/^https?:\/\//i.test(url)) { showBlurError('⚠️ The link must start with http:// or https://'); return; }
+            document.getElementById('blurError').classList.add('hidden');
+            document.getElementById('blurResult').classList.add('hidden');
+            document.getElementById('blurStatus').classList.remove('hidden');
+            const blurred = BLUR_API + '&url=' + encodeURIComponent(url);
+            const probe = new Image();
+            probe.onload = function() { showBlurResult(url, blurred, blurred); };
+            probe.onerror = function() {
+                showBlurError('❌ Could not blur that image. Make sure it is a direct image link (ends with .jpg / .png) and the server allows external access.');
+            };
+            probe.src = blurred;
+        }
+
+        // --- Mode 2: upload photo, blur on-device ---
+        function handleBlurUpload(inputEl) {
+            const file = inputEl.files && inputEl.files[0];
+            if (!file) return;
+            if (!file.type.startsWith('image/')) { showBlurError('⚠️ Please choose an image file.'); return; }
+            document.getElementById('blurError').classList.add('hidden');
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                lastUploadSrc = e.target.result;
+                document.getElementById('blurStrengthWrap').classList.remove('hidden');
+                applyUploadBlur();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function updateStrength(val) {
+            document.getElementById('blurStrengthVal').textContent = val + 'px';
+            if (lastUploadSrc) applyUploadBlur();
+        }
+
+        function applyUploadBlur() {
+            if (!lastUploadSrc) return;
+            const strength = parseInt(document.getElementById('blurStrength').value, 10) || 8;
+            const img = new Image();
+            img.onload = function() {
+                const MAX = 1600;
+                let w = img.width, h = img.height;
+                if (w > MAX || h > MAX) {
+                    const scale = MAX / Math.max(w, h);
+                    w = Math.round(w * scale);
+                    h = Math.round(h * scale);
+                }
+                const canvas = document.createElement('canvas');
+                canvas.width = w;
+                canvas.height = h;
+                const ctx = canvas.getContext('2d');
+                if ('filter' in ctx) ctx.filter = 'blur(' + strength + 'px)';
+                ctx.drawImage(img, 0, 0, w, h);
+                const out = canvas.toDataURL('image/jpeg', 0.92);
+                showBlurResult(lastUploadSrc, out, out);
+            };
+            img.onerror = function() { showBlurError('❌ Could not read that image file.'); };
+            img.src = lastUploadSrc;
+        }
+
+        function copyBlurLink() {
+            if (!currentDownloadUrl) return;
+            const label = document.getElementById('blurCopyLabel');
+            const oldText = label.textContent;
+            function done() {
+                label.textContent = ' Copied!';
+                setTimeout(function() { label.textContent = oldText; }, 1500);
+            }
+            function fallbackCopy() {
+                const ta = document.createElement('textarea');
+                ta.value = currentDownloadUrl;
+                document.body.appendChild(ta);
+                ta.select();
+                try { document.execCommand('copy'); } catch (e) {}
+                document.body.removeChild(ta);
+            }
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(currentDownloadUrl).then(done).catch(function() { fallbackCopy(); done(); });
+            } else {
+                fallbackCopy();
+                done();
+            }
+        }
+
+        function resetBlur() {
+            document.getElementById('blurResult').classList.add('hidden');
+            document.getElementById('blurUrlInput').value = '';
+            document.getElementById('blurFileInput').value = '';
+            document.getElementById('blurStrengthWrap').classList.add('hidden');
+            lastUploadSrc = null;
+            currentDownloadUrl = null;
+            hideBlurMessages();
         }
 
         // ===== Init Lucide Icons =====
