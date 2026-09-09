@@ -1780,7 +1780,7 @@
             // ===== HELPERS =====
             function ssEsc(s) {
                 return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) {
-                    return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+                    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
                 });
             }
             function ssField(obj, keys) {
@@ -1813,6 +1813,12 @@
                 if (!res.ok) throw new Error('HTTP ' + res.status);
                 return await res.json();
             }
+            function el(tag, cls, html) {
+                const d = document.createElement(tag);
+                if (cls) d.className = cls;
+                if (html !== undefined) d.innerHTML = html;
+                return d;
+            }
 
             // ===== SEARCH =====
             window.ssSearch = async function() {
@@ -1823,30 +1829,48 @@
                     const data = await ssFetchJson(SS_API + '/search/songhub?q=' + encodeURIComponent(q) + '&apitoken=' + SS_TOKEN);
                     const list = ssExtractList(data);
                     const wrap = document.getElementById('ssResults');
+                    wrap.innerHTML = '';
                     document.getElementById('ssStatus').classList.add('hidden');
                     if (!list.length) {
                         ssError('😕 "' + q + '" සඳහා results හමු වුනේ නෑ. වෙනත් නමින් try කරන්න.');
                         return;
                     }
-                    let h = '';
                     list.forEach(function(item, idx) {
                         const title  = ssField(item, ['title', 'song', 'song_name', 'name', 'track']);
                         const artist = ssField(item, ['artist', 'singer', 'artists', 'music', 'author']);
                         const thumb  = ssField(item, ['thumb', 'image', 'cover', 'thumbnail', 'img', 'artwork']);
                         const url    = ssField(item, ['url', 'link', 'page_url', 'song_url', 'songhub_url', 'page', 'download_page', 'lyrics_page_url']);
-                        const safeUrl = ssEsc(url);
-                        h += '<div class="ss-song-item">'
-                           +   (thumb ? '<img class="ss-song-thumb" src="' + ssEsc(thumb) + '" alt="" onerror="this.style.visibility='hidden'">' : '<div class="ss-song-thumb" style="display:flex;align-items:center;justify-content:center;color:var(--text-tertiary);"><i class="fa-solid fa-music"></i></div>')
-                           +   '<div class="ss-song-info">'
-                           +     '<div class="ss-song-title">' + ssEsc(title || ('Result ' + (idx + 1))) + '</div>'
-                           +     '<div class="ss-song-artist">' + ssEsc(artist || 'Unknown Artist') + '</div>'
-                           +   '</div>'
-                           +   (url
-                           ?     '<button class="ss-song-dl" title="Download" onclick="ssDownload(this,&quot;' + safeUrl + '&quot;)"><i class="fa-solid fa-download"></i></button>'
-                           :     '<button class="ss-song-dl" disabled title="No download link"><i class="fa-solid fa-ban"></i></button>')
-                           + '</div>';
+
+                        const row = el('div', 'ss-song-item');
+
+                        if (thumb) {
+                            const img = el('img', 'ss-song-thumb');
+                            img.src = thumb;
+                            img.alt = '';
+                            img.addEventListener('error', function() { this.style.visibility = 'hidden'; });
+                            row.appendChild(img);
+                        } else {
+                            row.appendChild(el('div', 'ss-song-thumb', '<i class="fa-solid fa-music"></i>'));
+                        }
+
+                        const info = el('div', 'ss-song-info');
+                        info.appendChild(el('div', 'ss-song-title', ssEsc(title || ('Result ' + (idx + 1)))));
+                        info.appendChild(el('div', 'ss-song-artist', ssEsc(artist || 'Unknown Artist')));
+                        row.appendChild(info);
+
+                        if (url) {
+                            const btn = el('button', 'ss-song-dl', '<i class="fa-solid fa-download"></i>');
+                            btn.title = 'Download';
+                            btn.addEventListener('click', function() { ssFetchSong(url, btn); });
+                            row.appendChild(btn);
+                        } else {
+                            const btn = el('button', 'ss-song-dl', '<i class="fa-solid fa-ban"></i>');
+                            btn.title = 'No download link';
+                            btn.disabled = true;
+                            row.appendChild(btn);
+                        }
+                        wrap.appendChild(row);
                     });
-                    wrap.innerHTML = h;
                     wrap.classList.remove('hidden');
                     wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 } catch (e) {
@@ -1868,29 +1892,52 @@
                     const music  = ssField(r, ['music', 'music_by', 'producer']);
                     const thumb  = ssField(r, ['thumb', 'image', 'cover', 'thumbnail', 'img']);
                     const mp3raw = ssField(r, ['mp3_url', 'mp3', 'audio_url', 'audio', 'download_url', 'song_url', 'url']);
-                    const mp3 = (typeof mp3raw === 'string' && (/\.mp3(\?|$)/i.test(mp3raw) || /^https?:\/\//i.test(mp3raw))) ? mp3raw : '';
+                    const mp3 = (typeof mp3raw === 'string' && /^https?:\/\//i.test(mp3raw)) ? mp3raw : '';
                     document.getElementById('ssStatus').classList.add('hidden');
                     if (!mp3) {
                         ssError('❌ Download link එක හමු වුනේ නෑ. වෙනත් song එකක් හෝ link එකක් try කරන්න.');
                         return;
                     }
                     const meta = [artist, music ? 'Music: ' + music : ''].filter(Boolean).join(' &middot; ');
-                    document.getElementById('ssPlayerWrap').innerHTML =
-                        '<div class="ss-player">'
-                      +   '<div class="ss-player-top">'
-                      +     (thumb ? '<img class="ss-player-thumb" src="' + ssEsc(thumb) + '" alt="" onerror="this.style.display='none'">' : '')
-                      +     '<div style="min-width:0;">'
-                      +       '<div class="ss-player-title">' + ssEsc(title || 'Unknown Song') + '</div>'
-                      +       '<div class="ss-player-artist">' + (meta ? ssEsc(meta) : 'ZETA SONGS') + '</div>'
-                      +     '</div>'
-                      +   '</div>'
-                      +   '<div class="ss-player-audio"><audio controls preload="none" src="' + ssEsc(mp3) + '"></audio></div>'
-                      +   '<div class="ss-player-actions">'
-                      +     '<a class="ss-btn" href="' + ssEsc(mp3) + '" download="' + ssEsc((title || 'zeta-song') + '.mp3') + '"><i class="fa-solid fa-download"></i> Download MP3</a>'
-                      +     '<button class="ss-btn ss-btn-ghost" onclick="ssClosePlayer()"><i class="fa-solid fa-rotate-left"></i> Close</button>'
-                      +   '</div>'
-                      + '</div>';
+
                     const pw = document.getElementById('ssPlayerWrap');
+                    pw.innerHTML = '';
+
+                    const card = el('div', 'ss-player');
+                    const top = el('div', 'ss-player-top');
+                    if (thumb) {
+                        const img = el('img', 'ss-player-thumb');
+                        img.src = thumb;
+                        img.alt = '';
+                        img.addEventListener('error', function() { this.style.display = 'none'; });
+                        top.appendChild(img);
+                    }
+                    const tdiv = el('div');
+                    tdiv.style.minWidth = '0';
+                    tdiv.appendChild(el('div', 'ss-player-title', ssEsc(title || 'Unknown Song')));
+                    tdiv.appendChild(el('div', 'ss-player-artist', meta ? ssEsc(meta) : 'ZETA SONGS'));
+                    top.appendChild(tdiv);
+                    card.appendChild(top);
+
+                    const audioWrap = el('div', 'ss-player-audio');
+                    const audio = document.createElement('audio');
+                    audio.controls = true;
+                    audio.preload = 'none';
+                    audio.src = mp3;
+                    audioWrap.appendChild(audio);
+                    card.appendChild(audioWrap);
+
+                    const actions = el('div', 'ss-player-actions');
+                    const dl = el('a', 'ss-btn', '<i class="fa-solid fa-download"></i> Download MP3');
+                    dl.href = mp3;
+                    dl.setAttribute('download', (title || 'zeta-song') + '.mp3');
+                    const closeBtn = el('button', 'ss-btn ss-btn-ghost', '<i class="fa-solid fa-rotate-left"></i> Close');
+                    closeBtn.addEventListener('click', ssClosePlayer);
+                    actions.appendChild(dl);
+                    actions.appendChild(closeBtn);
+                    card.appendChild(actions);
+
+                    pw.appendChild(card);
                     pw.classList.remove('hidden');
                     pw.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 } catch (e) {
