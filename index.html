@@ -583,54 +583,7 @@
         .font-mono { font-family:'JetBrains Mono',monospace; }
         .object-cover { object-fit:cover; }
         .border-subtle { border-color:var(--border-subtle); }
-        .bg-surface { background:var(--bg-surface); }
-
-        /* ============================================================
-           IMAGE BLUR TOOL — BUTTON + MODAL
-           ============================================================ */
-        .zeta-btn-blur { background:linear-gradient(135deg, #2DD4E8, #0E9BB0); color:#fff; box-shadow:0 4px 20px rgba(45,212,232,0.30); }
-        .zeta-btn-blur:hover { box-shadow:0 8px 32px rgba(45,212,232,0.45); background:linear-gradient(135deg, #45DEF0, #12ACC3); }
-
-        .blur-modal-overlay { position:fixed; inset:0; z-index:1000; background:rgba(3,5,12,0.7); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.35s ease; padding:16px; }
-        .blur-modal-overlay.active { opacity:1; pointer-events:all; }
-        .blur-modal-overlay.closing { opacity:0; pointer-events:none; }
-        .blur-modal { background:rgba(10,13,26,0.92); backdrop-filter:blur(24px) saturate(1.4); -webkit-backdrop-filter:blur(24px) saturate(1.4); border:1px solid rgba(45,212,232,0.20); border-radius:26px; box-shadow:0 24px 80px rgba(0,0,0,0.8), 0 0 0 1px rgba(45,212,232,0.06); max-width:460px; width:100%; max-height:88vh; overflow-y:auto; padding:28px 26px 26px; position:relative; transform:scale(0.94) translateY(12px); transition:transform 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.4s ease; opacity:0; }
-        .blur-modal-overlay.active .blur-modal { transform:scale(1) translateY(0); opacity:1; }
-        .blur-modal-overlay.closing .blur-modal { transform:scale(0.94) translateY(12px); opacity:0; }
-        .blur-modal .close-btn { position:absolute; top:14px; right:16px; background:rgba(255,255,255,0.03); border:none; color:var(--text-tertiary); font-size:18px; line-height:1; cursor:pointer; transition:all var(--transition-fast); padding:4px 8px; border-radius:8px; font-weight:300; z-index:2; }
-        .blur-modal .close-btn:hover { background:rgba(255,255,255,0.06); color:var(--text-primary); transform:rotate(90deg); }
-        .blur-modal-head { text-align:center; margin-bottom:20px; }
-        .blur-modal-icon { width:52px; height:52px; margin:0 auto 12px; border-radius:16px; background:linear-gradient(135deg, rgba(45,212,232,0.18), rgba(45,212,232,0.04)); border:1px solid rgba(45,212,232,0.2); display:flex; align-items:center; justify-content:center; font-size:22px; color:#2DD4E8; box-shadow:0 0 24px rgba(45,212,232,0.15); }
-        .blur-modal-title { font-size:19px; font-weight:800; color:#fff; letter-spacing:-0.3px; margin-bottom:6px; }
-        .blur-modal-sub { font-size:12.5px; color:var(--text-secondary); line-height:1.6; max-width:320px; margin:0 auto; }
-        .blur-dropzone { border:1.5px dashed rgba(45,212,232,0.25); border-radius:16px; padding:28px 16px; text-align:center; cursor:pointer; transition:all var(--transition-fast); background:rgba(45,212,232,0.03); }
-        .blur-dropzone:hover, .blur-dropzone.drag-over { border-color:rgba(45,212,232,0.55); background:rgba(45,212,232,0.06); }
-        .blur-dropzone i { font-size:26px; color:#2DD4E8; margin-bottom:10px; display:block; opacity:0.8; }
-        .blur-dropzone-text { font-size:13px; font-weight:600; color:var(--text-primary); margin-bottom:3px; }
-        .blur-dropzone-sub { font-size:11px; color:var(--text-tertiary); }
-        .blur-preview-wrap { position:relative; border-radius:16px; overflow:hidden; background:#000; border:1px solid var(--border-default); }
-        .blur-preview-img, .blur-result-img { width:100%; max-height:320px; object-fit:contain; display:block; background:#000; }
-        .blur-remove-btn { position:absolute; top:8px; right:8px; width:30px; height:30px; border-radius:50%; background:rgba(3,5,12,0.75); border:1px solid var(--border-default); color:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:13px; transition:all var(--transition-fast); }
-        .blur-remove-btn:hover { background:var(--status-error); border-color:var(--status-error); }
-        .blur-slider-row { display:flex; align-items:center; gap:12px; margin-top:16px; }
-        .blur-slider-row label { font-size:12px; font-weight:600; color:var(--text-secondary); white-space:nowrap; }
-        .blur-slider { flex:1; -webkit-appearance:none; appearance:none; height:5px; border-radius:6px; background:linear-gradient(90deg, rgba(45,212,232,0.5), rgba(45,212,232,0.12)); outline:none; cursor:pointer; }
-        .blur-slider::-webkit-slider-thumb { -webkit-appearance:none; width:16px; height:16px; border-radius:50%; background:#2DD4E8; box-shadow:0 0 10px rgba(45,212,232,0.6); cursor:pointer; border:2px solid #0A0D1A; }
-        .blur-slider::-moz-range-thumb { width:16px; height:16px; border-radius:50%; background:#2DD4E8; box-shadow:0 0 10px rgba(45,212,232,0.6); cursor:pointer; border:2px solid #0A0D1A; }
-        .blur-level-badge { font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; color:#2DD4E8; background:rgba(45,212,232,0.08); border:1px solid rgba(45,212,232,0.18); padding:3px 9px; border-radius:8px; min-width:34px; text-align:center; }
-        .blur-action-btn { width:100%; margin-top:18px; display:flex; align-items:center; justify-content:center; gap:8px; padding:13px; border-radius:14px; font-size:14.5px; font-weight:700; color:#fff; background:linear-gradient(135deg, #2DD4E8, #0E9BB0); border:none; cursor:pointer; transition:all var(--transition-fast); box-shadow:0 4px 20px rgba(45,212,232,0.30); font-family:'Inter',sans-serif; }
-        .blur-action-btn:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(45,212,232,0.45); }
-        .blur-action-btn:disabled { opacity:0.5; cursor:not-allowed; transform:none !important; }
-        .blur-action-btn.spin i { animation:blurSpin 0.9s linear infinite; }
-        @keyframes blurSpin { to { transform:rotate(360deg); } }
-        .blur-secondary-actions { display:flex; gap:10px; margin-top:12px; }
-        .blur-secondary-btn { flex:1; display:flex; align-items:center; justify-content:center; gap:7px; padding:11px; border-radius:12px; font-size:13px; font-weight:600; color:var(--text-secondary); background:transparent; border:1px solid var(--border-default); cursor:pointer; transition:all var(--transition-fast); text-decoration:none; font-family:'Inter',sans-serif; }
-        .blur-secondary-btn:hover { color:var(--text-primary); border-color:rgba(45,212,232,0.3); background:rgba(45,212,232,0.05); }
-        .blur-error-box { margin-top:16px; background:rgba(240,86,74,0.08); border:1px solid rgba(240,86,74,0.25); border-radius:12px; padding:13px 15px; color:#F58B82; font-size:12.5px; line-height:1.6; display:flex; align-items:flex-start; gap:10px; }
-        .blur-status-text { text-align:center; font-size:12px; color:var(--text-tertiary); letter-spacing:0.4px; margin-top:14px; }
-        .blur-section-label { font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--text-tertiary); margin:18px 0 8px; opacity:0.7; }
-    
-        /* ============================================================
+        .bg-surface { background:var(--bg-surface); }/* ============================================================
            IMAGE BLUR STUDIO — SECTION (support.html style, zs- prefix)
            ============================================================ */
         .zs-studio { padding:56px 20px 60px; max-width:760px; margin:0 auto; width:100%; flex-shrink:0; }
@@ -765,50 +718,8 @@
         .zeta-btn-channel  { background:linear-gradient(180deg,#4BEB8C 0%,#18B565 52%,#0B7A44 100%); --btn-glow:rgba(37,211,102,0.45); }
         .zeta-btn-download { background:linear-gradient(180deg,#FFD066 0%,#F59E0B 52%,#C26203 100%); --btn-glow:rgba(245,158,11,0.45); }
         .zeta-btn-apk      { background:linear-gradient(180deg,#CE8BFF 0%,#A855F7 52%,#7525D6 100%); --btn-glow:rgba(168,85,247,0.45); }
-        .zeta-btn-blur     { background:linear-gradient(180deg,#6BF0FC 0%,#2DD4E8 52%,#0B86A0 100%); --btn-glow:rgba(45,212,232,0.45); }
-
-        /* ============================================================
-           SCROLL SPEED CONTROL — floating toggle (SLOW / NORMAL / FAST)
-           ============================================================ */
-        .scroll-speed-btn {
-            position:fixed;
-            bottom:22px; right:22px;
-            z-index:101;
-            display:flex; align-items:center; gap:9px;
-            padding:11px 18px;
-            border-radius:60px;
-            background:rgba(10,13,26,0.82);
-            backdrop-filter:blur(16px) saturate(1.3);
-            -webkit-backdrop-filter:blur(16px) saturate(1.3);
-            border:1px solid rgba(79,125,247,0.25);
-            color:var(--text-primary);
-            font-family:'Orbitron',sans-serif;
-            font-size:10px; font-weight:700;
-            letter-spacing:1.6px;
-            cursor:pointer;
-            transition:all var(--transition-fast);
-            box-shadow:0 6px 24px rgba(0,0,0,0.5), 0 0 18px rgba(79,125,247,0.12);
-        }
-        .scroll-speed-btn:hover {
-            transform:translateY(-2px);
-            border-color:rgba(45,212,232,0.45);
-            box-shadow:0 10px 30px rgba(0,0,0,0.55), 0 0 26px rgba(45,212,232,0.2);
-        }
-        .scroll-speed-btn:active { transform:scale(0.96); }
-        .scroll-speed-btn .ss-icon {
-            font-size:13px;
-            color:var(--accent-cyan);
-            width:16px; text-align:center;
-            filter:drop-shadow(0 0 6px rgba(45,212,232,0.5));
-            transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
-        }
-        .scroll-speed-btn:hover .ss-icon { transform:scale(1.2); }
-        .scroll-speed-btn .ss-label { color:var(--text-secondary); }
-        @media (max-width:480px) {
-            .scroll-speed-btn { bottom:16px; right:16px; padding:10px 14px; font-size:9px; }
-            .zeta-btn { padding:13px 34px; font-size:11.5px; letter-spacing:2px; }
-        }
     </style>
+<base target="_blank">
 <base target="_blank">
 <base target="_blank">
 </head>
@@ -912,7 +823,6 @@
                         <button class="zeta-btn zeta-btn-channel" onclick="alert('🔗 Express VPN — Coming soon!')"><span class="sweep"></span><i class="fa-solid fa-shield-halved"></i> EXPRESS VPN</button>
                         <button class="zeta-btn zeta-btn-download" onclick="location.href='https://zeta-mini-8e229a0a0f1e.herokuapp.com/Download.html'"><span class="sweep"></span><i class="fa-solid fa-download"></i> DOWNLOAD</button>
                         <button class="zeta-btn zeta-btn-apk" onclick="location.href='https://zeta-mini-8e229a0a0f1e.herokuapp.com/Apk.html'"><span class="sweep"></span><i class="fa-solid fa-mobile-screen-button"></i> APK DOWNLOAD</button>
-                        <button class="zeta-btn zeta-btn-blur" onclick="openBlurModal()"><span class="sweep"></span><i class="fa-solid fa-droplet"></i> IMAGE BLUR</button>
                     </div>
                     <div class="hero-chips reveal">
                         <span class="hero-chip"><i class="fa-solid fa-bolt"></i> Super Fast</span>
@@ -927,12 +837,12 @@
                 </div>
             </section>
 
-            <!-- ===== IMAGE BLUR STUDIO (support.html system + Hashu API) ===== -->
+                        <!-- ===== IMAGE BLUR STUDIO (browser-side canvas blur — always works) ===== -->
             <section class="zs-studio" id="blurStudio">
                 <div class="zs-head">
                     <span class="zs-badge"><i class="fa-solid fa-droplet"></i> Image Tools</span>
                     <h2 class="zs-title">Image Blur <span>Studio</span></h2>
-                    <p class="zs-sub">Photo එකක් upload කරලා හෝ image link එකක් paste කරලා, තත්පර කීපයකින් blur කරගන්න. Blur strength එකත් ඔයාට අනුව වෙනස් කරන්න පුළුවන්.</p>
+                    <p class="zs-sub">Photo එකක් upload කරලා හෝ image link එකක් paste කරලා, තත්පර කීපයකින් blur කරගන්න. Blur strength එකත් ඔයාට අනුව වෙනස් කරන්න පුළුවන්. සියල්ලම ඔයාගේ device එකේම process වෙනවා — upload/server අවශ්‍ය නෑ.</p>
                 </div>
                 <div class="zs-card">
                     <div class="zs-tabs">
@@ -940,7 +850,7 @@
                         <button class="zs-tab" data-tab="upload" onclick="zsSwitchTab('upload')"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Photo</button>
                     </div>
 
-                    <!-- URL panel — Hashu API -->
+                    <!-- URL panel -->
                     <div id="zsPanelUrl">
                         <div class="zs-input-row">
                             <input type="text" id="zsUrlInput" class="zs-input" placeholder="Paste a direct image link (.jpg / .png)…" onkeydown="if(event.key==='Enter')zsBlurFromUrl()">
@@ -951,7 +861,7 @@
                         </div>
                     </div>
 
-                    <!-- Upload panel — file → public URL → Hashu API -->
+                    <!-- Upload panel -->
                     <div id="zsPanelUpload" class="hidden">
                         <input type="file" id="zsFileInput" accept="image/*" style="display:none;" onchange="zsHandleUpload(this)">
                         <label for="zsFileInput" class="zs-drop">
@@ -959,14 +869,19 @@
                             <span class="zs-drop-main">Tap to choose a photo from your device</span>
                             <span class="zs-drop-sub">JPG / PNG / WEBP &middot; up to 8MB</span>
                         </label>
-                        <div id="zsStrengthWrap" class="hidden">
-                            <div class="zs-strength-head">
-                                <span>Blur Strength</span>
-                                <span id="zsStrengthVal">8</span>
-                            </div>
-                            <input type="range" class="zs-range" id="zsStrength" min="1" max="20" value="8" oninput="document.getElementById('zsStrengthVal').textContent=this.value">
-                            <button class="zs-btn" style="width:100%;margin-top:18px;" onclick="zsBlurUpload()"><i class="fa-solid fa-droplet"></i> Blur Image</button>
+                        <div id="zsUploadPreviewWrap" class="hidden" style="margin-top:14px;">
+                            <div class="zs-frame"><span class="zs-tag">SELECTED</span><img id="zsUploadPreview" alt="selected" style="max-height:220px;object-fit:contain;background:#000;"></div>
                         </div>
+                    </div>
+
+                    <!-- Strength + apply (shared by both modes) -->
+                    <div id="zsStrengthWrap" class="hidden">
+                        <div class="zs-strength-head">
+                            <span>Blur Strength</span>
+                            <span id="zsStrengthVal">8</span>
+                        </div>
+                        <input type="range" class="zs-range" id="zsStrength" min="1" max="40" value="8" oninput="document.getElementById('zsStrengthVal').textContent=this.value">
+                        <button class="zs-btn" style="width:100%;margin-top:18px;" onclick="zsApplyBlur()"><i class="fa-solid fa-droplet"></i> Blur Image</button>
                     </div>
 
                     <!-- Status / Error -->
@@ -1024,73 +939,7 @@
                     </button>
                 </div>
             </div>
-        </div>
-
-        <!-- ============================================================
-        IMAGE BLUR TOOL — MODAL
-        ============================================================ -->
-        <div class="blur-modal-overlay" id="blurModalOverlay" role="dialog" aria-modal="true" aria-label="Image Blur Tool">
-            <div class="blur-modal" id="blurModal">
-                <button class="close-btn" id="blurCloseBtn" aria-label="Close">✕</button>
-
-                <div class="blur-modal-head">
-                    <div class="blur-modal-icon"><i class="fa-solid fa-droplet"></i></div>
-                    <div class="blur-modal-title">Image Blur Tool</div>
-                    <div class="blur-modal-sub">ඕන ෆොටෝ එකක් දාලා තත්පර කීපයකින් blur කරගන්න.</div>
-                </div>
-
-                <!-- Upload state -->
-                <div id="blurUploadState">
-                    <div class="blur-dropzone" id="blurDropzone">
-                        <i class="fa-solid fa-cloud-arrow-up"></i>
-                        <div class="blur-dropzone-text">Photo එකක් තෝරන්න / drag කරන්න</div>
-                        <div class="blur-dropzone-sub">JPG, PNG &middot; up to 8MB</div>
-                    </div>
-                    <input type="file" id="blurFileInput" accept="image/*" style="display:none;" />
-                </div>
-
-                <!-- Selected preview + controls (hidden until a file is chosen) -->
-                <div id="blurSelectedState" style="display:none;">
-                    <div class="blur-preview-wrap">
-                        <img id="blurPreviewImg" class="blur-preview-img" alt="Selected photo" />
-                        <button class="blur-remove-btn" id="blurRemoveBtn" title="Remove photo"><i class="fa-solid fa-xmark"></i></button>
-                    </div>
-
-                    <div class="blur-slider-row">
-                        <label for="blurLevelSlider"><i class="fa-solid fa-sliders"></i> Blur Level</label>
-                        <input type="range" min="1" max="20" value="8" class="blur-slider" id="blurLevelSlider" />
-                        <span class="blur-level-badge" id="blurLevelBadge">8</span>
-                    </div>
-
-                    <button class="blur-action-btn" id="blurGoBtn" onclick="handleBlurImage()">
-                        <i class="fa-solid fa-droplet" id="blurGoIcon"></i>
-                        <span id="blurGoText">Blur Image</span>
-                    </button>
-
-                    <div class="blur-status-text" id="blurStatusText" style="display:none;"></div>
-                    <div class="blur-error-box" id="blurErrorBox" style="display:none;">
-                        <i class="fa-solid fa-triangle-exclamation" style="margin-top:1px;"></i>
-                        <span id="blurErrorText"></span>
-                    </div>
-                </div>
-
-                <!-- Result state -->
-                <div id="blurResultState" style="display:none;">
-                    <div class="blur-section-label">Blurred Result</div>
-                    <div class="blur-preview-wrap">
-                        <img id="blurResultImg" class="blur-result-img" alt="Blurred photo" />
-                    </div>
-                    <div class="blur-secondary-actions">
-                        <a id="blurDownloadBtn" class="blur-secondary-btn" download="blurred-image.png" href="#" target="_blank" rel="noopener noreferrer">
-                            <i class="fa-solid fa-download"></i> Download
-                        </a>
-                        <button class="blur-secondary-btn" id="blurAnotherBtn">
-                            <i class="fa-solid fa-rotate-left"></i> Try Another
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </div></div>
 
     </div>
 
@@ -1312,266 +1161,15 @@
             console.log('📱 Mobile responsive with slide-in sidebar');
             console.log('🔧 Hack Generator added to navigation');
         })();
-    </script>
-
-    <!-- ============================================================
-    IMAGE BLUR TOOL — SCRIPT
+    </script>    <!-- ============================================================
+    IMAGE BLUR STUDIO — SCRIPT (100% browser-side canvas blur)
+    No API, no upload — works offline, no errors.
     ============================================================ -->
     <script>
         (function() {
-            // ===== CONFIG =====
-            const BLUR_API_BASE = 'https://hashu-apis-production.up.railway.app/api/image/blur';
-            const BLUR_API_KEY = 'hashu_cd4b0a9d325539de660602e7d8d38d61';
-            // Free anonymous file host used only to obtain a public URL for
-            // the photo the user selects, since the blur API expects a URL.
-            const UPLOAD_HOST = 'https://catbox.moe/user/api.php';
-
-            // ===== DOM refs =====
-            const overlay = document.getElementById('blurModalOverlay');
-            const modal = document.getElementById('blurModal');
-            const closeBtn = document.getElementById('blurCloseBtn');
-            const dropzone = document.getElementById('blurDropzone');
-            const fileInput = document.getElementById('blurFileInput');
-            const uploadState = document.getElementById('blurUploadState');
-            const selectedState = document.getElementById('blurSelectedState');
-            const resultState = document.getElementById('blurResultState');
-            const previewImg = document.getElementById('blurPreviewImg');
-            const removeBtn = document.getElementById('blurRemoveBtn');
-            const levelSlider = document.getElementById('blurLevelSlider');
-            const levelBadge = document.getElementById('blurLevelBadge');
-            const goBtn = document.getElementById('blurGoBtn');
-            const goIcon = document.getElementById('blurGoIcon');
-            const goText = document.getElementById('blurGoText');
-            const statusText = document.getElementById('blurStatusText');
-            const errorBox = document.getElementById('blurErrorBox');
-            const errorText = document.getElementById('blurErrorText');
-            const resultImg = document.getElementById('blurResultImg');
-            const downloadBtn = document.getElementById('blurDownloadBtn');
-            const anotherBtn = document.getElementById('blurAnotherBtn');
-
-            let selectedFile = null;
-            let resultBlobUrl = null;
-
-            // ===== MODAL OPEN/CLOSE =====
-            window.openBlurModal = function() {
-                overlay.classList.remove('closing');
-                overlay.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            };
-
-            function closeBlurModal() {
-                overlay.classList.add('closing');
-                document.body.style.overflow = '';
-                setTimeout(() => {
-                    overlay.classList.remove('active', 'closing');
-                }, 350);
-            }
-
-            closeBtn.addEventListener('click', closeBlurModal);
-            overlay.addEventListener('click', function(e) {
-                if (e.target === overlay) closeBlurModal();
-            });
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && overlay.classList.contains('active')) closeBlurModal();
-            });
-
-            // ===== FILE SELECTION =====
-            dropzone.addEventListener('click', () => fileInput.click());
-            dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('drag-over'); });
-            dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag-over'));
-            dropzone.addEventListener('drop', (e) => {
-                e.preventDefault();
-                dropzone.classList.remove('drag-over');
-                if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-                    handleFileSelected(e.dataTransfer.files[0]);
-                }
-            });
-            fileInput.addEventListener('change', (e) => {
-                if (e.target.files && e.target.files[0]) handleFileSelected(e.target.files[0]);
-            });
-
-            function handleFileSelected(file) {
-                if (!file.type.startsWith('image/')) {
-                    showError('කරුණාකර image file එකක් තෝරන්න (JPG/PNG).');
-                    return;
-                }
-                if (file.size > 8 * 1024 * 1024) {
-                    showError('Photo එක 8MB ට වඩා අඩු වෙන්න ඕන.');
-                    return;
-                }
-                selectedFile = file;
-                const reader = new FileReader();
-                reader.onload = (ev) => {
-                    previewImg.src = ev.target.result;
-                    uploadState.style.display = 'none';
-                    resultState.style.display = 'none';
-                    selectedState.style.display = 'block';
-                    hideError();
-                };
-                reader.readAsDataURL(file);
-            }
-
-            removeBtn.addEventListener('click', () => resetTool());
-
-            anotherBtn.addEventListener('click', () => resetTool());
-
-            function resetTool() {
-                selectedFile = null;
-                fileInput.value = '';
-                previewImg.src = '';
-                if (resultBlobUrl) { URL.revokeObjectURL(resultBlobUrl); resultBlobUrl = null; }
-                resultImg.src = '';
-                uploadState.style.display = 'block';
-                selectedState.style.display = 'none';
-                resultState.style.display = 'none';
-                hideError();
-                setStatus('');
-            }
-
-            // ===== SLIDER =====
-            levelSlider.addEventListener('input', () => {
-                levelBadge.textContent = levelSlider.value;
-            });
-
-            // ===== HELPERS =====
-            function setLoading(isLoading, label) {
-                goBtn.disabled = isLoading;
-                goBtn.classList.toggle('spin', isLoading);
-                goIcon.className = isLoading ? 'fa-solid fa-spinner' : 'fa-solid fa-droplet';
-                goText.textContent = isLoading ? (label || 'Processing...') : 'Blur Image';
-            }
-            function setStatus(msg) {
-                statusText.textContent = msg || '';
-                statusText.style.display = msg ? 'block' : 'none';
-            }
-            function showError(msg) {
-                errorText.textContent = msg;
-                errorBox.style.display = 'flex';
-            }
-            function hideError() {
-                errorBox.style.display = 'none';
-            }
-
-            // Upload the user's photo to a free anonymous host so the blur
-            // API (which expects an image URL) can fetch it.
-            async function uploadForPublicUrl(file) {
-                const fd = new FormData();
-                fd.append('reqtype', 'fileupload');
-                fd.append('fileToUpload', file);
-                const res = await fetch(UPLOAD_HOST, { method: 'POST', body: fd });
-                if (!res.ok) throw new Error('UPLOAD_FAILED');
-                const text = (await res.text()).trim();
-                if (!text.startsWith('http')) throw new Error('UPLOAD_FAILED');
-                return text;
-            }
-
-            // Try to dig a usable image URL out of a JSON response, since
-            // different lightweight APIs wrap their result differently.
-            function pick(obj, paths) {
-                for (const path of paths) {
-                    const parts = path.split('.');
-                    let cur = obj;
-                    let ok = true;
-                    for (const p of parts) {
-                        if (cur && typeof cur === 'object' && p in cur) { cur = cur[p]; } else { ok = false; break; }
-                    }
-                    if (ok && typeof cur === 'string' && cur) return cur;
-                }
-                return null;
-            }
-            function extractImageUrlFromJson(json) {
-                const roots = [json, json.result, json.data, json.response].filter(Boolean);
-                for (const root of roots) {
-                    const found = pick(root, ['url', 'image', 'blurred', 'output', 'download', 'downloadUrl', 'result_url', 'imageUrl']);
-                    if (found) return found;
-                }
-                return null;
-            }
-
-            async function handleBlurImage() {
-                if (!selectedFile) {
-                    showError('කරුණාකර පලමුව photo එකක් තෝරන්න.');
-                    return;
-                }
-                hideError();
-                setLoading(true, 'Uploading...');
-                setStatus('Photo එක upload කරමින්...');
-
-                try {
-                    const publicUrl = await uploadForPublicUrl(selectedFile);
-
-                    setLoading(true, 'Blurring...');
-                    setStatus('Blur කරමින්... තත්පර කීපයක් ගතවෙයි.');
-
-                    const level = levelSlider.value;
-                    const apiUrl = BLUR_API_BASE
-                        + '?apiKey=' + encodeURIComponent(BLUR_API_KEY)
-                        + '&url=' + encodeURIComponent(publicUrl)
-                        + '&level=' + encodeURIComponent(level)
-                        + '&blur=' + encodeURIComponent(level);
-
-                    const res = await fetch(apiUrl);
-                    if (!res.ok) throw new Error('API_STATUS_' + res.status);
-
-                    const contentType = res.headers.get('content-type') || '';
-
-                    if (contentType.startsWith('image/')) {
-                        const blob = await res.blob();
-                        if (resultBlobUrl) URL.revokeObjectURL(resultBlobUrl);
-                        resultBlobUrl = URL.createObjectURL(blob);
-                        showResult(resultBlobUrl, resultBlobUrl);
-                    } else {
-                        const json = await res.json();
-                        const imgUrl = extractImageUrlFromJson(json);
-                        if (!imgUrl) {
-                            console.warn('Unrecognized blur API response shape:', json);
-                            throw new Error('NO_IMAGE_FOUND');
-                        }
-                        showResult(imgUrl, imgUrl);
-                    }
-                } catch (err) {
-                    console.error('Image blur error:', err);
-                    if (err.message === 'UPLOAD_FAILED') {
-                        showError('Photo upload කරන්න බැරි වුනා. connection එක check කරලා ආයේ try කරන්න.');
-                    } else if (String(err.message).startsWith('API_STATUS_')) {
-                        showError('Blur API එකෙන් error එකක් ආවා. photo එක invalid වෙන්න පුලුවන් හෝ service එක temporarily down.');
-                    } else if (err.message === 'NO_IMAGE_FOUND') {
-                        showError('Response එකේ blur කරපු image එක හොයාගන්න බැරි වුනා. console එකේ full response එක තියෙනවා.');
-                    } else {
-                        showError('Download service එකට connect වෙන්න බැරි වුනා. ආයේ try කරන්න.');
-                    }
-                } finally {
-                    setLoading(false);
-                    setStatus('');
-                }
-            }
-            window.handleBlurImage = handleBlurImage;
-
-            function showResult(imgSrc, downloadHref) {
-                resultImg.src = imgSrc;
-                downloadBtn.href = downloadHref;
-                selectedState.style.display = 'none';
-                resultState.style.display = 'block';
-            }
-
-            console.log('🖼 Image Blur Tool loaded — button: IMAGE BLUR');
-        })();
-    </script>
-
-
-    <!-- ============================================================
-    IMAGE BLUR STUDIO — SCRIPT (Hashu API + upload via catbox)
-    ============================================================ -->
-    <script>
-        (function() {
-            // ===== CONFIG =====
-            const BLUR_API = 'https://hashu-apis-production.up.railway.app/api/image/blur?apiKey=hashu_cd4b0a9d325539de660602e7d8d38d61';
-            // Free anonymous file host used to get a public URL for uploaded
-            // photos, since the blur API expects an image URL.
-            const UPLOAD_HOST = 'https://catbox.moe/user/api.php';
-
-            let lastUploadFile = null;
-            let lastUploadSrc = null;
+            let currentImage = null;   // loaded HTMLImageElement
+            let currentOrigSrc = null; // original src for compare view
+            let lastBlobUrl = null;
 
             // ===== TABS =====
             window.zsSwitchTab = function(tab) {
@@ -1609,100 +1207,149 @@
                 res.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
 
-            // ===== MODE 1: image URL via Hashu API (same as support.html) =====
-            window.zsBlurFromUrl = function() {
+            // ===== IMAGE LOADING (with CORS fallback) =====
+            function tryLoad(src, useCors) {
+                return new Promise(function(resolve, reject) {
+                    const img = new Image();
+                    if (useCors) img.crossOrigin = 'anonymous';
+                    img.onload = function() { resolve(img); };
+                    img.onerror = function() { reject(new Error('IMG_LOAD')); };
+                    img.src = src;
+                });
+            }
+            async function loadImageSmart(src) {
+                try {
+                    return await tryLoad(src, true);
+                } catch (e) {
+                    return await tryLoad(src, false); // retry without CORS
+                }
+            }
+
+            // ===== FALLBACK BOX BLUR (for browsers without ctx.filter) =====
+            function boxBlurCanvas(ctx, w, h, radius) {
+                radius = Math.max(1, Math.round(radius / 2));
+                const imgData = ctx.getImageData(0, 0, w, h);
+                const data = imgData.data;
+                const tmp = new Uint8ClampedArray(data);
+                for (let y = 0; y < h; y++) {
+                    for (let c = 0; c < 3; c++) {
+                        let sum = 0;
+                        for (let x = -radius; x <= radius; x++) {
+                            sum += tmp[(y * w + Math.min(w - 1, Math.max(0, x))) * 4 + c];
+                        }
+                        for (let x = 0; x < w; x++) {
+                            data[(y * w + x) * 4 + c] = sum / (radius * 2 + 1);
+                            sum += tmp[(y * w + Math.min(w - 1, x + radius + 1)) * 4 + c]
+                                 - tmp[(y * w + Math.max(0, x - radius)) * 4 + c];
+                        }
+                    }
+                }
+                tmp.set(data);
+                for (let x = 0; x < w; x++) {
+                    for (let c = 0; c < 3; c++) {
+                        let sum = 0;
+                        for (let y = -radius; y <= radius; y++) {
+                            sum += tmp[(Math.min(h - 1, Math.max(0, y)) * w + x) * 4 + c];
+                        }
+                        for (let y = 0; y < h; y++) {
+                            data[(y * w + x) * 4 + c] = sum / (radius * 2 + 1);
+                            sum += tmp[(Math.min(h - 1, y + radius + 1) * w + x) * 4 + c]
+                                 - tmp[(Math.max(0, y - radius) * w + x) * 4 + c];
+                        }
+                    }
+                }
+                ctx.putImageData(imgData, 0, 0);
+            }
+
+            // ===== CORE BLUR (canvas, runs on device) =====
+            function canvasBlur(img, level) {
+                const maxDim = 1800;
+                let w = img.naturalWidth, h = img.naturalHeight;
+                if (!w || !h) throw new Error('IMG_LOAD');
+                const s = Math.min(1, maxDim / Math.max(w, h));
+                w = Math.max(1, Math.round(w * s));
+                h = Math.max(1, Math.round(h * s));
+                const canvas = document.createElement('canvas');
+                canvas.width = w; canvas.height = h;
+                const ctx = canvas.getContext('2d');
+                if (typeof ctx.filter === 'string') {
+                    ctx.filter = 'blur(' + level + 'px)';
+                    ctx.drawImage(img, 0, 0, w, h);
+                    ctx.filter = 'none';
+                } else {
+                    ctx.drawImage(img, 0, 0, w, h);
+                    boxBlurCanvas(ctx, w, h, level);
+                }
+                return canvas.toDataURL('image/jpeg', 0.92);
+            }
+
+            function dataUrlToBlobUrl(dataUrl) {
+                const parts = dataUrl.split(',');
+                const mime = (parts[0].match(/data:(.*?);/) || [])[1] || 'image/jpeg';
+                const bin = atob(parts[1]);
+                const arr = new Uint8Array(bin.length);
+                for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+                return URL.createObjectURL(new Blob([arr], { type: mime }));
+            }
+
+            // ===== MODE 1: image URL =====
+            window.zsBlurFromUrl = async function() {
                 const input = document.getElementById('zsUrlInput');
                 const url = (input.value || '').trim();
                 if (!url) { showError('⚠️ කරුණාකර image link එකක් paste කරන්න.'); return; }
                 if (!/^https?:\/\//i.test(url)) { showError('⚠️ Link එක http:// හෝ https:// වලින් පටන් ගත යුතුයි.'); return; }
                 showStatus();
-                const level = document.getElementById('zsStrength').value;
-                const blurred = BLUR_API + '&url=' + encodeURIComponent(url) + '&level=' + level + '&blur=' + level;
-                const probe = new Image();
-                probe.onload = function() { showResult(url, blurred, blurred); };
-                probe.onerror = function() {
-                    showError('❌ Blur කරන්න බැරි වුනා. Direct image link එකක් ද (.jpg / .png) කියලා check කරලා ආයේ try කරන්න.');
-                };
-                probe.src = blurred;
+                try {
+                    currentImage = await loadImageSmart(url);
+                    currentOrigSrc = url;
+                    document.getElementById('zsStrengthWrap').classList.remove('hidden');
+                    await zsApplyBlur();
+                } catch (e) {
+                    showError('❌ Image එක load කරන්න බැරි වුනා. Direct image link එකක් ද (.jpg / .png) කියලා check කරලා ආයේ try කරන්න.');
+                }
             };
 
-            // ===== MODE 2: upload photo → public URL → Hashu API =====
+            // ===== MODE 2: upload photo =====
             window.zsHandleUpload = function(inputEl) {
                 const file = inputEl.files && inputEl.files[0];
                 if (!file) return;
                 if (!file.type.startsWith('image/')) { showError('⚠️ කරුණාකර image file එකක් තෝරන්න.'); return; }
                 if (file.size > 8 * 1024 * 1024) { showError('⚠️ Photo එක 8MB ට වඩා අඩු වෙන්න ඕන.'); return; }
-                lastUploadFile = file;
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    lastUploadSrc = e.target.result;
-                    document.getElementById('zsStrengthWrap').classList.remove('hidden');
-                    hideMsgs();
+                reader.onload = async function(e) {
+                    currentOrigSrc = e.target.result;
+                    document.getElementById('zsUploadPreview').src = currentOrigSrc;
+                    document.getElementById('zsUploadPreviewWrap').classList.remove('hidden');
+                    showStatus();
+                    try {
+                        currentImage = await tryLoad(currentOrigSrc, false);
+                        document.getElementById('zsStrengthWrap').classList.remove('hidden');
+                        document.getElementById('zsStatus').classList.add('hidden');
+                    } catch (err) {
+                        showError('❌ Photo එක load කරන්න බැරි වුනා. වෙනත් photo එකක් try කරන්න.');
+                    }
                 };
                 reader.readAsDataURL(file);
             };
 
-            async function uploadForPublicUrl(file) {
-                const fd = new FormData();
-                fd.append('reqtype', 'fileupload');
-                fd.append('fileToUpload', file);
-                const res = await fetch(UPLOAD_HOST, { method: 'POST', body: fd });
-                if (!res.ok) throw new Error('UPLOAD_FAILED');
-                const text = (await res.text()).trim();
-                if (!text.startsWith('http')) throw new Error('UPLOAD_FAILED');
-                return text;
-            }
-
-            function pick(obj, paths) {
-                for (const path of paths) {
-                    const parts = path.split('.');
-                    let cur = obj, ok = true;
-                    for (const p of parts) {
-                        if (cur && typeof cur === 'object' && p in cur) { cur = cur[p]; } else { ok = false; break; }
-                    }
-                    if (ok && typeof cur === 'string' && cur) return cur;
-                }
-                return null;
-            }
-            function extractImageUrl(json) {
-                const roots = [json, json.result, json.data, json.response].filter(Boolean);
-                for (const root of roots) {
-                    const found = pick(root, ['url', 'image', 'blurred', 'output', 'download', 'downloadUrl', 'result_url', 'imageUrl']);
-                    if (found) return found;
-                }
-                return null;
-            }
-
-            window.zsBlurUpload = async function() {
-                if (!lastUploadFile || !lastUploadSrc) {
-                    showError('⚠️ කරුණාකර පලමුව photo එකක් තෝරන්න.');
-                    return;
-                }
+            // ===== APPLY BLUR =====
+            window.zsApplyBlur = async function() {
+                if (!currentImage) { showError('⚠️ කරුණාකර පලමුව photo එකක් හෝ link එකක් තෝරන්න.'); return; }
                 showStatus();
+                // let the spinner paint before the heavy canvas work
+                await new Promise(function(r) { setTimeout(r, 60); });
                 try {
-                    const publicUrl = await uploadForPublicUrl(lastUploadFile);
-                    const level = document.getElementById('zsStrength').value;
-                    const apiUrl = BLUR_API + '&url=' + encodeURIComponent(publicUrl) + '&level=' + level + '&blur=' + level;
-                    const res = await fetch(apiUrl);
-                    if (!res.ok) throw new Error('API_STATUS_' + res.status);
-                    const ct = res.headers.get('content-type') || '';
-                    if (ct.startsWith('image/')) {
-                        const blob = await res.blob();
-                        showResult(lastUploadSrc, URL.createObjectURL(blob), URL.createObjectURL(blob));
+                    const level = parseInt(document.getElementById('zsStrength').value, 10);
+                    const blurredDataUrl = canvasBlur(currentImage, level);
+                    if (lastBlobUrl) URL.revokeObjectURL(lastBlobUrl);
+                    lastBlobUrl = dataUrlToBlobUrl(blurredDataUrl);
+                    showResult(currentOrigSrc, blurredDataUrl, lastBlobUrl);
+                } catch (e) {
+                    console.error('Blur error:', e);
+                    if (e && e.name === 'SecurityError') {
+                        showError('❌ මේ image host එක download කිරීමට අවසර දෙන්නේ නෑ. Photo එක ඔයාගේ device එකට save කරලා "Upload Photo" tab එකෙන් upload කරලා try කරන්න.');
                     } else {
-                        const json = await res.json();
-                        const imgUrl = extractImageUrl(json);
-                        if (!imgUrl) throw new Error('NO_IMAGE_FOUND');
-                        showResult(lastUploadSrc, imgUrl, imgUrl);
-                    }
-                } catch (err) {
-                    console.error('Blur upload error:', err);
-                    if (err.message === 'UPLOAD_FAILED') {
-                        showError('❌ Photo upload කරන්න බැරි වුනා. connection එක check කරලා ආයේ try කරන්න.');
-                    } else if (String(err.message).startsWith('API_STATUS_')) {
-                        showError('❌ Blur API එකෙන් error එකක් ආවා. ආයේ try කරන්න.');
-                    } else {
-                        showError('❌ Service එකට connect වෙන්න බැරි වුනා. ආයේ try කරන්න.');
+                        showError('❌ Blur කරන්න බැරි වුනා. ආයේ try කරන්න.');
                     }
                 }
             };
@@ -1711,97 +1358,15 @@
                 document.getElementById('zsResult').classList.add('hidden');
                 document.getElementById('zsUrlInput').value = '';
                 document.getElementById('zsFileInput').value = '';
+                document.getElementById('zsUploadPreviewWrap').classList.add('hidden');
                 document.getElementById('zsStrengthWrap').classList.add('hidden');
-                lastUploadFile = null;
-                lastUploadSrc = null;
+                if (lastBlobUrl) { URL.revokeObjectURL(lastBlobUrl); lastBlobUrl = null; }
+                currentImage = null;
+                currentOrigSrc = null;
                 hideMsgs();
             };
 
-            console.log('🖼 Image Blur Studio loaded (Hashu API)');
-        })();
-    </script>
-
-
-    <!-- ===== SCROLL SPEED CONTROL ===== -->
-    <button class="scroll-speed-btn" id="scrollSpeedBtn" title="Scroll speed — click to change">
-        <i class="fa-solid fa-person-walking ss-icon" id="ssIcon"></i>
-        <span class="ss-label" id="ssLabel">NORMAL</span>
-    </button>
-
-    <!-- ============================================================
-    SMOOTH SCROLL — SLOW / NORMAL / FAST SPEED CONTROL
-    ============================================================ -->
-    <script>
-        (function() {
-            const container = document.getElementById('mainContent');
-            const btn = document.getElementById('scrollSpeedBtn');
-            const icon = document.getElementById('ssIcon');
-            const label = document.getElementById('ssLabel');
-            if (!container || !btn) return;
-
-            // mult = wheel distance multiplier, ease = smoothing factor
-            const MODES = [
-                { name: 'SLOW',   icon: 'fa-solid fa-mound',          mult: 0.45, ease: 0.055 },
-                { name: 'NORMAL', icon: 'fa-solid fa-person-walking', mult: 1.0,  ease: 0.14  },
-                { name: 'FAST',   icon: 'fa-solid fa-bolt',           mult: 2.3,  ease: 0.30  }
-            ];
-            let modeIdx = 1;
-            let target = container.scrollTop;
-            let current = target;
-            let rafId = null;
-            let programmatic = false;
-
-            function clamp(v) {
-                return Math.max(0, Math.min(v, container.scrollHeight - container.clientHeight));
-            }
-
-            function tick() {
-                const m = MODES[modeIdx];
-                current += (target - current) * m.ease;
-                if (Math.abs(target - current) < 0.5) {
-                    current = target;
-                    programmatic = true;
-                    container.scrollTop = current;
-                    programmatic = false;
-                    rafId = null;
-                    return;
-                }
-                programmatic = true;
-                container.scrollTop = current;
-                programmatic = false;
-                rafId = requestAnimationFrame(tick);
-            }
-            function ensureRaf() {
-                if (rafId === null) rafId = requestAnimationFrame(tick);
-            }
-
-            // wheel → smooth inertial scroll with chosen speed
-            container.addEventListener('wheel', function(e) {
-                // let inner scrollable popups/modals scroll naturally
-                if (e.target.closest('.blur-modal, .update-popup')) return;
-                e.preventDefault();
-                target = clamp(target + e.deltaY * MODES[modeIdx].mult);
-                ensureRaf();
-            }, { passive: false });
-
-            // keep target in sync when user scrolls by touch/keyboard/scrollbar
-            container.addEventListener('scroll', function() {
-                if (!programmatic) { target = container.scrollTop; current = container.scrollTop; }
-            }, { passive: true });
-
-            // cycle SLOW → NORMAL → FAST on click
-            btn.addEventListener('click', function() {
-                modeIdx = (modeIdx + 1) % MODES.length;
-                const m = MODES[modeIdx];
-                icon.className = m.icon + ' ss-icon';
-                label.textContent = m.name;
-                // little pop animation
-                btn.style.transform = 'scale(0.92)';
-                setTimeout(function() { btn.style.transform = ''; }, 140);
-                console.log('🎚 Scroll speed:', m.name);
-            });
-
-            console.log('🎚 Scroll speed control loaded — click the floating button to cycle SLOW / NORMAL / FAST');
+            console.log('🖼 Image Blur Studio loaded (browser-side canvas blur)');
         })();
     </script>
 
