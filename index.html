@@ -168,8 +168,7 @@
         /* ===== BANNER (unchanged) ===== */
         .premium-banner { margin:16px 20px 0 20px; padding:16px 20px; border-radius:16px; background:rgba(10,13,26,0.72); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid rgba(79,125,247,0.18); box-shadow:0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(79,125,247,0.06); position:relative; overflow:hidden; display:flex; align-items:center; gap:12px; transform:translateY(-20px); opacity:0; animation:bannerSlideIn 0.5s cubic-bezier(0.16,1,0.3,1) 0.4s forwards; flex-shrink:0; z-index:5; }
         .premium-banner::before { content:''; position:absolute; inset:0; border-radius:16px; padding:1px; background:linear-gradient(135deg, rgba(79,125,247,0.35), rgba(139,124,248,0.25), rgba(45,212,232,0.15)); -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none; }
-        .premium-banner::after { content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%; background:radial-gradient(ellipse at 30% 40%, rgba(79,125,247,0.06), transparent 60%), radial-gradient(ellipse at 70% 60%, rgba(139,124,248,0.04), transparent 50%); animation:bannerGlow 8s ease-in-out infinite alternate; pointer-events:none; }
-        @keyframes bannerGlow { 0% { transform:translate(0,0) scale(1); } 50% { transform:translate(2%,-2%) scale(1.02); } 100% { transform:translate(-1%,1%) scale(0.98); } }
+        .premium-banner::after { content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%; background:radial-gradient(ellipse at 30% 40%, rgba(79,125,247,0.06), transparent 60%), radial-gradient(ellipse at 70% 60%, rgba(139,124,248,0.04), transparent 50%); pointer-events:none; }
         .premium-banner .sweep-line { position:absolute; top:0; left:-100%; width:60%; height:100%; background:linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent); transform:skewX(-20deg); animation:sweepLine 6s ease-in-out infinite; pointer-events:none; }
         @keyframes sweepLine { 0% { left:-100%; } 100% { left:200%; } }
         .premium-banner .banner-icon { flex-shrink:0; font-size:20px; color:var(--status-warning); filter:drop-shadow(0 0 10px rgba(245,166,35,0.3)); position:relative; z-index:2; }
@@ -192,10 +191,8 @@
         .hero-section { position:relative; padding:32px 20px 44px; text-align:center; overflow:hidden; flex-shrink:0; }
         .hero-section::before { content:''; position:absolute; inset:0; background-image:linear-gradient(rgba(79,125,247,0.022) 1px, transparent 1px), linear-gradient(90deg, rgba(79,125,247,0.022) 1px, transparent 1px); background-size:52px 52px; mask-image:radial-gradient(ellipse 70% 55% at 50% 35%, rgba(0,0,0,0.5) 10%, transparent 60%); -webkit-mask-image:radial-gradient(ellipse 70% 55% at 50% 35%, rgba(0,0,0,0.5) 10%, transparent 60%); pointer-events:none; }
         .hero-glow { position:absolute; border-radius:50%; pointer-events:none; filter:blur(80px); will-change:transform; }
-        .hero-glow-1 { top:-18%; left:-8%; width:380px; height:380px; background:radial-gradient(circle, rgba(79,125,247,0.06), transparent 70%); animation:hg1 22s ease-in-out infinite alternate; }
-        .hero-glow-2 { bottom:-22%; right:-6%; width:300px; height:300px; background:radial-gradient(circle, rgba(139,124,248,0.04), transparent 70%); animation:hg2 18s ease-in-out infinite alternate; }
-        @keyframes hg1 { 0% { transform:translate(0,0) scale(1); } 50% { transform:translate(20px,14px) scale(1.05); } 100% { transform:translate(-12px,-6px) scale(.96); } }
-        @keyframes hg2 { 0% { transform:translate(0,0) scale(1); } 50% { transform:translate(-16px,10px) scale(1.06); } 100% { transform:translate(10px,-14px) scale(.95); } }
+        .hero-glow-1 { top:-18%; left:-8%; width:380px; height:380px; background:radial-gradient(circle, rgba(79,125,247,0.06), transparent 70%); }
+        .hero-glow-2 { bottom:-22%; right:-6%; width:300px; height:300px; background:radial-gradient(circle, rgba(139,124,248,0.04), transparent 70%); }
         .hero-badge { display:inline-flex; align-items:center; gap:6px; padding:4px 14px; border-radius:100px; font-size:10px; font-weight:600; letter-spacing:0.6px; text-transform:uppercase; background:rgba(79,125,247,0.06); border:1px solid rgba(79,125,247,0.1); color:var(--accent-blue); margin-bottom:22px; }
         .hero-badge i { font-size:8px; }
         .hero-heading { font-size:clamp(26px,5.5vw,48px); font-weight:800; letter-spacing:-1.6px; line-height:1.08; margin-bottom:14px; max-width:520px; margin-left:auto; margin-right:auto; }
@@ -299,10 +296,10 @@
         .reveal-d3 { transition-delay:.18s; }
         .reveal-d4 { transition-delay:.24s; }
 
-        .zeta-btn { display:inline-block; padding:11px 32px; font-size:16px; font-weight:700; border-radius:50px; text-decoration:none; box-shadow:0 4px 20px rgba(0,0,0,0.25); transition:all 0.25s ease; letter-spacing:0.3px; border:1px solid rgba(255,255,255,0.10); font-family:'Inter',sans-serif; cursor:pointer; background:none; border:none; }
+        .zeta-btn { display:inline-block; padding:9px 26px; font-size:14px; font-weight:700; border-radius:50px; text-decoration:none; box-shadow:0 4px 20px rgba(0,0,0,0.25); transition:all 0.25s ease; letter-spacing:0.3px; border:1px solid rgba(255,255,255,0.10); font-family:'Inter',sans-serif; cursor:pointer; background:none; border:none; }
         .zeta-btn:hover { transform:translateY(-2px) scale(1.02); }
         .zeta-btn:active { transform:scale(0.97); }
-        .zeta-btn i { margin-right:10px; font-size:17px; }
+        .zeta-btn i { margin-right:8px; font-size:14px; }
         .zeta-btn-chat { background:linear-gradient(135deg, #4F7DF7, #3B5FE0); color:#fff; box-shadow:0 4px 20px rgba(79,125,247,0.35); }
         .zeta-btn-chat:hover { box-shadow:0 8px 32px rgba(79,125,247,0.45); background:linear-gradient(135deg, #5A8BF9, #4A6FF0); }
         .zeta-btn-channel { background:linear-gradient(135deg, #25D366, #128C7E); color:#fff; box-shadow:0 4px 20px rgba(37,211,102,0.30); }
@@ -484,6 +481,18 @@
             .update-popup-overlay.closing .update-popup { transform: none; opacity: 0; }
         }
 
+        /* ===== HERO CHIPS + MARQUEE ===== */
+        .hero-chips { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-top:26px; }
+        .hero-chip { display:inline-flex; align-items:center; gap:6px; padding:6px 13px; border-radius:100px; font-size:10.5px; font-weight:600; letter-spacing:0.4px; color:var(--text-secondary); background:rgba(255,255,255,0.03); border:1px solid var(--border-default); transition:all var(--transition-fast); }
+        .hero-chip i { font-size:9px; color:var(--accent-cyan); }
+        .hero-chip:hover { color:#fff; border-color:rgba(45,212,232,0.3); background:rgba(45,212,232,0.06); transform:translateY(-1px); }
+        .hero-marquee { margin-top:26px; overflow:hidden; position:relative; -webkit-mask-image:linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); mask-image:linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
+        .marquee-track { display:inline-flex; align-items:center; gap:22px; white-space:nowrap; padding:6px 0; animation:marquee 24s linear infinite; will-change:transform; }
+        .marquee-track span { font-family:'JetBrains Mono',monospace; font-size:9.5px; font-weight:500; letter-spacing:2px; text-transform:uppercase; color:var(--text-tertiary); }
+        .marquee-track .mq-dot { width:3px; height:3px; border-radius:50%; background:var(--accent-blue); box-shadow:0 0 8px rgba(79,125,247,0.5); flex-shrink:0; }
+        @keyframes marquee { from { transform:translateX(0); } to { transform:translateX(-50%); } }
+        @media (prefers-reduced-motion:reduce) { .marquee-track { animation:none; } }
+
         /* ===== MOBILE SIDEBAR OVERRIDES ===== */
         @media(max-width:768px) {
             .zeta-sidebar { position:fixed; left:0; top:0; transform:translateX(-100%); border-radius:0 var(--radius-xl) var(--radius-xl) 0; width:280px; min-width:280px; height:100dvh; z-index:100; transition:transform var(--transition-smooth), width var(--transition-smooth); box-shadow:8px 0 48px rgba(0,0,0,0.8); }
@@ -493,6 +502,10 @@
             .mobile-toggle { position:fixed; top:16px; left:16px; z-index:101; width:40px; height:40px; border-radius:12px; background:linear-gradient(135deg, #FF3B4E, #C81E3A); border:1px solid rgba(255,59,78,0.5); color:#fff; font-size:16px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:opacity 0.25s ease, transform 0.25s ease, box-shadow var(--transition-fast); box-shadow:0 0 20px rgba(255,59,78,0.45); text-decoration:none; opacity:1; }
             .mobile-toggle:hover { transform:translateY(-1px) scale(1.05); box-shadow:0 0 28px rgba(255,59,78,0.65); }
             .mobile-toggle:active { transform:scale(0.94); }
+            .zeta-sidebar:not(.open) { visibility:hidden; transition:transform var(--transition-smooth), visibility 0s linear 0.4s; }
+            .zeta-sidebar.open { visibility:visible; transition-delay:0s; }
+            .zeta-sidebar::after { display:none; }
+            .mobile-toggle { backdrop-filter:none; -webkit-backdrop-filter:none; background:linear-gradient(135deg, #FF3B4E, #C81E3A); }
             .premium-banner { margin:12px 12px 0 12px; padding:14px 16px; flex-wrap:wrap; }
             .premium-banner .banner-title { font-size:12px; }
             .premium-banner .banner-text { font-size:11px; }
@@ -572,6 +585,7 @@
         .border-subtle { border-color:var(--border-subtle); }
         .bg-surface { background:var(--bg-surface); }
     </style>
+<base target="_blank">
 </head>
 <body>
 
@@ -673,6 +687,15 @@
                         <button class="zeta-btn zeta-btn-channel" onclick="alert('🔗 Express VPN — Coming soon!')"><i class="fa-solid fa-shield-halved"></i> EXPRESS VPN</button>
                         <button class="zeta-btn zeta-btn-download" onclick="location.href='https://zeta-mini-8e229a0a0f1e.herokuapp.com/Download.html'"><i class="fa-solid fa-download"></i> DOWNLOAD</button>
                         <button class="zeta-btn zeta-btn-apk" onclick="location.href='https://zeta-mini-8e229a0a0f1e.herokuapp.com/Apk.html'"><i class="fa-solid fa-mobile-screen-button"></i> APK DOWNLOAD</button>
+                    </div>
+                    <div class="hero-chips reveal">
+                        <span class="hero-chip"><i class="fa-solid fa-bolt"></i> Super Fast</span>
+                        <span class="hero-chip"><i class="fa-solid fa-shield-halved"></i> 100% Secure</span>
+                        <span class="hero-chip"><i class="fa-solid fa-gift"></i> Free Forever</span>
+                        <span class="hero-chip"><i class="fa-solid fa-rotate"></i> Daily Updates</span>
+                    </div>
+                    <div class="hero-marquee reveal reveal-d1" aria-hidden="true">
+                        <div class="marquee-track"><span>ZETA CHAT</span><span class="mq-dot"></span><span>EXPRESS VPN</span><span class="mq-dot"></span><span>VIDEO DOWNLOADER</span><span class="mq-dot"></span><span>APK STORE</span><span class="mq-dot"></span><span>AI GENERATOR</span><span class="mq-dot"></span><span>IMAGE STUDIO</span><span class="mq-dot"></span><span>CODE LAB</span><span class="mq-dot"></span><span>ZETA CHAT</span><span class="mq-dot"></span><span>EXPRESS VPN</span><span class="mq-dot"></span><span>VIDEO DOWNLOADER</span><span class="mq-dot"></span><span>APK STORE</span><span class="mq-dot"></span><span>AI GENERATOR</span><span class="mq-dot"></span><span>IMAGE STUDIO</span><span class="mq-dot"></span><span>CODE LAB</span><span class="mq-dot"></span></div>
                     </div>
                     <div class="hero-line"></div>
                 </div>
@@ -777,10 +800,17 @@
             // ===== NAV ITEMS =====
             document.querySelectorAll('.nav-item').forEach((item, i) => {
                 item.style.setProperty('--i', i); // staggered entrance delay
+                let moveRaf = null, lastMX = 0, lastMY = 0;
                 item.addEventListener('mousemove', function(e) {
-                    const r = this.getBoundingClientRect();
-                    this.style.setProperty('--mx', (e.clientX - r.left) + 'px');
-                    this.style.setProperty('--my', (e.clientY - r.top) + 'px');
+                    lastMX = e.clientX; lastMY = e.clientY;
+                    if (moveRaf) return;
+                    const self = this;
+                    moveRaf = requestAnimationFrame(function() {
+                        moveRaf = null;
+                        const r = self.getBoundingClientRect();
+                        self.style.setProperty('--mx', (lastMX - r.left) + 'px');
+                        self.style.setProperty('--my', (lastMY - r.top) + 'px');
+                    });
                 });
                 item.addEventListener('click', function() {
                     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -815,6 +845,7 @@
                     mobileToggle.style.opacity = opacity;
                     mobileToggle.style.transform = 'translateY(' + (-14 * ratio) + 'px) scale(' + (1 - 0.15 * ratio) + ')';
                     mobileToggle.style.pointerEvents = opacity < 0.05 ? 'none' : 'auto';
+                    mobileToggle.style.visibility = opacity < 0.05 ? 'hidden' : 'visible';
                 }
 
                 mainContent.addEventListener('scroll', updateToggleOpacity, { passive: true });
