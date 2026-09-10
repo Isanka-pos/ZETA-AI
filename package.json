@@ -1,13 +1,16 @@
 {
   "name": "zeta-ai",
   "version": "1.0.0",
-  "description": "ZETA TOOLS - AI Command Center (static site)",
+  "description": "ZETA TOOLS - AI Command Center",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "engines": {
     "node": "22.x"
+  },
+  "dependencies": {
+    "mongodb": "^6.8.0"
   },
   "license": "MIT"
 }

@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | ZETA TOOLS</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: { extend: {
+                colors: { zeta: { bg:'#04060C', surface:'#0A0E1A', card:'#0D1120', border:'#1A2035', blue:'#00A3FF', cyan:'#00D4FF' } },
+                fontFamily: { orbitron:['Orbitron','sans-serif'], inter:['Inter','sans-serif'] }
+            } }
+        }
+    </script>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior:smooth; }
+        body { font-family:'Inter',sans-serif; background:#04060C; color:#E0E8F0; overflow-x:hidden; }
+
+        ::-webkit-scrollbar { width:6px; height:6px; }
+        ::-webkit-scrollbar-track { background:#04060C; }
+        ::-webkit-scrollbar-thumb { background:#00A3FF33; border-radius:3px; }
+        ::-webkit-scrollbar-thumb:hover { background:#00A3FF66; }
+
+        /* ===== support.html background style ===== */
+        .cyber-grid { position:fixed; top:0; left:0; width:100%; height:100%;
+            background-image:linear-gradient(rgba(0,163,255,0.03) 1px, transparent 1px),
+                             linear-gradient(90deg, rgba(0,163,255,0.03) 1px, transparent 1px);
+            background-size:60px 60px; z-index:0; animation:gridMove 20s linear infinite; }
+        @keyframes gridMove { 0%{transform:translate(0,0);} 100%{transform:translate(60px,60px);} }
+
+        #particles-canvas { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; }
+
+        .mouse-glow { position:fixed; width:400px; height:400px; border-radius:50%;
+            background:radial-gradient(circle, rgba(0,163,255,0.06), transparent 70%);
+            pointer-events:none; z-index:1; transform:translate(-50%,-50%); }
+
+        .hero-orb { position:absolute; border-radius:50%; filter:blur(80px); animation:orbFloat 8s ease-in-out infinite; }
+        @keyframes orbFloat { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-30px);} }
+
+        .holo-circle { position:absolute; border-radius:50%; border:1px solid rgba(0,163,255,0.1); animation:holoPulse 4s ease-in-out infinite; }
+        .holo-circle::before { content:''; position:absolute; inset:-1px; border-radius:50%; border:1px solid transparent;
+            border-top-color:rgba(0,212,255,0.3); animation:holoSpin 6s linear infinite; }
+        @keyframes holoPulse { 0%,100%{opacity:0.3; transform:scale(1);} 50%{opacity:0.7; transform:scale(1.05);} }
+        @keyframes holoSpin { to{transform:rotate(360deg);} }
+
+        .energy-wave { position:absolute; border-radius:50%; border:1px solid rgba(0,163,255,0.15); animation:energyExpand 4s ease-out infinite; }
+        @keyframes energyExpand { 0%{transform:scale(0.5); opacity:0.8;} 100%{transform:scale(3); opacity:0;} }
+
+        .energy-ring { position:absolute; border-radius:50%; border:1px solid rgba(0,163,255,0.08); animation:ringRotate 20s linear infinite; }
+        @keyframes ringRotate { to{transform:translate(-50%,-50%) rotate(360deg);} }
+
+        .light-streak { position:absolute; width:200px; height:1px;
+            background:linear-gradient(90deg, transparent, rgba(0,163,255,0.6), transparent);
+            animation:streakMove 3s ease-in-out infinite; }
+        @keyframes streakMove { 0%{transform:translateX(-200px); opacity:0;} 50%{opacity:1;} 100%{transform:translateX(calc(100vw + 200px)); opacity:0;} }
+
+        /* ===== loader ===== */
+        .page-loader { position:fixed; inset:0; background:#04060C; z-index:9999;
+            display:flex; align-items:center; justify-content:center; flex-direction:column; gap:20px;
+            transition:opacity .5s ease; }
+        .page-loader.hidden { opacity:0; pointer-events:none; }
+        .loader-ring { width:50px; height:50px; border-radius:50%; border:2px solid rgba(0,163,255,0.1);
+            border-top-color:#00A3FF; animation:loaderSpin 1s linear infinite; }
+        @keyframes loaderSpin { to{transform:rotate(360deg);} }
+        .loader-text { font-family:'Orbitron',sans-serif; letter-spacing:6px; font-size:14px; color:#00A3FF; }
+
+        /* ===== glass ===== */
+        .nav-blur { backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+            background:rgba(4,6,12,0.8); border-bottom:1px solid rgba(0,163,255,0.06); }
+        .glass-card { background:linear-gradient(135deg, rgba(13,17,32,0.8), rgba(10,14,26,0.6));
+            backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+            border:1px solid rgba(0,163,255,0.08); border-radius:16px; transition:all .3s ease; }
+        .glass-card:hover { border-color:rgba(0,163,255,0.2); box-shadow:0 0 30px rgba(0,163,255,0.06); }
+
+        .reveal { opacity:0; transform:translateY(40px); transition:all .8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.visible { opacity:1; transform:translateY(0); }
+
+        /* ===== buttons & inputs ===== */
+        .neon-btn { position:relative; display:inline-flex; align-items:center; gap:10px; padding:11px 24px;
+            background:linear-gradient(135deg, #00A3FF, #0066CC); color:white; font-weight:600; border-radius:12px;
+            border:none; cursor:pointer; font-size:13px; font-family:'Inter',sans-serif; transition:all .4s cubic-bezier(0.175,0.885,0.32,1.275);
+            box-shadow:0 0 15px rgba(0,163,255,0.3), 0 0 30px rgba(0,163,255,0.1), inset 0 1px 0 rgba(255,255,255,0.1); }
+        .neon-btn:hover { transform:translateY(-3px) scale(1.02); box-shadow:0 0 25px rgba(0,163,255,0.5), 0 0 50px rgba(0,163,255,0.15), inset 0 1px 0 rgba(255,255,255,0.15); }
+        .neon-btn:active { transform:scale(0.98); }
+        .neon-btn.danger { background:linear-gradient(135deg, #FF4757, #CC2233); box-shadow:0 0 15px rgba(255,71,87,0.3); }
+        .neon-btn.danger:hover { box-shadow:0 0 25px rgba(255,71,87,0.5); }
+        .neon-btn.ghost { background:rgba(0,163,255,0.05); border:1px solid rgba(0,163,255,0.2); box-shadow:none; color:#00D4FF; }
+        .neon-btn.ghost:hover { background:rgba(0,163,255,0.12); box-shadow:0 0 20px rgba(0,163,255,0.15); }
+
+        .z-input { width:100%; padding:11px 14px; background:rgba(4,6,12,0.7); border:1px solid rgba(0,163,255,0.15);
+            border-radius:10px; color:#E0E8F0; font-size:13.5px; font-family:'Inter',sans-serif; outline:none; transition:all .3s; }
+        .z-input:focus { border-color:#00A3FF; box-shadow:0 0 0 3px rgba(0,163,255,0.1), 0 0 20px rgba(0,163,255,0.08); }
+        .z-input::placeholder { color:rgba(224,232,240,0.3); }
+        textarea.z-input { resize:vertical; min-height:80px; }
+
+        .z-label { display:block; font-size:10px; font-weight:700; letter-spacing:1.6px; text-transform:uppercase;
+            color:rgba(0,212,255,0.7); margin-bottom:6px; font-family:'Orbitron',sans-serif; }
+
+        /* ===== sidebar ===== */
+        .side-item { display:flex; align-items:center; gap:12px; padding:11px 14px; border-radius:11px; cursor:pointer;
+            color:rgba(224,232,240,0.55); font-size:13px; font-weight:500; transition:all .25s ease; border:1px solid transparent;
+            font-family:'Inter',sans-serif; background:transparent; width:100%; text-align:left; }
+        .side-item i { width:18px; text-align:center; font-size:14px; }
+        .side-item:hover { color:#fff; background:rgba(0,163,255,0.06); border-color:rgba(0,163,255,0.1); }
+        .side-item.active { color:#00D4FF; background:linear-gradient(135deg, rgba(0,163,255,0.12), rgba(0,163,255,0.03));
+            border-color:rgba(0,163,255,0.25); box-shadow:0 0 20px rgba(0,163,255,0.08); }
+
+        /* ===== toggle switch ===== */
+        .switch { position:relative; width:44px; height:24px; flex-shrink:0; cursor:pointer; }
+        .switch input { opacity:0; width:0; height:0; }
+        .slider { position:absolute; inset:0; background:rgba(255,255,255,0.08); border-radius:100px; transition:.3s; }
+        .slider::before { content:''; position:absolute; width:18px; height:18px; left:3px; top:3px; border-radius:50%;
+            background:#8899AA; transition:.3s; }
+        .switch input:checked + .slider { background:rgba(0,163,255,0.35); box-shadow:0 0 12px rgba(0,163,255,0.25); }
+        .switch input:checked + .slider::before { transform:translateX(20px); background:#00D4FF; box-shadow:0 0 10px rgba(0,212,255,0.6); }
+
+        .tab-page { display:none; }
+        .tab-page.active { display:block; animation:pageIn .4s cubic-bezier(0.16,1,0.3,1); }
+        @keyframes pageIn { from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);} }
+
+        .stat-num { font-family:'Orbitron',sans-serif; font-size:clamp(22px,3vw,30px); font-weight:700;
+            background:linear-gradient(135deg,#00D4FF,#00A3FF); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+
+        .toast { position:fixed; bottom:24px; right:24px; z-index:9998; padding:13px 20px; border-radius:12px;
+            background:rgba(13,17,32,0.95); border:1px solid rgba(0,212,255,0.3); color:#E0E8F0; font-size:13px;
+            backdrop-filter:blur(14px); box-shadow:0 8px 32px rgba(0,0,0,0.6); transform:translateY(20px); opacity:0;
+            transition:all .4s cubic-bezier(0.16,1,0.3,1); pointer-events:none; display:flex; align-items:center; gap:9px; }
+        .toast.show { transform:translateY(0); opacity:1; }
+        .toast.err { border-color:rgba(255,71,87,0.4); }
+
+        table.z-table { width:100%; border-collapse:collapse; font-size:12.5px; }
+        table.z-table th { text-align:left; padding:9px 12px; font-family:'Orbitron',sans-serif; font-size:9px;
+            letter-spacing:1.4px; text-transform:uppercase; color:rgba(0,212,255,0.6); border-bottom:1px solid rgba(0,163,255,0.12); }
+        table.z-table td { padding:9px 12px; border-bottom:1px solid rgba(255,255,255,0.03); color:rgba(224,232,240,0.75); }
+
+        .badge-mini { display:inline-block; padding:2px 9px; border-radius:100px; font-size:9px; font-weight:700;
+            letter-spacing:0.6px; text-transform:uppercase; font-family:'Orbitron',sans-serif; }
+        .badge-on { background:rgba(0,212,255,0.1); border:1px solid rgba(0,212,255,0.25); color:#00D4FF; }
+        .badge-off { background:rgba(255,71,87,0.08); border:1px solid rgba(255,71,87,0.2); color:#FF6B7A; }
+
+        .icon-btn { width:30px; height:30px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center;
+            background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); color:rgba(224,232,240,0.5);
+            cursor:pointer; transition:all .2s; font-size:11px; }
+        .icon-btn:hover { color:#00D4FF; border-color:rgba(0,163,255,0.35); background:rgba(0,163,255,0.07); }
+        .icon-btn.danger:hover { color:#FF6B7A; border-color:rgba(255,71,87,0.4); background:rgba(255,71,87,0.07); }
+
+        @media (max-width:900px) {
+            #sidebar { position:fixed; left:0; top:0; bottom:0; z-index:60; transform:translateX(-100%); transition:transform .35s cubic-bezier(0.16,1,0.3,1); }
+            #sidebar.open { transform:translateX(0); }
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+
+    <!-- Page Loader -->
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-ring"></div>
+        <div class="loader-text">ZETA ADMIN</div>
+    </div>
+
+    <!-- Background layers (support.html style) -->
+    <div class="mouse-glow" id="mouseGlow"></div>
+    <div class="cyber-grid"></div>
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- ===== LOGIN GATE ===== -->
+    <div id="loginGate" class="fixed inset-0 z-50 flex items-center justify-center p-5" style="background:#04060C;">
+        <div class="holo-circle" style="width:280px;height:280px;top:12%;left:-60px;"></div>
+        <div class="holo-circle" style="width:180px;height:180px;bottom:14%;right:-40px;animation-delay:-2s;"></div>
+        <div class="energy-wave" style="width:220px;height:220px;top:35%;left:20%;"></div>
+        <div class="light-streak" style="top:20%;animation-delay:.5s;"></div>
+        <div class="light-streak" style="top:65%;animation-delay:1.8s;"></div>
+        <div class="glass-card w-full max-w-sm p-8" style="position:relative;z-index:2;">
+            <div class="text-center mb-7">
+                <div style="width:56px;height:56px;margin:0 auto 14px;background:linear-gradient(135deg,#00A3FF,#0066CC);border-radius:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 25px rgba(0,163,255,0.4);">
+                    <i class="fa-solid fa-shield-halved" style="font-size:22px;color:#fff;"></i>
+                </div>
+                <div style="font-family:'Orbitron',sans-serif;font-weight:800;font-size:20px;letter-spacing:3px;">ZETA <span style="color:#00A3FF;">ADMIN</span></div>
+                <div style="font-size:11px;color:rgba(224,232,240,0.4);margin-top:5px;letter-spacing:1px;">RESTRICTED ACCESS — LOGIN REQUIRED</div>
+            </div>
+            <label class="z-label">Admin Password</label>
+            <input type="password" id="adminPass" class="z-input mb-2" placeholder="••••••••" onkeydown="if(event.key==='Enter')adminLogin()">
+            <div id="loginErr" class="hidden" style="font-size:12px;color:#FF6B7A;margin:6px 0;">⚠️ Password එක වැරදියි. ආයේ try කරන්න.</div>
+            <button class="neon-btn w-full justify-center mt-3" onclick="adminLogin()"><i class="fa-solid fa-lock-open"></i> LOGIN</button>
+            <div style="font-size:10px;color:rgba(224,232,240,0.25);margin-top:14px;text-align:center;">Default password: <b style="color:rgba(0,212,255,0.5);">zeta123</b> — Settings tab එකෙන් මාරු කරන්න</div>
+        </div>
+    </div>
+
+    <!-- ===== ADMIN APP ===== -->
+    <div id="adminApp" class="hidden">
+
+        <!-- Nav -->
+        <nav class="nav-blur fixed top-0 left-0 right-0 z-50">
+            <div class="max-w-[1400px] mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <button class="md:hidden icon-btn" onclick="document.getElementById('sidebar').classList.toggle('open')"><i class="fa-solid fa-bars"></i></button>
+                    <a href="index.html" class="flex items-center gap-3" style="text-decoration:none;">
+                        <div style="width:34px;height:34px;background:linear-gradient(135deg,#00A3FF,#0066CC);border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 15px rgba(0,163,255,0.3);">
+                            <span style="font-family:'Orbitron',sans-serif;font-weight:900;font-size:15px;color:#fff;">Z</span>
+                        </div>
+                        <span style="font-family:'Orbitron',sans-serif;font-weight:700;font-size:15px;color:#E0E8F0;letter-spacing:2px;">ZETA <span style="color:#00A3FF;">ADMIN</span></span>
+                    </a>
+                    <span class="badge-mini badge-on hidden sm:inline-block" style="margin-left:6px;">● LIVE</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <a href="index.html" class="neon-btn ghost" style="padding:8px 16px;font-size:12px;"><i class="fa-solid fa-globe"></i> <span class="hidden sm:inline">View Site</span></a>
+                    <button class="neon-btn danger" style="padding:8px 16px;font-size:12px;" onclick="adminLogout()"><i class="fa-solid fa-right-from-bracket"></i> <span class="hidden sm:inline">Logout</span></button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="max-w-[1400px] mx-auto px-4 sm:px-6 pt-24 pb-16 flex gap-6" style="position:relative;z-index:2;">
+
+            <!-- Sidebar -->
+            <aside id="sidebar" class="glass-card p-4 w-64 flex-shrink-0 self-start" style="position:sticky;top:88px;">
+                <div class="z-label" style="padding:4px 6px 10px;">Control Center</div>
+                <div id="sideNav" class="flex flex-col gap-1"></div>
+            </aside>
+
+            <!-- Main -->
+            <main class="flex-1 min-w-0">
+
+                <!-- ============ DASHBOARD ============ -->
+                <section id="page-dashboard" class="tab-page active">
+                    <h2 style="font-family:'Orbitron',sans-serif;font-size:22px;font-weight:800;letter-spacing:1px;margin-bottom:4px;">DASHBOARD</h2>
+                    <p style="font-size:12.5px;color:rgba(224,232,240,0.45);margin-bottom:22px;">ZETA TOOLS — system overview &amp; quick stats</p>
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                        <div class="glass-card p-5 reveal"><i class="fa-solid fa-eye" style="color:#00A3FF;font-size:18px;"></i><div class="stat-num mt-2" id="statVisits">0</div><div style="font-size:11px;color:rgba(224,232,240,0.4);">Total Visits</div></div>
+                        <div class="glass-card p-5 reveal"><i class="fa-solid fa-images" style="color:#00D4FF;font-size:18px;"></i><div class="stat-num mt-2" id="statPhotos">0</div><div style="font-size:11px;color:rgba(224,232,240,0.4);">Photos Saved</div></div>
+                        <div class="glass-card p-5 reveal"><i class="fa-solid fa-users" style="color:#7C5CFC;font-size:18px;"></i><div class="stat-num mt-2" id="statUsers">0</div><div style="font-size:11px;color:rgba(224,232,240,0.4);">Users</div></div>
+                        <div class="glass-card p-5 reveal"><i class="fa-solid fa-screwdriver-wrench" style="color:#22C990;font-size:18px;"></i><div class="stat-num mt-2" id="statTools">0</div><div style="font-size:11px;color:rgba(224,232,240,0.4);">Active Tools</div></div>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="glass-card p-5">
+                            <div style="font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:1.5px;color:#00D4FF;margin-bottom:14px;">⚡ QUICK ACTIONS</div>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="neon-btn ghost" onclick="showTab('popup')"><i class="fa-regular fa-bell"></i> Popup Manager</button>
+                                <button class="neon-btn ghost" onclick="showTab('photos')"><i class="fa-solid fa-images"></i> Photo Links</button>
+                                <button class="neon-btn ghost" onclick="showTab('backup')"><i class="fa-solid fa-database"></i> Backup</button>
+                            </div>
+                        </div>
+                        <div class="glass-card p-5">
+                            <div style="font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:1.5px;color:#00D4FF;margin-bottom:14px;">🕒 RECENT ACTIVITY</div>
+                            <div id="dashLog" style="font-size:12px;color:rgba(224,232,240,0.6);max-height:130px;overflow-y:auto;"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============ PHOTO LINKS (MongoDB) ============ -->
+                <section id="page-photos" class="tab-page">
+                    <h2 style="font-family:'Orbitron',sans-serif;font-size:22px;font-weight:800;letter-spacing:1px;margin-bottom:4px;">PHOTO LINKS</h2>
+                    <p style="font-size:12.5px;color:rgba(224,232,240,0.45);margin-bottom:22px;">Blur Studio එකෙන් database එකේ save වුනු image links</p>
+                    <div class="glass-card p-5">
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <button class="neon-btn" onclick="loadPhotos()"><i class="fa-solid fa-rotate"></i> Refresh</button>
+                            <span id="photosMsg" style="font-size:12px;color:rgba(224,232,240,0.5);align-self:center;"></span>
+                        </div>
+                        <div style="overflow-x:auto;">
+                            <table class="z-table">
+                                <thead><tr><th>#</th><th>Image Link</th><th>Page</th><th>Date</th><th style="text-align:right;">Actions</th></tr></thead>
+                                <tbody id="photosTable"><tr><td colspan="5" style="text-align:center;color:rgba(224,232,240,0.3);padding:24px;">— data නෑ —</td></tr></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============ POPUP MANAGER ============ -->
+                <section id="page-popup" class="tab-page">
+                    <h2 style="font-family:'Orbitron',sans-serif;font-size:22px;font-weight:800;letter-spacing:1px;margin-bottom:4px;">POPUP MANAGER</h2>
+                    <p style="font-size:12.5px;color:rgba(224,232,240,0.45);margin-bottom:22px;">"New Updates" popup එක control කරන්න</p>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="glass-card p-5">
+                            <div class="mb-4"><label class="z-label">Popup Status</label>
+                                <div class="flex items-center gap-3">
+                                    <label class="switch"><input type="checkbox" id="popupEnabled" checked><span class="slider"></span></label>
+                                    <span id="popupStateTxt" style="font-size:12px;color:rgba(224,232,240,0.6);">Enabled</span>
+                                </div>
+                            </div>
+                            <div class="mb-4"><label class="z-label">Updates Version (number)</label>
+                                <input type="number" id="popupVersion" class="z-input" value="2" min="1"></div>
+                            <div class="mb-4"><label class="z-label">Main Text (use &lt;br&gt; for new line)</label>
+                                <textarea id="popupMain" class="z-input">අපගේ වෙබ්සයිට් එක සඳහා නව &lt;span class="highlight"&gt;ඇප් 2ක්&lt;/span&gt;&lt;br&gt;එකතු වී ඇත</textarea></div>
+                            <div class="mb-4"><label class="z-label">Description</label>
+                                <textarea id="popupDesc" class="z-input">අලුතින් එකතු කළ Apps 2 දැන් භාවිතා කර බලන්න.</textarea></div>
+                            <button class="neon-btn" onclick="savePopupSettings()"><i class="fa-solid fa-floppy-disk"></i> Save Popup Settings</button>
+                        </div>
+                        <div class="glass-card p-5">
+                            <div style="font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:1.5px;color:#00D4FF;margin-bottom:14px;">👁 LIVE PREVIEW</div>
+                            <div style="background:rgba(3,5,12,0.7);border:1px solid rgba(0,163,255,0.15);border-radius:14px;padding:22px;text-align:center;">
+                                <i class="fa-regular fa-bell" style="font-size:24px;color:#00A3FF;"></i>
+                                <div style="font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2px;color:#00A3FF;margin:8px 0;">New Updates</div>
+                                <div id="popupPreview" style="font-size:16px;font-weight:800;line-height:1.5;color:#fff;"></div>
+                                <div id="popupPreviewDesc" style="font-size:12px;color:rgba(224,232,240,0.5);margin-top:8px;"></div>
+                            </div>
+                            <button class="neon-btn ghost w-full justify-center mt-4" onclick="forceShowPopup()"><i class="fa-solid fa-bullhorn"></i> Force Show Popup on Site</button>
+                            <button class="neon-btn danger w-full justify-center mt-2" onclick="hidePopupForAll()"><i class="fa-solid fa-eye-slash"></i> Hide Popup (mark as seen)</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============ SITE SETTINGS ============ -->
+                <section id="page-settings" class="tab-page">
+                    <h2 style="font-family:'Orbitron',sans-serif;font-size:22px;font-weight:800;letter-spacing:1px;margin-bottom:4px;">SITE SETTINGS</h2>
+                    <p style="font-size:12.5px;color:rgba(224,232,240,0.45);margin-bottom:22px;">Website එකේ basic settings — localStorage එකේ save වෙනවා</p>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="glass-card p-5">
+                            <div class="mb-4"><label class="z-label">Site Name</label><input type="text" id="setSiteName" class="z-input" value="ZETA TOOLS"></div>
+                            <div class="mb-4"><label class="z-label">Announcement Banner Text</label><input type="text" id="setBanner" class="z-input" placeholder="(empty = hide banner)"></div>
+                            <div class="mb-4"><label class="z-label">Hero Heading</label><input type="text" id="setHero" class="z-input" value="Welcome to ZETA TOOLS"></div>
+                            <div class="mb-4 flex items-center justify-between">
+                                <div><label class="z-label" style="margin-bottom:2px;">Maintenance Mode</label><span style="font-size:11px;color:rgba(224,232,240,0.4);">Site visitorsට maintenance page එක පෙන්නයි</span></div>
+                                <label class="switch"><input type="checkbox" id="setMaintenance"><span class="slider"></span></label>
+                            </div>
+                            <button class="neon-btn" onclick="saveSiteSettings()"><i class="fa-solid fa-floppy-disk"></i> Save Settings</button>
+                        </div>
+                        <div class="glass-card p-5">
+                            <div style="font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:1.5px;color:#00D4FF;margin-bottom:14px;">🔐 SECURITY</div>
+                            <div class="mb-4"><label class="z-label">Admin Password</label><input type="text" id="setAdminPass" class="z-input" value="zeta123"></div>
+                            <button class="neon-btn ghost" onclick="saveAdminPass()"><i class="fa-solid fa-key"></i> Change Password</button>
+                            <div style="border-top:1px solid rgba(255,255,255,0.05);margin:18px 0;"></div>
+                            <div style="font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:1.5px;color:#00D4FF;margin-bottom:14px;">📊 COUNTER</div>
+                            <div class="flex gap-2">
+                                <input type="number" id="setVisits" class="z-input" placeholder="Visit count">
+                                <button class="neon-btn ghost" onclick="saveVisits()">Set</button>
+                                <button class="neon-btn danger" onclick="resetVisits()">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============ TOOLS MANAGER ============ -->
+                <section id="page-tools" class="tab-page">
+                    <h2 style="font-family:'Orbitron',sans-serif;font-size:22px;font-weight:800;letter-spacing:1px;margin-bottom:4px;">TOOLS MANAGER</h2>
+                    <p style="font-size:12.5px;color:rgba(224,232,240,0.45);margin-bottom:22px;">Site එකේ tools on/off කරන්න</p>
+                    <div class="glass-card p-5">
+                        <div id="toolsList" class="flex flex-col gap-2"></div>
+                    </div>
+                </section>
+
+                <!-- ============ USERS ============ -->
+                <section id="page-users" class="tab-page">
+                    <h2 style="font-family:'Orbitron',sans-serif;font-size:22px;font-weight:800;letter-spacing:1px;margin-bottom:4px;">USERS</h2>
+                    <p style="font-size:12.5px;color:rgba(224,232,240,0.45);margin-bottom:22px;">User list manage කරන්න</p>
+                    <div class="glass-card p-5 mb-4">
+                        <div class="flex flex-wrap gap-2">
+                            <input type="text" id="newUserName" class="z-input" style="flex:1;min-width:150px;" placeholder="User name">
+                            <select id="newUserRole" class="z-input" style="width:130px;">
+                                <option value="member">Member</option><option value="pro">Pro</option><option value="admin">Admin</option>
+                            </select>
+                            <button class="neon-btn" onclick="addUser()"><i class="fa-solid fa-user-plus"></i> Add</button>
+                        </div>
+                    </div>
+                    <div class="glass-card p-5">
+                        <div style="overflow-x:auto;">
+                            <table class="z-table">
+                                <thead><tr><th>Name</th><th>Role</th><th>Joined</th><th>Status</th><th style="text-align:right;">Actions</th></tr></thead>
+                                <tbody id="usersTable"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============ API KEYS ============ -->
+                <section id="page-api" class="tab-page">
+                    <h2 style="font-family:'Orbitron',sans-serif;font-size:22px;font-weight:800;letter-spacing:1px;margin-bottom:4px;">API KEYS</h2>
+                    <p style="font-size:12.5px;color:rgba(224,232,240,0.45);margin-bottom:22px;">External APIs වල keys — localStorage එකේ save වෙනවා</p>
+                    <div class="glass-card p-5">
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div><label class="z-label">Movie API Key (chamindu)</label><input type="text" id="apiMovie" class="z-input" placeholder="chama_api_..."></div>
+                            <div><label class="z-label">AI Code API Key (wolvarex)</label><input type="text" id="apiCode" class="z-input" placeholder="wxa_f_..."></div>
+                            <div><label class="z-label">MongoDB Backend URL</label><input type="text" id="apiBackend" class="z-input" placeholder="https://...herokuapp.com"></div>
+                            <div><label class="z-label">Announce / Notes</label><input type="text" id="apiNotes" class="z-input" placeholder="internal notes..."></div>
+                        </div>
+                        <button class="neon-btn mt-4" onclick="saveApiKeys()"><i class="fa-solid fa-floppy-disk"></i> Save API Keys</button>
+                    </div>
+                </section>
+
+                <!-- ============ BACKUP ============ -->
+                <section id="page-backup" class="tab-page">
+                    <h2 style="font-family:'Orbitron',sans-serif;font-size:22px;font-weight:800;letter-spacing:1px;margin-bottom:4px;">BACKUP &amp; DATA</h2>
+                    <p style="font-size:12.5px;color:rgba(224,232,240,0.45);margin-bottom:22px;">Site data export / import / reset</p>
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="glass-card p-5 text-center">
+                            <i class="fa-solid fa-file-export" style="font-size:28px;color:#00A3FF;"></i>
+                            <div style="font-weight:700;margin:10px 0 4px;">Export Backup</div>
+                            <p style="font-size:11.5px;color:rgba(224,232,240,0.4);margin-bottom:14px;">සියලුම site data JSON file එකකට බාගන්න</p>
+                            <button class="neon-btn w-full justify-center" onclick="exportData()"><i class="fa-solid fa-download"></i> Download JSON</button>
+                        </div>
+                        <div class="glass-card p-5 text-center">
+                            <i class="fa-solid fa-file-import" style="font-size:28px;color:#22C990;"></i>
+                            <div style="font-weight:700;margin:10px 0 4px;">Import Backup</div>
+                            <p style="font-size:11.5px;color:rgba(224,232,240,0.4);margin-bottom:14px;">පරණ backup file එකක් ආපහු load කරන්න</p>
+                            <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importData(this)">
+                            <button class="neon-btn ghost w-full justify-center" onclick="document.getElementById('importFile').click()"><i class="fa-solid fa-upload"></i> Choose File</button>
+                        </div>
+                        <div class="glass-card p-5 text-center">
+                            <i class="fa-solid fa-triangle-exclamation" style="font-size:28px;color:#FF4757;"></i>
+                            <div style="font-weight:700;margin:10px 0 4px;">Reset All Data</div>
+                            <p style="font-size:11.5px;color:rgba(224,232,240,0.4);margin-bottom:14px;">සියලුම site data මකා දමයි (ආපසු ගන්න බෑ!)</p>
+                            <button class="neon-btn danger w-full justify-center" onclick="resetAllData()"><i class="fa-solid fa-trash"></i> Reset Everything</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============ ACTIVITY LOG ============ -->
+                <section id="page-logs" class="tab-page">
+                    <h2 style="font-family:'Orbitron',sans-serif;font-size:22px;font-weight:800;letter-spacing:1px;margin-bottom:4px;">ACTIVITY LOG</h2>
+                    <p style="font-size:12.5px;color:rgba(224,232,240,0.45);margin-bottom:22px;">Admin actions සියල්ල මෙතන record වෙනවා</p>
+                    <div class="glass-card p-5">
+                        <div class="flex justify-end mb-3"><button class="neon-btn ghost" style="padding:7px 16px;font-size:12px;" onclick="clearLog()"><i class="fa-solid fa-broom"></i> Clear Log</button></div>
+                        <div id="logList" style="font-size:12.5px;max-height:420px;overflow-y:auto;"></div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"><i class="fa-solid fa-circle-check" style="color:#00D4FF;"></i><span id="toastTxt"></span></div>
+
+    <script>
+    // ============================================================
+    // ZETA ADMIN PANEL — LOGIC
+    // ============================================================
+    (function() {
+        // ===== storage keys =====
+        const K = {
+            pass: 'zeta_admin_pass',
+            visits: 'zeta_visits',
+            users: 'zeta_users',
+            tools: 'zeta_tools_cfg',
+            api: 'zeta_api_keys',
+            site: 'zeta_site_settings',
+            popup: 'zeta_popup_cfg',
+            log: 'zeta_admin_log'
+        };
+
+        // ===== helpers =====
+        function lsGet(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
+        function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+        function $(id) { return document.getElementById(id); }
+        function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+        window.toast = function(msg, isErr) {
+            const t = $('toast');
+            $('toastTxt').textContent = msg;
+            t.classList.toggle('err', !!isErr);
+            t.querySelector('i').className = isErr ? 'fa-solid fa-circle-xmark' : 'fa-solid fa-circle-check';
+            t.querySelector('i').style.color = isErr ? '#FF6B7A' : '#00D4FF';
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2600);
+        };
+
+        window.logAction = function(action) {
+            const log = lsGet(K.log, []);
+            log.unshift({ time: new Date().toLocaleString('en-GB'), action });
+            if (log.length > 200) log.length = 200;
+            lsSet(K.log, log);
+            renderLog();
+        };
+
+        // ===== LOGIN =====
+        window.adminLogin = function() {
+            const pass = $('adminPass').value;
+            const real = lsGet(K.pass, 'zeta123');
+            if (pass === real) {
+                sessionStorage.setItem('zeta_admin_ok', '1');
+                $('loginGate').style.display = 'none';
+                $('adminApp').classList.remove('hidden');
+                initApp();
+                logAction('Admin logged in');
+            } else {
+                $('loginErr').classList.remove('hidden');
+            }
+        };
+        window.adminLogout = function() {
+            sessionStorage.removeItem('zeta_admin_ok');
+            location.reload();
+        };
+
+        // ===== TABS =====
+        const tabs = [
+            { id: 'dashboard', icon: 'fa-gauge-high', label: 'Dashboard' },
+            { id: 'photos', icon: 'fa-images', label: 'Photo Links' },
+            { id: 'popup', icon: 'fa-bell', label: 'Popup Manager' },
+            { id: 'settings', icon: 'fa-gear', label: 'Site Settings' },
+            { id: 'tools', icon: 'fa-screwdriver-wrench', label: 'Tools Manager' },
+            { id: 'users', icon: 'fa-users', label: 'Users' },
+            { id: 'api', icon: 'fa-key', label: 'API Keys' },
+            { id: 'backup', icon: 'fa-database', label: 'Backup & Data' },
+            { id: 'logs', icon: 'fa-list', label: 'Activity Log' }
+        ];
+        window.showTab = function(id) {
+            document.querySelectorAll('.tab-page').forEach(p => p.classList.toggle('active', p.id === 'page-' + id));
+            document.querySelectorAll('.side-item').forEach(b => b.classList.toggle('active', b.dataset.tab === id));
+            $('sidebar').classList.remove('open');
+        };
+
+        function buildNav() {
+            $('sideNav').innerHTML = tabs.map(t =>
+                `<button class="side-item ${t.id === 'dashboard' ? 'active' : ''}" data-tab="${t.id}" onclick="showTab('${t.id}')"><i class="fa-solid ${t.icon}"></i> ${t.label}</button>`
+            ).join('');
+        }
+
+        // ===== DASHBOARD =====
+        function refreshStats() {
+            const users = lsGet(K.users, [{ name: 'ZETA User', role: 'pro', date: '2026-01-01', active: true }]);
+            const tools = lsGet(K.tools, null);
+            const toolList = tools || getDefaultTools();
+            $('statVisits').textContent = (lsGet(K.visits, 0)).toLocaleString();
+            $('statUsers').textContent = users.length;
+            $('statTools').textContent = toolList.filter(t => t.on).length + '/' + toolList.length;
+            $('setVisits').value = lsGet(K.visits, 0);
+            // local photo count from gallery
+            try {
+                const g = JSON.parse(localStorage.getItem('zeta_gallery_v1') || '[]');
+                $('statPhotos').textContent = g.length;
+            } catch (e) { $('statPhotos').textContent = 0; }
+            const log = lsGet(K.log, []);
+            $('dashLog').innerHTML = log.slice(0, 6).map(l =>
+                `<div style="padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.03);">⚡ ${esc(l.action)} <span style="color:rgba(224,232,240,0.25);font-size:10px;">· ${esc(l.time)}</span></div>`
+            ).join('') || '<div style="color:rgba(224,232,240,0.3);">No activity yet</div>';
+        }
+
+        // ===== PHOTOS (MongoDB via backend) =====
+        window.loadPhotos = async function() {
+            const msg = $('photosMsg');
+            msg.textContent = '⏳ Loading from database…';
+            try {
+                const res = await fetch('/api/photos');
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const data = await res.json();
+                const photos = data.photos || [];
+                msg.textContent = photos.length + ' links found';
+                $('photosTable').innerHTML = photos.length ? photos.map((p, i) => `
+                    <tr>
+                        <td style="color:rgba(224,232,240,0.3);">${i + 1}</td>
+                        <td style="max-width:280px;"><a href="${esc(p.url)}" target="_blank" style="color:#00D4FF;text-decoration:none;word-break:break-all;">${esc(String(p.url).slice(0, 60))}${p.url.length > 60 ? '…' : ''}</a></td>
+                        <td>${esc(p.page || '—')}</td>
+                        <td style="white-space:nowrap;">${p.savedAt ? new Date(p.savedAt).toLocaleDateString('en-GB') : '—'}</td>
+                        <td style="text-align:right;white-space:nowrap;">
+                            <button class="icon-btn" title="Copy" onclick="navigator.clipboard.writeText('${esc(p.url)}');toast('Link copied')"><i class="fa-regular fa-copy"></i></button>
+                        </td>
+                    </tr>`).join('')
+                    : '<tr><td colspan="5" style="text-align:center;color:rgba(224,232,240,0.3);padding:24px;">— data නෑ —</td></tr>';
+            } catch (e) {
+                msg.textContent = '';
+                $('photosTable').innerHTML = '<tr><td colspan="5" style="text-align:center;color:#FF6B7A;padding:24px;">❌ Backend connect වුනේ නෑ. server.js එකේ /api/photos endpoint එක add කරලා තියෙනවද check කරන්න.</td></tr>';
+            }
+        };
+
+        // ===== POPUP MANAGER =====
+        function getPopupCfg() {
+            return lsGet(K.popup, { enabled: true, version: 2 });
+        }
+        function loadPopupUI() {
+            const cfg = getPopupCfg();
+            $('popupEnabled').checked = cfg.enabled;
+            $('popupVersion').value = cfg.version || 2;
+            $('popupStateTxt').textContent = cfg.enabled ? 'Enabled' : 'Disabled';
+            updatePopupPreview();
+        }
+        function updatePopupPreview() {
+            $('popupPreview').innerHTML = $('popupMain').value;
+            $('popupPreviewDesc').textContent = $('popupDesc').value;
+        }
+        ['popupMain', 'popupDesc'].forEach(id => {
+            document.addEventListener('input', e => { if (e.target && e.target.id === id) updatePopupPreview(); });
+        });
+        $('popupEnabled').addEventListener('change', function() {
+            $('popupStateTxt').textContent = this.checked ? 'Enabled' : 'Disabled';
+        });
+        window.savePopupSettings = function() {
+            lsSet(K.popup, {
+                enabled: $('popupEnabled').checked,
+                version: parseInt($('popupVersion').value, 10) || 2,
+                main: $('popupMain').value,
+                desc: $('popupDesc').value
+            });
+            logAction('Popup settings saved (v' + $('popupVersion').value + ')');
+            toast('Popup settings saved ✅');
+        };
+        window.forceShowPopup = function() {
+            const cfg = getPopupCfg();
+            for (let i = 0; i < 50; i++) localStorage.removeItem('zeta_updates_seen_v' + i);
+            if (cfg.version) localStorage.removeItem('zeta_updates_seen_v' + cfg.version);
+            logAction('Popup forced to show for all users');
+            toast('Popup එක ආයේ පෙන්නයි — index.html refresh කරලා බලන්න');
+        };
+        window.hidePopupForAll = function() {
+            const cfg = getPopupCfg();
+            localStorage.setItem('zeta_updates_seen_v' + (cfg.version || 2), 'true');
+            logAction('Popup marked as seen (hidden)');
+            toast('Popup එක hide කළා ✅');
+        };
+
+        // ===== SITE SETTINGS =====
+        window.saveSiteSettings = function() {
+            lsSet(K.site, {
+                siteName: $('setSiteName').value,
+                banner: $('setBanner').value,
+                hero: $('setHero').value,
+                maintenance: $('setMaintenance').checked
+            });
+            logAction('Site settings saved');
+            toast('Site settings saved ✅');
+        };
+        window.saveAdminPass = function() {
+            const p = $('setAdminPass').value.trim();
+            if (p.length < 4) { toast('Password එක අවම 4 characters වෙන්න ඕන', true); return; }
+            lsSet(K.pass, p);
+            logAction('Admin password changed');
+            toast('Password change වුනා ✅');
+        };
+        window.saveVisits = function() {
+            lsSet(K.visits, parseInt($('setVisits').value, 10) || 0);
+            refreshStats();
+            logAction('Visit counter set to ' + $('setVisits').value);
+            toast('Visit counter update කළා ✅');
+        };
+        window.resetVisits = function() {
+            lsSet(K.visits, 0);
+            refreshStats();
+            logAction('Visit counter reset');
+            toast('Counter reset කළා');
+        };
+
+        // ===== TOOLS =====
+        function getDefaultTools() {
+            return [
+                { id: 'blur', name: 'Image Blur Studio', icon: 'fa-droplet', on: true },
+                { id: 'code', name: 'AI Code Generator', icon: 'fa-code', on: true },
+                { id: 'gallery', name: 'ZETA Gallery', icon: 'fa-images', on: true },
+                { id: 'movies', name: 'Movie Downloader', icon: 'fa-film', on: true },
+                { id: 'hack', name: 'Hack Generator', icon: 'fa-comment', on: true },
+                { id: 'download', name: 'Video Downloader page', icon: 'fa-download', on: true },
+                { id: 'apk', name: 'APK Downloader page', icon: 'fa-mobile-screen', on: true }
+            ];
+        }
+        window.toggleTool = function(idx) {
+            const tools = lsGet(K.tools, getDefaultTools());
+            tools[idx].on = !tools[idx].on;
+            lsSet(K.tools, tools);
+            renderTools();
+            logAction('Tool "' + tools[idx].name + '" ' + (tools[idx].on ? 'ENABLED' : 'DISABLED'));
+            toast(tools[idx].name + ' — ' + (tools[idx].on ? 'ON ✅' : 'OFF'));
+        };
+        function renderTools() {
+            const tools = lsGet(K.tools, getDefaultTools());
+            $('toolsList').innerHTML = tools.map((t, i) => `
+                <div class="flex items-center justify-between p-3 rounded-xl" style="background:rgba(4,6,12,0.5);border:1px solid rgba(0,163,255,0.08);">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid ${t.icon}" style="color:${t.on ? '#00D4FF' : 'rgba(224,232,240,0.25)'};width:18px;text-align:center;"></i>
+                        <span style="font-size:13px;font-weight:600;color:${t.on ? '#E0E8F0' : 'rgba(224,232,240,0.4)'};">${esc(t.name)}</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="badge-mini ${t.on ? 'badge-on' : 'badge-off'}">${t.on ? 'ON' : 'OFF'}</span>
+                        <label class="switch"><input type="checkbox" ${t.on ? 'checked' : ''} onchange="toggleTool(${i})"><span class="slider"></span></label>
+                    </div>
+                </div>`).join('');
+        }
+
+        // ===== USERS =====
+        window.addUser = function() {
+            const name = $('newUserName').value.trim();
+            if (!name) { toast('Name එකක් දාන්න', true); return; }
+            const users = lsGet(K.users, []);
+            users.push({ name, role: $('newUserRole').value, date: new Date().toISOString().slice(0, 10), active: true });
+            lsSet(K.users, users);
+            $('newUserName').value = '';
+            renderUsers();
+            refreshStats();
+            logAction('User added: ' + name);
+            toast('User add කළා ✅');
+        };
+        window.toggleUser = function(i) {
+            const users = lsGet(K.users, []);
+            users[i].active = !users[i].active;
+            lsSet(K.users, users);
+            renderUsers();
+            logAction('User "' + users[i].name + '" ' + (users[i].active ? 'activated' : 'deactivated'));
+        };
+        window.deleteUser = function(i) {
+            const users = lsGet(K.users, []);
+            logAction('User removed: ' + users[i].name);
+            users.splice(i, 1);
+            lsSet(K.users, users);
+            renderUsers();
+            refreshStats();
+            toast('User delete කළා');
+        };
+        function renderUsers() {
+            const users = lsGet(K.users, [{ name: 'ZETA User', role: 'pro', date: '2026-01-01', active: true }]);
+            $('usersTable').innerHTML = users.map((u, i) => `
+                <tr>
+                    <td style="font-weight:600;color:#E0E8F0;">${esc(u.name)}</td>
+                    <td><span class="badge-mini ${u.role === 'admin' ? 'badge-on' : (u.role === 'pro' ? 'badge-on' : 'badge-off')}" style="${u.role === 'pro' ? 'color:#F5C842;border-color:rgba(245,200,66,0.3);background:rgba(245,200,66,0.08);' : ''}">${esc(u.role)}</span></td>
+                    <td>${esc(u.date || '—')}</td>
+                    <td><span class="badge-mini ${u.active ? 'badge-on' : 'badge-off'}">${u.active ? 'Active' : 'Blocked'}</span></td>
+                    <td style="text-align:right;white-space:nowrap;">
+                        <button class="icon-btn" title="${u.active ? 'Block' : 'Activate'}" onclick="toggleUser(${i})"><i class="fa-solid ${u.active ? 'fa-user-slash' : 'fa-user-check'}"></i></button>
+                        <button class="icon-btn danger" title="Delete" onclick="deleteUser(${i})"><i class="fa-regular fa-trash-can"></i></button>
+                    </td>
+                </tr>`).join('');
+        }
+
+        // ===== API KEYS =====
+        window.saveApiKeys = function() {
+            lsSet(K.api, {
+                movie: $('apiMovie').value,
+                code: $('apiCode').value,
+                backend: $('apiBackend').value,
+                notes: $('apiNotes').value
+            });
+            logAction('API keys saved');
+            toast('API keys saved ✅');
+        };
+        function loadApiKeys() {
+            const a = lsGet(K.api, {});
+            $('apiMovie').value = a.movie || '';
+            $('apiCode').value = a.code || '';
+            $('apiBackend').value = a.backend || '';
+            $('apiNotes').value = a.notes || '';
+        }
+
+        // ===== BACKUP =====
+        window.exportData = function() {
+            const data = {};
+            for (let i = 0; i < localStorage.length; i++) {
+                const k = localStorage.key(i);
+                data[k] = localStorage.getItem(k);
+            }
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'zeta-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+            a.click();
+            URL.revokeObjectURL(a.href);
+            logAction('Backup exported');
+            toast('Backup download වුනා ✅');
+        };
+        window.importData = function(input) {
+            const f = input.files && input.files[0];
+            if (!f) return;
+            const r = new FileReader();
+            r.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    let n = 0;
+                    Object.keys(data).forEach(k => { localStorage.setItem(k, data[k]); n++; });
+                    logAction('Backup imported (' + n + ' keys)');
+                    toast('Import සාර්ථකයි ✅ (' + n + ' items) — page reload වෙනවා');
+                    setTimeout(() => location.reload(), 1200);
+                } catch (err) {
+                    toast('File එක read කරන්න බැරි වුනා', true);
+                }
+            };
+            r.readAsText(f);
+            input.value = '';
+        };
+        window.resetAllData = function() {
+            if (!confirm('ඔයාට විශ්වාසද? සියලුම data මැකෙනවා!')) return;
+            localStorage.clear();
+            sessionStorage.clear();
+            logAction('ALL DATA RESET');
+            toast('සියලුම data reset කළා');
+            setTimeout(() => location.reload(), 1200);
+        };
+
+        // ===== LOG =====
+        function renderLog() {
+            const log = lsGet(K.log, []);
+            $('logList').innerHTML = log.length ? log.map(l => `
+                <div style="display:flex;gap:10px;padding:8px 4px;border-bottom:1px solid rgba(255,255,255,0.03);">
+                    <span style="color:rgba(0,212,255,0.5);font-family:'Orbitron',sans-serif;font-size:10px;white-space:nowrap;padding-top:2px;">${esc(l.time)}</span>
+                    <span style="color:rgba(224,232,240,0.7);">${esc(l.action)}</span>
+                </div>`).join('') : '<div style="color:rgba(224,232,240,0.3);text-align:center;padding:20px;">Log empty</div>';
+        }
+        window.clearLog = function() {
+            lsSet(K.log, []);
+            renderLog();
+            refreshStats();
+        };
+
+        // ===== INIT =====
+        function initApp() {
+            buildNav();
+            refreshStats();
+            renderTools();
+            renderUsers();
+            loadApiKeys();
+            loadPopupUI();
+            renderLog();
+            loadPhotos();
+        }
+
+        // ===== BACKGROUND FX (support.html style) =====
+        // mouse glow
+        const glow = $('mouseGlow');
+        let mx = 0, my = 0, gx = 0, gy = 0;
+        document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+        (function animGlow() { gx += (mx - gx) * 0.08; gy += (my - gy) * 0.08; glow.style.left = gx + 'px'; glow.style.top = gy + 'px'; requestAnimationFrame(animGlow); })();
+
+        // particles
+        const canvas = $('particles-canvas'), ctx = canvas.getContext('2d');
+        let particles = [];
+        function resizeCanvas() { canvas.width = innerWidth; canvas.height = innerHeight; }
+        resizeCanvas();
+        addEventListener('resize', resizeCanvas);
+        class Particle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 1.5 + 0.3;
+                this.speedX = (Math.random() - 0.5) * 0.3; this.speedY = (Math.random() - 0.5) * 0.3;
+                this.opacity = Math.random() * 0.5 + 0.1; this.pulse = Math.random() * Math.PI * 2;
+            }
+            update() {
+                this.x += this.speedX; this.y += this.speedY; this.pulse += 0.02;
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+            }
+            draw() {
+                const o = this.opacity * (0.5 + 0.5 * Math.sin(this.pulse));
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(0,163,255,${o})`; ctx.fill();
+            }
+        }
+        const count = Math.min(80, Math.floor(innerWidth / 15));
+        for (let i = 0; i < count; i++) particles.push(new Particle());
+        (function animParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) for (let j = i + 1; j < particles.length; j++) {
+                const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 120) {
+                    ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y);
+                    ctx.strokeStyle = `rgba(0,163,255,${0.06 * (1 - dist / 120)})`; ctx.lineWidth = 0.5; ctx.stroke();
+                }
+            }
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animParticles);
+        })();
+
+        // loader + auto login
+        window.addEventListener('load', () => {
+            setTimeout(() => $('pageLoader').classList.add('hidden'), 700);
+            if (sessionStorage.getItem('zeta_admin_ok') === '1') {
+                $('loginGate').style.display = 'none';
+                $('adminApp').classList.remove('hidden');
+                initApp();
+            } else {
+                $('adminPass').focus();
+            }
+        });
+
+        // count visits (per session)
+        if (!sessionStorage.getItem('zeta_counted')) {
+            sessionStorage.setItem('zeta_counted', '1');
+            lsSet(K.visits, lsGet(K.visits, 0) + 1);
+        }
+    })();
+    </script>
+</body>
+</html>
