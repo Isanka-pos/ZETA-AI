@@ -507,6 +507,54 @@
         @keyframes marquee { from { transform:translateX(0); } to { transform:translateX(-50%); } }
         @media (prefers-reduced-motion:reduce) { .marquee-track { animation:none; } }
 
+        /* ============================================================
+           ZETA GALLERY — photo upload + shareable links (zg- prefix)
+           ============================================================ */
+        .zg-studio { padding:56px 20px 60px; max-width:760px; margin:0 auto; width:100%; flex-shrink:0; }
+        .zg-head { text-align:center; margin-bottom:32px; }
+        .zg-badge { display:inline-flex; align-items:center; gap:6px; padding:6px 16px; border-radius:100px; font-size:10px; font-weight:600; letter-spacing:1.2px; text-transform:uppercase; background:rgba(217,70,239,0.06); border:1px solid rgba(217,70,239,0.14); color:#E879F9; margin-bottom:16px; }
+        .zg-badge i { font-size:9px; }
+        .zg-title { font-size:clamp(20px,3.5vw,30px); font-weight:800; letter-spacing:-0.5px; margin-bottom:10px; }
+        .zg-title span { color:#E879F9; }
+        .zg-sub { font-size:13px; color:var(--text-secondary); max-width:440px; margin:0 auto; line-height:1.7; }
+        .zg-card { background:var(--bg-surface); border:1px solid var(--border-subtle); border-radius:var(--radius-xl); padding:28px 26px; position:relative; overflow:hidden; }
+        .zg-card::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg, transparent, rgba(217,70,239,0.35), transparent); }
+        .zg-drop { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; padding:36px 20px; border:2px dashed rgba(217,70,239,0.20); border-radius:16px; cursor:pointer; transition:all var(--transition-fast); text-align:center; }
+        .zg-drop:hover, .zg-drop.dragover { border-color:rgba(217,70,239,0.5); background:rgba(217,70,239,0.05); }
+        .zg-drop i { font-size:26px; color:#E879F9; opacity:0.85; }
+        .zg-drop-main { font-size:13.5px; color:var(--text-secondary); font-weight:500; }
+        .zg-drop-sub { font-size:11px; color:var(--text-tertiary); }
+        .zg-status { display:flex; align-items:center; justify-content:center; gap:12px; padding:16px; color:var(--text-secondary); font-size:13px; }
+        .zg-spinner { width:20px; height:20px; border-radius:50%; border:2px solid rgba(217,70,239,0.15); border-top-color:#E879F9; animation:zgSpin 0.9s linear infinite; }
+        @keyframes zgSpin { to { transform:rotate(360deg); } }
+        .zg-error { margin-top:18px; padding:13px 16px; border-radius:12px; background:rgba(240,86,74,0.08); border:1px solid rgba(240,86,74,0.22); color:#F58B82; font-size:12.5px; line-height:1.6; }
+        .zg-progress { height:6px; border-radius:6px; background:rgba(255,255,255,0.04); overflow:hidden; margin-top:16px; }
+        .zg-progress-bar { height:100%; width:0%; border-radius:6px; background:linear-gradient(90deg, #D946EF, #8B7CF8); transition:width .3s ease; }
+        .zg-grid { margin-top:24px; display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:14px; }
+        .zg-item { border-radius:14px; overflow:hidden; background:rgba(3,5,12,0.5); border:1px solid var(--border-subtle); transition:all var(--transition-fast); display:flex; flex-direction:column; animation:zgIn .35s cubic-bezier(0.16,1,0.3,1) both; }
+        @keyframes zgIn { from { opacity:0; transform:translateY(10px) scale(.97); } to { opacity:1; transform:translateY(0) scale(1); } }
+        .zg-item:hover { border-color:rgba(217,70,239,0.35); transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.4); }
+        .zg-thumb-wrap { position:relative; aspect-ratio:1/1; background:#000; overflow:hidden; }
+        .zg-thumb { width:100%; height:100%; object-fit:cover; display:block; transition:transform var(--transition-fast); }
+        .zg-item:hover .zg-thumb { transform:scale(1.05); }
+        .zg-brand-tag { position:absolute; top:8px; left:8px; padding:3px 8px; border-radius:6px; font-size:8px; font-weight:700; letter-spacing:0.8px; background:rgba(3,5,12,0.8); color:#E879F9; border:1px solid rgba(217,70,239,0.35); font-family:'Orbitron',sans-serif; }
+        .zg-item-body { padding:10px; display:flex; flex-direction:column; gap:6px; flex:1; }
+        .zg-item-name { font-size:11.5px; font-weight:600; color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .zg-item-link { font-family:'JetBrains Mono',monospace; font-size:9.5px; color:var(--text-tertiary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .zg-item-link.ok { color:#22C990; }
+        .zg-item-link.pending { color:var(--status-warning); }
+        .zg-item-btns { display:flex; gap:6px; margin-top:auto; padding-top:4px; }
+        .zg-btn { flex:1; display:inline-flex; align-items:center; justify-content:center; gap:4px; padding:7px 4px; border-radius:8px; font-size:10.5px; font-weight:600; color:var(--text-secondary); background:rgba(255,255,255,0.03); border:1px solid var(--border-default); cursor:pointer; transition:all var(--transition-fast); font-family:'Inter',sans-serif; text-decoration:none; }
+        .zg-btn:hover { color:#fff; border-color:rgba(217,70,239,0.45); background:rgba(217,70,239,0.10); }
+        .zg-btn.zg-danger:hover { color:#F58B82; border-color:rgba(240,86,74,0.4); background:rgba(240,86,74,0.08); }
+        .zg-empty { margin-top:24px; padding:30px 16px; border:2px dashed var(--border-default); border-radius:16px; text-align:center; color:var(--text-tertiary); font-size:12px; display:flex; flex-direction:column; align-items:center; gap:8px; }
+        .zg-empty i { font-size:24px; opacity:0.5; }
+        .hidden { display:none !important; }
+        @media (max-width:640px) {
+            .zg-card { padding:20px 16px; }
+            .zg-grid { grid-template-columns:repeat(2,1fr); gap:10px; }
+        }
+
         /* ===== MOBILE SIDEBAR OVERRIDES ===== */
         @media(max-width:768px) {
             .zeta-sidebar { position:fixed; left:0; top:0; transform:translateX(-100%); border-radius:0 var(--radius-xl) var(--radius-xl) 0; width:280px; min-width:280px; height:100dvh; z-index:100; transition:transform var(--transition-smooth), width var(--transition-smooth); box-shadow:8px 0 48px rgba(0,0,0,0.8); }
@@ -833,6 +881,7 @@
 <base target="_blank">
 <base target="_blank">
 <base target="_blank">
+<base target="_blank">
 </head>
 <body>
 
@@ -1058,6 +1107,28 @@
                 </div>
             </section>
 
+
+            <!-- ===== ZETA GALLERY (upload photos only → get shareable link) ===== -->
+            <section class="zg-studio" id="zetaGallery">
+                <div class="zg-head">
+                    <span class="zg-badge"><i class="fa-solid fa-images"></i> ZETA Gallery</span>
+                    <h2 class="zg-title">Photo <span>Gallery</span></h2>
+                    <p class="zg-sub">Photo එකක් upload කරලා, තත්පර කීපයකින් share කරන්න පුළුවන් link එකක් ගන්න. Gallery එකට <strong>photo files විතරක්</strong> add කරන්න පුළුවන් — copy, open, delete කරන්නත් පුළුවන්. Photos save වෙන්නේ මේ device එකේම (localStorage).</p>
+                </div>
+                <div class="zg-card">
+                    <input type="file" id="zgFileInput" accept="image/jpeg,image/png,image/webp,image/gif,image/bmp,image/avif" style="display:none;" onchange="zgHandleFiles(this.files); this.value='';">
+                    <label for="zgFileInput" class="zg-drop" id="zgDrop">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                        <span class="zg-drop-main">Tap (or drag &amp; drop) to upload a photo</span>
+                        <span class="zg-drop-sub">JPG / PNG / WEBP / GIF / BMP &middot; up to 20MB &middot; photos only</span>
+                    </label>
+                    <div class="zg-progress hidden" id="zgProgressWrap"><div class="zg-progress-bar" id="zgProgressBar"></div></div>
+                    <div id="zgStatus" class="hidden"><div class="zg-status"><div class="zg-spinner"></div> Uploading photo&hellip; getting your link&hellip;</div></div>
+                    <div id="zgError" class="zg-error hidden"></div>
+                    <div class="zg-grid" id="zgGrid"></div>
+                    <div id="zgEmpty" class="zg-empty"><i class="fa-regular fa-images"></i><span>Photos නෑ — ඔයාගේ පළවෙනි photo එක upload කරන්න.</span></div>
+                </div>
+            </section>
 
             <!-- ===== MOVIE DOWNLOADER (chamindu.site API) ===== -->
             <section class="sm-studio" id="movieStudio">
@@ -1969,5 +2040,264 @@
             console.log('🎬 Movie Downloader loaded (chamindu.site API)');
         })();
     </script>
+    <!-- ============================================================
+    ZETA GALLERY — SCRIPT (photos only, validated, links via free host)
+    ============================================================ -->
+    <script>
+        (function() {
+            const ZG_KEY = 'zeta_gallery_v1';
+            const ZG_BRAND = 'ZETA TOOLS';
+            const MAX_SIZE = 20 * 1024 * 1024;   // 20MB
+            const MAX_ITEMS = 30;
+            const EXT_OK = /\.(jpe?g|png|webp|gif|bmp|avif)$/i;
+
+            let items = [];
+            try { items = JSON.parse(localStorage.getItem(ZG_KEY) || '[]'); } catch (e) { items = []; }
+
+            // ===== helpers =====
+            function $(id) { return document.getElementById(id); }
+            function zgEsc(s) {
+                return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) {
+                    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+                });
+            }
+            function zgSave() {
+                try { localStorage.setItem(ZG_KEY, JSON.stringify(items)); }
+                catch (e) { console.warn('Gallery storage full — old photos may not persist.', e); }
+            }
+            function zgError(msg) {
+                const el = $('zgError');
+                el.textContent = msg;
+                el.classList.remove('hidden');
+                $('zgStatus').classList.add('hidden');
+            }
+            function zgHideMsgs() {
+                $('zgError').classList.add('hidden');
+                $('zgStatus').classList.add('hidden');
+            }
+            function zgSetProgress(pct) {
+                const wrap = $('zgProgressWrap');
+                if (pct === null) { wrap.classList.add('hidden'); $('zgProgressBar').style.width = '0%'; return; }
+                wrap.classList.remove('hidden');
+                $('zgProgressBar').style.width = Math.min(100, Math.max(0, pct)) + '%';
+            }
+
+            // read file → dataURL
+            function zgReadFile(file) {
+                return new Promise(function(resolve, reject) {
+                    const r = new FileReader();
+                    r.onload = function() { resolve(r.result); };
+                    r.onerror = function() { reject(new Error('READ_FAIL')); };
+                    r.readAsDataURL(file);
+                });
+            }
+
+            // make a small local thumbnail so localStorage doesn't blow up
+            function zgMakeThumb(dataUrl) {
+                return new Promise(function(resolve) {
+                    const img = new Image();
+                    img.onload = function() {
+                        try {
+                            const max = 480;
+                            let w = img.naturalWidth, h = img.naturalHeight;
+                            if (!w || !h) { resolve(''); return; }
+                            const s = Math.min(1, max / Math.max(w, h));
+                            w = Math.max(1, Math.round(w * s));
+                            h = Math.max(1, Math.round(h * s));
+                            const c = document.createElement('canvas');
+                            c.width = w; c.height = h;
+                            c.getContext('2d').drawImage(img, 0, 0, w, h);
+                            resolve(c.toDataURL('image/jpeg', 0.75));
+                        } catch (e) { resolve(''); }
+                    };
+                    img.onerror = function() { resolve(''); };
+                    img.src = dataUrl;
+                });
+            }
+
+            // upload to free hosts (no API key needed). Returns {url, host}
+            async function zgUploadToHost(file) {
+                // Host 1: catbox.moe
+                try {
+                    const fd = new FormData();
+                    fd.append('reqtype', 'fileupload');
+                    fd.append('fileToUpload', file, file.name);
+                    const res = await fetch('https://catbox.moe/user/api.php', { method: 'POST', body: fd });
+                    if (res.ok) {
+                        const t = (await res.text()).trim();
+                        if (/^https?:\/\//i.test(t)) return { url: t, host: 'catbox' };
+                    }
+                } catch (e) { /* try next host */ }
+                // Host 2: telegra.ph
+                try {
+                    const fd = new FormData();
+                    fd.append('file', file, file.name);
+                    const res = await fetch('https://telegra.ph/upload', { method: 'POST', body: fd });
+                    if (res.ok) {
+                        const j = await res.json();
+                        if (Array.isArray(j) && j[0] && j[0].src) return { url: 'https://telegra.ph' + j[0].src, host: 'telegraph' };
+                    }
+                } catch (e) { /* give up */ }
+                throw new Error('UPLOAD_FAILED');
+            }
+
+            // ===== RENDER =====
+            function zgRender() {
+                const grid = $('zgGrid');
+                grid.innerHTML = '';
+                items.forEach(function(it) {
+                    const card = document.createElement('div');
+                    card.className = 'zg-item';
+                    let linkHtml;
+                    if (it.link) {
+                        linkHtml = '<div class="zg-item-link ok" title="' + zgEsc(it.link) + '">' + zgEsc(it.link) + '</div>';
+                    } else {
+                        linkHtml = '<div class="zg-item-link pending">Link pending — press Retry</div>';
+                    }
+                    card.innerHTML =
+                        '<div class="zg-thumb-wrap">' +
+                            '<img class="zg-thumb" src="' + (it.thumb || it.dataUrl || '') + '" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">' +
+                            '<span class="zg-brand-tag">' + zgEsc(ZG_BRAND) + '</span>' +
+                        '</div>' +
+                        '<div class="zg-item-body">' +
+                            '<div class="zg-item-name" title="' + zgEsc(it.name) + '">' + zgEsc(it.name) + '</div>' +
+                            linkHtml +
+                            '<div class="zg-item-btns">' +
+                                (it.link
+                                    ? '<button class="zg-btn" onclick="zgCopy(' + it.id + ', this)"><i class="fa-regular fa-copy"></i> Copy</button>' +
+                                      '<a class="zg-btn" href="' + zgEsc(it.link) + '" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open</a>'
+                                    : '<button class="zg-btn" onclick="zgRetry(' + it.id + ', this)"><i class="fa-solid fa-rotate"></i> Retry</button>') +
+                                '<button class="zg-btn zg-danger" onclick="zgDelete(' + it.id + ')"><i class="fa-regular fa-trash-can"></i></button>' +
+                            '</div>' +
+                        '</div>';
+                    grid.appendChild(card);
+                });
+                $('zgEmpty').classList.toggle('hidden', items.length > 0);
+            }
+
+            // ===== UPLOAD FLOW =====
+            window.zgHandleFiles = async function(fileList) {
+                zgHideMsgs();
+                const file = fileList && fileList[0];
+                if (!file) return;
+
+                // — validation: photos ONLY —
+                if (!file.type || !file.type.startsWith('image/')) {
+                    zgError('⚠️ "' + file.name + '" photo එකක් නෙමෙයි. Gallery එකට JPG / PNG / WEBP / GIF / BMP photo files විතරක් දාන්න පුළුවන්.');
+                    return;
+                }
+                if (!EXT_OK.test(file.name) && !/^image\/(jpeg|png|webp|gif|bmp|avif)$/i.test(file.type)) {
+                    zgError('⚠️ File type එක ඉදිරියෙන් support කරන්නේ නෑ. JPG / PNG / WEBP / GIF / BMP try කරන්න.');
+                    return;
+                }
+                if (file.size > MAX_SIZE) {
+                    zgError('⚠️ Photo එක ඉතා විශාලයි (max 20MB). වඩා පොඩි photo එකක් දාන්න.');
+                    return;
+                }
+                if (items.length >= MAX_ITEMS) {
+                    zgError('⚠️ Gallery එක full (max ' + MAX_ITEMS + ' photos). පරණ photo එකක් delete කරලා try කරන්න.');
+                    return;
+                }
+
+                $('zgStatus').classList.remove('hidden');
+                zgSetProgress(15);
+                try {
+                    const dataUrl = await zgReadFile(file);
+                    zgSetProgress(40);
+                    const thumb = await zgMakeThumb(dataUrl);
+                    zgSetProgress(55);
+
+                    let link = '', host = '';
+                    try {
+                        const up = await zgUploadToHost(file);
+                        link = up.url; host = up.host;
+                        zgSetProgress(100);
+                    } catch (e) {
+                        // photo is still kept locally — user can retry later
+                        console.warn('Upload failed, photo saved locally.', e);
+                    }
+
+                    items.unshift({ id: Date.now(), name: file.name, link: link, host: host, thumb: thumb, dataUrl: '', date: Date.now() });
+                    if (items.length > MAX_ITEMS) items.length = MAX_ITEMS;
+                    zgSave();
+                    zgRender();
+                    zgSetProgress(null);
+                    $('zgStatus').classList.add('hidden');
+
+                    if (!link) {
+                        zgError('⚠️ Link එක ගන්න බැරි වුනා (internet/host issue). Photo එක gallery එකේ ඉන්නවා — "Retry" button එකෙන් ආයේ try කරන්න.');
+                    }
+                } catch (e) {
+                    console.error('Gallery upload error:', e);
+                    zgSetProgress(null);
+                    zgError('❌ Photo එක read කරන්න / upload කරන්න බැරි වුනා. ආයේ try කරන්න.');
+                }
+            };
+
+            // ===== ACTIONS =====
+            window.zgCopy = function(id, btn) {
+                const it = items.find(function(x) { return x.id === id; });
+                if (!it || !it.link) return;
+                navigator.clipboard.writeText(it.link).then(function() {
+                    if (btn) {
+                        const old = btn.innerHTML;
+                        btn.innerHTML = '<i class="fa-solid fa-check"></i> OK';
+                        setTimeout(function() { btn.innerHTML = old; }, 1600);
+                    }
+                });
+            };
+
+            window.zgDelete = function(id) {
+                items = items.filter(function(x) { return x.id !== id; });
+                zgSave();
+                zgRender();
+            };
+
+            window.zgRetry = async function(id, btn) {
+                const it = items.find(function(x) { return x.id === id; });
+                if (!it) return;
+                if (btn) btn.disabled = true;
+                zgHideMsgs();
+                $('zgStatus').classList.remove('hidden');
+                try {
+                    // rebuild a File from the stored thumbnail dataUrl and upload that
+                    if (!it.thumb) throw new Error('NO_DATA');
+                    const blob = await (await fetch(it.thumb)).blob();
+                    const file = new File([blob], it.name.replace(/\.[^.]+$/, '') + '.jpg', { type: 'image/jpeg' });
+                    const up = await zgUploadToHost(file);
+                    it.link = up.url; it.host = up.host;
+                    zgSave();
+                    zgRender();
+                } catch (e) {
+                    console.error('Retry failed:', e);
+                    zgError('❌ ආයේ try කිරීමත් fail වුනා. Internet connection එක check කරලා ආයේ try කරන්න.');
+                } finally {
+                    if (btn) btn.disabled = false;
+                    $('zgStatus').classList.add('hidden');
+                }
+            };
+
+            // ===== DRAG & DROP =====
+            (function() {
+                const drop = $('zgDrop');
+                if (!drop) return;
+                ['dragenter', 'dragover'].forEach(function(ev) {
+                    drop.addEventListener(ev, function(e) { e.preventDefault(); drop.classList.add('dragover'); });
+                });
+                ['dragleave', 'drop'].forEach(function(ev) {
+                    drop.addEventListener(ev, function(e) { e.preventDefault(); drop.classList.remove('dragover'); });
+                });
+                drop.addEventListener('drop', function(e) {
+                    if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length) {
+                        window.zgHandleFiles(e.dataTransfer.files);
+                    }
+                });
+            })();
+
+            zgRender();
+            console.log('🖼 ZETA Gallery loaded — photos only, links via free host');
+        })();
+    </script>
+
 </body>
 </html>
