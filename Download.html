@@ -141,6 +141,7 @@
             cursor: pointer;
             font-size: 15px;
             font-family: 'Inter', sans-serif;
+            text-align: center;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             text-decoration: none;
             box-shadow: 0 0 15px rgba(0,163,255,0.3), 0 0 30px rgba(0,163,255,0.1), inset 0 1px 0 rgba(255,255,255,0.1);
@@ -403,6 +404,7 @@
             color: rgba(224,232,240,0.5);
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
             user-select: none;
         }
@@ -440,7 +442,6 @@
             font-weight: 500;
         }
     </style>
-<base target="_blank">
 <base target="_blank">
 </head>
 <body>
@@ -549,6 +550,10 @@
                         <i data-lucide="youtube" style="width:18px;height:18px;"></i>
                         YouTube Thumb
                     </div>
+                    <div class="platform-tab" data-platform="wikipedia" onclick="switchPlatform('wikipedia')">
+                        <i data-lucide="book-open" style="width:18px;height:18px;"></i>
+                        Wikipedia
+                    </div>
                     <div class="platform-tab" data-platform="tempmail" onclick="switchPlatform('tempmail')">
                         <i data-lucide="mail" style="width:18px;height:18px;"></i>
                         Temp Mail
@@ -646,7 +651,7 @@
                     <div class="glass-card reveal reveal-delay-1" style="padding:32px 24px;text-align:center;">
                         <div style="font-size:42px;margin-bottom:16px;filter:drop-shadow(0 0 12px rgba(0,163,255,0.3));">2️⃣</div>
                         <h3 style="font-weight:700;font-size:17px;margin-bottom:8px;color:#E0E8F0;">Select Platform</h3>
-                        <p style="font-size:14px;color:rgba(224,232,240,0.45);line-height:1.6;">Choose TikTok, Facebook, YouTube Thumbnail, or Temp Mail.</p>
+                        <p style="font-size:14px;color:rgba(224,232,240,0.45);line-height:1.6;">Choose TikTok, Facebook, YouTube Thumbnail, Wikipedia, or Temp Mail.</p>
                     </div>
                     <div class="glass-card reveal reveal-delay-2" style="padding:32px 24px;text-align:center;">
                         <div style="font-size:42px;margin-bottom:16px;filter:drop-shadow(0 0 12px rgba(0,163,255,0.3));">3️⃣</div>
@@ -948,7 +953,19 @@
             } else if (platform === 'youtube') {
                 input.placeholder = 'Paste YouTube video URL here...';
                 hint.textContent = 'Supports YouTube links (e.g., https://youtu.be/xxxx or https://www.youtube.com/watch?v=xxxx)';
+            } else if (platform === 'wikipedia') {
+                input.placeholder = 'Enter a topic to search Wikipedia...';
+                hint.textContent = 'Type any topic, e.g., Artificial intelligence, Sri Lanka, Albert Einstein';
             }
+
+            const label = getSubmitLabelForPlatform(platform);
+            downloadBtn.innerHTML = `<i data-lucide="${label.icon}" style="width:18px;height:18px;"></i> ${label.text}`;
+            lucide.createIcons();
+        }
+
+        // Idle label for the submit button — varies per platform (Download vs Search)
+        function getSubmitLabelForPlatform(platform) {
+            return platform === 'wikipedia' ? { icon: 'search', text: 'Search' } : { icon: 'download', text: 'Download' };
         }
 
         // ===== Mobile Menu =====
@@ -982,6 +999,8 @@
         const FACEBOOK_API = 'https://hashu-apis-production.up.railway.app/api/fb/dl';
         const YOUTUBE_THUMB_API = 'https://hashu-apis-production.up.railway.app/api/youtube/thumbnail';
         const API_KEY = 'hashu_cd4b0a9d325539de660602e7d8d38d61';
+        const WIKIPEDIA_API = 'https://apix.wolvarex.com/api/tools/wikipedia';
+        const WIKIPEDIA_KEY = 'wxa_f_1aee13e60b';
 
         const form = document.getElementById('downloadForm');
         const urlInput = document.getElementById('videoUrl');
@@ -1019,17 +1038,22 @@
                     return;
                 }
             }
+            // Wikipedia takes a free-text topic, not a link — no format check needed.
 
             isLoading = true;
             downloadBtn.disabled = true;
             downloadBtn.innerHTML = '<i data-lucide="loader" style="width:18px;height:18px;animation:spin 1s linear infinite;"></i> Processing...';
             lucide.createIcons();
 
+            const loadingText = currentPlatform === 'youtube'
+                ? 'Fetching thumbnail... Please wait.'
+                : (currentPlatform === 'wikipedia' ? 'Searching Wikipedia... Please wait.' : 'Downloading video... Please wait.');
+
             resultContainer.innerHTML = `
                 <div class="glass-card result-card" style="padding:24px 28px;width:100%;max-width:600px;">
                     <div style="display:flex;align-items:center;gap:12px;justify-content:center;">
                         <i data-lucide="loader" style="width:24px;height:24px;color:#00A3FF;animation:spin 1s linear infinite;"></i>
-                        <p style="color:rgba(224,232,240,0.6);margin:0;">${currentPlatform === 'youtube' ? 'Fetching thumbnail... Please wait.' : 'Downloading video... Please wait.'}</p>
+                        <p style="color:rgba(224,232,240,0.6);margin:0;">${loadingText}</p>
                     </div>
                 </div>
             `;
@@ -1047,6 +1071,8 @@
                     apiUrl = `${FACEBOOK_API}?apiKey=${API_KEY}&text=${encodeURIComponent(url)}`;
                 } else if (currentPlatform === 'youtube') {
                     apiUrl = `${YOUTUBE_THUMB_API}?apiKey=${API_KEY}&text=${encodeURIComponent(url)}`;
+                } else if (currentPlatform === 'wikipedia') {
+                    apiUrl = `${WIKIPEDIA_API}?query=${encodeURIComponent(url)}&key=${WIKIPEDIA_KEY}`;
                 }
 
                 console.log('Fetching:', apiUrl);
@@ -1076,6 +1102,15 @@
 
                 const data = await response.json();
                 console.log('API Response:', data);
+
+                if (currentPlatform === 'wikipedia') {
+                    if (data.success === true && data.result) {
+                        showWikiResult(data.result);
+                    } else {
+                        showResult('error', data.message || 'Could not find a Wikipedia article for that topic.');
+                    }
+                    return;
+                }
 
                 const isSuccess = data.success === true || currentPlatform === 'youtube';
                 if (isSuccess && (data.results || data.url || data.thumbnail)) {
@@ -1126,7 +1161,8 @@
                 clearTimeout(timeoutId);
                 isLoading = false;
                 downloadBtn.disabled = false;
-                downloadBtn.innerHTML = '<i data-lucide="download" style="width:18px;height:18px;"></i> Download';
+                const idleLabel = getSubmitLabelForPlatform(currentPlatform);
+                downloadBtn.innerHTML = `<i data-lucide="${idleLabel.icon}" style="width:18px;height:18px;"></i> ${idleLabel.text}`;
                 lucide.createIcons();
             }
         });
@@ -1164,8 +1200,8 @@
                                     <img src="${thumbnail}" alt="Video thumbnail" style="width:100%;object-fit:cover;max-height:300px;" onerror="this.style.display='none'">
                                 </div>
                             ` : ''}
-                            ${title ? `<p style="font-weight:600;font-size:16px;color:#E0E8F0;margin:0;text-align:center;">${title}</p>` : ''}
-                            ${author && currentPlatform === 'tiktok' ? `<p style="font-size:14px;color:rgba(224,232,240,0.4);margin:-8px 0 0 0;text-align:center;">@${author}</p>` : ''}
+                            ${title ? `<p style="font-weight:600;font-size:16px;color:#E0E8F0;margin:0;text-align:center;">${escapeHtml(title)}</p>` : ''}
+                            ${author && currentPlatform === 'tiktok' ? `<p style="font-size:14px;color:rgba(224,232,240,0.4);margin:-8px 0 0 0;text-align:center;">@${escapeHtml(author)}</p>` : ''}
 
                             <div class="download-btn-wrapper">
                                 <a href="${videoUrl}" download class="neon-btn" style="padding:14px 36px;font-size:16px;text-decoration:none;min-width:200px;">
@@ -1180,6 +1216,38 @@
                     </div>
                 `;
             }
+            lucide.createIcons();
+        }
+
+        function showWikiResult(result) {
+            const title = result.title || 'Wikipedia';
+            const extract = result.extract || 'No summary available for this topic.';
+            const articleUrl = result.url || `https://en.wikipedia.org/wiki/${encodeURIComponent(title.replace(/ /g, '_'))}`;
+
+            resultContainer.innerHTML = `
+                <div class="glass-card result-card" style="padding:28px;width:100%;max-width:600px;animation:fadeUp 0.5s ease forwards;">
+                    <div class="hud-corner hud-corner-tl" style="top:8px;left:8px;"></div>
+                    <div class="hud-corner hud-corner-tr" style="top:8px;right:8px;"></div>
+                    <div class="hud-corner hud-corner-bl" style="bottom:8px;left:8px;"></div>
+                    <div class="hud-corner hud-corner-br" style="bottom:8px;right:8px;"></div>
+
+                    <div style="display:flex;flex-direction:column;gap:16px;align-items:center;">
+                        <span style="font-size:12px;color:rgba(0,212,255,0.6);font-weight:600;letter-spacing:1px;text-transform:uppercase;">
+                            <i data-lucide="book-open" style="width:14px;height:14px;display:inline;margin-right:4px;"></i>
+                            Wikipedia
+                        </span>
+                        <p style="font-weight:600;font-size:18px;color:#E0E8F0;margin:0;text-align:center;">${escapeHtml(title)}</p>
+                        <p style="font-size:14px;color:rgba(224,232,240,0.55);line-height:1.7;text-align:left;margin:0;">${escapeHtml(extract)}</p>
+
+                        <div class="download-btn-wrapper">
+                            <a href="${articleUrl}" target="_blank" rel="noopener" class="neon-btn" style="padding:14px 36px;font-size:16px;text-decoration:none;min-width:200px;">
+                                <i data-lucide="external-link" style="width:20px;height:20px;"></i>
+                                Read Full Article
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
             lucide.createIcons();
         }
 
