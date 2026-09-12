@@ -59,9 +59,9 @@
         .app-container { display:flex; height:100dvh; width:100%; background:var(--bg-deep); position:relative; }
 
         /* ===== SIDEBAR (unchanged, just copied minimal) ===== */
-        .zeta-sidebar { width:280px; min-width:280px; height:100%; background:var(--bg-glass); backdrop-filter:blur(28px) saturate(1.4); -webkit-backdrop-filter:blur(28px) saturate(1.4); border-right:1px solid var(--border-default); box-shadow:8px 0 48px rgba(0,0,0,0.7), inset -1px 0 0 rgba(79,125,247,0.06); display:flex; flex-direction:column; transition:width var(--transition-smooth), min-width var(--transition-smooth); overflow:hidden; flex-shrink:0; position:relative; z-index:10; }
+        .zeta-sidebar { width:280px; min-width:280px; height:100%; background:var(--bg-glass); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-right:1px solid var(--border-default); box-shadow:8px 0 48px rgba(0,0,0,0.7), inset -1px 0 0 rgba(79,125,247,0.06); display:flex; flex-direction:column; transition:width var(--transition-smooth), min-width var(--transition-smooth); overflow:hidden; flex-shrink:0; position:relative; z-index:10; transform:translateZ(0); contain:layout paint style; }
         .zeta-sidebar::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 0% 20%, rgba(79,125,247,0.03) 0%, transparent 60%), radial-gradient(ellipse at 80% 80%, rgba(139,124,248,0.02) 0%, transparent 50%); pointer-events:none; }
-        .zeta-sidebar::after { content:''; position:absolute; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E"); opacity:0.3; pointer-events:none; mix-blend-mode:overlay; }
+        /* noise texture (feTurbulence + mix-blend-mode) removed — combined with the sidebar's backdrop-filter it was the main cause of slow/janky scrolling */
         .zeta-sidebar.collapsed { width:76px; min-width:76px; }
         .zeta-sidebar.collapsed .nav-label,.zeta-sidebar.collapsed .brand-sub,.zeta-sidebar.collapsed .search-shortcut,.zeta-sidebar.collapsed .section-title,.zeta-sidebar.collapsed .upgrade-sub,.zeta-sidebar.collapsed .user-name,.zeta-sidebar.collapsed .user-badge,.zeta-sidebar.collapsed .status-panel-text,.zeta-sidebar.collapsed .status-panel-label,.zeta-sidebar.collapsed .action-label { opacity:0; width:0; overflow:hidden; transition:opacity 0.2s,width 0.2s; }
         .zeta-sidebar.collapsed .brand-icon { margin:0 auto; }
@@ -166,12 +166,12 @@
         .user-area:hover .user-more { transform:rotate(90deg); }
 
         /* ===== MAIN CONTENT ===== */
-        .main-content { flex:1; height:100%; display:flex; flex-direction:column; overflow-y:auto; background:var(--bg-deep); padding:0; transition:margin-left var(--transition-smooth); }
+        .main-content { flex:1; height:100%; display:flex; flex-direction:column; overflow-y:auto; background:var(--bg-deep); padding:0; transition:margin-left var(--transition-smooth); -webkit-overflow-scrolling:touch; contain:layout paint style; transform:translateZ(0); }
         .main-content::-webkit-scrollbar { width:4px; }
         .main-content::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.06); border-radius:10px; }
 
         /* ===== BANNER (unchanged) ===== */
-        .premium-banner { margin:16px 20px 0 20px; padding:16px 20px; border-radius:16px; background:rgba(10,13,26,0.72); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid rgba(79,125,247,0.18); box-shadow:0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(79,125,247,0.06); position:relative; overflow:hidden; display:flex; align-items:center; gap:12px; transform:translateY(-20px); opacity:0; animation:bannerSlideIn 0.5s cubic-bezier(0.16,1,0.3,1) 0.4s forwards; flex-shrink:0; z-index:5; }
+        .premium-banner { margin:16px 20px 0 20px; padding:16px 20px; border-radius:16px; background:rgba(10,13,26,0.72); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid rgba(79,125,247,0.18); box-shadow:0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(79,125,247,0.06); position:relative; overflow:hidden; display:flex; align-items:center; gap:12px; transform:translateY(-20px); opacity:0; animation:bannerSlideIn 0.5s cubic-bezier(0.16,1,0.3,1) 0.4s forwards; flex-shrink:0; z-index:5; contain:layout paint style; }
         .premium-banner::before { content:''; position:absolute; inset:0; border-radius:16px; padding:1px; background:linear-gradient(135deg, rgba(79,125,247,0.35), rgba(139,124,248,0.25), rgba(45,212,232,0.15)); -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none; }
         .premium-banner::after { content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%; background:radial-gradient(ellipse at 30% 40%, rgba(79,125,247,0.06), transparent 60%), radial-gradient(ellipse at 70% 60%, rgba(139,124,248,0.04), transparent 50%); pointer-events:none; }
         .premium-banner .sweep-line { position:absolute; top:0; left:-100%; width:60%; height:100%; background:linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent); transform:skewX(-20deg); animation:sweepLine 6s ease-in-out infinite; pointer-events:none; }
@@ -2136,6 +2136,36 @@
                 return d;
             }
 
+            window.isDownload = async function(imgUrl, q, idx, btn) {
+                const old = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ...';
+                btn.disabled = true;
+                const fileName = (q || 'image').replace(/[^a-z0-9]+/gi, '_').toLowerCase() + '_' + (idx + 1) + '.jpg';
+                try {
+                    // cross-origin photo එකක් නිසා fetch කරලා blob එකක් විදිහට download කරනවා
+                    const res = await fetch(imgUrl, { mode: 'cors' });
+                    if (!res.ok) throw new Error('HTTP ' + res.status);
+                    const blob = await res.blob();
+                    const objUrl = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = objUrl;
+                    a.download = fileName;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    setTimeout(function() { URL.revokeObjectURL(objUrl); }, 4000);
+                    btn.innerHTML = '<i class="fa-solid fa-check"></i> OK';
+                } catch (e) {
+                    console.warn('Direct download failed, opening in new tab instead.', e);
+                    // CORS නිසා fetch fail උනොත් tab එකක් open කරලා download කරගන්න පුළුවන් විදිහට දෙනවා
+                    window.open(imgUrl, '_blank');
+                    btn.innerHTML = '<i class="fa-solid fa-arrow-up-right-from-square"></i> Opened';
+                } finally {
+                    btn.disabled = false;
+                    setTimeout(function() { btn.innerHTML = old; }, 1800);
+                }
+            };
+
             window.isSearch = async function() {
                 const q = (document.getElementById('isQuery').value || '').trim();
                 if (!q) { isError('⚠️ මොනවහරි keyword එකක් type කරන්න.'); return; }
@@ -2147,7 +2177,7 @@
                     if (!res.ok) throw new Error('HTTP ' + res.status);
                     const data = await res.json();
 
-                    const results = (data && (data.result || data.results || data.data)) || [];
+                    let results = (data && (data.result || data.results || data.data)) || [];
                     isHideStatus();
 
                     if (!Array.isArray(results) || results.length === 0) {
@@ -2155,9 +2185,12 @@
                         return;
                     }
 
+                    // ✅ පළමු photos 20 විතරක් පෙන්වන්න
+                    results = results.slice(0, 20);
+
                     const grid = document.getElementById('isGrid');
                     grid.innerHTML = '';
-                    results.forEach(function(imgUrl) {
+                    results.forEach(function(imgUrl, idx) {
                         if (!imgUrl) return;
                         const item = isEl('div', 'is-item');
 
@@ -2188,6 +2221,10 @@
                         openBtn.href = imgUrl;
                         openBtn.target = '_blank';
                         actions.appendChild(openBtn);
+
+                        const dlBtn = isEl('button', 'is-mini-btn', '<i class="fa-solid fa-download"></i> Download');
+                        dlBtn.addEventListener('click', function() { isDownload(imgUrl, q, idx, dlBtn); });
+                        actions.appendChild(dlBtn);
 
                         item.appendChild(actions);
                         grid.appendChild(item);
