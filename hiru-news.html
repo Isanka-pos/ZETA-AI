@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hiru News | ZETA TOOLS</title>
+    <meta name="description" content="Hiru News - Live Sri Lankan news powered by ZETA TOOLS. Fast, smooth and always up to date.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&family=Noto+Sans+Sinhala:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        zeta: {
+                            bg: '#04060C',
+                            surface: '#0A0E1A',
+                            card: '#0D1120',
+                            border: '#1A2035',
+                            blue: '#00A3FF',
+                            cyan: '#00D4FF',
+                            glow: '#0088FF',
+                            deep: '#003366',
+                        }
+                    },
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        inter: ['Inter', 'sans-serif'],
+                        sinhala: ['Noto Sans Sinhala', 'Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Noto Sans Sinhala', 'Inter', sans-serif;
+            background: #04060C;
+            color: #E0E8F0;
+            overflow-x: hidden;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #04060C; }
+        ::-webkit-scrollbar-thumb { background: #00A3FF33; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00A3FF66; }
+
+        /* Animated Grid Background */
+        .cyber-grid {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image:
+                linear-gradient(rgba(0,163,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,163,255,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: 0;
+            animation: gridMove 20s linear infinite;
+        }
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(60px, 60px); }
+        }
+
+        #particles-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Holographic Circles */
+        .holo-circle {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(0,163,255,0.1);
+            animation: holoPulse 4s ease-in-out infinite;
+        }
+        .holo-circle::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 50%;
+            border: 1px solid transparent;
+            border-top-color: rgba(0,212,255,0.3);
+            animation: holoSpin 6s linear infinite;
+        }
+        @keyframes holoPulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+        }
+        @keyframes holoSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .energy-wave {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(0,163,255,0.15);
+            animation: energyExpand 4s ease-out infinite;
+        }
+        @keyframes energyExpand {
+            0% { transform: scale(0.5); opacity: 0.8; }
+            100% { transform: scale(3); opacity: 0; }
+        }
+
+        .light-streak {
+            position: absolute;
+            width: 200px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0,163,255,0.6), transparent);
+            animation: streakMove 3s ease-in-out infinite;
+        }
+        @keyframes streakMove {
+            0% { transform: translateX(-200px); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(calc(100vw + 200px)); opacity: 0; }
+        }
+
+        .neon-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #00A3FF, #0066CC);
+            color: white;
+            font-weight: 600;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
+            box-shadow:
+                0 0 15px rgba(0,163,255,0.3),
+                0 0 30px rgba(0,163,255,0.1),
+                inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+        .neon-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow:
+                0 0 25px rgba(0,163,255,0.5),
+                0 0 50px rgba(0,163,255,0.2),
+                0 0 80px rgba(0,163,255,0.1),
+                inset 0 1px 0 rgba(255,255,255,0.2);
+        }
+        .neon-btn:active { transform: translateY(-1px) scale(0.98); }
+        .neon-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        .glass-card {
+            background: linear-gradient(135deg, rgba(13,17,32,0.8), rgba(10,14,26,0.6));
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(0,163,255,0.08);
+            border-radius: 20px;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0,163,255,0.3), transparent);
+        }
+
+        .status-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: #00FF88;
+            box-shadow: 0 0 8px #00FF88, 0 0 16px rgba(0,255,136,0.3);
+            animation: statusPulse 2s ease-in-out infinite;
+        }
+        @keyframes statusPulse {
+            0%, 100% { box-shadow: 0 0 8px #00FF88, 0 0 16px rgba(0,255,136,0.3); }
+            50% { box-shadow: 0 0 12px #00FF88, 0 0 24px rgba(0,255,136,0.5), 0 0 40px rgba(0,255,136,0.1); }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .mouse-glow {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,163,255,0.06), transparent 70%);
+            pointer-events: none;
+            z-index: 1;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s ease;
+        }
+
+        .hero-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            animation: orbFloat 8s ease-in-out infinite;
+        }
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -20px) scale(1.1); }
+            66% { transform: translate(-20px, 15px) scale(0.95); }
+        }
+
+        .badge-glow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            background: rgba(0,163,255,0.06);
+            border: 1px solid rgba(0,163,255,0.15);
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #00D4FF;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            animation: badgePulse 3s ease-in-out infinite;
+        }
+        @keyframes badgePulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(0,163,255,0.1); }
+            50% { box-shadow: 0 0 20px rgba(0,163,255,0.2); }
+        }
+
+        .hud-corner {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+        }
+        .hud-corner::before, .hud-corner::after {
+            content: '';
+            position: absolute;
+            background: rgba(0,163,255,0.3);
+        }
+        .hud-corner-tl::before { top: 0; left: 0; width: 20px; height: 1px; }
+        .hud-corner-tl::after { top: 0; left: 0; width: 1px; height: 20px; }
+        .hud-corner-tr::before { top: 0; right: 0; width: 20px; height: 1px; }
+        .hud-corner-tr::after { top: 0; right: 0; width: 1px; height: 20px; }
+        .hud-corner-bl::before { bottom: 0; left: 0; width: 20px; height: 1px; }
+        .hud-corner-bl::after { bottom: 0; left: 0; width: 1px; height: 20px; }
+        .hud-corner-br::before { bottom: 0; right: 0; width: 20px; height: 1px; }
+        .hud-corner-br::after { bottom: 0; right: 0; width: 1px; height: 20px; }
+
+        .scan-line {
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0,163,255,0.15), transparent);
+            animation: scanDown 6s linear infinite;
+        }
+        @keyframes scanDown {
+            0% { top: -1px; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+
+        .section-divider {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0,163,255,0.15), transparent);
+        }
+
+        .nav-blur {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            background: rgba(4,6,12,0.8);
+            border-bottom: 1px solid rgba(0,163,255,0.06);
+        }
+
+        /* Page Loader */
+        .page-loader {
+            position: fixed;
+            inset: 0;
+            background: #04060C;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 24px;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        .page-loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .loader-ring {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid rgba(0,163,255,0.1);
+            border-top-color: #00A3FF;
+            animation: loaderSpin 1s linear infinite;
+        }
+        @keyframes loaderSpin {
+            to { transform: rotate(360deg); }
+        }
+        .loader-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            color: #00A3FF;
+            letter-spacing: 4px;
+            animation: loaderPulse 1.5s ease-in-out infinite;
+        }
+        @keyframes loaderPulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+
+        /* ===== NEWS CARDS ===== */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+            gap: 24px;
+        }
+        .news-card {
+            background: linear-gradient(135deg, rgba(13,17,32,0.85), rgba(10,14,26,0.65));
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(0,163,255,0.08);
+            border-radius: 18px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: cardIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes cardIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .news-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0,163,255,0.4), transparent);
+            z-index: 2;
+        }
+        .news-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(0,163,255,0.25);
+            box-shadow:
+                0 20px 40px rgba(0,0,0,0.5),
+                0 0 30px rgba(0,163,255,0.1),
+                inset 0 1px 0 rgba(0,163,255,0.1);
+        }
+        .news-card:hover .news-img { transform: scale(1.08); }
+        .news-card:hover .read-more { color: #00D4FF; gap: 12px; }
+
+        .news-img-wrap {
+            position: relative;
+            width: 100%;
+            height: 190px;
+            overflow: hidden;
+            background: rgba(0,163,255,0.04);
+        }
+        .news-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .news-img-fallback {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+            background: linear-gradient(135deg, rgba(0,163,255,0.08), rgba(0,163,255,0.02));
+        }
+        .news-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            background: rgba(4,6,12,0.85);
+            backdrop-filter: blur(8px);
+            color: #00D4FF;
+            border: 1px solid rgba(0,163,255,0.25);
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            z-index: 2;
+        }
+        .news-body {
+            padding: 22px 22px 20px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+        .news-title {
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 1.55;
+            color: #E0E8F0;
+            margin-bottom: 10px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            transition: color 0.3s ease;
+        }
+        .news-card:hover .news-title { color: #00D4FF; }
+        .news-desc {
+            font-size: 13px;
+            color: rgba(224,232,240,0.5);
+            line-height: 1.7;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 16px;
+            flex: 1;
+        }
+        .news-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 14px;
+            border-top: 1px solid rgba(0,163,255,0.06);
+        }
+        .news-date {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: rgba(224,232,240,0.4);
+        }
+        .read-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(0,212,255,0.6);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        /* Featured Card */
+        .featured-card {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            min-height: 320px;
+        }
+        @media (max-width: 768px) {
+            .featured-card { grid-template-columns: 1fr; }
+        }
+        .featured-card .news-img-wrap { height: 100%; min-height: 240px; }
+        .featured-card .news-title { font-size: clamp(18px, 2.5vw, 24px); -webkit-line-clamp: 3; }
+        .featured-card .news-desc { -webkit-line-clamp: 4; font-size: 14px; }
+        .featured-card .news-body { padding: 32px; justify-content: center; }
+
+        /* Error box */
+        .news-error {
+            padding: 20px 24px;
+            border-radius: 14px;
+            background: rgba(255,60,80,0.08);
+            border: 1px solid rgba(255,60,80,0.2);
+            color: #FF6B7E;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Skeleton */
+        .skeleton-card {
+            background: linear-gradient(135deg, rgba(13,17,32,0.8), rgba(10,14,26,0.6));
+            border: 1px solid rgba(0,163,255,0.06);
+            border-radius: 18px;
+            overflow: hidden;
+        }
+        .skeleton {
+            background: linear-gradient(90deg, rgba(0,163,255,0.04) 25%, rgba(0,163,255,0.1) 50%, rgba(0,163,255,0.04) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s infinite;
+            border-radius: 8px;
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .footer-cta-glow {
+            position: absolute;
+            width: 600px;
+            height: 300px;
+            background: radial-gradient(ellipse, rgba(0,163,255,0.08), transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            border-radius: 100px;
+            background: rgba(0,255,136,0.06);
+            border: 1px solid rgba(0,255,136,0.15);
+            font-size: 12px;
+            font-weight: 700;
+            color: #00FF88;
+            letter-spacing: 1px;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .clock {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 13px;
+            color: rgba(0,212,255,0.7);
+            letter-spacing: 1px;
+        }
+    </style>
+<base target="_blank">
+<base target="_blank">
+</head>
+<body>
+    <!-- Page Loader -->
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-ring"></div>
+        <div class="loader-text">Hiru News</div>
+    </div>
+
+    <!-- Mouse Glow -->
+    <div class="mouse-glow" id="mouseGlow"></div>
+
+    <!-- Cyber Grid -->
+    <div class="cyber-grid"></div>
+
+    <!-- Particles -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- Navigation -->
+    <nav class="nav-blur fixed top-0 left-0 right-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="#" class="flex items-center gap-3 text-decoration-none">
+                    <div style="width:36px;height:36px;background:linear-gradient(135deg,#00A3FF,#0066CC);border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 15px rgba(0,163,255,0.3);">
+                        <span style="font-family:'Orbitron',sans-serif;font-weight:900;font-size:16px;color:white;">Z</span>
+                    </div>
+                    <span style="font-family:'Orbitron',sans-serif;font-weight:700;font-size:16px;color:#E0E8F0;letter-spacing:2px;">Hiru <span style="color:#00D4FF;">News</span></span>
+                </a>
+                <div class="hidden md:flex items-center gap-6">
+                    <span class="live-badge"><div class="status-dot" style="width:7px;height:7px;"></div> LIVE</span>
+                    <span class="clock" id="liveClock">--:--:--</span>
+                    <button id="refreshBtn" class="neon-btn" style="padding:10px 22px;font-size:13px;" onclick="loadNews(true)">
+                        <i data-lucide="refresh-cw" style="width:15px;height:15px;"></i>
+                        Refresh
+                    </button>
+                </div>
+                <div class="md:hidden">
+                    <button id="refreshBtnMobile" class="neon-btn" style="padding:9px 18px;font-size:12px;" onclick="loadNews(true)">
+                        <i data-lucide="refresh-cw" style="width:14px;height:14px;"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main style="position:relative;z-index:2;">
+
+        <!-- ===== HERO SECTION ===== -->
+        <section style="min-height:60vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:130px 20px 70px;">
+            <div class="hero-orb" style="width:500px;height:500px;background:rgba(0,163,255,0.06);top:-100px;right:-150px;"></div>
+            <div class="hero-orb" style="width:400px;height:400px;background:rgba(0,100,255,0.04);bottom:-80px;left:-100px;animation-delay:-3s;"></div>
+            <div class="holo-circle" style="width:300px;height:300px;top:10%;left:-50px;"></div>
+            <div class="holo-circle" style="width:200px;height:200px;bottom:15%;right:-30px;animation-delay:-2s;"></div>
+            <div class="energy-wave" style="width:200px;height:200px;top:30%;left:20%;"></div>
+            <div class="light-streak" style="top:25%;"></div>
+            <div class="light-streak" style="top:60%;animation-delay:-1.5s;"></div>
+            <div class="scan-line"></div>
+
+            <div style="text-align:center;max-width:800px;position:relative;z-index:5;">
+                <div class="reveal" style="margin-bottom:24px;">
+                    <span class="badge-glow">
+                        <span>📰</span>
+                        Hiru News Live Feed
+                    </span>
+                </div>
+                <h1 class="reveal reveal-delay-1" style="font-family:'Orbitron','Noto Sans Sinhala',sans-serif;font-size:clamp(30px,6vw,56px);font-weight:800;line-height:1.15;margin-bottom:20px;letter-spacing:-0.5px;">
+                    හිරු පුවත්<br>
+                    <span style="background:linear-gradient(135deg,#00D4FF,#00A3FF,#0066FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Live &amp; Up to Date</span>
+                </h1>
+                <p class="reveal reveal-delay-2" style="font-size:clamp(14px,2vw,17px);color:rgba(224,232,240,0.55);line-height:1.8;max-width:560px;margin:0 auto 16px;font-weight:300;">
+                    ශ්‍රී ලංකාවේ නවතම පුවත් ක්ෂණිකව — smooth, fast and powered by ZETA TOOLS. News refresh වන්නේ ඔබේ ඇඟිලි තුඩින්.
+                </p>
+                <div class="reveal reveal-delay-3" style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;align-items:center;">
+                    <span class="live-badge"><div class="status-dot" style="width:7px;height:7px;"></div> API CONNECTED</span>
+                    <span id="lastUpdated" style="font-size:13px;color:rgba(224,232,240,0.4);"></span>
+                </div>
+            </div>
+
+            <div class="hud-corner hud-corner-tl" style="top:90px;left:30px;"></div>
+            <div class="hud-corner hud-corner-tr" style="top:90px;right:30px;"></div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- ===== NEWS SECTION ===== -->
+        <section style="padding:80px 20px;position:relative;">
+            <div class="max-w-7xl mx-auto">
+                <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:40px;">
+                    <div>
+                        <h2 class="reveal" style="font-family:'Orbitron','Noto Sans Sinhala',sans-serif;font-size:clamp(22px,3.5vw,32px);font-weight:700;letter-spacing:-0.5px;">
+                            Latest <span style="color:#00D4FF;">News</span>
+                        </h2>
+                        <p style="font-size:13px;color:rgba(224,232,240,0.4);margin-top:6px;">Source: Hiru News API &bull; 15 articles</p>
+                    </div>
+                    <div id="newsCount" style="font-family:'Orbitron',sans-serif;font-size:12px;color:rgba(0,212,255,0.6);letter-spacing:1px;"></div>
+                </div>
+
+                <!-- Loading Skeletons -->
+                <div id="skeletonWrap" class="news-grid">
+                    <div class="skeleton-card" style="height:340px;">
+                        <div class="skeleton" style="height:190px;border-radius:0;"></div>
+                        <div style="padding:22px;">
+                            <div class="skeleton" style="height:16px;width:85%;margin-bottom:12px;"></div>
+                            <div class="skeleton" style="height:12px;width:60%;margin-bottom:8px;"></div>
+                            <div class="skeleton" style="height:12px;width:45%;"></div>
+                        </div>
+                    </div>
+                    <div class="skeleton-card" style="height:340px;">
+                        <div class="skeleton" style="height:190px;border-radius:0;"></div>
+                        <div style="padding:22px;">
+                            <div class="skeleton" style="height:16px;width:75%;margin-bottom:12px;"></div>
+                            <div class="skeleton" style="height:12px;width:65%;margin-bottom:8px;"></div>
+                            <div class="skeleton" style="height:12px;width:50%;"></div>
+                        </div>
+                    </div>
+                    <div class="skeleton-card" style="height:340px;">
+                        <div class="skeleton" style="height:190px;border-radius:0;"></div>
+                        <div style="padding:22px;">
+                            <div class="skeleton" style="height:16px;width:90%;margin-bottom:12px;"></div>
+                            <div class="skeleton" style="height:12px;width:55%;margin-bottom:8px;"></div>
+                            <div class="skeleton" style="height:12px;width:40%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Error -->
+                <div id="newsError" class="news-error hidden" style="max-width:600px;margin:0 auto;text-align:center;"></div>
+
+                <!-- News Grid -->
+                <div id="newsGrid" class="news-grid" style="margin-top:0;"></div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- ===== FOOTER ===== -->
+        <footer style="position:relative;padding:80px 20px 40px;overflow:hidden;">
+            <div class="footer-cta-glow"></div>
+            <div class="holo-circle" style="width:300px;height:300px;top:-100px;right:-80px;"></div>
+            <div class="max-w-4xl mx-auto" style="text-align:center;position:relative;z-index:5;">
+                <h3 style="font-family:'Orbitron','Noto Sans Sinhala',sans-serif;font-size:clamp(20px,3vw,28px);font-weight:700;margin-bottom:14px;">
+                    Always <span style="color:#00D4FF;">Fresh News</span>
+                </h3>
+                <p style="font-size:14px;color:rgba(224,232,240,0.45);margin-bottom:32px;">Refresh බොත්තම ඔබා නවතම පුවත් ක්ෂණිකව ලබාගන්න.</p>
+                <button class="neon-btn" onclick="loadNews(true);window.scrollTo({top:0,behavior:'smooth'});" style="margin-bottom:50px;">
+                    <i data-lucide="zap" style="width:18px;height:18px;"></i>
+                    Load Fresh News
+                </button>
+                <div class="section-divider" style="margin-bottom:30px;"></div>
+                <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:16px;">
+                    <div style="width:28px;height:28px;background:linear-gradient(135deg,#00A3FF,#0066CC);border-radius:8px;display:flex;align-items:center;justify-content:center;">
+                        <span style="font-family:'Orbitron',sans-serif;font-weight:900;font-size:12px;color:white;">Z</span>
+                    </div>
+                    <span style="font-family:'Orbitron',sans-serif;font-size:12px;color:rgba(224,232,240,0.3);letter-spacing:2px;">ZETA TOOLS &bull; HIRU NEWS</span>
+                </div>
+                <p style="font-size:12px;color:rgba(224,232,240,0.2);">© 2026 ZETA TOOLS. News content by Hiru News. All rights reserved.</p>
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+        // ===== Config =====
+        const NEWS_API = 'https://hashu-apis-production.up.railway.app/api/news/hiru?apiKey=hashu_cd4b0a9d325539de660602e7d8d38d61&limit=15';
+
+        // ===== Page Loader =====
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('pageLoader').classList.add('hidden');
+            }, 600);
+        });
+
+        // ===== Mouse Glow =====
+        const mouseGlow = document.getElementById('mouseGlow');
+        let mouseX = 0, mouseY = 0, glowX = 0, glowY = 0;
+        document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
+        function animateGlow() {
+            glowX += (mouseX - glowX) * 0.08;
+            glowY += (mouseY - glowY) * 0.08;
+            mouseGlow.style.left = glowX + 'px';
+            mouseGlow.style.top = glowY + 'px';
+            requestAnimationFrame(animateGlow);
+        }
+        animateGlow();
+
+        // ===== Particles =====
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        class Particle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 1.5 + 0.3;
+                this.speedX = (Math.random() - 0.5) * 0.3;
+                this.speedY = (Math.random() - 0.5) * 0.3;
+                this.opacity = Math.random() * 0.5 + 0.1;
+                this.pulse = Math.random() * Math.PI * 2;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.pulse += 0.02;
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+            }
+            draw() {
+                const o = this.opacity * (0.5 + 0.5 * Math.sin(this.pulse));
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(0, 163, 255, ' + o + ')';
+                ctx.fill();
+            }
+        }
+
+        const particleCount = Math.min(80, Math.floor(window.innerWidth / 15));
+        for (let i = 0; i < particleCount; i++) particles.push(new Particle());
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 120) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = 'rgba(0, 163, 255, ' + (0.06 * (1 - dist / 120)) + ')';
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+                    }
+                }
+            }
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // ===== Scroll Reveal =====
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+        // ===== Live Clock =====
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('liveClock').textContent = now.toLocaleTimeString('en-GB');
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        // ===== Field Helpers (API format tolerant) =====
+        function pick(obj, keys) {
+            for (const k of keys) {
+                if (obj[k] !== undefined && obj[k] !== null && obj[k] !== '') return obj[k];
+            }
+            return null;
+        }
+        function getTitle(item) {
+            return pick(item, ['title', 'Title', 'heading', 'headline', 'news_title']) || 'Untitled News';
+        }
+        function getDesc(item) {
+            return pick(item, ['description', 'desc', 'summary', 'content', 'news_content', 'excerpt', 'short_description']) || '';
+        }
+        function getImage(item) {
+            return pick(item, ['image', 'imageUrl', 'image_url', 'img', 'thumbnail', 'photo', 'news_image', 'cover']);
+        }
+        function getLink(item) {
+            return pick(item, ['url', 'link', 'news_link', 'source_url', 'permalink', 'href']) || '#';
+        }
+        function getDate(item) {
+            return pick(item, ['date', 'time', 'publishedAt', 'published_at', 'timestamp', 'createdAt', 'datetime']);
+        }
+        function extractList(data) {
+            if (Array.isArray(data)) return data;
+            if (data && typeof data === 'object') {
+                for (const key of ['news', 'data', 'result', 'results', 'articles', 'items', 'posts']) {
+                    if (Array.isArray(data[key])) return data[key];
+                }
+            }
+            return [];
+        }
+        function formatDate(d) {
+            if (!d) return '';
+            try {
+                const date = new Date(d);
+                if (isNaN(date.getTime())) return String(d);
+                return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+            } catch (e) { return String(d); }
+        }
+        function stripHtml(s) {
+            const div = document.createElement('div');
+            div.innerHTML = s;
+            return div.textContent || div.innerText || '';
+        }
+
+        // ===== Render =====
+        function renderNews(list) {
+            const grid = document.getElementById('newsGrid');
+            grid.innerHTML = '';
+
+            list.forEach((item, index) => {
+                const title = stripHtml(getTitle(item));
+                const desc = stripHtml(getDesc(item));
+                const img = getImage(item);
+                const link = getLink(item);
+                const date = formatDate(getDate(item));
+                const isFeatured = index === 0;
+
+                const card = document.createElement('article');
+                card.className = 'news-card' + (isFeatured ? ' featured-card' : '');
+                card.style.animationDelay = (index * 0.06) + 's';
+
+                const imgHtml = img
+                    ? '<img class="news-img" src="' + encodeURI(img) + '" alt="" loading="lazy" onerror="this.parentNode.innerHTML=\'<div class=news-img-fallback>📰</div>\'">'
+                    : '<div class="news-img-fallback">📰</div>';
+
+                card.innerHTML =
+                    '<div class="news-img-wrap">' +
+                        '<span class="news-badge">' + (isFeatured ? '🔥 Top Story' : 'Hiru News') + '</span>' +
+                        imgHtml +
+                    '</div>' +
+                    '<div class="news-body">' +
+                        '<h3 class="news-title">' + title + '</h3>' +
+                        (desc ? '<p class="news-desc">' + desc + '</p>' : '') +
+                        '<div class="news-meta">' +
+                            '<span class="news-date">' +
+                                '<i data-lucide="calendar" style="width:13px;height:13px;"></i>' +
+                                (date || 'Recent') +
+                            '</span>' +
+                            '<a class="read-more" href="' + encodeURI(link) + '">' +
+                                'Read More' +
+                                '<i data-lucide="arrow-right" style="width:14px;height:14px;"></i>' +
+                            '</a>' +
+                        '</div>' +
+                    '</div>';
+
+                card.addEventListener('click', function(e) {
+                    if (e.target.closest('a')) return;
+                    window.open(link, '_blank');
+                });
+
+                grid.appendChild(card);
+            });
+
+            lucide.createIcons();
+        }
+
+        // ===== Load News =====
+        let loading = false;
+        async function loadNews(manual) {
+            if (loading) return;
+            loading = true;
+
+            const grid = document.getElementById('newsGrid');
+            const skel = document.getElementById('skeletonWrap');
+            const err = document.getElementById('newsError');
+            err.classList.add('hidden');
+
+            if (manual || grid.children.length === 0) {
+                grid.innerHTML = '';
+                skel.style.display = 'grid';
+            }
+
+            try {
+                const res = await fetch(NEWS_API);
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const data = await res.json();
+                const list = extractList(data);
+
+                if (!list.length) throw new Error('No news items in response');
+
+                skel.style.display = 'none';
+                renderNews(list);
+
+                document.getElementById('newsCount').textContent = list.length + ' ARTICLES LOADED';
+                document.getElementById('lastUpdated').textContent = 'Updated: ' + new Date().toLocaleTimeString('en-GB');
+            } catch (e) {
+                skel.style.display = 'none';
+                err.innerHTML = '⚠️ News load කිරීමට නොහැකි වුණා. <b>Refresh</b> බොත්තම ඔබා නැවත උත්සාහ කරන්න.<br><span style="font-size:12px;opacity:0.7;">' + (e.message || e) + '</span>';
+                err.classList.remove('hidden');
+            } finally {
+                loading = false;
+            }
+        }
+
+        // ===== Init =====
+        lucide.createIcons();
+        loadNews(false);
+    </script>
+</body>
+</html>
