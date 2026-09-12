@@ -880,6 +880,43 @@
             .sm-info-top { flex-direction:column; }
         }
 
+        /* ===== IMAGE SEARCH STUDIO (google-image-search API) ===== */
+        .is-studio { padding:56px 20px 60px; max-width:760px; margin:0 auto; width:100%; flex-shrink:0; }
+        .is-head { text-align:center; margin-bottom:32px; }
+        .is-badge { display:inline-flex; align-items:center; gap:6px; padding:6px 16px; border-radius:100px; font-size:10px; font-weight:600; letter-spacing:1.2px; text-transform:uppercase; background:rgba(45,212,232,0.06); border:1px solid rgba(45,212,232,0.12); color:var(--accent-cyan); margin-bottom:16px; }
+        .is-badge i { font-size:9px; }
+        .is-title { font-size:clamp(20px,3.5vw,30px); font-weight:800; letter-spacing:-0.5px; margin-bottom:10px; }
+        .is-title span { color:var(--accent-cyan); }
+        .is-sub { font-size:13px; color:var(--text-secondary); max-width:440px; margin:0 auto; line-height:1.7; }
+        .is-card { background:var(--bg-surface); border:1px solid var(--border-subtle); border-radius:var(--radius-xl); padding:28px 26px; position:relative; overflow:hidden; }
+        .is-card::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg, transparent, rgba(45,212,232,0.35), transparent); }
+        .is-input-row { display:flex; gap:10px; flex-wrap:wrap; }
+        .is-input { flex:1; min-width:220px; padding:12px 16px; background:rgba(3,5,12,0.6); border:1px solid var(--border-default); border-radius:12px; color:var(--text-primary); font-size:13.5px; font-family:'Inter',sans-serif; outline:none; transition:all var(--transition-fast); }
+        .is-input:focus { border-color:var(--accent-cyan); box-shadow:0 0 0 3px rgba(45,212,232,0.10); }
+        .is-input::placeholder { color:var(--text-tertiary); }
+        .is-btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:12px 24px; border-radius:12px; font-size:13.5px; font-weight:700; color:#fff; background:linear-gradient(135deg, #2DD4E8, #0ea5e9); border:none; cursor:pointer; transition:all var(--transition-fast); box-shadow:0 2px 14px rgba(45,212,232,0.20); font-family:'Inter',sans-serif; text-decoration:none; }
+        .is-btn:hover { transform:translateY(-2px); box-shadow:0 6px 24px rgba(45,212,232,0.35); }
+        .is-status { display:flex; align-items:center; justify-content:center; gap:12px; padding:16px; color:var(--text-secondary); font-size:13px; }
+        .is-spinner { width:20px; height:20px; border-radius:50%; border:2px solid rgba(45,212,232,0.15); border-top-color:#2DD4E8; animation:smSpin 0.9s linear infinite; }
+        .is-error { margin-top:18px; padding:13px 16px; border-radius:12px; background:rgba(240,86,74,0.08); border:1px solid rgba(240,86,74,0.22); color:#F58B82; font-size:12.5px; line-height:1.6; }
+        .is-grid { margin-top:24px; display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:12px; }
+        .is-item { border-radius:14px; overflow:hidden; background:rgba(3,5,12,0.5); border:1px solid var(--border-subtle); transition:all var(--transition-fast); display:flex; flex-direction:column; }
+        .is-item:hover { border-color:rgba(45,212,232,0.35); transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.4); }
+        .is-pic-wrap { position:relative; aspect-ratio:1/1; background:#000; overflow:hidden; }
+        .is-pic { width:100%; height:100%; object-fit:cover; display:block; transition:transform var(--transition-fast); cursor:pointer; }
+        .is-item:hover .is-pic { transform:scale(1.06); }
+        .is-item-actions { display:flex; gap:6px; padding:8px; }
+        .is-mini-btn { flex:1; display:inline-flex; align-items:center; justify-content:center; gap:5px; padding:7px 6px; border-radius:8px; border:none; font-size:10.5px; font-weight:700; color:#fff; background:linear-gradient(135deg, #2DD4E8, #0ea5e9); cursor:pointer; transition:all var(--transition-fast); font-family:'Inter',sans-serif; text-decoration:none; }
+        .is-mini-btn:hover { transform:translateY(-1px); box-shadow:0 4px 16px rgba(45,212,232,0.3); }
+        .is-mini-btn.ghost { background:rgba(255,255,255,0.04); border:1px solid var(--border-default); color:var(--text-secondary); }
+        .is-mini-btn.ghost:hover { color:var(--text-primary); border-color:rgba(255,255,255,0.15); }
+        .is-empty-note { margin-top:10px; text-align:center; font-size:11px; color:var(--text-tertiary); }
+        @media (max-width:640px) {
+            .is-card { padding:20px 16px; }
+            .is-btn { width:100%; }
+            .is-grid { grid-template-columns:repeat(2,1fr); gap:10px; }
+        }
+
     </style>
 <base target="_blank">
 <base target="_blank">
@@ -1158,6 +1195,29 @@
 
                     <!-- Movie info + download links -->
                     <div id="smInfoWrap" class="hidden"></div>
+                </div>
+            </section>
+
+            <!-- ===== IMAGE SEARCH STUDIO (supunofc.site google-image-search API) ===== -->
+            <section class="is-studio" id="imageSearchStudio">
+                <div class="is-head">
+                    <span class="is-badge"><i class="fa-solid fa-magnifying-glass"></i> Image Search</span>
+                    <h2 class="is-title">Google Image <span>Search</span></h2>
+                    <p class="is-sub">ඕන දෙයක් type කරලා search කරන්න — Google වලින් images 100ක් විතර ගෙනත් දෙනවා. Photo එක click කරලා විශාල කරලා බලන්න, "Copy" හෝ "Open" කරන්න පුළුවන්.</p>
+                </div>
+                <div class="is-card">
+                    <div class="is-input-row">
+                        <input type="text" id="isQuery" class="is-input" placeholder="මොනවද search කරන්නේ… (උදා: Cat)" onkeydown="if(event.key==='Enter')isSearch()">
+                        <button class="is-btn" onclick="isSearch()"><i class="fa-solid fa-magnifying-glass"></i> Search Images</button>
+                    </div>
+
+                    <!-- Status / Error -->
+                    <div id="isStatus" class="hidden"><div class="is-status"><div class="is-spinner"></div> Images search කරමින්…</div></div>
+                    <div id="isError" class="is-error hidden"></div>
+
+                    <!-- Results grid -->
+                    <div id="isGrid" class="is-grid"></div>
+                    <div id="isEmptyNote" class="is-empty-note hidden">ප්‍රතිඵල නෑ — වෙන keyword එකකින් try කරන්න.</div>
                 </div>
             </section>
 
@@ -2044,6 +2104,103 @@
             };
 
             console.log('🎬 Movie Downloader loaded (chamindu.site API)');
+        })();
+    </script>
+    <!-- ============================================================
+    IMAGE SEARCH STUDIO — SCRIPT (supunofc.site google-image-search API)
+    ============================================================ -->
+    <script>
+        (function() {
+            const IS_API = 'https://supunofc.site/api/search/google-image-search/search';
+            const IS_KEY = 'supun-9ecbf7stws7v39309xb6sgfc';
+
+            function isError(msg) {
+                const el = document.getElementById('isError');
+                el.textContent = msg;
+                el.classList.remove('hidden');
+                document.getElementById('isStatus').classList.add('hidden');
+            }
+            function isShowStatus() {
+                document.getElementById('isError').classList.add('hidden');
+                document.getElementById('isEmptyNote').classList.add('hidden');
+                document.getElementById('isGrid').innerHTML = '';
+                document.getElementById('isStatus').classList.remove('hidden');
+            }
+            function isHideStatus() {
+                document.getElementById('isStatus').classList.add('hidden');
+            }
+            function isEl(tag, cls, html) {
+                const d = document.createElement(tag);
+                if (cls) d.className = cls;
+                if (html !== undefined) d.innerHTML = html;
+                return d;
+            }
+
+            window.isSearch = async function() {
+                const q = (document.getElementById('isQuery').value || '').trim();
+                if (!q) { isError('⚠️ මොනවහරි keyword එකක් type කරන්න.'); return; }
+
+                isShowStatus();
+                try {
+                    const url = IS_API + '?q=' + encodeURIComponent(q) + '&apikey=' + encodeURIComponent(IS_KEY);
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error('HTTP ' + res.status);
+                    const data = await res.json();
+
+                    const results = (data && (data.result || data.results || data.data)) || [];
+                    isHideStatus();
+
+                    if (!Array.isArray(results) || results.length === 0) {
+                        document.getElementById('isEmptyNote').classList.remove('hidden');
+                        return;
+                    }
+
+                    const grid = document.getElementById('isGrid');
+                    grid.innerHTML = '';
+                    results.forEach(function(imgUrl) {
+                        if (!imgUrl) return;
+                        const item = isEl('div', 'is-item');
+
+                        const picWrap = isEl('div', 'is-pic-wrap');
+                        const img = document.createElement('img');
+                        img.className = 'is-pic';
+                        img.src = imgUrl;
+                        img.alt = q;
+                        img.loading = 'lazy';
+                        img.addEventListener('click', function() { window.open(imgUrl, '_blank'); });
+                        img.addEventListener('error', function() { item.remove(); });
+                        picWrap.appendChild(img);
+                        item.appendChild(picWrap);
+
+                        const actions = isEl('div', 'is-item-actions');
+
+                        const copyBtn = isEl('button', 'is-mini-btn ghost', '<i class="fa-regular fa-copy"></i> Copy');
+                        copyBtn.addEventListener('click', function() {
+                            navigator.clipboard.writeText(imgUrl).then(function() {
+                                const old = copyBtn.innerHTML;
+                                copyBtn.innerHTML = '<i class="fa-solid fa-check"></i> OK';
+                                setTimeout(function() { copyBtn.innerHTML = old; }, 1400);
+                            });
+                        });
+                        actions.appendChild(copyBtn);
+
+                        const openBtn = isEl('a', 'is-mini-btn', '<i class="fa-solid fa-arrow-up-right-from-square"></i> Open');
+                        openBtn.href = imgUrl;
+                        openBtn.target = '_blank';
+                        actions.appendChild(openBtn);
+
+                        item.appendChild(actions);
+                        grid.appendChild(item);
+                    });
+
+                    grid.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                } catch (e) {
+                    console.error('Image search error:', e);
+                    isError('❌ Images ගන්න බැරි වුනා. Internet connection එක check කරලා ආයේ try කරන්න.');
+                }
+            };
+
+            console.log('🖼 Image Search Studio loaded (supunofc.site google-image-search API)');
         })();
     </script>
     <!-- ============================================================
