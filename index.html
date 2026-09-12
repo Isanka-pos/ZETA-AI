@@ -925,7 +925,6 @@
 <base target="_blank">
 <base target="_blank">
 <base target="_blank">
-<base target="_blank">
 </head>
 <body>
 
@@ -1204,7 +1203,7 @@
                 <div class="is-head">
                     <span class="is-badge"><i class="fa-solid fa-magnifying-glass"></i> Image Search</span>
                     <h2 class="is-title">Google Image <span>Search</span></h2>
-                    <p class="is-sub">ඕන දෙයක් type කරලා search කරන්න — Google වලින් images 20ක් ගෙනත් දෙනවා. Photo එක click කරලා විශාල කරලා බලන්න, "Copy", "Open" හෝ "Download" කරන්න පුළුවන්.</p>
+                    <p class="is-sub">ඕන දෙයක් type කරලා search කරන්න — Google වලින් images 100ක් විතර ගෙනත් දෙනවා. Photo එක click කරලා විශාල කරලා බලන්න, "Copy" හෝ "Open" කරන්න පුළුවන්.</p>
                 </div>
                 <div class="is-card">
                     <div class="is-input-row">
@@ -2148,7 +2147,7 @@
                     if (!res.ok) throw new Error('HTTP ' + res.status);
                     const data = await res.json();
 
-                    const results = ((data && (data.result || data.results || data.data)) || []).slice(0, 20);
+                    const results = (data && (data.result || data.results || data.data)) || [];
                     isHideStatus();
 
                     if (!Array.isArray(results) || results.length === 0) {
@@ -2185,11 +2184,7 @@
                         });
                         actions.appendChild(copyBtn);
 
-                        const dlBtn = isEl('button', 'is-mini-btn', '<i class="fa-solid fa-download"></i> Download');
-                        dlBtn.addEventListener('click', function() { isDownload(imgUrl, dlBtn); });
-                        actions.appendChild(dlBtn);
-
-                        const openBtn = isEl('a', 'is-mini-btn ghost', '<i class="fa-solid fa-arrow-up-right-from-square"></i> Open');
+                        const openBtn = isEl('a', 'is-mini-btn', '<i class="fa-solid fa-arrow-up-right-from-square"></i> Open');
                         openBtn.href = imgUrl;
                         openBtn.target = '_blank';
                         actions.appendChild(openBtn);
@@ -2205,34 +2200,7 @@
                 }
             };
 
-            // Download image: try blob save, fallback to opening in new tab
-            window.isDownload = async function(imgUrl, btn) {
-                const oldHtml = btn.innerHTML;
-                btn.disabled = true;
-                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> …';
-                try {
-                    const res = await fetch(imgUrl, { mode: 'cors' });
-                    if (!res.ok) throw new Error('HTTP ' + res.status);
-                    const blob = await res.blob();
-                    const ext = (imgUrl.split('?')[0].match(/\.(jpe?g|png|gif|webp|bmp|avif)$/i) || [])[1] || 'jpg';
-                    const a = document.createElement('a');
-                    a.href = URL.createObjectURL(blob);
-                    a.download = 'zeta-image-' + Date.now() + '.' + ext.toLowerCase();
-                    document.body.appendChild(a);
-                    a.click();
-                    a.remove();
-                    setTimeout(function() { URL.revokeObjectURL(a.href); }, 4000);
-                    btn.innerHTML = '<i class="fa-solid fa-check"></i> OK';
-                    setTimeout(function() { btn.innerHTML = oldHtml; btn.disabled = false; }, 1600);
-                } catch (e) {
-                    // CORS blocked — open full image in a new tab so user can save it manually
-                    window.open(imgUrl, '_blank');
-                    btn.innerHTML = oldHtml;
-                    btn.disabled = false;
-                }
-            };
-
-            console.log('🖼 Image Search Studio loaded (supunofc.site google-image-search API) — 20 results + download');
+            console.log('🖼 Image Search Studio loaded (supunofc.site google-image-search API)');
         })();
     </script>
     <!-- ============================================================
