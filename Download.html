@@ -547,12 +547,16 @@
                         Facebook
                     </div>
                     <div class="platform-tab" data-platform="youtube" onclick="switchPlatform('youtube')">
-                        <i data-lucide="video" style="width:18px;height:18px;"></i>
+                        <i data-lucide="youtube" style="width:18px;height:18px;"></i>
                         YouTube Thumb
                     </div>
                     <div class="platform-tab" data-platform="wikipedia" onclick="switchPlatform('wikipedia')">
                         <i data-lucide="book-open" style="width:18px;height:18px;"></i>
                         Wikipedia
+                    </div>
+                    <div class="platform-tab" data-platform="nic" onclick="switchPlatform('nic')">
+                        <i data-lucide="id-card" style="width:18px;height:18px;"></i>
+                        NIC Decode
                     </div>
                     <div class="platform-tab" data-platform="tempmail" onclick="switchPlatform('tempmail')">
                         <i data-lucide="mail" style="width:18px;height:18px;"></i>
@@ -651,7 +655,7 @@
                     <div class="glass-card reveal reveal-delay-1" style="padding:32px 24px;text-align:center;">
                         <div style="font-size:42px;margin-bottom:16px;filter:drop-shadow(0 0 12px rgba(0,163,255,0.3));">2️⃣</div>
                         <h3 style="font-weight:700;font-size:17px;margin-bottom:8px;color:#E0E8F0;">Select Platform</h3>
-                        <p style="font-size:14px;color:rgba(224,232,240,0.45);line-height:1.6;">Choose TikTok, Facebook, YouTube Thumbnail, Wikipedia, or Temp Mail.</p>
+                        <p style="font-size:14px;color:rgba(224,232,240,0.45);line-height:1.6;">Choose TikTok, Facebook, YouTube Thumbnail, Wikipedia, NIC Decode, or Temp Mail.</p>
                     </div>
                     <div class="glass-card reveal reveal-delay-2" style="padding:32px 24px;text-align:center;">
                         <div style="font-size:42px;margin-bottom:16px;filter:drop-shadow(0 0 12px rgba(0,163,255,0.3));">3️⃣</div>
@@ -956,6 +960,9 @@
             } else if (platform === 'wikipedia') {
                 input.placeholder = 'Enter a topic to search Wikipedia...';
                 hint.textContent = 'Type any topic, e.g., Artificial intelligence, Sri Lanka, Albert Einstein';
+            } else if (platform === 'nic') {
+                input.placeholder = 'Enter NIC number (old or new)...';
+                hint.textContent = 'Supports old (e.g., 705693322V) and new 12-digit (e.g., 200712345678) NIC formats';
             }
 
             const label = getSubmitLabelForPlatform(platform);
@@ -965,7 +972,9 @@
 
         // Idle label for the submit button — varies per platform (Download vs Search)
         function getSubmitLabelForPlatform(platform) {
-            return platform === 'wikipedia' ? { icon: 'search', text: 'Search' } : { icon: 'download', text: 'Download' };
+            if (platform === 'wikipedia') return { icon: 'search', text: 'Search' };
+            if (platform === 'nic') return { icon: 'scan-search', text: 'Decode' };
+            return { icon: 'download', text: 'Download' };
         }
 
         // ===== Mobile Menu =====
@@ -1001,6 +1010,7 @@
         const API_KEY = 'hashu_cd4b0a9d325539de660602e7d8d38d61';
         const WIKIPEDIA_API = 'https://apix.wolvarex.com/api/tools/wikipedia';
         const WIKIPEDIA_KEY = 'wxa_f_1aee13e60b';
+        const NIC_API = 'https://hashu-apis-production.up.railway.app/api/nic/decode';
 
         const form = document.getElementById('downloadForm');
         const urlInput = document.getElementById('videoUrl');
@@ -1038,7 +1048,13 @@
                     return;
                 }
             }
-            // Wikipedia takes a free-text topic, not a link — no format check needed.
+            // Wikipedia takes a free-text topic — no format check needed.
+            else if (currentPlatform === 'nic') {
+                if (!/^\d{9}[vVxX]$/.test(url) && !/^\d{12}$/.test(url)) {
+                    showResult('error', 'Please enter a valid NIC number (e.g., 705693322V or a 12-digit new NIC).');
+                    return;
+                }
+            }
 
             isLoading = true;
             downloadBtn.disabled = true;
@@ -1047,7 +1063,9 @@
 
             const loadingText = currentPlatform === 'youtube'
                 ? 'Fetching thumbnail... Please wait.'
-                : (currentPlatform === 'wikipedia' ? 'Searching Wikipedia... Please wait.' : 'Downloading video... Please wait.');
+                : currentPlatform === 'wikipedia' ? 'Searching Wikipedia... Please wait.'
+                : currentPlatform === 'nic' ? 'Decoding NIC number... Please wait.'
+                : 'Downloading video... Please wait.';
 
             resultContainer.innerHTML = `
                 <div class="glass-card result-card" style="padding:24px 28px;width:100%;max-width:600px;">
@@ -1073,6 +1091,8 @@
                     apiUrl = `${YOUTUBE_THUMB_API}?apiKey=${API_KEY}&text=${encodeURIComponent(url)}`;
                 } else if (currentPlatform === 'wikipedia') {
                     apiUrl = `${WIKIPEDIA_API}?query=${encodeURIComponent(url)}&key=${WIKIPEDIA_KEY}`;
+                } else if (currentPlatform === 'nic') {
+                    apiUrl = `${NIC_API}?apiKey=${API_KEY}&text=${encodeURIComponent(url)}`;
                 }
 
                 console.log('Fetching:', apiUrl);
@@ -1108,6 +1128,22 @@
                         showWikiResult(data.result);
                     } else {
                         showResult('error', data.message || 'Could not find a Wikipedia article for that topic.');
+                    }
+                    return;
+                }
+
+                if (currentPlatform === 'nic') {
+                    // Field names for this endpoint couldn't be verified directly (network access
+                    // to this host isn't available in this environment), so we check several
+                    // common field names at once — the raw response is logged above for easy
+                    // adjustment in devtools if a field doesn't populate correctly.
+                    const root = data.results || data.result || data.data || data;
+                    const hasInfo = root && (root.dob || root.birthday || root.dateOfBirth || root.birthDate
+                        || root.age || root.gender || root.sex || root.nic || root.oldNic || root.newNic);
+                    if (data.success !== false && hasInfo) {
+                        showNicResult(root);
+                    } else {
+                        showResult('error', data.message || 'Could not decode that NIC number. Please check it and try again.');
                     }
                     return;
                 }
@@ -1244,6 +1280,49 @@
                                 <i data-lucide="external-link" style="width:20px;height:20px;"></i>
                                 Read Full Article
                             </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        function showNicResult(root) {
+            const dob = root.dob || root.birthday || root.dateOfBirth || root.birthDate || '';
+            const age = root.age !== undefined && root.age !== null ? root.age : '';
+            const gender = root.gender || root.sex || '';
+            const oldNic = root.oldNic || root.old_nic || '';
+            const newNic = root.newNic || root.new_nic || '';
+
+            const rows = [
+                ['Date of Birth', dob],
+                ['Age', age],
+                ['Gender', gender],
+                ['Old NIC', oldNic],
+                ['New NIC', newNic],
+            ].filter(([, value]) => value !== '' && value !== null && value !== undefined);
+
+            const rowsHtml = rows.map(([label, value]) => `
+                <div style="display:flex;justify-content:space-between;gap:16px;width:100%;padding:10px 0;border-bottom:1px solid rgba(0,163,255,0.08);">
+                    <span style="font-size:13px;color:rgba(224,232,240,0.45);">${escapeHtml(label)}</span>
+                    <span style="font-size:14px;font-weight:600;color:#E0E8F0;text-align:right;">${escapeHtml(String(value))}</span>
+                </div>
+            `).join('');
+
+            resultContainer.innerHTML = `
+                <div class="glass-card result-card" style="padding:28px;width:100%;max-width:600px;animation:fadeUp 0.5s ease forwards;">
+                    <div class="hud-corner hud-corner-tl" style="top:8px;left:8px;"></div>
+                    <div class="hud-corner hud-corner-tr" style="top:8px;right:8px;"></div>
+                    <div class="hud-corner hud-corner-bl" style="bottom:8px;left:8px;"></div>
+                    <div class="hud-corner hud-corner-br" style="bottom:8px;right:8px;"></div>
+
+                    <div style="display:flex;flex-direction:column;gap:12px;align-items:center;">
+                        <span style="font-size:12px;color:rgba(0,212,255,0.6);font-weight:600;letter-spacing:1px;text-transform:uppercase;">
+                            <i data-lucide="id-card" style="width:14px;height:14px;display:inline;margin-right:4px;"></i>
+                            NIC Decode
+                        </span>
+                        <div style="width:100%;">
+                            ${rowsHtml || '<p style="font-size:14px;color:rgba(224,232,240,0.5);text-align:center;">No details found for this NIC.</p>'}
                         </div>
                     </div>
                 </div>
