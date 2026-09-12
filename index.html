@@ -905,8 +905,9 @@
         .is-pic-wrap { position:relative; aspect-ratio:1/1; background:#000; overflow:hidden; }
         .is-pic { width:100%; height:100%; object-fit:cover; display:block; transition:transform var(--transition-fast); cursor:pointer; }
         .is-item:hover .is-pic { transform:scale(1.06); }
-        .is-item-actions { display:flex; gap:6px; padding:8px; }
-        .is-mini-btn { flex:1; display:inline-flex; align-items:center; justify-content:center; gap:5px; padding:7px 6px; border-radius:8px; border:none; font-size:10.5px; font-weight:700; color:#fff; background:linear-gradient(135deg, #2DD4E8, #0ea5e9); cursor:pointer; transition:all var(--transition-fast); font-family:'Inter',sans-serif; text-decoration:none; }
+        .is-item-actions { display:flex; flex-wrap:wrap; gap:6px; padding:8px; }
+        .is-mini-btn { flex:1 1 calc(50% - 3px); min-width:0; display:inline-flex; align-items:center; justify-content:center; gap:5px; padding:7px 4px; border-radius:8px; border:none; font-size:10px; font-weight:700; color:#fff; background:linear-gradient(135deg, #2DD4E8, #0ea5e9); cursor:pointer; transition:all var(--transition-fast); font-family:'Inter',sans-serif; text-decoration:none; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .is-mini-btn.is-dl { flex-basis:100%; background:linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); }
         .is-mini-btn:hover { transform:translateY(-1px); box-shadow:0 4px 16px rgba(45,212,232,0.3); }
         .is-mini-btn.ghost { background:rgba(255,255,255,0.04); border:1px solid var(--border-default); color:var(--text-secondary); }
         .is-mini-btn.ghost:hover { color:var(--text-primary); border-color:rgba(255,255,255,0.15); }
@@ -2222,7 +2223,7 @@
                         openBtn.target = '_blank';
                         actions.appendChild(openBtn);
 
-                        const dlBtn = isEl('button', 'is-mini-btn', '<i class="fa-solid fa-download"></i> Download');
+                        const dlBtn = isEl('button', 'is-mini-btn is-dl', '<i class="fa-solid fa-download"></i> Download');
                         dlBtn.addEventListener('click', function() { isDownload(imgUrl, q, idx, dlBtn); });
                         actions.appendChild(dlBtn);
 
