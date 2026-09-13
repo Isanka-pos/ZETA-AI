@@ -497,6 +497,7 @@
         }
     </style>
 <base target="_blank">
+<base target="_blank">
 </head>
 <body>
     <!-- Page Loader -->
@@ -529,9 +530,43 @@
                     <a href="#forecast" style="font-size:14px;color:rgba(224,232,240,0.6);text-decoration:none;font-weight:500;transition:color 0.3s;letter-spacing:0.5px;" onmouseover="this.style.color='#00D4FF'" onmouseout="this.style.color='rgba(224,232,240,0.6)'">FORECAST</a>
                     <a href="#stats" style="font-size:14px;color:rgba(224,232,240,0.6);text-decoration:none;font-weight:500;transition:color 0.3s;letter-spacing:0.5px;" onmouseover="this.style.color='#00D4FF'" onmouseout="this.style.color='rgba(224,232,240,0.6)'">DETAILS</a>
                 </div>
+                <div id="userBox" style="display:none;align-items:center;gap:12px;">
+                    <span class="badge-glow" style="padding:6px 14px;font-size:12px;"><i data-lucide="coins" style="width:14px;height:14px;"></i> <span id="coinCount">0</span></span>
+                    <span id="navGmail" style="font-size:12px;color:rgba(224,232,240,0.5);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
+                    <button class="neon-btn neon-btn-ghost" style="padding:6px 14px;font-size:12px;" onclick="logout()"><i data-lucide="log-out" style="width:14px;height:14px;"></i> Logout</button>
+                </div>
             </div>
         </div>
     </nav>
+
+    <!-- ===== AUTH OVERLAY (Login / Register) ===== -->
+    <div id="authOverlay" class="hidden" style="position:fixed;inset:0;z-index:9000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(4,6,12,0.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);">
+        <div class="glass-card" style="width:100%;max-width:430px;padding:40px 32px;position:relative;">
+            <div class="hud-corner hud-corner-tl" style="top:12px;left:12px;"></div>
+            <div class="hud-corner hud-corner-tr" style="top:12px;right:12px;"></div>
+            <div class="hud-corner hud-corner-bl" style="bottom:12px;left:12px;"></div>
+            <div class="hud-corner hud-corner-br" style="bottom:12px;right:12px;"></div>
+            <div style="text-align:center;margin-bottom:24px;">
+                <div style="width:52px;height:52px;background:linear-gradient(135deg,#00A3FF,#0066CC);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 0 20px rgba(0,163,255,0.3);">
+                    <span style="font-family:'Orbitron',sans-serif;font-weight:900;font-size:22px;color:white;">Z</span>
+                </div>
+                <h2 style="font-family:'Orbitron',sans-serif;font-size:22px;font-weight:700;letter-spacing:1px;" id="authTitle">LOGIN</h2>
+                <p style="font-size:13px;color:rgba(224,232,240,0.45);margin-top:8px;">Weather search කරන්න මුලින්ම login වෙන්න</p>
+            </div>
+            <div style="display:flex;gap:6px;background:rgba(4,6,12,0.5);border:1px solid rgba(0,163,255,0.1);border-radius:12px;padding:5px;margin-bottom:22px;">
+                <button id="tabLogin" onclick="setAuthMode('login')" style="flex:1;padding:10px;border-radius:9px;border:none;font-family:'Inter',sans-serif;font-weight:600;font-size:13px;cursor:pointer;background:linear-gradient(135deg,#00A3FF,#0066CC);color:#fff;transition:all 0.3s;">LOGIN</button>
+                <button id="tabRegister" onclick="setAuthMode('register')" style="flex:1;padding:10px;border-radius:9px;border:none;font-family:'Inter',sans-serif;font-weight:600;font-size:13px;cursor:pointer;background:transparent;color:rgba(224,232,240,0.5);transition:all 0.3s;">REGISTER</button>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:14px;">
+                <input type="email" id="authGmail" class="weather-input" placeholder="Gmail address" onkeydown="if(event.key==='Enter')authSubmit()">
+                <input type="password" id="authPass" class="weather-input" placeholder="Password (characters 6+)" onkeydown="if(event.key==='Enter')authSubmit()">
+                <input type="password" id="authPass2" class="weather-input hidden" placeholder="Confirm password" onkeydown="if(event.key==='Enter')authSubmit()">
+                <p id="authMsg" style="font-size:13px;color:#FF6B7E;min-height:18px;margin:0;line-height:1.5;"></p>
+                <button class="neon-btn" style="width:100%;" onclick="authSubmit()" id="authBtn">Login</button>
+            </div>
+            <p style="font-size:11px;color:rgba(224,232,240,0.25);text-align:center;margin-top:18px;">New account එකකට free coins <span style="color:#FFC83C;">50</span> ලැබෙනවා · Coins අවසන් වුණොත් Admin panel එකෙන් දාගන්න</p>
+        </div>
+    </div>
 
     <main style="position:relative;z-index:2;">
 
@@ -720,6 +755,12 @@
         const API_BASE = 'https://sasa-dev-api.xyz/api/weather/forecast';
         const API_KEY  = 'Sasa_Dev_Api_e101b64c0549417f720ec1a9fb4f2b938a0214aa';
         const DEFAULT_CITY = '';
+
+        // ===== Coin System Config =====
+        const SEARCH_COST = 10;     // search 1කට cut වෙන coins
+        const WELCOME_COINS = 50;   // register වුණ ගමන් free coins
+        const LS_USERS = 'zeta_users';
+        const LS_SESSION = 'zeta_session';
 
         let currentDays = 1;
         let lastCity = DEFAULT_CITY;
@@ -1041,6 +1082,7 @@
                 showError('⚠️ Please enter a city name first.');
                 return;
             }
+            if (!spendCoins()) return;  // coins 10 කැපීම
             lastCity = city;
             fetchWeather(city);
         }
@@ -1051,7 +1093,110 @@
             currentDays = n;
             document.querySelectorAll('.day-chip').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
+            if (!spendCoins()) return;  // day change එකත් fresh request එකක් නිසා coins 10 කැපේ
             fetchWeather(lastCity);
+        }
+
+
+        // ===== AUTH & COIN SYSTEM =====
+        let authMode = 'login';
+
+        function getUsers(){ try { return JSON.parse(localStorage.getItem(LS_USERS)) || {}; } catch(e){ return {}; } }
+        function saveUsers(u){ localStorage.setItem(LS_USERS, JSON.stringify(u)); }
+        function currentGmail(){ return localStorage.getItem(LS_SESSION); }
+        function getCurrentUser(){
+            const g = currentGmail();
+            return g ? getUsers()[g] : null;
+        }
+
+        function showAuth(){
+            document.getElementById('authOverlay').classList.remove('hidden');
+            lucide.createIcons();
+        }
+        function hideAuth(){ document.getElementById('authOverlay').classList.add('hidden'); }
+
+        function setAuthMode(m){
+            authMode = m;
+            const on  = 'background:linear-gradient(135deg,#00A3FF,#0066CC);color:#fff;';
+            const off = 'background:transparent;color:rgba(224,232,240,0.5);';
+            document.getElementById('tabLogin').style.cssText    = m === 'login'    ? on : off;
+            document.getElementById('tabRegister').style.cssText = m === 'register' ? on : off;
+            document.getElementById('authPass2').classList.toggle('hidden', m !== 'register');
+            document.getElementById('authTitle').textContent = m === 'login' ? 'LOGIN' : 'REGISTER';
+            document.getElementById('authBtn').textContent   = m === 'login' ? 'Login' : 'Create Account';
+            document.getElementById('authMsg').textContent = '';
+        }
+
+        function authSubmit(){
+            const g = document.getElementById('authGmail').value.trim().toLowerCase();
+            const p = document.getElementById('authPass').value;
+            const p2 = document.getElementById('authPass2').value;
+            const msg = document.getElementById('authMsg');
+            msg.style.color = '#FF6B7E';
+
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(g)) { msg.textContent = '⚠️ Valid Gmail address එකක් දාන්න.'; return; }
+            if (p.length < 6) { msg.textContent = '⚠️ Password අකුරු 6කට වැඩි විය යුතුයි.'; return; }
+
+            const users = getUsers();
+
+            if (authMode === 'register') {
+                if (p !== p2) { msg.textContent = '⚠️ Password දෙක match වෙන්නේ නැහැ.'; return; }
+                if (users[g]) { msg.textContent = '⚠️ මේ Gmail එකෙන් account එකක් තියෙනවා. Login tab එකෙන් වෙන්න.'; return; }
+                users[g] = { password: p, coins: WELCOME_COINS, created: new Date().toISOString() };
+                saveUsers(users);
+                msg.style.color = '#4ADE80';
+                msg.textContent = '✅ Account හදලා ඉවරයි! Logging in…';
+                setTimeout(() => startSession(g), 500);
+            } else {
+                const u = users[g];
+                if (!u || u.password !== p) { msg.textContent = '❌ Gmail හෝ Password වැරදියි.'; return; }
+                startSession(g);
+            }
+        }
+
+        function startSession(g){
+            localStorage.setItem(LS_SESSION, g);
+            hideAuth();
+            updateUserUI();
+        }
+
+        function logout(){
+            localStorage.removeItem(LS_SESSION);
+            document.getElementById('userBox').style.display = 'none';
+            document.getElementById('weatherSection').classList.add('hidden');
+            document.getElementById('forecast').classList.add('hidden');
+            document.getElementById('dailySection').classList.add('hidden');
+            document.getElementById('errorSection').classList.add('hidden');
+            setAuthMode('login');
+            showAuth();
+        }
+
+        function updateUserUI(){
+            const g = currentGmail();
+            if (!g) return;
+            const u = getUsers()[g];
+            if (!u) { logout(); return; }
+            document.getElementById('userBox').style.display = 'flex';
+            document.getElementById('coinCount').textContent = u.coins;
+            document.getElementById('navGmail').textContent = g;
+            lucide.createIcons();
+        }
+
+        // search එකකට coins 10 කැපීම — coins නැත්නම් block
+        function spendCoins(){
+            const g = currentGmail();
+            if (!g) { showAuth(); return false; }
+            const users = getUsers();
+            const u = users[g];
+            if (!u) { logout(); return false; }
+            if (u.coins < SEARCH_COST) {
+                showError('❌ Coins ප්‍රමාණවත් නැහැ! ඉතිරිය: ' + u.coins + ' coins. Admin panel එකෙන් coins add කරගන්න.');
+                return false;
+            }
+            u.coins -= SEARCH_COST;
+            saveUsers(users);
+            updateUserUI();
+            return true;
         }
 
         // ===== Nav scroll effect =====
@@ -1068,11 +1213,17 @@
 
         // ===== Init =====
         lucide.createIcons();
+        setAuthMode('login');
 
-        // Auto-load default city on page open
+        // Page open වුණ ගමන් login check
         window.addEventListener('load', () => {
-            document.getElementById('cityInput').value = DEFAULT_CITY;
-            fetchWeather(DEFAULT_CITY);
+            const g = currentGmail();
+            if (g && getUsers()[g]) {
+                updateUserUI();  // session තියෙනවා — direct යන්න
+            } else {
+                setAuthMode('login');
+                showAuth();      // login වෙන්න කියනවා
+            }
         });
     </script>
 </body>
