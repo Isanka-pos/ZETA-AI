@@ -65,6 +65,8 @@
             background-size: 60px 60px;
             z-index: 0;
             animation: gridMove 20s linear infinite;
+            will-change: transform;
+            transform: translateZ(0);
         }
         @keyframes gridMove {
             0% { transform: translate(0, 0); }
@@ -78,6 +80,8 @@
             width: 100%; height: 100%;
             z-index: 0;
             pointer-events: none;
+            will-change: transform;
+            transform: translateZ(0);
         }
 
         /* Holographic Circles */
@@ -173,9 +177,9 @@
 
         /* Glass Card */
         .glass-card {
-            background: linear-gradient(135deg, rgba(13,17,32,0.8), rgba(10,14,26,0.6));
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: linear-gradient(135deg, rgba(13,17,32,0.92), rgba(10,14,26,0.85));
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             border: 1px solid rgba(0,163,255,0.08);
             border-radius: 20px;
             transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -201,8 +205,8 @@
         /* Neon Border Card */
         .neon-border-card {
             position: relative;
-            background: linear-gradient(135deg, rgba(13,17,32,0.9), rgba(10,14,26,0.7));
-            backdrop-filter: blur(20px);
+            background: linear-gradient(135deg, rgba(13,17,32,0.95), rgba(10,14,26,0.88));
+            backdrop-filter: blur(8px);
             border-radius: 20px;
             padding: 2px;
             transition: all 0.5s ease;
@@ -236,14 +240,17 @@
         /* Mouse Glow */
         .mouse-glow {
             position: fixed;
+            top: 0;
+            left: 0;
             width: 400px;
             height: 400px;
             border-radius: 50%;
             background: radial-gradient(circle, rgba(0,163,255,0.06), transparent 70%);
             pointer-events: none;
             z-index: 1;
-            transform: translate(-50%, -50%);
+            transform: translate3d(-50%, -50%, 0);
             transition: opacity 0.3s ease;
+            will-change: transform;
         }
 
         /* Hero Glow Orbs */
@@ -324,10 +331,12 @@
 
         /* Nav blur */
         .nav-blur {
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            background: rgba(4,6,12,0.8);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            background: rgba(4,6,12,0.85);
             border-bottom: 1px solid rgba(0,163,255,0.06);
+            will-change: background;
+            transform: translateZ(0);
         }
 
         /* Page Loader */
@@ -731,18 +740,23 @@
             }, 700);
         });
 
-        // ===== Mouse Glow =====
+        // ===== Mouse Glow ===== (uses transform, not left/top, to avoid layout thrash)
         const mouseGlow = document.getElementById('mouseGlow');
-        let mouseX = 0, mouseY = 0, glowX = 0, glowY = 0;
-        document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
+        let mouseX = 0, mouseY = 0, glowX = 0, glowY = 0, glowActive = false;
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX; mouseY = e.clientY;
+            if (!glowActive) { glowActive = true; requestAnimationFrame(animateGlow); }
+        }, { passive: true });
         function animateGlow() {
-            glowX += (mouseX - glowX) * 0.08;
-            glowY += (mouseY - glowY) * 0.08;
-            mouseGlow.style.left = glowX + 'px';
-            mouseGlow.style.top = glowY + 'px';
-            requestAnimationFrame(animateGlow);
+            glowX += (mouseX - glowX) * 0.15;
+            glowY += (mouseY - glowY) * 0.15;
+            mouseGlow.style.transform = `translate3d(${glowX - 200}px, ${glowY - 200}px, 0)`;
+            if (Math.abs(mouseX - glowX) > 0.5 || Math.abs(mouseY - glowY) > 0.5) {
+                requestAnimationFrame(animateGlow);
+            } else {
+                glowActive = false;
+            }
         }
-        animateGlow();
 
         // ===== Particles =====
         const canvas = document.getElementById('particles-canvas');
@@ -778,21 +792,34 @@
             }
         }
 
-        const particleCount = Math.min(80, Math.floor(window.innerWidth / 15));
+        // Fewer particles + only check each particle against a handful of neighbors
+        // (was O(n^2) full pairwise distance+sqrt every frame — that was the main scroll-jank cause)
+        const particleCount = Math.min(36, Math.floor(window.innerWidth / 35));
         for (let i = 0; i < particleCount; i++) particles.push(new Particle());
+        const LINK_DIST = 120, LINK_DIST_SQ = LINK_DIST * LINK_DIST, NEIGHBOR_CHECK = 6;
+
+        let particlesPaused = document.hidden;
+        document.addEventListener('visibilitychange', () => {
+            particlesPaused = document.hidden;
+            if (!particlesPaused) requestAnimationFrame(animateParticles);
+        });
 
         function animateParticles() {
+            if (particlesPaused) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 120) {
+                const pi = particles[i];
+                const limit = Math.min(i + 1 + NEIGHBOR_CHECK, particles.length);
+                for (let j = i + 1; j < limit; j++) {
+                    const pj = particles[j];
+                    const dx = pi.x - pj.x, dy = pi.y - pj.y;
+                    const distSq = dx * dx + dy * dy;
+                    if (distSq < LINK_DIST_SQ) {
+                        const o = 0.06 * (1 - Math.sqrt(distSq) / LINK_DIST);
                         ctx.beginPath();
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.strokeStyle = `rgba(0, 163, 255, ${0.06 * (1 - dist / 120)})`;
+                        ctx.moveTo(pi.x, pi.y);
+                        ctx.lineTo(pj.x, pj.y);
+                        ctx.strokeStyle = `rgba(0, 163, 255, ${o})`;
                         ctx.lineWidth = 0.5;
                         ctx.stroke();
                     }
@@ -1056,15 +1083,21 @@
 
         // ===== Nav scroll effect =====
         const nav = document.querySelector('nav');
+        let navScrollTicking = false;
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                nav.style.borderBottomColor = 'rgba(0,163,255,0.1)';
-                nav.style.background = 'rgba(4,6,12,0.92)';
-            } else {
-                nav.style.borderBottomColor = 'rgba(0,163,255,0.06)';
-                nav.style.background = 'rgba(4,6,12,0.8)';
-            }
-        });
+            if (navScrollTicking) return;
+            navScrollTicking = true;
+            requestAnimationFrame(() => {
+                if (window.scrollY > 50) {
+                    nav.style.borderBottomColor = 'rgba(0,163,255,0.1)';
+                    nav.style.background = 'rgba(4,6,12,0.92)';
+                } else {
+                    nav.style.borderBottomColor = 'rgba(0,163,255,0.06)';
+                    nav.style.background = 'rgba(4,6,12,0.8)';
+                }
+                navScrollTicking = false;
+            });
+        }, { passive: true });
 
         // ===== Init =====
         lucide.createIcons();
