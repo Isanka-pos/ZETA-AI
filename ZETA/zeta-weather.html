@@ -163,7 +163,7 @@
                 inset 0 1px 0 rgba(255,255,255,0.2);
         }
         .neon-btn:active:not(:disabled) { transform: translateY(-1px) scale(0.98); }
-        .neon-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .neon-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
         .neon-btn-ghost {
             background: linear-gradient(135deg, rgba(0,163,255,0.1), rgba(0,163,255,0.05));
@@ -495,8 +495,272 @@
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-10px); }
         }
+
+        /* ==========================================================
+           ===== NEW AUTH SYSTEM (redesigned login / register) =====
+           ========================================================== */
+        .auth-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background:
+                radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,163,255,0.10), transparent 60%),
+                radial-gradient(ellipse 60% 50% at 50% 100%, rgba(0,80,200,0.08), transparent 60%),
+                rgba(4,6,12,0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            overflow-y: auto;
+        }
+        .auth-overlay.hidden { display: none; }
+
+        /* animated gradient border card */
+        .auth-card {
+            position: relative;
+            width: 100%;
+            max-width: 880px;
+            border-radius: 24px;
+            padding: 2px;
+            background: linear-gradient(135deg, rgba(0,163,255,0.5), rgba(0,60,140,0.15), rgba(0,212,255,0.35), rgba(0,163,255,0.5));
+            background-size: 300% 300%;
+            animation: borderFlow 8s ease infinite;
+            box-shadow:
+                0 30px 80px rgba(0,0,0,0.6),
+                0 0 60px rgba(0,163,255,0.12);
+        }
+        @keyframes borderFlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .auth-card-inner {
+            display: grid;
+            grid-template-columns: 1fr 1.15fr;
+            border-radius: 22px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0A0E1A, #070A14);
+            min-height: 560px;
+        }
+        @media (max-width: 820px) {
+            .auth-card-inner { grid-template-columns: 1fr; min-height: auto; }
+            .auth-side { display: none !important; }
+        }
+
+        /* left branding side */
+        .auth-side {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px 36px;
+            background:
+                radial-gradient(circle at 30% 20%, rgba(0,163,255,0.15), transparent 55%),
+                linear-gradient(160deg, rgba(0,50,120,0.25), rgba(4,6,12,0.2));
+            border-right: 1px solid rgba(0,163,255,0.08);
+            overflow: hidden;
+        }
+        .auth-radar {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 10px auto 0;
+        }
+        .auth-radar .ring {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 1px solid rgba(0,163,255,0.25);
+            animation: radarPing 3s ease-out infinite;
+        }
+        .auth-radar .ring:nth-child(2) { animation-delay: 1s; }
+        .auth-radar .ring:nth-child(3) { animation-delay: 2s; }
+        @keyframes radarPing {
+            0% { transform: scale(0.35); opacity: 0.9; }
+            100% { transform: scale(1.25); opacity: 0; }
+        }
+        .auth-radar .core {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 44px;
+            filter: drop-shadow(0 0 18px rgba(0,163,255,0.5));
+            animation: iconFloat 4s ease-in-out infinite;
+        }
+
+        /* right form side */
+        .auth-form-side { padding: 44px 40px; display: flex; flex-direction: column; justify-content: center; }
+
+        .auth-tabs {
+            display: flex;
+            background: rgba(4,6,12,0.6);
+            border: 1px solid rgba(0,163,255,0.1);
+            border-radius: 100px;
+            padding: 5px;
+            margin-bottom: 26px;
+            position: relative;
+        }
+        .auth-tab {
+            flex: 1;
+            padding: 11px 10px;
+            border-radius: 100px;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 13px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            background: transparent;
+            color: rgba(224,232,240,0.45);
+            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            z-index: 2;
+        }
+        .auth-tab.active {
+            color: #fff;
+            background: linear-gradient(135deg, #00A3FF, #0066CC);
+            box-shadow: 0 0 18px rgba(0,163,255,0.35);
+        }
+
+        /* floating-label input fields */
+        .field {
+            position: relative;
+            margin-bottom: 16px;
+        }
+        .field input {
+            width: 100%;
+            padding: 16px 48px 16px 46px;
+            background: rgba(4,6,12,0.55);
+            border: 1px solid rgba(0,163,255,0.12);
+            border-radius: 14px;
+            color: #E0E8F0;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        .field input:focus {
+            border-color: rgba(0,163,255,0.5);
+            box-shadow: 0 0 0 3px rgba(0,163,255,0.1), 0 0 20px rgba(0,163,255,0.08);
+            background: rgba(4,6,12,0.8);
+        }
+        .field input::placeholder { color: rgba(224,232,240,0.3); }
+        .field .f-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(0,163,255,0.55);
+            display: flex;
+            pointer-events: none;
+        }
+        .field .eye-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: rgba(224,232,240,0.4);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 10px;
+            display: flex;
+            transition: color 0.3s, background 0.3s;
+        }
+        .field .eye-btn:hover { color: #00D4FF; background: rgba(0,163,255,0.08); }
+        .field.invalid input {
+            border-color: rgba(255,90,110,0.55);
+            box-shadow: 0 0 0 3px rgba(255,90,110,0.08);
+            animation: shake 0.4s ease;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+
+        .auth-msg {
+            font-size: 13px;
+            line-height: 1.55;
+            min-height: 20px;
+            margin: 2px 0 14px;
+            padding: 0 2px;
+            display: flex;
+            align-items: flex-start;
+            gap: 7px;
+        }
+        .auth-msg.error { color: #FF6B7E; }
+        .auth-msg.success { color: #4ADE80; }
+
+        .auth-submit {
+            width: 100%;
+            padding: 15px;
+            font-size: 15px;
+            letter-spacing: 1px;
+        }
+        .auth-submit .btn-spinner {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.35);
+            border-top-color: #fff;
+            animation: loaderSpin 0.7s linear infinite;
+            display: none;
+        }
+        .auth-submit.loading .btn-spinner { display: inline-block; }
+        .auth-submit.loading .btn-label { opacity: 0.7; }
+
+        .auth-guest {
+            text-align: center;
+            margin-top: 16px;
+        }
+        .auth-guest button {
+            background: none;
+            border: none;
+            color: rgba(224,232,240,0.45);
+            font-size: 13px;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+            transition: color 0.3s;
+        }
+        .auth-guest button:hover { color: #00D4FF; }
+
+        .auth-foot {
+            margin-top: 20px;
+            padding: 14px 16px;
+            border-radius: 12px;
+            background: rgba(255,200,60,0.05);
+            border: 1px solid rgba(255,200,60,0.15);
+            font-size: 12px;
+            color: rgba(224,232,240,0.5);
+            text-align: center;
+            line-height: 1.6;
+        }
+        .auth-foot b { color: #FFC83C; }
+
+        .perk {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: rgba(224,232,240,0.55);
+        }
+        .perk .perk-ico {
+            width: 30px; height: 30px;
+            border-radius: 9px;
+            background: rgba(0,163,255,0.1);
+            border: 1px solid rgba(0,163,255,0.2);
+            display: flex; align-items: center; justify-content: center;
+            color: #00D4FF;
+            flex-shrink: 0;
+        }
     </style>
-<base target="_blank">
 <base target="_blank">
 </head>
 <body>
@@ -518,8 +782,8 @@
     <!-- Navigation -->
     <nav class="nav-blur fixed top-0 left-0 right-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16 sm:h-18">
-                <a href="#" class="flex items-center gap-3 text-decoration-none">
+            <div class="flex items-center justify-between h-16">
+                <a href="#" class="flex items-center gap-3" style="text-decoration:none;">
                     <div style="width:36px;height:36px;background:linear-gradient(135deg,#00A3FF,#0066CC);border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 15px rgba(0,163,255,0.3);">
                         <span style="font-family:'Orbitron',sans-serif;font-weight:900;font-size:16px;color:white;">Z</span>
                     </div>
@@ -539,32 +803,101 @@
         </div>
     </nav>
 
-    <!-- ===== AUTH OVERLAY (Login / Register) ===== -->
-    <div id="authOverlay" class="hidden" style="position:fixed;inset:0;z-index:9000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(4,6,12,0.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);">
-        <div class="glass-card" style="width:100%;max-width:430px;padding:40px 32px;position:relative;">
-            <div class="hud-corner hud-corner-tl" style="top:12px;left:12px;"></div>
-            <div class="hud-corner hud-corner-tr" style="top:12px;right:12px;"></div>
-            <div class="hud-corner hud-corner-bl" style="bottom:12px;left:12px;"></div>
-            <div class="hud-corner hud-corner-br" style="bottom:12px;right:12px;"></div>
-            <div style="text-align:center;margin-bottom:24px;">
-                <div style="width:52px;height:52px;background:linear-gradient(135deg,#00A3FF,#0066CC);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 0 20px rgba(0,163,255,0.3);">
-                    <span style="font-family:'Orbitron',sans-serif;font-weight:900;font-size:22px;color:white;">Z</span>
+    <!-- ===== AUTH OVERLAY (redesigned) ===== -->
+    <div id="authOverlay" class="auth-overlay hidden">
+        <div class="auth-card fade-in">
+            <div class="auth-card-inner">
+
+                <!-- Left: branding -->
+                <div class="auth-side">
+                    <div>
+                        <div style="display:flex;align-items:center;gap:12px;margin-bottom:34px;">
+                            <div style="width:44px;height:44px;background:linear-gradient(135deg,#00A3FF,#0066CC);border-radius:13px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 22px rgba(0,163,255,0.4);">
+                                <span style="font-family:'Orbitron',sans-serif;font-weight:900;font-size:19px;color:white;">Z</span>
+                            </div>
+                            <div>
+                                <div style="font-family:'Orbitron',sans-serif;font-weight:700;font-size:16px;letter-spacing:2px;color:#E0E8F0;">ZETA WEATHER</div>
+                                <div style="font-size:11px;color:rgba(0,212,255,0.6);letter-spacing:1px;margin-top:2px;">LIVE FORECAST ENGINE</div>
+                            </div>
+                        </div>
+                        <h3 style="font-family:'Orbitron',sans-serif;font-size:22px;font-weight:700;line-height:1.35;margin-bottom:12px;">
+                            Weather data,<br><span style="background:linear-gradient(135deg,#00D4FF,#0066FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">real-time.</span>
+                        </h3>
+                        <p style="font-size:13px;color:rgba(224,232,240,0.45);line-height:1.7;margin-bottom:30px;">
+                            Account එකක් හදන්න — coins ලබාගෙන ඕනෑම city එකක live weather forecast ගන්න.
+                        </p>
+                        <div style="display:flex;flex-direction:column;gap:14px;">
+                            <div class="perk">
+                                <div class="perk-ico"><i data-lucide="gift" style="width:15px;height:15px;"></i></div>
+                                <span>Register වුණ ගමන් <b style="color:#FFC83C;">50 free coins</b></span>
+                            </div>
+                            <div class="perk">
+                                <div class="perk-ico"><i data-lucide="search" style="width:15px;height:15px;"></i></div>
+                                <span>Search 1කට coins 10යි — quick &amp; easy</span>
+                            </div>
+                            <div class="perk">
+                                <div class="perk-ico"><i data-lucide="calendar-days" style="width:15px;height:15px;"></i></div>
+                                <span>Today / 3-day / 7-day forecasts</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="auth-radar">
+                        <div class="ring"></div>
+                        <div class="ring"></div>
+                        <div class="ring"></div>
+                        <div class="core">⛅</div>
+                    </div>
                 </div>
-                <h2 style="font-family:'Orbitron',sans-serif;font-size:22px;font-weight:700;letter-spacing:1px;" id="authTitle">LOGIN</h2>
-                <p style="font-size:13px;color:rgba(224,232,240,0.45);margin-top:8px;">Weather search කරන්න මුලින්ම login වෙන්න</p>
+
+                <!-- Right: form -->
+                <div class="auth-form-side">
+                    <h2 style="font-family:'Orbitron',sans-serif;font-size:21px;font-weight:700;letter-spacing:1px;margin-bottom:6px;" id="authTitle">Welcome back 👋</h2>
+                    <p style="font-size:13px;color:rgba(224,232,240,0.45);margin-bottom:24px;" id="authSub">Weather search කරන්න login වෙන්න.</p>
+
+                    <div class="auth-tabs">
+                        <button id="tabLogin" class="auth-tab active" onclick="setAuthMode('login')" type="button">LOGIN</button>
+                        <button id="tabRegister" class="auth-tab" onclick="setAuthMode('register')" type="button">REGISTER</button>
+                    </div>
+
+                    <form id="authForm" autocomplete="off" onsubmit="return false;">
+                        <div class="field" id="fieldEmail">
+                            <span class="f-icon"><i data-lucide="mail" style="width:17px;height:17px;"></i></span>
+                            <input type="email" id="authEmail" placeholder="Email address" autocomplete="email" autocapitalize="none" spellcheck="false">
+                        </div>
+                        <div class="field" id="fieldPass">
+                            <span class="f-icon"><i data-lucide="lock" style="width:17px;height:17px;"></i></span>
+                            <input type="password" id="authPass" placeholder="Password (6+ characters)" autocomplete="current-password">
+                            <button type="button" class="eye-btn" onclick="togglePass('authPass', this)" aria-label="Show password">
+                                <i data-lucide="eye" style="width:17px;height:17px;"></i>
+                            </button>
+                        </div>
+                        <div class="field hidden" id="fieldPass2">
+                            <span class="f-icon"><i data-lucide="lock" style="width:17px;height:17px;"></i></span>
+                            <input type="password" id="authPass2" placeholder="Confirm password" autocomplete="new-password">
+                            <button type="button" class="eye-btn" onclick="togglePass('authPass2', this)" aria-label="Show password">
+                                <i data-lucide="eye" style="width:17px;height:17px;"></i>
+                            </button>
+                        </div>
+                    </form>
+
+                    <p class="auth-msg" id="authMsg"></p>
+
+                    <button class="neon-btn auth-submit" id="authBtn" onclick="authSubmit()" type="button">
+                        <span class="btn-spinner"></span>
+                        <span class="btn-label" id="authBtnLabel">Login</span>
+                        <i data-lucide="arrow-right" style="width:17px;height:17px;" id="authBtnIcon"></i>
+                    </button>
+
+                    <div class="auth-guest">
+                        <button type="button" onclick="continueAsGuest()">Just exploring? Continue as Guest →</button>
+                    </div>
+
+                    <div class="auth-foot">
+                        🎁 New account එකකට free coins <b>50</b> · Coins අවසන් වුණොත් නැවත register වෙන්න හෝ guest mode use කරන්න
+                    </div>
+                </div>
+
             </div>
-            <div style="display:flex;gap:6px;background:rgba(4,6,12,0.5);border:1px solid rgba(0,163,255,0.1);border-radius:12px;padding:5px;margin-bottom:22px;">
-                <button id="tabLogin" onclick="setAuthMode('login')" style="flex:1;padding:10px;border-radius:9px;border:none;font-family:'Inter',sans-serif;font-weight:600;font-size:13px;cursor:pointer;background:linear-gradient(135deg,#00A3FF,#0066CC);color:#fff;transition:all 0.3s;">LOGIN</button>
-                <button id="tabRegister" onclick="setAuthMode('register')" style="flex:1;padding:10px;border-radius:9px;border:none;font-family:'Inter',sans-serif;font-weight:600;font-size:13px;cursor:pointer;background:transparent;color:rgba(224,232,240,0.5);transition:all 0.3s;">REGISTER</button>
-            </div>
-            <div style="display:flex;flex-direction:column;gap:14px;">
-                <input type="email" id="authGmail" class="weather-input" placeholder="Gmail address" onkeydown="if(event.key==='Enter')authSubmit()">
-                <input type="password" id="authPass" class="weather-input" placeholder="Password (characters 6+)" onkeydown="if(event.key==='Enter')authSubmit()">
-                <input type="password" id="authPass2" class="weather-input hidden" placeholder="Confirm password" onkeydown="if(event.key==='Enter')authSubmit()">
-                <p id="authMsg" style="font-size:13px;color:#FF6B7E;min-height:18px;margin:0;line-height:1.5;"></p>
-                <button class="neon-btn" style="width:100%;" onclick="authSubmit()" id="authBtn">Login</button>
-            </div>
-            <p style="font-size:11px;color:rgba(224,232,240,0.25);text-align:center;margin-top:18px;">New account එකකට free coins <span style="color:#FFC83C;">50</span> ලැබෙනවා · Coins අවසන් වුණොත් Admin panel එකෙන් දාගන්න</p>
         </div>
     </div>
 
@@ -595,7 +928,7 @@
                     <span style="background:linear-gradient(135deg,#00D4FF,#00A3FF,#0066FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Real-Time Data</span>
                 </h1>
                 <p style="font-size:clamp(15px,2.2vw,17px);color:rgba(224,232,240,0.55);line-height:1.8;max-width:560px;margin:0 auto 40px;font-weight:300;">
-                    ඕනෑම වැසිකාලය තත්ත්වය මිනිත්තුවෙන් මිනිත්තුවට. Search your city and get accurate live forecasts.
+                    ඕනෑම නගරයක වාරික තත්ත්වය මිනිත්තුවෙන් මිනිත්තුවට. Search your city and get accurate live forecasts.
                 </p>
 
                 <!-- Search Bar -->
@@ -659,7 +992,7 @@
                         <p id="countryName" style="font-size:14px;color:rgba(224,232,240,0.4);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">—</p>
                         <p id="conditionText" style="font-size:15px;color:rgba(224,232,240,0.6);">—</p>
                         <div id="demoBadgeWrap" class="hidden" style="display:flex;justify-content:center;margin-top:14px;">
-                            <span class="demo-badge"><i data-lucide="flask-conical" style="width:14px;height:14px;"></i> 𝗢𝗻𝗹𝗶𝗻𝗲</span>
+                            <span class="demo-badge"><i data-lucide="flask-conical" style="width:14px;height:14px;"></i> Demo Mode</span>
                         </div>
                     </div>
 
@@ -673,7 +1006,7 @@
                         </div>
                     </div>
 
-                    <!-- Stats Grid (only fields this API actually returns) -->
+                    <!-- Stats Grid -->
                     <div id="stats" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:16px;">
                         <div class="neon-border-card">
                             <div class="neon-border-card-inner" style="padding:20px;text-align:center;">
@@ -757,10 +1090,12 @@
         const DEFAULT_CITY = '';
 
         // ===== Coin System Config =====
-        const SEARCH_COST = 10;     // search 1කට cut වෙන coins
-        const WELCOME_COINS = 50;   // register වුණ ගමන් free coins
+        const SEARCH_COST = 10;      // search 1කට cut වෙන coins
+        const WELCOME_COINS = 50;    // register වුණ ගමන් free coins
+        const GUEST_COINS = 30;      // guest mode එකට free coins
         const LS_USERS = 'zeta_users';
         const LS_SESSION = 'zeta_session';
+        const LS_GUEST = 'zeta_guest_coins';
 
         let currentDays = 1;
         let lastCity = DEFAULT_CITY;
@@ -859,6 +1194,11 @@
             document.getElementById('errorText').textContent = msg;
             document.getElementById('errorSection').classList.remove('hidden');
         }
+        function hideAllWeather() {
+            document.getElementById('weatherSection').classList.add('hidden');
+            document.getElementById('forecast').classList.add('hidden');
+            document.getElementById('dailySection').classList.add('hidden');
+        }
 
         // ===== Emoji mapping =====
         function emojiFor(condition) {
@@ -874,17 +1214,7 @@
             return '🌡';
         }
 
-        // ===== Normalizer — matches the ACTUAL Sasa Dev API response shape =====
-        // {
-        //   status, result: {
-        //     location: { name, country, timezone, latitude, longitude },
-        //     current: { temperature: "26.7°C", condition: "Overcast", wind: "10.5 km/h", is_day: true },
-        //     days: [ { date, condition, max_temp, min_temp, precipitation_mm, rain_chance, max_wind } ]
-        //   }
-        // }
-        // Note: this API does NOT provide feels-like, humidity, pressure, visibility, or
-        // an hourly breakdown — those fields are simply left null / empty below instead
-        // of being guessed/faked.
+        // ===== Normalizer =====
         function parseNum(v) {
             if (v == null) return null;
             if (typeof v === 'number') return v;
@@ -919,17 +1249,13 @@
                 name: loc.name || city,
                 country: loc.country || 'Sri Lanka',
                 tempC: parseNum(cur.temperature),
-                feelsC: null,          // not provided by this API
                 condition: cur.condition || today.condition || '—',
-                humidity: null,        // not provided by this API
                 wind: parseNum(cur.wind),
-                pressure: null,        // not provided by this API
-                vis: null,             // not provided by this API
                 isDay: cur.is_day !== false,
                 rainChance: parseNum(today.rain_chance),
                 precipitation: parseNum(today.precipitation_mm),
                 maxWind: parseNum(today.max_wind),
-                hourly: [],            // this API has no hourly breakdown
+                hourly: [],
                 daily: days.map(d => ({
                     date: formatDayLabel(d.date),
                     max: parseNum(d.max_temp),
@@ -940,7 +1266,7 @@
             };
         }
 
-        // ===== Demo fallback (only used if API is completely unreachable) =====
+        // ===== Demo fallback =====
         function demoData(city) {
             return {
                 name: city, country: 'Sri Lanka',
@@ -979,7 +1305,6 @@
             document.getElementById('precipVal').textContent = d.precipitation != null ? Math.round(d.precipitation * 10) / 10 + ' mm' : '--';
             document.getElementById('maxWindVal').textContent = d.maxWind != null ? Math.round(d.maxWind) + ' km/h' : '--';
 
-            // Hourly
             const hs = document.getElementById('hourlyScroll');
             hs.innerHTML = '';
             if (d.hourly && d.hourly.length) {
@@ -995,7 +1320,6 @@
                 });
             }
 
-            // Daily
             const dg = document.getElementById('dailyGrid');
             dg.innerHTML = '';
             const daysToShow = (d.daily && d.daily.length) ? d.daily.slice(0, currentDays) : [];
@@ -1023,25 +1347,24 @@
             document.getElementById('forecast').classList.toggle('hidden', !(d.hourly && d.hourly.length));
             document.getElementById('dailySection').classList.remove('hidden');
 
-            // re-trigger fade animation
-            document.getElementById('weatherCard').classList.remove('fade-in');
-            void document.getElementById('weatherCard').offsetWidth;
-            document.getElementById('weatherCard').classList.add('fade-in');
+            const wc = document.getElementById('weatherCard');
+            wc.classList.remove('fade-in');
+            void wc.offsetWidth;
+            wc.classList.add('fade-in');
         }
 
-        // ===== Fetch =====
-        async function fetchWeather(city) {
+        // ===== Fetch — coins deduct only on SUCCESS =====
+        async function fetchWeather(city, chargeOnSuccess) {
             showLoading();
             const url = `${API_BASE}?apikey=${encodeURIComponent(API_KEY)}&city=${encodeURIComponent(city)}&days=${currentDays}`;
             const controller = new AbortController();
-            const timeout = setTimeout(() => controller.abort(), 15000); // 15s timeout — bug fix
+            const timeout = setTimeout(() => controller.abort(), 15000);
 
             try {
                 const res = await fetch(url, { signal: controller.signal });
                 clearTimeout(timeout);
 
                 if (!res.ok) {
-                    // Try to read error message from API
                     let msg = `API error (HTTP ${res.status})`;
                     try {
                         const errJson = await res.json();
@@ -1051,9 +1374,8 @@
                 }
 
                 const raw = await res.json();
-                console.log('[ZETA WEATHER] raw API response:', raw); // devtools console එකෙන් check කරගන්න පුළුවන්
+                console.log('[ZETA WEATHER] raw API response:', raw);
 
-                // API-level error field check — this API uses {status:false, message:"..."} on failure
                 if (raw && (raw.status === false || raw.error || raw.success === false)) {
                     throw new Error(raw.message || raw.error || 'API returned an error.');
                 }
@@ -1062,13 +1384,17 @@
                 if (data.tempC == null && (!data.daily || !data.daily.length)) {
                     throw new Error('API response format not recognized.');
                 }
+
+                // success — now charge coins
+                if (chargeOnSuccess) chargeCoins();
                 renderWeather(data, false);
             } catch (err) {
                 clearTimeout(timeout);
                 if (err.name === 'AbortError') {
                     showError('⏱ Request timed out. The API server is taking too long — please try again.');
-                } else if (err instanceof TypeError && err.message.includes('fetch')) {
-                    // Network/CORS failure → show demo data so page still works
+                } else if (err instanceof TypeError && (err.message.includes('fetch') || err.message.includes('NetworkError'))) {
+                    // network/CORS fail → demo so page still works
+                    if (chargeOnSuccess) chargeCoins();
                     renderWeather(demoData(city), true);
                 } else {
                     showError('❌ ' + (err.message || 'Failed to load weather data.') + ' — Try again or check the city name.');
@@ -1082,122 +1408,244 @@
                 showError('⚠️ Please enter a city name first.');
                 return;
             }
-            if (!spendCoins()) return;  // coins 10 කැපීම
+            // coins ප්‍රමාණවත්ද කියලා check කරලා තියෙනවා — insufficient නම් block
+            if (!ensureCoins()) return;
             lastCity = city;
-            fetchWeather(city);
+            fetchWeather(city, true);  // success වුණාම විතරයි coins cut වෙන්නේ
         }
 
-        function retryLast() { fetchWeather(lastCity); }
+        function retryLast() {
+            if (!lastCity) { showError('⚠️ Search a city first.'); return; }
+            if (!ensureCoins()) return;
+            fetchWeather(lastCity, true);
+        }
 
         function setDays(n, btn) {
             currentDays = n;
             document.querySelectorAll('.day-chip').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            if (!spendCoins()) return;  // day change එකත් fresh request එකක් නිසා coins 10 කැපේ
-            fetchWeather(lastCity);
+            // BUG FIX: city එක search කරලා නැත්නම් fetch/charge කරන්නේ නෑ
+            if (!lastCity) return;
+            if (!ensureCoins()) return;
+            fetchWeather(lastCity, true);
         }
 
-
-        // ===== AUTH & COIN SYSTEM =====
+        // ==================================================
+        // ===== AUTH & COIN SYSTEM (rebuilt) =====
+        // ==================================================
         let authMode = 'login';
+
+        function simpleHash(str) {
+            let h = 5381;
+            for (let i = 0; i < str.length; i++) {
+                h = ((h << 5) + h + str.charCodeAt(i)) >>> 0;
+            }
+            return 'h' + h.toString(36);
+        }
 
         function getUsers(){ try { return JSON.parse(localStorage.getItem(LS_USERS)) || {}; } catch(e){ return {}; } }
         function saveUsers(u){ localStorage.setItem(LS_USERS, JSON.stringify(u)); }
-        function currentGmail(){ return localStorage.getItem(LS_SESSION); }
-        function getCurrentUser(){
-            const g = currentGmail();
-            return g ? getUsers()[g] : null;
+        function currentEmail(){ return localStorage.getItem(LS_SESSION); }
+
+        function isGuest() {
+            return currentEmail() === '__guest__';
         }
 
-        function showAuth(){
-            document.getElementById('authOverlay').classList.remove('hidden');
+        function getCoins() {
+            if (isGuest()) {
+                const c = parseInt(localStorage.getItem(LS_GUEST));
+                return isNaN(c) ? 0 : c;
+            }
+            const users = getUsers();
+            const u = users[currentEmail()];
+            return u ? u.coins : 0;
+        }
+
+        function setCoins(v) {
+            if (isGuest()) {
+                localStorage.setItem(LS_GUEST, String(v));
+            } else {
+                const users = getUsers();
+                if (users[currentEmail()]) {
+                    users[currentEmail()].coins = v;
+                    saveUsers(users);
+                }
+            }
+        }
+
+        function updateUserUI() {
+            const g = currentEmail();
+            if (!g) return;
+            document.getElementById('userBox').style.display = 'flex';
+            document.getElementById('coinCount').textContent = getCoins();
+            document.getElementById('navGmail').textContent = isGuest() ? '👤 Guest' : g;
             lucide.createIcons();
         }
-        function hideAuth(){ document.getElementById('authOverlay').classList.add('hidden'); }
 
-        function setAuthMode(m){
-            authMode = m;
-            const on  = 'background:linear-gradient(135deg,#00A3FF,#0066CC);color:#fff;';
-            const off = 'background:transparent;color:rgba(224,232,240,0.5);';
-            document.getElementById('tabLogin').style.cssText    = m === 'login'    ? on : off;
-            document.getElementById('tabRegister').style.cssText = m === 'register' ? on : off;
-            document.getElementById('authPass2').classList.toggle('hidden', m !== 'register');
-            document.getElementById('authTitle').textContent = m === 'login' ? 'LOGIN' : 'REGISTER';
-            document.getElementById('authBtn').textContent   = m === 'login' ? 'Login' : 'Create Account';
-            document.getElementById('authMsg').textContent = '';
+        function showAuth() {
+            document.getElementById('authOverlay').classList.remove('hidden');
+            lucide.createIcons();
+            setTimeout(() => { const e = document.getElementById('authEmail'); if (e) e.focus(); }, 250);
+        }
+        function hideAuth() {
+            document.getElementById('authOverlay').classList.add('hidden');
         }
 
-        function authSubmit(){
-            const g = document.getElementById('authGmail').value.trim().toLowerCase();
-            const p = document.getElementById('authPass').value;
-            const p2 = document.getElementById('authPass2').value;
-            const msg = document.getElementById('authMsg');
-            msg.style.color = '#FF6B7E';
+        function setAuthMode(m) {
+            authMode = m;
+            document.getElementById('tabLogin').classList.toggle('active', m === 'login');
+            document.getElementById('tabRegister').classList.toggle('active', m === 'register');
+            document.getElementById('fieldPass2').classList.toggle('hidden', m !== 'register');
+            document.getElementById('authTitle').textContent = m === 'login' ? 'Welcome back 👋' : 'Create account ✨';
+            document.getElementById('authSub').textContent = m === 'login'
+                ? 'Weather search කරන්න login වෙන්න.'
+                : 'මිනිත්තු 1න් account එක හදන්න — 50 free coins!';
+            document.getElementById('authBtnLabel').textContent = m === 'login' ? 'Login' : 'Create Account';
+            document.getElementById('authPass').setAttribute('autocomplete', m === 'login' ? 'current-password' : 'new-password');
+            setAuthMsg('', '');
+            ['fieldEmail','fieldPass','fieldPass2'].forEach(id => document.getElementById(id).classList.remove('invalid'));
+        }
 
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(g)) { msg.textContent = '⚠️ Valid Gmail address එකක් දාන්න.'; return; }
-            if (p.length < 6) { msg.textContent = '⚠️ Password අකුරු 6කට වැඩි විය යුතුයි.'; return; }
+        function setAuthMsg(text, type) {
+            const msg = document.getElementById('authMsg');
+            msg.textContent = text;
+            msg.className = 'auth-msg' + (type ? ' ' + type : '');
+        }
+
+        function markInvalid(id, on) {
+            document.getElementById(id).classList.toggle('invalid', !!on);
+        }
+
+        function togglePass(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const show = input.type === 'password';
+            input.type = show ? 'text' : 'password';
+            btn.innerHTML = `<i data-lucide="${show ? 'eye-off' : 'eye'}" style="width:17px;height:17px;"></i>`;
+            lucide.createIcons();
+        }
+
+        function setAuthLoading(on) {
+            const btn = document.getElementById('authBtn');
+            btn.disabled = on;
+            btn.classList.toggle('loading', on);
+        }
+
+        function authSubmit() {
+            const email = document.getElementById('authEmail').value.trim().toLowerCase();
+            const pass  = document.getElementById('authPass').value;
+            const pass2 = document.getElementById('authPass2').value;
+
+            ['fieldEmail','fieldPass','fieldPass2'].forEach(id => markInvalid(id, false));
+
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                markInvalid('fieldEmail', true);
+                setAuthMsg('⚠️ Valid email address එකක් දාන්න.', 'error');
+                return;
+            }
+            if (pass.length < 6) {
+                markInvalid('fieldPass', true);
+                setAuthMsg('⚠️ Password අකුරු 6කට වැඩි විය යුතුයි.', 'error');
+                return;
+            }
 
             const users = getUsers();
 
             if (authMode === 'register') {
-                if (p !== p2) { msg.textContent = '⚠️ Password දෙක match වෙන්නේ නැහැ.'; return; }
-                if (users[g]) { msg.textContent = '⚠️ මේ Gmail එකෙන් account එකක් තියෙනවා. Login tab එකෙන් වෙන්න.'; return; }
-                users[g] = { password: p, coins: WELCOME_COINS, created: new Date().toISOString() };
-                saveUsers(users);
-                msg.style.color = '#4ADE80';
-                msg.textContent = '✅ Account හදලා ඉවරයි! Logging in…';
-                setTimeout(() => startSession(g), 500);
+                if (pass !== pass2) {
+                    markInvalid('fieldPass2', true);
+                    setAuthMsg('⚠️ Password දෙක match වෙන්නේ නැහැ.', 'error');
+                    return;
+                }
+                if (users[email]) {
+                    markInvalid('fieldEmail', true);
+                    setAuthMsg('⚠️ මේ email එකෙන් account එකක් තියෙනවා. Login tab එකෙන් වෙන්න.', 'error');
+                    return;
+                }
+                setAuthLoading(true);
+                setTimeout(() => {
+                    users[email] = { password: simpleHash(pass), coins: WELCOME_COINS, created: new Date().toISOString() };
+                    saveUsers(users);
+                    setAuthLoading(false);
+                    setAuthMsg('✅ Account හදලා ඉවරයි! Logging in…', 'success');
+                    lucide.createIcons();
+                    setTimeout(() => startSession(email), 600);
+                }, 700);
             } else {
-                const u = users[g];
-                if (!u || u.password !== p) { msg.textContent = '❌ Gmail හෝ Password වැරදියි.'; return; }
-                startSession(g);
+                const u = users[email];
+                // backwards compatibility: old plain-text passwords still work
+                const passOk = u && (u.password === simpleHash(pass) || u.password === pass);
+                if (!u || !passOk) {
+                    markInvalid('fieldPass', true);
+                    setAuthMsg('❌ Email හෝ Password වැරදියි.', 'error');
+                    return;
+                }
+                setAuthLoading(true);
+                setTimeout(() => {
+                    setAuthLoading(false);
+                    startSession(email);
+                }, 500);
             }
         }
 
-        function startSession(g){
-            localStorage.setItem(LS_SESSION, g);
+        function startSession(email) {
+            localStorage.setItem(LS_SESSION, email);
             hideAuth();
             updateUserUI();
         }
 
-        function logout(){
+        function continueAsGuest() {
+            localStorage.setItem(LS_SESSION, '__guest__');
+            if (localStorage.getItem(LS_GUEST) === null) {
+                localStorage.setItem(LS_GUEST, String(GUEST_COINS));
+            }
+            hideAuth();
+            updateUserUI();
+        }
+
+        function logout() {
             localStorage.removeItem(LS_SESSION);
             document.getElementById('userBox').style.display = 'none';
-            document.getElementById('weatherSection').classList.add('hidden');
-            document.getElementById('forecast').classList.add('hidden');
-            document.getElementById('dailySection').classList.add('hidden');
+            hideAllWeather();
             document.getElementById('errorSection').classList.add('hidden');
             setAuthMode('login');
             showAuth();
         }
 
-        function updateUserUI(){
-            const g = currentGmail();
-            if (!g) return;
-            const u = getUsers()[g];
-            if (!u) { logout(); return; }
-            document.getElementById('userBox').style.display = 'flex';
-            document.getElementById('coinCount').textContent = u.coins;
-            document.getElementById('navGmail').textContent = g;
-            lucide.createIcons();
-        }
-
-        // search එකකට coins 10 කැපීම — coins නැත්නම් block
-        function spendCoins(){
-            const g = currentGmail();
+        // coins ප්‍රමාණවත්ද කියලා බලන function — insufficient නම් block
+        function ensureCoins() {
+            const g = currentEmail();
             if (!g) { showAuth(); return false; }
-            const users = getUsers();
-            const u = users[g];
-            if (!u) { logout(); return false; }
-            if (u.coins < SEARCH_COST) {
-                showError('❌ Coins ප්‍රමාණවත් නැහැ! ඉතිරිය: ' + u.coins + ' coins. Admin panel එකෙන් coins add කරගන්න.');
+            const coins = getCoins();
+            if (coins < SEARCH_COST) {
+                if (isGuest()) {
+                    showError('❌ Guest coins අවසන්! (' + coins + ' remaining) Full coins ලබාගන්න account එකක් හදන්න — Register වුණ ගමන් 50 free coins.');
+                } else {
+                    showError('❌ Coins ප්‍රමාණවත් නැහැ! ඉතිරිය: ' + coins + ' coins.');
+                }
                 return false;
             }
-            u.coins -= SEARCH_COST;
-            saveUsers(users);
-            updateUserUI();
             return true;
         }
+
+        // success වුණ search එකකට විතරයි charge වෙන්නේ
+        function chargeCoins() {
+            const g = currentEmail();
+            if (!g) return;
+            setCoins(Math.max(0, getCoins() - SEARCH_COST));
+            updateUserUI();
+        }
+
+        // Enter key support
+        document.addEventListener('keydown', (e) => {
+            if (e.key !== 'Enter') return;
+            const overlay = document.getElementById('authOverlay');
+            if (!overlay.classList.contains('hidden')) {
+                const active = document.activeElement;
+                if (['authEmail','authPass','authPass2'].includes(active && active.id)) {
+                    authSubmit();
+                }
+            }
+        });
 
         // ===== Nav scroll effect =====
         const nav = document.querySelector('nav');
@@ -1215,14 +1663,13 @@
         lucide.createIcons();
         setAuthMode('login');
 
-        // Page open වුණ ගමන් login check
         window.addEventListener('load', () => {
-            const g = currentGmail();
-            if (g && getUsers()[g]) {
-                updateUserUI();  // session තියෙනවා — direct යන්න
+            const g = currentEmail();
+            if (g && (g === '__guest__' || getUsers()[g])) {
+                updateUserUI();
             } else {
                 setAuthMode('login');
-                showAuth();      // login වෙන්න කියනවා
+                showAuth();
             }
         });
     </script>
