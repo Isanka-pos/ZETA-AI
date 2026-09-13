@@ -926,6 +926,7 @@
 <base target="_blank">
 <base target="_blank">
 <base target="_blank">
+<base target="_blank">
 </head>
 <body>
 
@@ -1204,7 +1205,7 @@
                 <div class="is-head">
                     <span class="is-badge"><i class="fa-solid fa-magnifying-glass"></i> Image Search</span>
                     <h2 class="is-title">Google Image <span>Search</span></h2>
-                    <p class="is-sub">ඕන දෙයක් type කරලා search කරන්න — Google වලින් images 100ක් විතර ගෙනත් දෙනවා. Photo එක click කරලා විශාල කරලා බලන්න, "Copy" හෝ "Open" කරන්න පුළුවන්.</p>
+                    <p class="is-sub">ඕන දෙයක් type කරලා search කරන්න — Google වලින් images 20ක් විතර ගෙනත් දෙනවා. Photo එක click කරලා විශාල කරලා බලන්න, "Copy" හෝ "Open" කරන්න පුළුවන්.</p>
                 </div>
                 <div class="is-card">
                     <div class="is-input-row">
@@ -2497,6 +2498,70 @@
 
             zgRender();
             console.log('🖼 ZETA Gallery loaded — photos only, links via free host');
+        })();
+
+    <!-- ============================================================
+    NOTIFICATION PERMISSION — asks on site load (admin-controlled)
+    Config from admin panel: localStorage key "zeta_notif_cfg"
+    ============================================================ -->
+    <script>
+        (function() {
+            var CFG_KEY = 'zeta_notif_cfg';
+            var WELCOMED_KEY = 'zeta_notif_welcomed';
+
+            function getCfg() {
+                try { return JSON.parse(localStorage.getItem(CFG_KEY)) || null; }
+                catch (e) { return null; }
+            }
+
+            function showNotif(cfg) {
+                try {
+                    var n = new Notification(cfg.title || 'ZETA TOOLS', {
+                        body: cfg.body || '',
+                        icon: 'https://files.catbox.moe/vy8h5y.png'
+                    });
+                    n.onclick = function() { window.focus(); n.close(); };
+                } catch (e) { console.warn('Notification show failed:', e); }
+            }
+
+            function askPermission(cfg) {
+                // small delay — let the page paint first, like the HASHU CHAT login gate
+                setTimeout(function() {
+                    try {
+                        var p = Notification.requestPermission();
+                        if (p && typeof p.then === 'function') {
+                            p.then(function(res) {
+                                if (res === 'granted') {
+                                    localStorage.setItem(WELCOMED_KEY, '1');
+                                    showNotif(cfg);
+                                }
+                            });
+                        } else if (p === 'granted') {
+                            localStorage.setItem(WELCOMED_KEY, '1');
+                            showNotif(cfg);
+                        }
+                    } catch (e) { console.warn('requestPermission failed:', e); }
+                }, 800);
+            }
+
+            window.addEventListener('load', function() {
+                var cfg = getCfg();
+                if (!cfg || !cfg.enabled) return;
+                if (!("Notification" in window)) return;   // browser not supported
+                if (Notification.permission === 'granted') {
+                    // already allowed — show the welcome notification once per admin reset
+                    if (!localStorage.getItem(WELCOMED_KEY)) {
+                        localStorage.setItem(WELCOMED_KEY, '1');
+                        showNotif(cfg);
+                    }
+                    return;
+                }
+                if (Notification.permission === 'denied') return; // browser blocked — can't re-ask
+                // not decided yet → show the "wants to send you notifications" prompt
+                askPermission(cfg);
+            });
+
+            console.log('🔔 Notification prompt module loaded (admin-controlled)');
         })();
     </script>
 
