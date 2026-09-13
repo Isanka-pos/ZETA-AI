@@ -30,7 +30,7 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
-        body { font-family: 'Inter', sans-serif; background: #04060C; color: #E0E8F0; overflow-x: hidden; }
+        body { font-family: 'Inter', sans-serif; background: #04060C; color: #E0E8F0; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
 
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #04060C; }
@@ -43,7 +43,7 @@
                                linear-gradient(90deg, rgba(0,163,255,0.03) 1px, transparent 1px);
             background-size: 60px 60px; z-index: 0;
             animation: gridMove 20s linear infinite;
-            contain: strict;
+            contain: strict; transform: translateZ(0); will-change: transform;
         }
         @keyframes gridMove { 0% { transform: translate(0,0); } 100% { transform: translate(60px,60px); } }
 
@@ -54,7 +54,7 @@
             transition: opacity 0.3s ease; will-change: transform;
         }
 
-        .hero-orb { position: absolute; border-radius: 50%; filter: blur(80px); animation: orbFloat 8s ease-in-out infinite; will-change: transform; }
+        .hero-orb { position: absolute; border-radius: 50%; filter: blur(80px); animation: orbFloat 8s ease-in-out infinite; will-change: transform; contain: layout paint style; }
         @keyframes orbFloat { 0%,100% { transform: translate(0,0) scale(1); } 33% { transform: translate(30px,-20px) scale(1.1); } 66% { transform: translate(-20px,15px) scale(0.95); } }
 
         .badge-glow {
@@ -66,10 +66,10 @@
         @keyframes badgePulse { 0%,100% { box-shadow: 0 0 10px rgba(0,163,255,0.1); } 50% { box-shadow: 0 0 20px rgba(0,163,255,0.2); } }
 
         .glass-card {
-            background: linear-gradient(135deg, rgba(13,17,32,0.8), rgba(10,14,26,0.6));
-            backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+            background: linear-gradient(135deg, rgba(13,17,32,0.85), rgba(10,14,26,0.7));
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
             border: 1px solid rgba(0,163,255,0.08); border-radius: 20px;
-            position: relative; overflow: hidden; contain: layout paint style;
+            position: relative; overflow: hidden; contain: layout paint style; transform: translateZ(0);
         }
         .glass-card::before {
             content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
@@ -98,7 +98,7 @@
 
         .section-divider { width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(0,163,255,0.15), transparent); }
 
-        .nav-blur { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); background: rgba(4,6,12,0.8); border-bottom: 1px solid rgba(0,163,255,0.06); }
+        .nav-blur { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); background: rgba(4,6,12,0.86); border-bottom: 1px solid rgba(0,163,255,0.06); transform: translateZ(0); contain: layout paint style; will-change: background; }
 
         .page-loader {
             position: fixed; inset: 0; background: #04060C; z-index: 9999;
@@ -209,11 +209,11 @@
                     <div class="hud-corner hud-corner-bl" style="bottom:10px;left:10px;"></div>
                     <div class="hud-corner hud-corner-br" style="bottom:10px;right:10px;"></div>
 
-                    <div style="display:flex;gap:10px;flex-wrap:wrap;">
-                        <input type="text" id="mfUrlInput" class="df-input" style="flex:1;min-width:200px;"
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
+                        <input type="text" id="mfUrlInput" class="df-input" style="flex:1 1 220px;min-width:200px;"
                                placeholder="https://www.mediafire.com/file/..."
                                onkeydown="if(event.key==='Enter'){event.preventDefault();fetchMediaFire();}">
-                        <button class="neon-btn" id="mfSubmitBtn" onclick="fetchMediaFire()" style="white-space:nowrap;">
+                        <button class="neon-btn" id="mfSubmitBtn" onclick="fetchMediaFire()" style="white-space:nowrap;flex:0 0 auto;margin:0 auto;">
                             <i data-lucide="download" style="width:18px;height:18px;"></i> Get Link
                         </button>
                     </div>
