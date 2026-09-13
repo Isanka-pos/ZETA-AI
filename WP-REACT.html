@@ -1,563 +1,1281 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Channel Reactor | ZETA TOOLS</title>
-<meta name="description" content="Send fast bulk reactions to any WhatsApp Channel post.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://unpkg.com/lucide@latest"></script>
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body {
-    font-family: 'Inter', sans-serif;
-    background: #04060C;
-    color: #E0E8F0;
-    overflow-x: hidden;
-    min-height: 100vh;
-}
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #04060C; }
-::-webkit-scrollbar-thumb { background: #00A3FF33; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #00A3FF66; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WA Channel React | ZETA TOOLS</title>
+    <meta name="description" content="Send WhatsApp channel post reactions instantly with ZETA TOOLS. Paste your channel post link, pick an emoji, set the count and react.">
+    <meta name="keywords" content="whatsapp channel react, wa channel reactions, ZETA TOOLS, whatsapp reaction sender">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="WA Channel React | ZETA TOOLS">
+    <meta property="og:description" content="Send WhatsApp channel post reactions instantly.">
+    <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        zeta: {
+                            bg: '#04060C',
+                            surface: '#0A0E1A',
+                            card: '#0D1120',
+                            border: '#1A2035',
+                            blue: '#00A3FF',
+                            cyan: '#00D4FF',
+                            glow: '#0088FF',
+                            deep: '#003366',
+                        }
+                    },
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        inter: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #04060C;
+            color: #E0E8F0;
+            overflow-x: hidden;
+        }
 
-/* Static grid — cheap, no JS animation loop for speed */
-.cyber-grid {
-    position: fixed; inset: 0;
-    background-image:
-        linear-gradient(rgba(0,163,255,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,163,255,0.03) 1px, transparent 1px);
-    background-size: 60px 60px;
-    z-index: 0;
-}
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #04060C; }
+        ::-webkit-scrollbar-thumb { background: #00A3FF33; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00A3FF66; }
 
-.mouse-glow {
-    position: fixed;
-    width: 420px; height: 420px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(0,163,255,0.07), transparent 70%);
-    pointer-events: none;
-    z-index: 1;
-    transform: translate(-50%, -50%);
-}
+        .cyber-grid {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image:
+                linear-gradient(rgba(0,163,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,163,255,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: 0;
+            animation: gridMove 20s linear infinite;
+        }
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(60px, 60px); }
+        }
 
-.hero-orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(80px);
-    animation: orbFloat 9s ease-in-out infinite;
-}
-@keyframes orbFloat {
-    0%, 100% { transform: translate(0,0) scale(1); }
-    50% { transform: translate(20px,-16px) scale(1.08); }
-}
+        #particles-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
 
-.holo-circle {
-    position: absolute; border-radius: 50%;
-    border: 1px solid rgba(0,163,255,0.1);
-    animation: holoPulse 4s ease-in-out infinite;
-}
-@keyframes holoPulse {
-    0%, 100% { opacity: 0.3; transform: scale(1); }
-    50% { opacity: 0.7; transform: scale(1.05); }
-}
+        .holo-circle {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(0,163,255,0.1);
+            animation: holoPulse 4s ease-in-out infinite;
+        }
+        .holo-circle::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 50%;
+            border: 1px solid transparent;
+            border-top-color: rgba(0,212,255,0.3);
+            animation: holoSpin 6s linear infinite;
+        }
+        @keyframes holoPulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+        }
+        @keyframes holoSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
-.badge-glow {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 8px 20px;
-    background: rgba(0,163,255,0.06);
-    border: 1px solid rgba(0,163,255,0.15);
-    border-radius: 100px;
-    font-size: 13px; font-weight: 600; color: #00D4FF;
-    letter-spacing: 0.5px;
-}
+        .energy-wave {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(0,163,255,0.15);
+            animation: energyExpand 4s ease-out infinite;
+        }
+        @keyframes energyExpand {
+            0% { transform: scale(0.5); opacity: 0.8; }
+            100% { transform: scale(3); opacity: 0; }
+        }
 
-.neon-border-card {
-    position: relative;
-    background: linear-gradient(135deg, rgba(13,17,32,0.9), rgba(10,14,26,0.7));
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 22px;
-    padding: 2px;
-}
-.neon-border-card::before {
-    content: '';
-    position: absolute; inset: 0; border-radius: 22px; padding: 1px;
-    background: linear-gradient(135deg, rgba(0,163,255,0.25), transparent, rgba(0,212,255,0.12));
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor; mask-composite: exclude;
-}
-.neon-border-card-inner {
-    background: linear-gradient(135deg, rgba(13,17,32,0.95), rgba(10,14,26,0.85));
-    border-radius: 20px;
-    padding: 32px;
-}
-@media (min-width: 640px) { .neon-border-card-inner { padding: 44px; } }
+        .light-streak {
+            position: absolute;
+            width: 200px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0,163,255,0.6), transparent);
+            animation: streakMove 3s ease-in-out infinite;
+        }
+        @keyframes streakMove {
+            0% { transform: translateX(-200px); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(calc(100vw + 200px)); opacity: 0; }
+        }
 
-.field-label {
-    font-size: 12px; font-weight: 600; letter-spacing: 0.5px;
-    color: rgba(224,232,240,0.5); margin-bottom: 8px; display: block;
-}
+        .neon-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #00A3FF, #0066CC);
+            color: white;
+            font-weight: 600;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
+            box-shadow:
+                0 0 15px rgba(0,163,255,0.3),
+                0 0 30px rgba(0,163,255,0.1),
+                inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+        .neon-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow:
+                0 0 25px rgba(0,163,255,0.5),
+                0 0 50px rgba(0,163,255,0.2),
+                0 0 80px rgba(0,163,255,0.1),
+                inset 0 1px 0 rgba(255,255,255,0.2);
+        }
+        .neon-btn:active { transform: translateY(-1px) scale(0.98); }
+        .neon-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
 
-.zeta-input {
-    width: 100%; padding: 14px 16px;
-    background: rgba(4,6,12,0.6);
-    border: 1px solid rgba(0,163,255,0.14);
-    border-radius: 12px;
-    color: #E0E8F0; font-size: 16px; font-family: 'Inter', sans-serif;
-    outline: none; transition: all 0.25s ease;
-    -webkit-tap-highlight-color: transparent;
-}
-.zeta-input:focus { border-color: rgba(0,163,255,0.45); box-shadow: 0 0 0 3px rgba(0,163,255,0.08); }
-.zeta-input::placeholder { color: rgba(224,232,240,0.25); }
+        .glass-card {
+            background: linear-gradient(135deg, rgba(13,17,32,0.8), rgba(10,14,26,0.6));
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(0,163,255,0.08);
+            border-radius: 20px;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0,163,255,0.3), transparent);
+        }
+        .glass-card:hover {
+            border-color: rgba(0,163,255,0.2);
+            box-shadow:
+                0 20px 40px rgba(0,0,0,0.4),
+                0 0 30px rgba(0,163,255,0.08),
+                inset 0 1px 0 rgba(0,163,255,0.1);
+        }
 
-.emoji-chip {
-    padding: 10px 16px;
-    border-radius: 12px;
-    border: 1px solid rgba(0,163,255,0.12);
-    background: rgba(0,163,255,0.03);
-    font-size: 18px; cursor: pointer;
-    transition: all 0.2s ease;
-    line-height: 1;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-    user-select: none;
-}
-.emoji-chip:hover { border-color: rgba(0,163,255,0.3); }
-.emoji-chip.active {
-    background: linear-gradient(135deg, rgba(0,163,255,0.16), rgba(0,163,255,0.05));
-    border-color: rgba(0,163,255,0.45);
-    box-shadow: 0 0 14px rgba(0,163,255,0.15);
-}
+        .neon-border-card {
+            position: relative;
+            background: linear-gradient(135deg, rgba(13,17,32,0.9), rgba(10,14,26,0.7));
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2px;
+            transition: all 0.5s ease;
+        }
+        .neon-border-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(0,163,255,0.2), transparent, rgba(0,212,255,0.1));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+        }
+        .neon-border-card:hover::before {
+            background: linear-gradient(135deg, rgba(0,163,255,0.5), rgba(0,212,255,0.2), rgba(0,163,255,0.3));
+        }
+        .neon-border-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 60px rgba(0,163,255,0.1);
+        }
+        .neon-border-card-inner {
+            background: linear-gradient(135deg, rgba(13,17,32,0.95), rgba(10,14,26,0.8));
+            border-radius: 18px;
+            padding: 32px;
+            height: 100%;
+        }
 
-input[type=range].zeta-range {
-    -webkit-appearance: none; appearance: none;
-    width: 100%; height: 4px; border-radius: 4px;
-    background: linear-gradient(90deg, #00A3FF var(--fill,20%), rgba(0,163,255,0.12) var(--fill,20%));
-    outline: none;
-}
-input[type=range].zeta-range::-webkit-slider-thumb {
-    -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%;
-    background: #00D4FF; border: 3px solid #04060C;
-    box-shadow: 0 0 10px rgba(0,212,255,0.5); cursor: pointer;
-}
-input[type=range].zeta-range::-moz-range-thumb {
-    width: 18px; height: 18px; border-radius: 50%;
-    background: #00D4FF; border: 3px solid #04060C; cursor: pointer;
-}
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
 
-.neon-btn {
-    position: relative;
-    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-    width: 100%;
-    padding: 15px 32px;
-    background: linear-gradient(135deg, #00A3FF, #0066CC);
-    color: white; font-weight: 600; font-size: 15px;
-    border-radius: 12px; border: none; cursor: pointer;
-    font-family: 'Inter', sans-serif;
-    transition: all 0.35s cubic-bezier(0.175,0.885,0.32,1.275);
-    box-shadow: 0 0 15px rgba(0,163,255,0.3), 0 0 30px rgba(0,163,255,0.1), inset 0 1px 0 rgba(255,255,255,0.1);
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-}
-.neon-btn:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 0 25px rgba(0,163,255,0.5), 0 0 50px rgba(0,163,255,0.2), inset 0 1px 0 rgba(255,255,255,0.2);
-}
-.neon-btn:active:not(:disabled) { transform: translateY(0); }
-.neon-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+        .mouse-glow {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,163,255,0.06), transparent 70%);
+            pointer-events: none;
+            z-index: 1;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s ease;
+        }
 
-.ghost-btn {
-    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-    padding: 12px 22px; border-radius: 12px;
-    background: none; border: 1px solid rgba(0,163,255,0.18);
-    color: rgba(0,212,255,0.75); font-size: 13px; font-weight: 600;
-    cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.25s ease;
-}
-.ghost-btn:hover { border-color: rgba(0,163,255,0.4); color: #00D4FF; }
+        .hero-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            animation: orbFloat 8s ease-in-out infinite;
+        }
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -20px) scale(1.1); }
+            66% { transform: translate(-20px, 15px) scale(0.95); }
+        }
 
-.progress-track {
-    width: 100%; height: 6px; border-radius: 4px;
-    background: rgba(0,163,255,0.1); overflow: hidden;
-}
-.progress-fill {
-    height: 100%; border-radius: 4px;
-    background: linear-gradient(90deg, #0088FF, #00D4FF);
-    width: 0%;
-    transition: width 0.3s ease;
-    box-shadow: 0 0 10px rgba(0,212,255,0.5);
-}
+        .badge-glow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            background: rgba(0,163,255,0.06);
+            border: 1px solid rgba(0,163,255,0.15);
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #00D4FF;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            animation: badgePulse 3s ease-in-out infinite;
+        }
+        @keyframes badgePulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(0,163,255,0.1); }
+            50% { box-shadow: 0 0 20px rgba(0,163,255,0.2); }
+        }
 
-.status-dot {
-    width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0;
-    animation: statusPulse 1.6s ease-in-out infinite;
-}
-@keyframes statusPulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+        .hud-corner {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+        }
+        .hud-corner::before, .hud-corner::after {
+            content: '';
+            position: absolute;
+            background: rgba(0,163,255,0.3);
+        }
+        .hud-corner-tl::before { top: 0; left: 0; width: 20px; height: 1px; }
+        .hud-corner-tl::after { top: 0; left: 0; width: 1px; height: 20px; }
+        .hud-corner-tr::before { top: 0; right: 0; width: 20px; height: 1px; }
+        .hud-corner-tr::after { top: 0; right: 0; width: 1px; height: 20px; }
+        .hud-corner-bl::before { bottom: 0; left: 0; width: 20px; height: 1px; }
+        .hud-corner-bl::after { bottom: 0; left: 0; width: 1px; height: 20px; }
+        .hud-corner-br::before { bottom: 0; right: 0; width: 20px; height: 1px; }
+        .hud-corner-br::after { bottom: 0; right: 0; width: 1px; height: 20px; }
 
-.result-panel {
-    border-radius: 16px; padding: 20px;
-    border: 1px solid rgba(0,163,255,0.14);
-    background: rgba(0,163,255,0.03);
-}
-.result-panel.error { border-color: rgba(255,70,90,0.3); background: rgba(255,60,80,0.05); }
+        .energy-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(0,163,255,0.08);
+            animation: ringRotate 20s linear infinite;
+        }
+        @keyframes ringRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
-pre.raw-json {
-    background: rgba(4,6,12,0.7);
-    border: 1px solid rgba(0,163,255,0.1);
-    border-radius: 10px; padding: 14px; font-size: 12px;
-    color: rgba(224,232,240,0.7);
-    max-height: 220px; overflow: auto; white-space: pre-wrap; word-break: break-word;
-}
+        .section-divider {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0,163,255,0.15), transparent);
+        }
 
-.reveal { opacity: 0; transform: translateY(16px); transition: all 0.5s cubic-bezier(0.16,1,0.3,1); }
-.reveal.visible { opacity: 1; transform: translateY(0); }
+        .nav-blur {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            background: rgba(4,6,12,0.8);
+            border-bottom: 1px solid rgba(0,163,255,0.06);
+        }
 
-@media (prefers-reduced-motion: reduce) {
-    .hero-orb, .holo-circle, .status-dot { animation: none !important; }
-}
+        .scan-line {
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0,163,255,0.15), transparent);
+            animation: scanDown 6s linear infinite;
+        }
+        @keyframes scanDown {
+            0% { top: -1px; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
 
-/* Warning popup */
-.modal-overlay {
-    position: fixed; inset: 0; z-index: 200;
-    background: rgba(4,6,12,0.78);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    display: flex; align-items: center; justify-content: center;
-    padding: 20px;
-    opacity: 1; transition: opacity 0.3s ease;
-}
-.modal-overlay.hidden { opacity: 0; pointer-events: none; }
-.modal-card { max-width: 440px; width: 100%; }
-/* Desktop-only lock — no mobile layout, just a block screen */
-.mobile-block { display: none; }
-@media (min-width: 861px) {
-    nav, main, .modal-overlay, .mouse-glow, .cyber-grid, .hero-orb, .holo-circle { display: none !important; }
-    .mobile-block {
-        display: flex !important;
-        position: fixed; inset: 0; z-index: 500;
-        background: #04060C;
-        flex-direction: column; align-items: center; justify-content: center;
-        text-align: center; padding: 32px;
-    }
-}
+        .page-loader {
+            position: fixed;
+            inset: 0;
+            background: #04060C;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 24px;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        .page-loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .loader-ring {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid rgba(0,163,255,0.1);
+            border-top-color: #00A3FF;
+            animation: loaderSpin 1s linear infinite;
+        }
+        .loader-ring.small {
+            width: 20px;
+            height: 20px;
+            border-width: 2px;
+        }
+        @keyframes loaderSpin {
+            to { transform: rotate(360deg); }
+        }
+        .loader-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            color: #00A3FF;
+            letter-spacing: 4px;
+            animation: loaderPulse 1.5s ease-in-out infinite;
+        }
+        @keyframes loaderPulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
 
-.modal-icon-ring {
-    width: 52px; height: 52px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    background: rgba(255,180,0,0.08);
-    border: 1px solid rgba(255,180,0,0.3);
-    box-shadow: 0 0 18px rgba(255,180,0,0.12);
-    margin: 0 auto 16px;
-}
-</style>
+        /* ===== React Tool ===== */
+        .hidden { display: none !important; }
+        .react-input {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(4,6,12,0.6);
+            border: 1px solid rgba(0,163,255,0.12);
+            border-radius: 12px;
+            color: #E0E8F0;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        .react-input:focus {
+            border-color: rgba(0,163,255,0.4);
+            box-shadow: 0 0 0 3px rgba(0,163,255,0.08);
+        }
+        .react-input::placeholder { color: rgba(224,232,240,0.25); }
+
+        input[type=range].react-range {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 4px;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #00A3FF var(--fill, 10%), rgba(0,163,255,0.12) var(--fill, 10%));
+            outline: none;
+        }
+        input[type=range].react-range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #00D4FF;
+            border: 3px solid #04060C;
+            box-shadow: 0 0 10px rgba(0,212,255,0.5);
+            cursor: pointer;
+        }
+        input[type=range].react-range::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #00D4FF;
+            border: 3px solid #04060C;
+            cursor: pointer;
+        }
+
+        .emoji-chip {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            border: 1px solid rgba(0,163,255,0.12);
+            background: rgba(0,163,255,0.03);
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            user-select: none;
+        }
+        .emoji-chip:hover {
+            transform: translateY(-3px) scale(1.1);
+            border-color: rgba(0,163,255,0.35);
+            background: rgba(0,163,255,0.08);
+        }
+        .emoji-chip.active {
+            border-color: rgba(0,212,255,0.6);
+            background: rgba(0,163,255,0.15);
+            box-shadow: 0 0 20px rgba(0,163,255,0.25);
+            transform: scale(1.1);
+        }
+
+        .react-error {
+            padding: 13px 16px;
+            border-radius: 10px;
+            background: rgba(255,60,80,0.08);
+            border: 1px solid rgba(255,60,80,0.2);
+            color: #FF6B7E;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        .react-success {
+            padding: 16px 18px;
+            border-radius: 12px;
+            background: rgba(0,255,136,0.06);
+            border: 1px solid rgba(0,255,136,0.2);
+            color: #7CFFB2;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+        .react-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 16px;
+            color: rgba(224,232,240,0.5);
+            font-size: 13px;
+        }
+
+        .icon-box {
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 14px;
+            background: linear-gradient(135deg, rgba(0,163,255,0.1), rgba(0,163,255,0.03));
+            border: 1px solid rgba(0,163,255,0.1);
+            font-size: 24px;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover .icon-box {
+            background: linear-gradient(135deg, rgba(0,163,255,0.2), rgba(0,163,255,0.05));
+            border-color: rgba(0,163,255,0.2);
+            box-shadow: 0 0 20px rgba(0,163,255,0.15);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(4,6,12,0.95);
+            backdrop-filter: blur(20px);
+            z-index: 100;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 32px;
+        }
+        .mobile-menu.open { display: flex; }
+        .mobile-menu a {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            color: #E0E8F0;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            letter-spacing: 2px;
+        }
+        .mobile-menu a:hover { color: #00D4FF; }
+
+        .footer-cta-glow {
+            position: absolute;
+            width: 600px;
+            height: 300px;
+            background: radial-gradient(ellipse, rgba(0,163,255,0.08), transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+    </style>
+<base target="_blank">
+<base target="_blank">
 </head>
 <body>
-
-<!-- Desktop-only notice (shown on small screens instead of a responsive layout) -->
-<div class="mobile-block" id="mobileBlock">
-    <div class="modal-icon-ring" style="background:rgba(0,163,255,0.08);border-color:rgba(0,163,255,0.3);box-shadow:0 0 18px rgba(0,163,255,0.12);">
-        <i data-lucide="monitor-x" style="width:26px;height:26px;color:#00A3FF;"></i>
-    </div>
-    <h1 style="font-family:'Orbitron',sans-serif;font-weight:700;font-size:18px;letter-spacing:0.5px;color:#E0E8F0;margin-bottom:14px;">
-        Do Not Support
-    </h1>
-    <p style="font-size:14px;line-height:1.8;color:rgba(224,232,240,0.7);max-width:320px;margin-bottom:6px;">
-        මෙම Tool එක Desktop/Laptop සඳහා සහාය නොදක්වයි.
-    </p>
-    <p style="font-size:14px;line-height:1.8;color:rgba(224,232,240,0.7);max-width:320px;">
-        කරුණාකර ඔබගේ Mobile Phone එකේ browser එකෙන් open කරන්න.
-    </p>
-</div>
-
-<div class="mouse-glow" id="mouseGlow"></div>
-<div class="cyber-grid"></div>
-
-<!-- Warning Popup -->
-<div class="modal-overlay" id="warningModal">
-    <div class="modal-card neon-border-card">
-        <div class="neon-border-card-inner" style="text-align:center;">
-            <div class="modal-icon-ring">
-                <i data-lucide="triangle-alert" style="width:24px;height:24px;color:#FFB400;"></i>
-            </div>
-            <h2 style="font-family:'Orbitron',sans-serif;font-weight:700;font-size:17px;letter-spacing:0.5px;margin-bottom:14px;color:#E0E8F0;">
-                Important Notice
-            </h2>
-            <p style="font-size:14px;line-height:1.8;color:rgba(224,232,240,0.75);margin-bottom:10px;">
-                මෙය ඔබට එක WhatsApp Channel එකක පෝස්ට් 5ක් පමණයි React කල හැක්කේ.
-            </p>
-            <p style="font-size:14px;line-height:1.8;color:rgba(224,232,240,0.75);margin-bottom:22px;">
-                මෙය භාවිතා කිරීමට පෙර ඔබගේ WhatsApp Channel <strong style="color:#00D4FF;">About</strong> එකේ
-                <strong style="color:#00D4FF;">Zeta React</strong> යන නම කිසියම් හෝ තැනක Type කර Save කරන්න.
-            </p>
-            <button class="neon-btn" onclick="closeWarningModal()">
-                <i data-lucide="check" style="width:18px;height:18px;"></i>
-                <span>Got it, Continue</span>
-            </button>
-        </div>
-    </div>
-</div>
-
-<div class="hero-orb" style="width:480px;height:480px;background:rgba(0,163,255,0.06);top:-140px;right:-160px;"></div>
-<div class="hero-orb" style="width:380px;height:380px;background:rgba(0,100,255,0.04);bottom:-100px;left:-120px;animation-delay:-4s;"></div>
-<div class="holo-circle" style="width:220px;height:220px;top:14%;left:-60px;"></div>
-<div class="holo-circle" style="width:160px;height:160px;bottom:12%;right:-40px;animation-delay:-2s;"></div>
-
-<nav class="fixed top-0 left-0 right-0 z-50" style="backdrop-filter:blur(18px);background:rgba(4,6,12,0.75);border-bottom:1px solid rgba(0,163,255,0.06);">
-    <div class="max-w-3xl mx-auto px-5 sm:px-6">
-        <div class="flex items-center justify-center gap-3 h-16">
-            <div style="width:34px;height:34px;border-radius:9px;overflow:hidden;box-shadow:0 0 15px rgba(0,163,255,0.3);flex-shrink:0;background:linear-gradient(135deg,#00A3FF,#0066CC);display:flex;align-items:center;justify-content:center;">
-                <img src="https://files.catbox.moe/vy8h5y.png" alt="Zeta Tools logo" referrerpolicy="no-referrer" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.nextElementSibling.style.display='inline';">
-                <span style="display:none;font-family:'Orbitron',sans-serif;font-weight:900;font-size:15px;color:white;">Z</span>
-            </div>
-            <span style="font-family:'Orbitron',sans-serif;font-weight:700;font-size:15px;letter-spacing:1.5px;">ZETA TOOLS</span>
-            <span style="color:rgba(224,232,240,0.3);">/</span>
-            <span style="font-size:14px;color:#00D4FF;font-weight:600;">Channel Reactor</span>
-        </div>
-    </div>
-</nav>
-
-<main class="max-w-3xl mx-auto px-5 sm:px-6" style="position:relative;z-index:2;padding-top:104px;padding-bottom:60px;text-align:center;">
-
-    <div class="reveal visible" style="text-align:center;margin-bottom:30px;">
-        <span class="badge-glow"><span>⚡</span> INSTANT REACT ENGINE</span>
-        <h1 style="font-family:'Orbitron',sans-serif;font-weight:700;font-size:clamp(24px,5vw,34px);margin-top:20px;letter-spacing:0.5px;">
-            WhatsApp Channel Reactor
-        </h1>
-        <p style="color:rgba(224,232,240,0.55);font-size:15px;margin-top:10px;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.6;">
-            Paste a channel post link, pick your emoji, and fire off reactions in one shot.
-        </p>
+    <!-- Page Loader -->
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-ring"></div>
+        <div class="loader-text">ZETA TOOLS</div>
     </div>
 
-    <div class="neon-border-card reveal visible" style="margin-left:auto;margin-right:auto;">
-        <div class="neon-border-card-inner" style="text-align:center;">
+    <!-- Mouse Glow -->
+    <div class="mouse-glow" id="mouseGlow"></div>
 
-            <div style="margin-bottom:20px;max-width:420px;margin-left:auto;margin-right:auto;">
-                <label class="field-label" for="postUrl" style="text-align:center;">CHANNEL POST URL</label>
-                <input type="text" id="postUrl" class="zeta-input" style="text-align:center;"
-                       placeholder="https://whatsapp.com/channel/.../123"
-                       value="https://whatsapp.com/channel/0029Vb6X1kv0Qeabrr1Dlp03/1510">
-            </div>
+    <!-- Cyber Grid -->
+    <div class="cyber-grid"></div>
 
-            <div style="margin-bottom:20px;max-width:420px;margin-left:auto;margin-right:auto;">
-                <label class="field-label" style="text-align:center;">EMOJI (tap to pick, or type your own)</label>
-                <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;justify-content:center;" id="emojiChips">
-                    <button type="button" class="emoji-chip active" data-emoji="❤️">❤️</button>
-                    <button type="button" class="emoji-chip" data-emoji="🔥">🔥</button>
-                    <button type="button" class="emoji-chip" data-emoji="👍">👍</button>
-                    <button type="button" class="emoji-chip" data-emoji="😂">😂</button>
-                    <button type="button" class="emoji-chip" data-emoji="😮">😮</button>
-                    <button type="button" class="emoji-chip" data-emoji="🙏">🙏</button>
-                    <button type="button" class="emoji-chip" data-emoji="💯">💯</button>
-                </div>
-                <input type="text" id="emojiInput" class="zeta-input" placeholder="Custom emoji" value="❤️" style="max-width:160px;margin-left:auto;margin-right:auto;text-align:center;">
-            </div>
+    <!-- Particles -->
+    <canvas id="particles-canvas"></canvas>
 
-            <div style="margin-bottom:26px;max-width:420px;margin-left:auto;margin-right:auto;">
-                <div style="display:flex;justify-content:center;align-items:baseline;gap:10px;margin-bottom:8px;">
-                    <label class="field-label" style="margin-bottom:0;" for="countRange">REACTION COUNT</label>
-                    <span id="countLabel" style="font-family:'Orbitron',sans-serif;color:#00D4FF;font-size:15px;font-weight:600;">100</span>
-                </div>
-                <input type="range" id="countRange" class="zeta-range" min="1" max="500" value="100">
-            </div>
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html" onclick="closeMobileMenu()">HOME</a>
+        <a href="#react-tool" onclick="closeMobileMenu()" style="color:#00D4FF;">WA REACT</a>
+        <a href="#how" onclick="closeMobileMenu()">HOW TO USE</a>
+        <a href="#faq" onclick="closeMobileMenu()">FAQ</a>
+        <button onclick="closeMobileMenu()" style="margin-top:20px;background:none;border:1px solid rgba(0,163,255,0.2);color:#00D4FF;padding:12px 32px;border-radius:10px;font-family:'Orbitron',sans-serif;font-size:13px;cursor:pointer;letter-spacing:2px;">CLOSE</button>
+    </div>
 
-            <div style="max-width:420px;margin-left:auto;margin-right:auto;">
-                <button class="neon-btn" id="sendBtn" onclick="sendReactions()">
-                    <i data-lucide="zap" style="width:18px;height:18px;"></i>
-                    <span id="sendBtnLabel">Send Reactions</span>
-                </button>
-
-                <div id="progressBlock" class="hidden" style="margin-top:22px;">
-                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
-                        <span class="status-dot" style="background:#00A3FF;box-shadow:0 0 8px #00A3FF;"></span>
-                        <span id="progressStatus" style="font-size:13px;color:rgba(224,232,240,0.65);">Connecting…</span>
-                        <span id="elapsedTime" style="margin-left:auto;font-size:12px;color:rgba(224,232,240,0.35);font-family:'Orbitron',sans-serif;">0.0s</span>
+    <!-- Navigation -->
+    <nav class="nav-blur fixed top-0 left-0 right-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-18">
+                <a href="index.html" class="flex items-center gap-3" style="text-decoration:none;">
+                    <div style="width:36px;height:36px;background:linear-gradient(135deg,#00A3FF,#0066CC);border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 15px rgba(0,163,255,0.3);">
+                        <span style="font-family:'Orbitron',sans-serif;font-weight:900;font-size:16px;color:white;">Z</span>
                     </div>
-                    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+                    <span style="font-family:'Orbitron',sans-serif;font-weight:700;font-size:16px;color:#E0E8F0;letter-spacing:2px;">ZETA TOOLS</span>
+                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="index.html" style="font-size:14px;color:rgba(224,232,240,0.6);text-decoration:none;font-weight:500;transition:color 0.3s;letter-spacing:0.5px;" onmouseover="this.style.color='#00D4FF'" onmouseout="this.style.color='rgba(224,232,240,0.6)'">HOME</a>
+                    <a href="#react-tool" style="font-size:14px;color:#00D4FF;text-decoration:none;font-weight:600;letter-spacing:0.5px;">WA REACT</a>
+                    <a href="#how" style="font-size:14px;color:rgba(224,232,240,0.6);text-decoration:none;font-weight:500;transition:color 0.3s;letter-spacing:0.5px;" onmouseover="this.style.color='#00D4FF'" onmouseout="this.style.color='rgba(224,232,240,0.6)'">HOW TO USE</a>
+                    <a href="#faq" style="font-size:14px;color:rgba(224,232,240,0.6);text-decoration:none;font-weight:500;transition:color 0.3s;letter-spacing:0.5px;" onmouseover="this.style.color='#00D4FF'" onmouseout="this.style.color='rgba(224,232,240,0.6)'">FAQ</a>
                 </div>
-
-                <div id="resultBlock" class="hidden" style="margin-top:22px;text-align:left;"></div>
+                <button class="md:hidden" onclick="toggleMobileMenu()" style="background:none;border:none;color:#E0E8F0;cursor:pointer;padding:8px;">
+                    <i data-lucide="menu" style="width:24px;height:24px;"></i>
+                </button>
             </div>
-
         </div>
-    </div>
+    </nav>
 
-    <p style="text-align:center;font-size:12px;color:rgba(224,232,240,0.3);margin-top:20px;">
-        Runs the request straight from your browser — nothing is stored on this page.
-    </p>
+    <main style="position:relative;z-index:2;">
 
-</main>
+        <!-- ===== HERO ===== -->
+        <section style="min-height:92vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:120px 20px 60px;">
+            <div class="hero-orb" style="width:500px;height:500px;background:rgba(0,163,255,0.06);top:-100px;right:-150px;"></div>
+            <div class="hero-orb" style="width:400px;height:400px;background:rgba(0,100,255,0.04);bottom:-80px;left:-100px;animation-delay:-3s;"></div>
+            <div class="hero-orb" style="width:300px;height:300px;background:rgba(0,212,255,0.03);top:40%;left:60%;animation-delay:-5s;"></div>
 
-<script>
-lucide.createIcons();
+            <div class="holo-circle" style="width:300px;height:300px;top:10%;left:-50px;"></div>
+            <div class="holo-circle" style="width:200px;height:200px;bottom:15%;right:-30px;animation-delay:-2s;"></div>
 
-// Warning popup
-function closeWarningModal() {
-    document.getElementById('warningModal').classList.add('hidden');
-}
+            <div class="energy-wave" style="width:200px;height:200px;top:30%;left:20%;"></div>
+            <div class="energy-wave" style="width:150px;height:150px;top:50%;right:15%;animation-delay:-1.5s;"></div>
 
-// Mouse glow — cheap follow, no canvas particle loop
-const mouseGlow = document.getElementById('mouseGlow');
-let mx = window.innerWidth/2, my = window.innerHeight/2, gx = mx, gy = my;
-document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-(function animateGlow(){
-    gx += (mx - gx) * 0.1;
-    gy += (my - gy) * 0.1;
-    mouseGlow.style.left = gx + 'px';
-    mouseGlow.style.top = gy + 'px';
-    requestAnimationFrame(animateGlow);
-})();
+            <div class="energy-ring" style="width:600px;height:600px;top:50%;left:50%;transform:translate(-50%,-50%);border-style:dashed;"></div>
+            <div class="energy-ring" style="width:800px;height:800px;top:50%;left:50%;transform:translate(-50%,-50%);animation-direction:reverse;animation-duration:30s;"></div>
 
-// Emoji chip selection
-const emojiInput = document.getElementById('emojiInput');
-document.querySelectorAll('.emoji-chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-        document.querySelectorAll('.emoji-chip').forEach(c => c.classList.remove('active'));
-        chip.classList.add('active');
-        emojiInput.value = chip.dataset.emoji;
-    });
-});
-emojiInput.addEventListener('input', () => {
-    document.querySelectorAll('.emoji-chip').forEach(c => c.classList.toggle('active', c.dataset.emoji === emojiInput.value));
-});
+            <div class="light-streak" style="top:25%;"></div>
+            <div class="light-streak" style="top:55%;animation-delay:-1.5s;"></div>
+            <div class="light-streak" style="top:75%;animation-delay:-3s;"></div>
 
-// Count slider
-const countRange = document.getElementById('countRange');
-const countLabel = document.getElementById('countLabel');
-function syncCount() {
-    countLabel.textContent = countRange.value;
-    const pct = ((countRange.value - countRange.min) / (countRange.max - countRange.min)) * 100;
-    countRange.style.setProperty('--fill', pct + '%');
-}
-countRange.addEventListener('input', syncCount);
-syncCount();
+            <div class="scan-line"></div>
 
-const API_BASE = 'https://sasa-dev-api.xyz/api/wachannelreact';
-const API_KEY = 'Sasa_Dev_Api_e101b64c0549417f720ec1a9fb4f2b938a0214aa';
-
-const sendBtn = document.getElementById('sendBtn');
-const sendBtnLabel = document.getElementById('sendBtnLabel');
-const progressBlock = document.getElementById('progressBlock');
-const progressFill = document.getElementById('progressFill');
-const progressStatus = document.getElementById('progressStatus');
-const elapsedTimeEl = document.getElementById('elapsedTime');
-const resultBlock = document.getElementById('resultBlock');
-
-let tickTimer = null;
-
-function renderResult(kind, html) {
-    resultBlock.classList.remove('hidden');
-    resultBlock.innerHTML = `<div class="result-panel ${kind === 'error' ? 'error' : ''}">${html}</div>`;
-}
-
-function escapeHtml(str) {
-    return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
-}
-
-async function sendReactions() {
-    const url = document.getElementById('postUrl').value.trim();
-    const emojis = emojiInput.value.trim() || '❤️';
-    const count = countRange.value;
-
-    if (!url) {
-        renderResult('error', `<div style="font-size:14px;color:#ff6b7a;">⚠️ Paste a channel post URL first.</div>`);
-        return;
-    }
-    if (!/^https?:\/\/(www\.)?whatsapp\.com\/channel\//i.test(url)) {
-        renderResult('error', `<div style="font-size:14px;color:#ff6b7a;">⚠️ That doesn't look like a WhatsApp channel post link.</div>`);
-        return;
-    }
-
-    sendBtn.disabled = true;
-    sendBtnLabel.textContent = 'Sending…';
-    resultBlock.classList.add('hidden');
-    progressBlock.classList.remove('hidden');
-    progressStatus.textContent = 'Connecting…';
-    progressFill.style.width = '6%';
-
-    const started = performance.now();
-    tickTimer = setInterval(() => {
-        const elapsed = (performance.now() - started) / 1000;
-        elapsedTimeEl.textContent = elapsed.toFixed(1) + 's';
-        // ease toward 90% while waiting, never claiming done until the response lands
-        const estTarget = Math.min(90, 15 + elapsed * (30 / Math.max(1, count / 40)));
-        progressFill.style.width = estTarget + '%';
-        progressStatus.textContent = 'Sending reactions…';
-    }, 100);
-
-    const apiUrl = `${API_BASE}?apikey=${encodeURIComponent(API_KEY)}&url=${encodeURIComponent(url)}&count=${encodeURIComponent(count)}&emojis=${encodeURIComponent(emojis)}`;
-
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 60000);
-
-    try {
-        const res = await fetch(apiUrl, { signal: controller.signal });
-        clearTimeout(timeout);
-        clearInterval(tickTimer);
-        progressFill.style.width = '100%';
-        progressStatus.textContent = 'Done';
-
-        const raw = await res.text();
-        let data = null;
-        try { data = JSON.parse(raw); } catch (e) { /* not JSON */ }
-
-        if (!res.ok) {
-            renderResult('error', `
-                <div style="font-size:14px;color:#ff6b7a;font-weight:600;margin-bottom:6px;">❌ Request failed (${res.status})</div>
-                <pre class="raw-json">${escapeHtml(data ? JSON.stringify(data, null, 2) : raw || 'No response body')}</pre>
-            `);
-        } else if (data) {
-            const success = data.success ?? data.status ?? true;
-            const reacted = data.reacted ?? data.count ?? data.total ?? count;
-            const message = data.message ?? data.msg ?? 'Reactions sent.';
-            renderResult('ok', `
-                <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
-                    <span class="status-dot" style="background:#00FF88;box-shadow:0 0 8px #00FF88;"></span>
-                    <span style="font-size:14px;font-weight:600;color:#00D4FF;">${success ? 'Sent successfully' : 'Completed'}</span>
+            <div style="text-align:center;max-width:820px;position:relative;z-index:5;">
+                <div class="reveal" style="margin-bottom:28px;">
+                    <span class="badge-glow">
+                        <span>⚡</span>
+                        ZETA TOOLS · WA REACT ENGINE
+                    </span>
                 </div>
-                <div style="font-size:13px;color:rgba(224,232,240,0.7);margin-bottom:12px;">${escapeHtml(message)} — <strong style="color:#E0E8F0;">${escapeHtml(String(reacted))}</strong> reaction(s) targeted.</div>
-                <details>
-                    <summary style="cursor:pointer;font-size:12px;color:rgba(0,212,255,0.7);">View raw response</summary>
-                    <pre class="raw-json" style="margin-top:8px;">${escapeHtml(JSON.stringify(data, null, 2))}</pre>
-                </details>
-            `);
-        } else {
-            renderResult('ok', `
-                <div style="font-size:14px;color:#00D4FF;font-weight:600;margin-bottom:8px;">✅ Request completed</div>
-                <pre class="raw-json">${escapeHtml(raw || 'Empty response')}</pre>
-            `);
-        }
-    } catch (err) {
-        clearTimeout(timeout);
-        clearInterval(tickTimer);
-        progressFill.style.width = '100%';
-        const aborted = err.name === 'AbortError';
-        renderResult('error', `
-            <div style="font-size:14px;color:#ff6b7a;font-weight:600;margin-bottom:6px;">
-                ${aborted ? '⏱️ Timed out after 60s' : '❌ Couldn\'t reach the API'}
+                <h1 class="reveal reveal-delay-1" style="font-family:'Orbitron',sans-serif;font-size:clamp(32px,7vw,64px);font-weight:800;line-height:1.15;margin-bottom:24px;letter-spacing:-0.5px;">
+                    WhatsApp Channel<br>
+                    <span style="background:linear-gradient(135deg,#00D4FF,#00A3FF,#0066FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Post React Sender</span>
+                </h1>
+                <p class="reveal reveal-delay-2" style="font-size:clamp(15px,2.2vw,18px);color:rgba(224,232,240,0.55);line-height:1.8;max-width:620px;margin:0 auto 40px;font-weight:300;">
+                    Paste your WhatsApp channel post link, pick an emoji, set the reaction count — and send reactions instantly with the ZETA react engine. Free, fast and unlimited.
+                </p>
+                <div class="reveal reveal-delay-3" style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+                    <a href="#react-tool" class="neon-btn">
+                        <i data-lucide="zap" style="width:18px;height:18px;"></i>
+                        Start Reacting
+                    </a>
+                    <a href="#how" class="neon-btn" style="background:linear-gradient(135deg,rgba(0,163,255,0.1),rgba(0,163,255,0.05));border:1px solid rgba(0,163,255,0.2);box-shadow:0 0 15px rgba(0,163,255,0.1);">
+                        <i data-lucide="help-circle" style="width:18px;height:18px;"></i>
+                        How To Use
+                    </a>
+                </div>
+                <div class="reveal reveal-delay-4" style="display:flex;gap:28px;justify-content:center;flex-wrap:wrap;margin-top:56px;">
+                    <div style="text-align:center;">
+                        <div style="font-family:'Orbitron',sans-serif;font-size:28px;font-weight:800;color:#00D4FF;" id="statCount">0</div>
+                        <div style="font-size:11px;color:rgba(224,232,240,0.4);letter-spacing:2px;margin-top:4px;">REACTIONS SENT</div>
+                    </div>
+                    <div style="width:1px;background:rgba(0,163,255,0.1);"></div>
+                    <div style="text-align:center;">
+                        <div style="font-family:'Orbitron',sans-serif;font-size:28px;font-weight:800;color:#00D4FF;">100%</div>
+                        <div style="font-size:11px;color:rgba(224,232,240,0.4);letter-spacing:2px;margin-top:4px;">FREE &amp; UNLIMITED</div>
+                    </div>
+                    <div style="width:1px;background:rgba(0,163,255,0.1);"></div>
+                    <div style="text-align:center;">
+                        <div style="font-family:'Orbitron',sans-serif;font-size:28px;font-weight:800;color:#00FF88;">●</div>
+                        <div style="font-size:11px;color:rgba(224,232,240,0.4);letter-spacing:2px;margin-top:4px;">ENGINE ONLINE</div>
+                    </div>
+                </div>
             </div>
-            <div style="font-size:13px;color:rgba(224,232,240,0.6);margin-bottom:12px;">
-                ${aborted ? 'The server took too long to respond. Try a smaller count.' : 'This can happen if the API blocks browser requests (CORS) or the server is unreachable right now.'}
-            </div>
-            <a href="${apiUrl}" target="_blank" rel="noopener" class="ghost-btn">
-                <i data-lucide="external-link" style="width:14px;height:14px;"></i> Open request directly
-            </a>
-        `);
-        lucide.createIcons();
-    } finally {
-        sendBtn.disabled = false;
-        sendBtnLabel.textContent = 'Send Reactions';
-        setTimeout(() => progressBlock.classList.add('hidden'), 600);
-    }
-}
 
-document.getElementById('postUrl').addEventListener('keydown', e => {
-    if (e.key === 'Enter') sendReactions();
-});
-</script>
+            <div class="hud-corner hud-corner-tl" style="top:100px;left:30px;"></div>
+            <div class="hud-corner hud-corner-tr" style="top:100px;right:30px;"></div>
+            <div class="hud-corner hud-corner-bl" style="bottom:40px;left:30px;"></div>
+            <div class="hud-corner hud-corner-br" style="bottom:40px;right:30px;"></div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- ===== REACT TOOL ===== -->
+        <section id="react-tool" style="padding:100px 20px;position:relative;">
+            <div class="max-w-4xl mx-auto">
+                <div style="text-align:center;margin-bottom:48px;">
+                    <span class="badge-glow reveal" style="margin-bottom:20px;display:inline-flex;"><span>🚀</span> REACT ENGINE</span>
+                    <h2 class="reveal reveal-delay-1" style="font-family:'Orbitron',sans-serif;font-size:clamp(26px,4vw,40px);font-weight:700;margin-bottom:16px;letter-spacing:-0.5px;">
+                        Send Channel <span style="color:#00D4FF;">Reactions</span>
+                    </h2>
+                    <p class="reveal reveal-delay-2" style="font-size:16px;color:rgba(224,232,240,0.45);max-width:540px;margin:0 auto;">
+                        Fill the details below and launch the react engine. The API handles everything.
+                    </p>
+                </div>
+
+                <div class="glass-card reveal reveal-delay-2" style="padding:40px 32px;">
+                    <div class="hud-corner hud-corner-tl" style="top:12px;left:12px;"></div>
+                    <div class="hud-corner hud-corner-tr" style="top:12px;right:12px;"></div>
+                    <div class="hud-corner hud-corner-bl" style="bottom:12px;left:12px;"></div>
+                    <div class="hud-corner hud-corner-br" style="bottom:12px;right:12px;"></div>
+
+                    <!-- Post URL -->
+                    <div style="margin-bottom:26px;">
+                        <label style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:rgba(224,232,240,0.5);letter-spacing:1px;margin-bottom:12px;">
+                            <i data-lucide="link" style="width:14px;height:14px;color:#00A3FF;"></i>
+                            CHANNEL POST LINK
+                        </label>
+                        <input type="url" id="postUrl" class="react-input" placeholder="https://whatsapp.com/channel/0029VXXXXXXXXXXXX/1234">
+                        <p style="font-size:12px;color:rgba(224,232,240,0.3);margin-top:8px;line-height:1.6;">
+                            Open your channel post → Share → Copy link, then paste it here. Link must contain the message number at the end (e.g. <span style="color:rgba(0,212,255,0.6);">/1510</span>).
+                        </p>
+                        <div style="margin-top:10px;">
+                            <button onclick="fillSample()" style="background:none;border:1px solid rgba(0,163,255,0.15);color:rgba(0,212,255,0.6);padding:7px 14px;border-radius:8px;font-size:12px;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.3s;" onmouseover="this.style.borderColor='rgba(0,163,255,0.35)';this.style.color='#00D4FF'" onmouseout="this.style.borderColor='rgba(0,163,255,0.15)';this.style.color='rgba(0,212,255,0.6)'">✨ Try a sample link</button>
+                        </div>
+                    </div>
+
+                    <!-- Count slider -->
+                    <div style="margin-bottom:26px;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                            <label style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:rgba(224,232,240,0.5);letter-spacing:1px;">
+                                <i data-lucide="hash" style="width:14px;height:14px;color:#00A3FF;"></i>
+                                REACTION COUNT
+                            </label>
+                            <span id="countVal" style="font-family:'Orbitron',sans-serif;font-size:15px;color:#00D4FF;font-weight:700;">100</span>
+                        </div>
+                        <input type="range" class="react-range" id="reactCount" min="1" max="1000" value="100" oninput="updateCount(this.value)">
+                        <div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(224,232,240,0.25);margin-top:6px;">
+                            <span>1</span><span>250</span><span>500</span><span>750</span><span>1000</span>
+                        </div>
+                    </div>
+
+                    <!-- Emoji picker -->
+                    <div style="margin-bottom:26px;">
+                        <label style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:rgba(224,232,240,0.5);letter-spacing:1px;margin-bottom:12px;">
+                            <i data-lucide="smile" style="width:14px;height:14px;color:#00A3FF;"></i>
+                            PICK YOUR EMOJI
+                        </label>
+                        <div id="emojiGrid" style="display:flex;gap:10px;flex-wrap:wrap;">
+                            <button type="button" class="emoji-chip active" data-emoji="❤️" onclick="pickEmoji(this)">❤️</button>
+                            <button type="button" class="emoji-chip" data-emoji="👍" onclick="pickEmoji(this)">👍</button>
+                            <button type="button" class="emoji-chip" data-emoji="😂" onclick="pickEmoji(this)">😂</button>
+                            <button type="button" class="emoji-chip" data-emoji="🔥" onclick="pickEmoji(this)">🔥</button>
+                            <button type="button" class="emoji-chip" data-emoji="😮" onclick="pickEmoji(this)">😮</button>
+                            <button type="button" class="emoji-chip" data-emoji="😢" onclick="pickEmoji(this)">😢</button>
+                            <button type="button" class="emoji-chip" data-emoji="🙏" onclick="pickEmoji(this)">🙏</button>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:12px;margin-top:14px;">
+                            <span style="font-size:12px;color:rgba(224,232,240,0.35);white-space:nowrap;">Custom emoji:</span>
+                            <input type="text" id="customEmoji" class="react-input" style="flex:1;max-width:140px;padding:9px 14px;text-align:center;font-size:18px;" maxlength="4" placeholder="💯" oninput="onCustomEmoji(this.value)">
+                        </div>
+                    </div>
+
+                    <!-- Launch button -->
+                    <button class="neon-btn" id="launchBtn" onclick="launchReact()" style="width:100%;padding:18px;font-size:16px;letter-spacing:0.5px;">
+                        <i data-lucide="send" style="width:18px;height:18px;"></i>
+                        <span id="launchLabel">🚀 Launch React Engine</span>
+                    </button>
+
+                    <!-- Status / Result -->
+                    <div id="reactStatus" class="react-status hidden" style="margin-top:24px;">
+                        <div class="loader-ring small"></div>
+                        <span id="reactStatusText">Sending reactions, please wait…</span>
+                    </div>
+                    <div id="reactError" class="react-error hidden" style="margin-top:24px;"></div>
+                    <div id="reactSuccess" class="react-success hidden" style="margin-top:24px;"></div>
+                    <div id="reactOpenRow" class="hidden" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px;">
+                        <a id="openApiBtn" class="neon-btn" style="padding:12px 24px;font-size:14px;background:linear-gradient(135deg,rgba(0,163,255,0.1),rgba(0,163,255,0.05));border:1px solid rgba(0,163,255,0.25);box-shadow:0 0 15px rgba(0,163,255,0.1);">
+                            <i data-lucide="external-link" style="width:16px;height:16px;"></i>
+                            Open API Response
+                        </a>
+                        <button class="neon-btn" style="padding:12px 24px;font-size:14px;background:rgba(255,60,80,0.08);border:1px solid rgba(255,60,80,0.25);box-shadow:none;" onclick="resetTool()">
+                            <i data-lucide="rotate-ccw" style="width:16px;height:16px;"></i>
+                            Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- ===== HOW TO USE ===== -->
+        <section id="how" style="padding:100px 20px;position:relative;">
+            <div class="max-w-7xl mx-auto">
+                <div style="text-align:center;margin-bottom:64px;">
+                    <span class="badge-glow reveal" style="margin-bottom:20px;display:inline-flex;">HOW TO USE</span>
+                    <h2 class="reveal reveal-delay-1" style="font-family:'Orbitron',sans-serif;font-size:clamp(26px,4vw,40px);font-weight:700;margin-bottom:16px;letter-spacing:-0.5px;">
+                        3 Simple <span style="color:#00D4FF;">Steps</span>
+                    </h2>
+                </div>
+
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:24px;">
+                    <div class="neon-border-card reveal">
+                        <div class="neon-border-card-inner" style="text-align:center;">
+                            <div style="font-family:'Orbitron',sans-serif;font-size:44px;font-weight:900;background:linear-gradient(135deg,#00D4FF,#0066FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px;">01</div>
+                            <div class="icon-box" style="margin:0 auto 20px;">🔗</div>
+                            <h3 style="font-weight:700;font-size:18px;margin-bottom:10px;color:#E0E8F0;">Copy Post Link</h3>
+                            <p style="font-size:14px;color:rgba(224,232,240,0.45);line-height:1.7;">Open your WhatsApp channel post, tap Share → Copy Link and paste it into the tool.</p>
+                        </div>
+                    </div>
+                    <div class="neon-border-card reveal reveal-delay-1">
+                        <div class="neon-border-card-inner" style="text-align:center;">
+                            <div style="font-family:'Orbitron',sans-serif;font-size:44px;font-weight:900;background:linear-gradient(135deg,#00D4FF,#0066FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px;">02</div>
+                            <div class="icon-box" style="margin:0 auto 20px;">⚙️</div>
+                            <h3 style="font-weight:700;font-size:18px;margin-bottom:10px;color:#E0E8F0;">Set Count &amp; Emoji</h3>
+                            <p style="font-size:14px;color:rgba(224,232,240,0.45);line-height:1.7;">Choose how many reactions you want (1–1000) and pick your favourite emoji.</p>
+                        </div>
+                    </div>
+                    <div class="neon-border-card reveal reveal-delay-2">
+                        <div class="neon-border-card-inner" style="text-align:center;">
+                            <div style="font-family:'Orbitron',sans-serif;font-size:44px;font-weight:900;background:linear-gradient(135deg,#00D4FF,#0066FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px;">03</div>
+                            <div class="icon-box" style="margin:0 auto 20px;">🚀</div>
+                            <h3 style="font-weight:700;font-size:18px;margin-bottom:10px;color:#E0E8F0;">Launch &amp; Done</h3>
+                            <p style="font-size:14px;color:rgba(224,232,240,0.45);line-height:1.7;">Hit the launch button — the engine fires the API and your reactions get sent instantly.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- ===== FEATURES ===== -->
+        <section style="padding:100px 20px;position:relative;">
+            <div class="max-w-7xl mx-auto">
+                <div style="text-align:center;margin-bottom:64px;">
+                    <span class="badge-glow reveal" style="margin-bottom:20px;display:inline-flex;">FEATURES</span>
+                    <h2 class="reveal reveal-delay-1" style="font-family:'Orbitron',sans-serif;font-size:clamp(26px,4vw,40px);font-weight:700;margin-bottom:16px;letter-spacing:-0.5px;">
+                        Why This <span style="color:#00D4FF;">Engine?</span>
+                    </h2>
+                </div>
+
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:24px;">
+                    <div class="glass-card reveal" style="padding:36px 28px;text-align:center;">
+                        <div style="font-size:40px;margin-bottom:20px;filter:drop-shadow(0 0 12px rgba(0,163,255,0.4));">⚡</div>
+                        <h3 style="font-weight:700;font-size:17px;margin-bottom:10px;color:#E0E8F0;">Instant Launch</h3>
+                        <p style="font-size:14px;color:rgba(224,232,240,0.45);line-height:1.7;">Reactions are fired within seconds of launching the engine.</p>
+                    </div>
+                    <div class="glass-card reveal reveal-delay-1" style="padding:36px 28px;text-align:center;">
+                        <div style="font-size:40px;margin-bottom:20px;filter:drop-shadow(0 0 12px rgba(0,163,255,0.4));">🎨</div>
+                        <h3 style="font-weight:700;font-size:17px;margin-bottom:10px;color:#E0E8F0;">Any Emoji</h3>
+                        <p style="font-size:14px;color:rgba(224,232,240,0.45);line-height:1.7;">7 built-in WhatsApp reaction emojis plus full custom emoji support.</p>
+                    </div>
+                    <div class="glass-card reveal reveal-delay-2" style="padding:36px 28px;text-align:center;">
+                        <div style="font-size:40px;margin-bottom:20px;filter:drop-shadow(0 0 12px rgba(0,163,255,0.4));">📊</div>
+                        <h3 style="font-weight:700;font-size:17px;margin-bottom:10px;color:#E0E8F0;">Up To 1000</h3>
+                        <p style="font-size:14px;color:rgba(224,232,240,0.45);line-height:1.7;">Send anywhere from 1 to 1000 reactions on a single post with one click.</p>
+                    </div>
+                    <div class="glass-card reveal reveal-delay-3" style="padding:36px 28px;text-align:center;">
+                        <div style="font-size:40px;margin-bottom:20px;filter:drop-shadow(0 0 12px rgba(0,163,255,0.4));">🛡</div>
+                        <h3 style="font-weight:700;font-size:17px;margin-bottom:10px;color:#E0E8F0;">No Login Needed</h3>
+                        <p style="font-size:14px;color:rgba(224,232,240,0.45);line-height:1.7;">No account, no signup — just paste the link and launch. 100% free.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- ===== FAQ ===== -->
+        <section id="faq" style="padding:100px 20px;position:relative;">
+            <div class="max-w-3xl mx-auto">
+                <div style="text-align:center;margin-bottom:64px;">
+                    <span class="badge-glow reveal" style="margin-bottom:20px;display:inline-flex;">FAQ</span>
+                    <h2 class="reveal reveal-delay-1" style="font-family:'Orbitron',sans-serif;font-size:clamp(26px,4vw,40px);font-weight:700;margin-bottom:16px;letter-spacing:-0.5px;">
+                        Frequently Asked <span style="color:#00D4FF;">Questions</span>
+                    </h2>
+                </div>
+
+                <div style="display:flex;flex-direction:column;gap:12px;">
+                    <div class="faq-item reveal" style="border:1px solid rgba(0,163,255,0.06);border-radius:14px;overflow:hidden;transition:all 0.3s ease;background:rgba(13,17,32,0.5);" onclick="toggleFaq(this)">
+                        <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;cursor:pointer;font-weight:500;font-size:16px;transition:all 0.3s ease;user-select:none;" class="faq-question">
+                            <span>How do I copy my channel post link?</span>
+                            <i data-lucide="chevron-down" class="faq-arrow" style="width:20px;height:20px;flex-shrink:0;color:#00A3FF;transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);"></i>
+                        </div>
+                        <div class="faq-answer" style="max-height:0;overflow:hidden;transition:max-height 0.5s cubic-bezier(0.4,0,0.2,1),padding 0.3s ease;padding:0 24px;color:rgba(224,232,240,0.6);font-size:15px;line-height:1.7;">
+                            Open WhatsApp → go to your channel → open the post → tap the three dots (or Share) → Copy Link. The link looks like: https://whatsapp.com/channel/0029V…/1510 — the number at the end is the message ID.
+                        </div>
+                    </div>
+                    <div class="faq-item reveal reveal-delay-1" style="border:1px solid rgba(0,163,255,0.06);border-radius:14px;overflow:hidden;transition:all 0.3s ease;background:rgba(13,17,32,0.5);" onclick="toggleFaq(this)">
+                        <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;cursor:pointer;font-weight:500;font-size:16px;transition:all 0.3s ease;user-select:none;" class="faq-question">
+                            <span>How many reactions can I send?</span>
+                            <i data-lucide="chevron-down" class="faq-arrow" style="width:20px;height:20px;flex-shrink:0;color:#00A3FF;transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);"></i>
+                        </div>
+                        <div class="faq-answer" style="max-height:0;overflow:hidden;transition:max-height 0.5s cubic-bezier(0.4,0,0.2,1),padding 0.3s ease;padding:0 24px;color:rgba(224,232,240,0.6);font-size:15px;line-height:1.7;">
+                            You can send between 1 and 1000 reactions per launch using the slider. You can launch the engine multiple times if you need more.
+                        </div>
+                    </div>
+                    <div class="faq-item reveal reveal-delay-2" style="border:1px solid rgba(0,163,255,0.06);border-radius:14px;overflow:hidden;transition:all 0.3s ease;background:rgba(13,17,32,0.5);" onclick="toggleFaq(this)">
+                        <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;cursor:pointer;font-weight:500;font-size:16px;transition:all 0.3s ease;user-select:none;" class="faq-question">
+                            <span>Which emojis are supported?</span>
+                            <i data-lucide="chevron-down" class="faq-arrow" style="width:20px;height:20px;flex-shrink:0;color:#00A3FF;transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);"></i>
+                        </div>
+                        <div class="faq-answer" style="max-height:0;overflow:hidden;transition:max-height 0.5s cubic-bezier(0.4,0,0.2,1),padding 0.3s ease;padding:0 24px;color:rgba(224,232,240,0.6);font-size:15px;line-height:1.7;">
+                            All 7 official WhatsApp reaction emojis are built in (❤️ 👍 😂 🔥 😮 😢 🙏) and you can also type any custom emoji into the custom emoji box.
+                        </div>
+                    </div>
+                    <div class="faq-item reveal reveal-delay-3" style="border:1px solid rgba(0,163,255,0.06);border-radius:14px;overflow:hidden;transition:all 0.3s ease;background:rgba(13,17,32,0.5);" onclick="toggleFaq(this)">
+                        <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;cursor:pointer;font-weight:500;font-size:16px;transition:all 0.3s ease;user-select:none;" class="faq-question">
+                            <span>Why did the engine show an error?</span>
+                            <i data-lucide="chevron-down" class="faq-arrow" style="width:20px;height:20px;flex-shrink:0;color:#00A3FF;transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);"></i>
+                        </div>
+                        <div class="faq-answer" style="max-height:0;overflow:hidden;transition:max-height 0.5s cubic-bezier(0.4,0,0.2,1),padding 0.3s ease;padding:0 24px;color:rgba(224,232,240,0.6);font-size:15px;line-height:1.7;">
+                            The most common reasons: the link is not a valid channel post link (must end with a message number), the API server is temporarily busy, or the API key expired. Check your link format and try again in a few seconds — you can also open the API response directly to see the exact error message.
+                        </div>
+                    </div>
+                    <div class="faq-item reveal reveal-delay-4" style="border:1px solid rgba(0,163,255,0.06);border-radius:14px;overflow:hidden;transition:all 0.3s ease;background:rgba(13,17,32,0.5);" onclick="toggleFaq(this)">
+                        <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;cursor:pointer;font-weight:500;font-size:16px;transition:all 0.3s ease;user-select:none;" class="faq-question">
+                            <span>Is it really free and unlimited?</span>
+                            <i data-lucide="chevron-down" class="faq-arrow" style="width:20px;height:20px;flex-shrink:0;color:#00A3FF;transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);"></i>
+                        </div>
+                        <div class="faq-answer" style="max-height:0;overflow:hidden;transition:max-height 0.5s cubic-bezier(0.4,0,0.2,1),padding 0.3s ease;padding:0 24px;color:rgba(224,232,240,0.6);font-size:15px;line-height:1.7;">
+                            Yes! The tool is 100% free with no limits and no signups. Just keep the API server happy by not spamming thousands of requests per minute.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- ===== FOOTER CTA ===== -->
+        <section style="padding:120px 20px;position:relative;overflow:hidden;">
+            <div class="footer-cta-glow"></div>
+            <div class="holo-circle" style="width:400px;height:400px;top:-100px;right:-100px;"></div>
+            <div class="holo-circle" style="width:300px;height:300px;bottom:-80px;left:-80px;animation-delay:-2s;"></div>
+
+            <div class="max-w-3xl mx-auto" style="text-align:center;position:relative;z-index:5;">
+                <h2 class="reveal" style="font-family:'Orbitron',sans-serif;font-size:clamp(28px,5vw,48px);font-weight:800;margin-bottom:20px;letter-spacing:-0.5px;">
+                    Ready To <span style="color:#00D4FF;">Boost Your Channel?</span>
+                </h2>
+                <p class="reveal reveal-delay-1" style="font-size:17px;color:rgba(224,232,240,0.5);line-height:1.7;margin-bottom:48px;max-width:450px;margin-left:auto;margin-right:auto;">
+                    Launch the react engine now — it takes less than 10 seconds.
+                </p>
+                <div class="reveal reveal-delay-2" style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+                    <a href="#react-tool" class="neon-btn" style="padding:16px 36px;font-size:16px;">
+                        <i data-lucide="zap" style="width:20px;height:20px;"></i>
+                        Open React Tool
+                    </a>
+                    <a href="support.html" class="neon-btn" style="padding:16px 36px;font-size:16px;background:linear-gradient(135deg,rgba(0,163,255,0.1),rgba(0,163,255,0.05));border:1px solid rgba(0,163,255,0.25);box-shadow:0 0 15px rgba(0,163,255,0.1);">
+                        <i data-lucide="headphones" style="width:20px;height:20px;"></i>
+                        Contact Support
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== FOOTER ===== -->
+        <footer style="border-top:1px solid rgba(0,163,255,0.06);padding:40px 20px;">
+            <div class="max-w-7xl mx-auto" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;">
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <div style="width:28px;height:28px;background:linear-gradient(135deg,#00A3FF,#0066CC);border-radius:8px;display:flex;align-items:center;justify-content:center;">
+                        <span style="font-family:'Orbitron',sans-serif;font-weight:900;font-size:12px;color:white;">Z</span>
+                    </div>
+                    <span style="font-family:'Orbitron',sans-serif;font-size:12px;color:rgba(224,232,240,0.3);letter-spacing:2px;">ZETA TOOLS</span>
+                </div>
+                <p style="font-size:13px;color:rgba(224,232,240,0.2);">© 2026 ZETA TOOLS. All rights reserved.</p>
+                <div style="display:flex;gap:24px;">
+                    <a href="index.html" style="font-size:13px;color:rgba(224,232,240,0.3);text-decoration:none;transition:color 0.3s;" onmouseover="this.style.color='#00D4FF'" onmouseout="this.style.color='rgba(224,232,240,0.3)'">Home</a>
+                    <a href="#react-tool" style="font-size:13px;color:rgba(224,232,240,0.3);text-decoration:none;transition:color 0.3s;" onmouseover="this.style.color='#00D4FF'" onmouseout="this.style.color='rgba(224,232,240,0.3)'">WA React</a>
+                    <a href="#faq" style="font-size:13px;color:rgba(224,232,240,0.3);text-decoration:none;transition:color 0.3s;" onmouseover="this.style.color='#00D4FF'" onmouseout="this.style.color='rgba(224,232,240,0.3)'">FAQ</a>
+                </div>
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+        // ===== Config =====
+        const API_BASE = 'https://sasa-dev-api.xyz/api/wachannelreact';
+        const API_KEY = 'Sasa_Dev_Api_e101b64c0549417f720ec1a9fb4f2b938a0214aa';
+        let selectedEmoji = '❤️';
+
+        // ===== Page Loader =====
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('pageLoader').classList.add('hidden');
+            }, 800);
+        });
+
+        // ===== Mouse Glow =====
+        const mouseGlow = document.getElementById('mouseGlow');
+        let mouseX = 0, mouseY = 0, glowX = 0, glowY = 0;
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+        function animateGlow() {
+            glowX += (mouseX - glowX) * 0.08;
+            glowY += (mouseY - glowY) * 0.08;
+            mouseGlow.style.left = glowX + 'px';
+            mouseGlow.style.top = glowY + 'px';
+            requestAnimationFrame(animateGlow);
+        }
+        animateGlow();
+
+        // ===== Particles =====
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        class Particle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 1.5 + 0.3;
+                this.speedX = (Math.random() - 0.5) * 0.3;
+                this.speedY = (Math.random() - 0.5) * 0.3;
+                this.opacity = Math.random() * 0.5 + 0.1;
+                this.pulse = Math.random() * Math.PI * 2;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.pulse += 0.02;
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                    this.reset();
+                }
+            }
+            draw() {
+                const o = this.opacity * (0.5 + 0.5 * Math.sin(this.pulse));
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(0, 163, 255, ' + o + ')';
+                ctx.fill();
+            }
+        }
+
+        const particleCount = Math.min(80, Math.floor(window.innerWidth / 15));
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 120) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = 'rgba(0, 163, 255, ' + (0.06 * (1 - dist / 120)) + ')';
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+                    }
+                }
+            }
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // ===== Scroll Reveal =====
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // ===== FAQ Toggle =====
+        function toggleFaq(item) {
+            const wasActive = item.classList.contains('active');
+            document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+            document.querySelectorAll('.faq-item .faq-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+            document.querySelectorAll('.faq-item .faq-answer').forEach(a => { a.style.maxHeight = '0'; a.style.padding = '0 24px'; });
+            if (!wasActive) {
+                item.classList.add('active');
+                const arrow = item.querySelector('.faq-arrow');
+                const answer = item.querySelector('.faq-answer');
+                if (arrow) arrow.style.transform = 'rotate(180deg)';
+                if (answer) { answer.style.maxHeight = '300px'; answer.style.padding = '0 24px 20px'; }
+            }
+        }
+
+        // ===== Mobile Menu =====
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('open');
+        }
+        function closeMobileMenu() {
+            document.getElementById('mobileMenu').classList.remove('open');
+        }
+
+        // ===== React Tool Logic =====
+        const countSlider = document.getElementById('reactCount');
+        function syncCountFill() {
+            const pct = ((countSlider.value - countSlider.min) / (countSlider.max - countSlider.min)) * 100;
+            countSlider.style.setProperty('--fill', pct + '%');
+        }
+        countSlider.addEventListener('input', syncCountFill);
+        syncCountFill();
+
+        function updateCount(val) {
+            document.getElementById('countVal').textContent = val;
+        }
+
+        function pickEmoji(btn) {
+            document.querySelectorAll('.emoji-chip').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            selectedEmoji = btn.dataset.emoji;
+            document.getElementById('customEmoji').value = '';
+        }
+
+        function onCustomEmoji(val) {
+            const trimmed = val.trim();
+            if (trimmed) {
+                document.querySelectorAll('.emoji-chip').forEach(c => c.classList.remove('active'));
+                selectedEmoji = trimmed;
+            }
+        }
+
+        function getPostUrl() {
+            return document.getElementById('postUrl').value.trim();
+        }
+
+        function getApiUrl() {
+            return API_BASE
+                + '?apikey=' + encodeURIComponent(API_KEY)
+                + '&url=' + encodeURIComponent(getPostUrl())
+                + '&count=' + encodeURIComponent(countSlider.value)
+                + '&emojis=' + encodeURIComponent(selectedEmoji);
+        }
+
+        function fillSample() {
+            document.getElementById('postUrl').value = 'https://whatsapp.com/channel/0029Vb6X1kv0Qeabrr1Dlp03/1510';
+            hideMessages();
+        }
+
+        function hideMessages() {
+            document.getElementById('reactError').classList.add('hidden');
+            document.getElementById('reactSuccess').classList.add('hidden');
+            document.getElementById('reactStatus').classList.add('hidden');
+            document.getElementById('reactOpenRow').classList.add('hidden');
+        }
+
+        function showError(msg) {
+            const el = document.getElementById('reactError');
+            el.textContent = msg;
+            el.classList.remove('hidden');
+            document.getElementById('reactSuccess').classList.add('hidden');
+            document.getElementById('reactStatus').classList.add('hidden');
+        }
+
+        function resetTool() {
+            document.getElementById('postUrl').value = '';
+            countSlider.value = 100;
+            updateCount(100);
+            syncCountFill();
+            document.getElementById('customEmoji').value = '';
+            document.querySelectorAll('.emoji-chip').forEach((c, i) => c.classList.toggle('active', i === 0));
+            selectedEmoji = '❤️';
+            hideMessages();
+        }
+
+        // reaction counter (local, just for fun stats)
+        let totalReactions = parseInt(localStorage.getItem('zeta_reactions') || '0', 10);
+        function renderStat() {
+            const el = document.getElementById('statCount');
+            if (el) el.textContent = totalReactions.toLocaleString();
+        }
+        renderStat();
+
+        async function launchReact() {
+            hideMessages();
+
+            const url = getPostUrl();
+            if (!url) {
+                showError('⚠️ කරුණාකර channel post link එක paste කරන්න. / Please paste your channel post link first.');
+                document.getElementById('postUrl').focus();
+                return;
+            }
+
+            // validation: must be a whatsapp channel link
+            if (!/whatsapp\.com\/channel\//i.test(url) && !/wa\.me\/channel/i.test(url)) {
+                showError('⚠️ Link එක valid WhatsApp channel post link එකක් නෙමෙයි. "https://whatsapp.com/channel/..." format එකට belong වෙන්න ඕන. / This does not look like a WhatsApp channel post link (must start with https://whatsapp.com/channel/…).');
+                return;
+            }
+
+            // validation: should contain a message number at the end
+            if (!/\/\d+\s*$/.test(url)) {
+                showError('⚠️ Link එකේ අගට message number එක නැහැ (උදා: /1510). Channel post එක open කරලා Share → Copy Link කරන්න. / Your link is missing the message number at the end (e.g. /1510). Open the post and use Share → Copy Link.');
+                return;
+            }
+
+            const apiUrl = getApiUrl();
+            const btn = document.getElementById('launchBtn');
+            const label = document.getElementById('launchLabel');
+            const status = document.getElementById('reactStatus');
+            const statusText = document.getElementById('reactStatusText');
+
+            btn.disabled = true;
+            label.textContent = '⏳ Launching…';
+            statusText.textContent = 'Sending ' + countSlider.value + ' × ' + selectedEmoji + ' reactions, please wait…';
+            status.classList.remove('hidden');
+
+            let ok = false;
+            let responseText = '';
+
+            try {
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), 60000);
+                const res = await fetch(apiUrl, { signal: controller.signal });
+                clearTimeout(timeout);
+                responseText = await res.text();
+                // API returns JSON — try to parse for a friendlier message
+                try {
+                    const data = JSON.parse(responseText);
+                    const statusOk = (data.status === true || data.success === true || res.ok);
+                    const msg = (typeof data.message === 'string' && data.message) ? data.message : null;
+                    if (statusOk) {
+                        ok = true;
+                        statusText.textContent = '✅ Engine response received!';
+                        const successEl = document.getElementById('reactSuccess');
+                        successEl.innerHTML = '✅ <b>Success!</b> ' + (msg ? escapeHtml(msg) : 'Reactions are being sent to your channel post.') +
+                            '<br><span style="color:rgba(124,255,178,0.6);font-size:12px;">Count: ' + countSlider.value + ' · Emoji: ' + escapeHtml(selectedEmoji) + '</span>';
+                        successEl.classList.remove('hidden');
+                    } else {
+                        showError('❌ API Error: ' + (msg ? escapeHtml(msg) : 'Engine returned an unsuccessful response. The API key may be expired or the server is busy.'));
+                    }
+                } catch (e) {
+                    // Not JSON — treat as raw response
+                    if (res.ok) {
+                        ok = true;
+                        statusText.textContent = '✅ Engine response received!';
+                        const successEl = document.getElementById('reactSuccess');
+                        successEl.innerHTML = '✅ <b>Request sent!</b> The react engine processed your request.<br><span style="color:rgba(124,255,178,0.6);font-size:12px;">Count: ' + countSlider.value + ' · Emoji: ' + escapeHtml(selectedEmoji) + '</span>';
+                        successEl.classList.remove('hidden');
+                    } else {
+                        showError('❌ Server returned an error (HTTP ' + res.status + '). Please try again in a few seconds.');
+                    }
+                }
+            } catch (err) {
+                // CORS block or network failure — fall back to opening in a new tab
+                statusText.textContent = 'Opening API directly in a new tab…';
+                window.open(apiUrl, '_blank');
+                const successEl = document.getElementById('reactSuccess');
+                successEl.innerHTML = '🔗 <b>Request opened!</b> The API was opened in a new tab because the browser blocked direct access. Check that tab for the result.<br><span style="color:rgba(124,255,178,0.6);font-size:12px;">Count: ' + countSlider.value + ' · Emoji: ' + escapeHtml(selectedEmoji) + '</span>';
+                successEl.classList.remove('hidden');
+                ok = true;
+            }
+
+            if (ok) {
+                totalReactions += parseInt(countSlider.value, 10);
+                localStorage.setItem('zeta_reactions', String(totalReactions));
+                renderStat();
+            }
+
+            status.classList.add('hidden');
+            const openRow = document.getElementById('reactOpenRow');
+            document.getElementById('openApiBtn').href = apiUrl;
+            openRow.classList.remove('hidden');
+
+            btn.disabled = false;
+            label.textContent = '🚀 Launch React Engine';
+        }
+
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        // allow Enter key on the URL field to launch
+        document.getElementById('postUrl').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') launchReact();
+        });
+
+        // ===== Init Lucide Icons =====
+        lucide.createIcons();
+
+        // ===== Nav scroll effect =====
+        const nav = document.querySelector('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.style.borderBottomColor = 'rgba(0,163,255,0.1)';
+                nav.style.background = 'rgba(4,6,12,0.92)';
+            } else {
+                nav.style.borderBottomColor = 'rgba(0,163,255,0.06)';
+                nav.style.background = 'rgba(4,6,12,0.8)';
+            }
+        });
+    </script>
 </body>
 </html>
