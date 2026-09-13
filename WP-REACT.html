@@ -227,6 +227,19 @@ pre.raw-json {
 }
 .modal-overlay.hidden { opacity: 0; pointer-events: none; }
 .modal-card { max-width: 440px; width: 100%; }
+/* Desktop-only lock — no mobile layout, just a block screen */
+.mobile-block { display: none; }
+@media (max-width: 860px) {
+    nav, main, .modal-overlay, .mouse-glow, .cyber-grid, .hero-orb, .holo-circle { display: none !important; }
+    .mobile-block {
+        display: flex !important;
+        position: fixed; inset: 0; z-index: 500;
+        background: #04060C;
+        flex-direction: column; align-items: center; justify-content: center;
+        text-align: center; padding: 32px;
+    }
+}
+
 .modal-icon-ring {
     width: 52px; height: 52px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
@@ -238,6 +251,22 @@ pre.raw-json {
 </style>
 </head>
 <body>
+
+<!-- Desktop-only notice (shown on small screens instead of a responsive layout) -->
+<div class="mobile-block" id="mobileBlock">
+    <div class="modal-icon-ring" style="background:rgba(0,163,255,0.08);border-color:rgba(0,163,255,0.3);box-shadow:0 0 18px rgba(0,163,255,0.12);">
+        <i data-lucide="monitor-x" style="width:26px;height:26px;color:#00A3FF;"></i>
+    </div>
+    <h1 style="font-family:'Orbitron',sans-serif;font-weight:700;font-size:18px;letter-spacing:0.5px;color:#E0E8F0;margin-bottom:14px;">
+        Do Not Support
+    </h1>
+    <p style="font-size:14px;line-height:1.8;color:rgba(224,232,240,0.7);max-width:320px;margin-bottom:6px;">
+        මෙම Tool එක Mobile උපාංග සඳහා සහාය නොදක්වයි.
+    </p>
+    <p style="font-size:14px;line-height:1.8;color:rgba(224,232,240,0.7);max-width:320px;">
+        කරුණාකර Desktop හෝ Laptop browser එකකින් open කරන්න.
+    </p>
+</div>
 
 <div class="mouse-glow" id="mouseGlow"></div>
 <div class="cyber-grid"></div>
@@ -275,8 +304,9 @@ pre.raw-json {
 <nav class="fixed top-0 left-0 right-0 z-50" style="backdrop-filter:blur(18px);background:rgba(4,6,12,0.75);border-bottom:1px solid rgba(0,163,255,0.06);">
     <div class="max-w-3xl mx-auto px-5 sm:px-6">
         <div class="flex items-center justify-center gap-3 h-16">
-            <div style="width:34px;height:34px;background:linear-gradient(135deg,#00A3FF,#0066CC);border-radius:9px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 15px rgba(0,163,255,0.3);flex-shrink:0;">
-                <span style="font-family:'Orbitron',sans-serif;font-weight:900;font-size:15px;color:white;">Z</span>
+            <div style="width:34px;height:34px;border-radius:9px;overflow:hidden;box-shadow:0 0 15px rgba(0,163,255,0.3);flex-shrink:0;background:linear-gradient(135deg,#00A3FF,#0066CC);display:flex;align-items:center;justify-content:center;">
+                <img src="https://files.catbox.moe/vy8h5y.png" alt="Zeta Tools logo" referrerpolicy="no-referrer" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.nextElementSibling.style.display='inline';">
+                <span style="display:none;font-family:'Orbitron',sans-serif;font-weight:900;font-size:15px;color:white;">Z</span>
             </div>
             <span style="font-family:'Orbitron',sans-serif;font-weight:700;font-size:15px;letter-spacing:1.5px;">ZETA TOOLS</span>
             <span style="color:rgba(224,232,240,0.3);">/</span>
