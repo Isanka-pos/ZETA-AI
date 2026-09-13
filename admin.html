@@ -338,6 +338,46 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- ============ REAL BROADCAST (OneSignal) ============ -->
+                    <div class="glass-card p-5 mt-4">
+                        <div style="font-family:'Orbitron',sans-serif;font-size:13px;letter-spacing:1.5px;color:#00D4FF;margin-bottom:6px;">🚀 REAL BROADCAST — ALL VISITORS (OneSignal)</div>
+                        <p style="font-size:11.5px;color:rgba(224,232,240,0.45);margin-bottom:16px;line-height:1.7;">උඩින් තියෙන section එක local demo එකයි — ඔයාගේම browser එකේ විතරයි වැඩ කරන්නේ. "Allow" කරපු <b>සියලුම</b> visitors ලට (වෙන devices වලට වුනත්) real notification එකක් යවන්න OneSignal (free) connect කරගන්න ඕන.</p>
+
+                        <details style="margin-bottom:16px;">
+                            <summary style="cursor:pointer;font-size:12px;color:#00A3FF;font-weight:600;">📋 Setup කරන විදිහ (එක පාරයි) — click කරලා බලන්න</summary>
+                            <ol style="font-size:11.5px;color:rgba(224,232,240,0.55);line-height:2;margin-top:10px;padding-left:18px;">
+                                <li><a href="https://onesignal.com" target="_blank" style="color:#00D4FF;text-decoration:underline;">onesignal.com</a> එකේ free account එකක් හදන්න</li>
+                                <li>New App/Website → "Web Push" → ඔයාගේ site එකේ URL දාන්න → create කරන්න</li>
+                                <li>Settings → Keys & IDs පිටුවෙන් <b>OneSignal App ID</b> එක copy කරන්න → පහළ දාන්න</li>
+                                <li>ඒ පිටුවෙන්ම <b>REST API Key</b> එක copy කරන්න → පහළ දාන්න (මෙය admin.html එකේ මේ browser එකේ විතරයි save වෙන්නේ)</li>
+                                <li>Save Keys ඔබන්න — ඊට පස්සේ index.html එකේ head එකේ <code>ONESIGNAL_APP_ID</code> තැනට ඒම App ID එකම දාන්න (comment එකේ පෙන්නලා තියෙනවා)</li>
+                                <li>Message type කරලා "Send to ALL Subscribers" ඔබන්න — Allow කරපු ඔක්කොම කෙනෙක්ට notification එක යනවා</li>
+                            </ol>
+                        </details>
+
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <div class="mb-3"><label class="z-label">OneSignal App ID</label>
+                                    <input type="text" id="osAppId" class="z-input" placeholder="e.g. 8f2c1a3b-....."></div>
+                                <div class="mb-3"><label class="z-label">OneSignal REST API Key</label>
+                                    <input type="password" id="osApiKey" class="z-input" placeholder="paste REST API key එක"></div>
+                                <button class="neon-btn ghost w-full justify-center" onclick="saveOneSignalKeys()"><i class="fa-solid fa-key"></i> Save Keys</button>
+                                <p id="osKeyStatus" style="font-size:11px;color:rgba(224,232,240,0.4);margin-top:8px;"></p>
+                            </div>
+                            <div>
+                                <div class="mb-3"><label class="z-label">Broadcast Title</label>
+                                    <input type="text" id="osTitle" class="z-input" value="ZETA TOOLS"></div>
+                                <div class="mb-3"><label class="z-label">Broadcast Message</label>
+                                    <textarea id="osBody" class="z-input" placeholder="visitors ලට යවන්න ඕන message එක type කරන්න"></textarea></div>
+                                <button class="neon-btn w-full justify-center" onclick="osBroadcast()"><i class="fa-solid fa-tower-broadcast"></i> Send to ALL Subscribers</button>
+                                <p id="osSendStatus" style="font-size:11px;color:rgba(224,232,240,0.4);margin-top:8px;"></p>
+                            </div>
+                        </div>
+                        <div style="margin-top:14px;padding:10px 12px;border-radius:10px;background:rgba(0,163,255,0.06);border:1px solid rgba(0,163,255,0.18);font-size:11px;color:rgba(224,232,240,0.55);line-height:1.7;">
+                            ⚠️ REST API Key එක client-side JS එකෙන් call කරන නිසා, admin.html එක ඔයාට විතරක් access වෙන විදිහට (password gate එකෙන් වගේ) තියාගන්න — වෙන කාටවත් admin.html එකේ link එක share කරන්න එපා.
+                        </div>
+                    </div>
                 </section>
 
                 <!-- ============ SITE SETTINGS ============ -->
@@ -709,6 +749,66 @@
             toast('Reset කළා — ඊළඟට allow කරන/ඉන්න අයට welcome notification එක යනවා');
         };
 
+        // ===== REAL BROADCAST (OneSignal) =====
+        const K_ONESIGNAL = 'zeta_onesignal_cfg';
+        function getOneSignalCfg() {
+            return lsGet(K_ONESIGNAL, { appId: '', apiKey: '' });
+        }
+        function loadOneSignalUI() {
+            const cfg = getOneSignalCfg();
+            $('osAppId').value = cfg.appId || '';
+            $('osApiKey').value = cfg.apiKey || '';
+            $('osKeyStatus').textContent = cfg.appId && cfg.apiKey ? '✅ Keys saved (මේ browser එකේ විතරයි)' : '';
+        }
+        window.saveOneSignalKeys = function() {
+            const appId = $('osAppId').value.trim();
+            const apiKey = $('osApiKey').value.trim();
+            if (!appId || !apiKey) { toast('App ID සහ REST API Key දෙකම දාන්න ඕන', true); return; }
+            lsSet(K_ONESIGNAL, { appId, apiKey });
+            $('osKeyStatus').textContent = '✅ Keys save කළා (මේ browser එකේ විතරයි)';
+            logAction('OneSignal keys saved');
+            toast('OneSignal keys save කළා ✅');
+        };
+        window.osBroadcast = function() {
+            const cfg = getOneSignalCfg();
+            if (!cfg.appId || !cfg.apiKey) { toast('මුලින්ම OneSignal App ID + REST API Key දාලා "Save Keys" ඔබන්න', true); return; }
+            const title = $('osTitle').value.trim() || 'ZETA TOOLS';
+            const body = $('osBody').value.trim();
+            if (!body) { toast('Broadcast Message එක type කරන්න', true); return; }
+            $('osSendStatus').textContent = '⏳ Sending...';
+            fetch('https://onesignal.com/api/v1/notifications', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                    'Authorization': 'Basic ' + cfg.apiKey
+                },
+                body: JSON.stringify({
+                    app_id: cfg.appId,
+                    included_segments: ['Subscribed Users'],
+                    headings: { en: title },
+                    contents: { en: body },
+                    chrome_web_icon: 'https://files.catbox.moe/vy8h5y.png'
+                })
+            })
+            .then(function(r) { return r.json().then(function(data) { return { ok: r.ok, data: data }; }); })
+            .then(function(res) {
+                if (res.ok && res.data && res.data.id) {
+                    $('osSendStatus').textContent = '✅ Sent — recipients: ' + (res.data.recipients != null ? res.data.recipients : '?');
+                    logAction('OneSignal broadcast sent to ' + (res.data.recipients != null ? res.data.recipients : '?') + ' subscribers');
+                    toast('Broadcast යැව්වා ✅');
+                } else {
+                    const err = (res.data && res.data.errors) ? JSON.stringify(res.data.errors) : 'Unknown error';
+                    $('osSendStatus').textContent = '❌ Failed: ' + err;
+                    toast('Broadcast fail වුනා — keys check කරන්න', true);
+                }
+            })
+            .catch(function(e) {
+                $('osSendStatus').textContent = '❌ Network/CORS error — console එක check කරන්න';
+                toast('Send request එක fail වුනා', true);
+                console.error('OneSignal send failed:', e);
+            });
+        };
+
         // ===== SITE SETTINGS =====
         window.saveSiteSettings = function() {
             lsSet(K.site, {
@@ -906,6 +1006,7 @@
             loadApiKeys();
             loadPopupUI();
             loadNotifUI();
+            loadOneSignalUI();
             renderLog();
             loadPhotos();
         }

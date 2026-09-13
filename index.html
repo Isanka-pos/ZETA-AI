@@ -9,6 +9,8 @@
     <link rel="shortcut icon" type="image/png" href="https://files.catbox.moe/vy8h5y.png">
     <link rel="apple-touch-icon" href="https://files.catbox.moe/vy8h5y.png">
     <meta name="theme-color" content="#03050C">
+    <!-- ===== ONESIGNAL PUSH (real, all-devices) SDK — set your App ID below ===== -->
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..900&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -2501,68 +2503,45 @@
         })();
 
     <!-- ============================================================
-    NOTIFICATION PERMISSION — asks on site load (admin-controlled)
-    Config from admin panel: localStorage key "zeta_notif_cfg"
+    ONESIGNAL PUSH — real notification permission + subscription.
+    Once a visitor clicks "Allow", they get added to your OneSignal
+    dashboard and admin.html's "Send to ALL Subscribers" can reach
+    them on ANY device, even when this tab is closed.
+
+    SETUP (one time):
+      1. Create a free app at https://onesignal.com (choose "Web Push")
+      2. Copy the "OneSignal App ID" from Settings → Keys & IDs
+      3. Paste it below, replacing  ONESIGNAL_APP_ID_HERE
+      4. Site must be served over HTTPS for push to work
     ============================================================ -->
     <script>
-        (function() {
-            var CFG_KEY = 'zeta_notif_cfg';
-            var WELCOMED_KEY = 'zeta_notif_welcomed';
+        var ONESIGNAL_APP_ID = "ONESIGNAL_APP_ID_HERE"; // <-- paste your OneSignal App ID here
 
-            function getCfg() {
-                try { return JSON.parse(localStorage.getItem(CFG_KEY)) || null; }
-                catch (e) { return null; }
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
+        OneSignalDeferred.push(async function(OneSignal) {
+            if (!ONESIGNAL_APP_ID || ONESIGNAL_APP_ID === "ONESIGNAL_APP_ID_HERE") {
+                console.warn('⚠️ OneSignal App ID not set yet — edit index.html and paste your App ID.');
+                return;
             }
+            try {
+                await OneSignal.init({
+                    appId: ONESIGNAL_APP_ID,
+                    notifyButton: { enable: false }, // we trigger the native prompt ourselves, not the bell widget
+                    allowLocalhostAsSecureOrigin: true
+                });
 
-            function showNotif(cfg) {
-                try {
-                    var n = new Notification(cfg.title || 'ZETA TOOLS', {
-                        body: cfg.body || '',
-                        icon: 'https://files.catbox.moe/vy8h5y.png'
-                    });
-                    n.onclick = function() { window.focus(); n.close(); };
-                } catch (e) { console.warn('Notification show failed:', e); }
-            }
-
-            function askPermission(cfg) {
-                // small delay — let the page paint first, like the HASHU CHAT login gate
-                setTimeout(function() {
+                // small delay so the page paints first, then ask for permission
+                setTimeout(async function() {
                     try {
-                        var p = Notification.requestPermission();
-                        if (p && typeof p.then === 'function') {
-                            p.then(function(res) {
-                                if (res === 'granted') {
-                                    localStorage.setItem(WELCOMED_KEY, '1');
-                                    showNotif(cfg);
-                                }
-                            });
-                        } else if (p === 'granted') {
-                            localStorage.setItem(WELCOMED_KEY, '1');
-                            showNotif(cfg);
+                        if (!OneSignal.Notifications.permission) {
+                            await OneSignal.Notifications.requestPermission();
                         }
-                    } catch (e) { console.warn('requestPermission failed:', e); }
+                    } catch (e) { console.warn('OneSignal permission request failed:', e); }
                 }, 800);
-            }
+            } catch (e) { console.warn('OneSignal init failed:', e); }
+        });
 
-            window.addEventListener('load', function() {
-                var cfg = getCfg();
-                if (!cfg || !cfg.enabled) return;
-                if (!("Notification" in window)) return;   // browser not supported
-                if (Notification.permission === 'granted') {
-                    // already allowed — show the welcome notification once per admin reset
-                    if (!localStorage.getItem(WELCOMED_KEY)) {
-                        localStorage.setItem(WELCOMED_KEY, '1');
-                        showNotif(cfg);
-                    }
-                    return;
-                }
-                if (Notification.permission === 'denied') return; // browser blocked — can't re-ask
-                // not decided yet → show the "wants to send you notifications" prompt
-                askPermission(cfg);
-            });
-
-            console.log('🔔 Notification prompt module loaded (admin-controlled)');
-        })();
+        console.log('🔔 OneSignal push module loaded');
     </script>
 
 </body>
