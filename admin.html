@@ -158,6 +158,7 @@
         }
     </style>
 <base target="_blank">
+<base target="_blank">
 </head>
 <body>
 
@@ -303,6 +304,38 @@
                             </div>
                             <button class="neon-btn ghost w-full justify-center mt-4" onclick="forceShowPopup()"><i class="fa-solid fa-bullhorn"></i> Force Show Popup on Site</button>
                             <button class="neon-btn danger w-full justify-center mt-2" onclick="hidePopupForAll()"><i class="fa-solid fa-eye-slash"></i> Hide Popup (mark as seen)</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============ NOTIFICATION MANAGER ============ -->
+                <section id="page-notifications" class="tab-page">
+                    <h2 style="font-family:'Orbitron',sans-serif;font-size:22px;font-weight:800;letter-spacing:1px;margin-bottom:4px;">NOTIFICATIONS</h2>
+                    <p style="font-size:12.5px;color:rgba(224,232,240,0.45);margin-bottom:22px;">Site එක load වෙද්දිම visitors ලට "wants to send you notifications" popup එක එන විදිහට හදන්න — Allow කරපු අයට ඔයාගේ message එක notification විදිහට යනවා</p>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="glass-card p-5">
+                            <div class="mb-4"><label class="z-label">Notification Prompt on Site Load</label>
+                                <div class="flex items-center gap-3">
+                                    <label class="switch"><input type="checkbox" id="notifEnabled"><span class="slider"></span></label>
+                                    <span id="notifStateTxt" style="font-size:12px;color:rgba(224,232,240,0.6);">Disabled</span>
+                                </div>
+                                <p style="font-size:11px;color:rgba(224,232,240,0.4);margin-top:8px;line-height:1.6;">ON කළාම site එක open වෙද්දිම visit කරන අයගෙන් notification permission එක ඉල්ලනවා. (HTTPS site එකක් වෙන්න ඕන)</p>
+                            </div>
+                            <div class="mb-4"><label class="z-label">Notification Title</label>
+                                <input type="text" id="notifTitle" class="z-input" value="ZETA TOOLS"></div>
+                            <div class="mb-4"><label class="z-label">Notification Message</label>
+                                <textarea id="notifBody" class="z-input">ඔයා ZETA TOOLS notifications allow කළා ✅ අලුත් updates ඉක්මනින් දැනගන්න.</textarea></div>
+                            <button class="neon-btn" onclick="saveNotifSettings()"><i class="fa-solid fa-floppy-disk"></i> Save Settings</button>
+                        </div>
+                        <div class="glass-card p-5">
+                            <div style="font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:1.5px;color:#00D4FF;margin-bottom:14px;">🧪 TEST &amp; CONTROL</div>
+                            <button class="neon-btn w-full justify-center mb-2" onclick="notifAllowNow()"><i class="fa-regular fa-bell"></i> Allow Now (මේ device එකෙන්)</button>
+                            <button class="neon-btn ghost w-full justify-center mb-2" onclick="notifSendTest()"><i class="fa-solid fa-paper-plane"></i> Send Test Notification</button>
+                            <button class="neon-btn ghost w-full justify-center mb-2" onclick="notifPreviewCfg()"><i class="fa-solid fa-eye"></i> Preview Saved Settings</button>
+                            <button class="neon-btn danger w-full justify-center" onclick="notifResetFlags()"><i class="fa-solid fa-rotate"></i> Reset — ආයේ welcome notification එකක්</button>
+                            <div style="margin-top:14px;padding:10px 12px;border-radius:10px;background:rgba(245,166,35,0.06);border:1px solid rgba(245,166,35,0.18);font-size:11px;color:rgba(224,232,240,0.55);line-height:1.7;">
+                                ⚠️ Browser rule: visitor "Block" ඔබ්බුවොත් browser එක ආයෙ permission ඉල්ලන්නෙ නෑ. එහෙම වුනොත් visitor ලට site settings වලින් reset කරන්න කියන්න ඕන.
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -493,6 +526,7 @@
             { id: 'dashboard', icon: 'fa-gauge-high', label: 'Dashboard' },
             { id: 'photos', icon: 'fa-images', label: 'Photo Links' },
             { id: 'popup', icon: 'fa-bell', label: 'Popup Manager' },
+            { id: 'notifications', icon: 'fa-regular fa-bell', label: 'Notifications' },
             { id: 'settings', icon: 'fa-gear', label: 'Site Settings' },
             { id: 'tools', icon: 'fa-screwdriver-wrench', label: 'Tools Manager' },
             { id: 'users', icon: 'fa-users', label: 'Users' },
@@ -602,6 +636,77 @@
             localStorage.setItem('zeta_updates_seen_v' + (cfg.version || 2), 'true');
             logAction('Popup marked as seen (hidden)');
             toast('Popup එක hide කළා ✅');
+        };
+
+        // ===== NOTIFICATION MANAGER =====
+        const K_NOTIF = 'zeta_notif_cfg';
+        const K_NOTIF_WELCOMED = 'zeta_notif_welcomed';
+        function getNotifCfg() {
+            return lsGet(K_NOTIF, { enabled: false, title: 'ZETA TOOLS', body: 'ඔයා ZETA TOOLS notifications allow කළා \u2705 අලුත් updates ඉක්මනින් දැනගන්න.' });
+        }
+        function loadNotifUI() {
+            const cfg = getNotifCfg();
+            $('notifEnabled').checked = cfg.enabled;
+            $('notifTitle').value = cfg.title || '';
+            $('notifBody').value = cfg.body || '';
+            $('notifStateTxt').textContent = cfg.enabled ? 'Enabled' : 'Disabled';
+        }
+        $('notifEnabled').addEventListener('change', function() {
+            $('notifStateTxt').textContent = this.checked ? 'Enabled' : 'Disabled';
+        });
+        function notifShow(title, body) {
+            try {
+                const n = new Notification(title || 'ZETA TOOLS', {
+                    body: body || '',
+                    icon: 'https://files.catbox.moe/vy8h5y.png'
+                });
+                n.onclick = function() { window.focus(); n.close(); };
+            } catch (e) { toast('Notification එක පෙන්නන්න බැරි වුනා', true); }
+        }
+        window.saveNotifSettings = function() {
+            lsSet(K_NOTIF, {
+                enabled: $('notifEnabled').checked,
+                title: $('notifTitle').value,
+                body: $('notifBody').value
+            });
+            logAction('Notification settings saved (prompt ' + ($('notifEnabled').checked ? 'ON' : 'OFF') + ')');
+            toast('Notification settings saved ✅');
+        };
+        window.notifAllowNow = function() {
+            if (!("Notification" in window)) { toast('Browser එක notifications support කරන්නෙ නෑ', true); return; }
+            try {
+                const p = Notification.requestPermission();
+                const onRes = function(res) {
+                    if (res === 'granted') {
+                        toast('Permission allow කළා ✅');
+                        notifShow($('notifTitle').value, $('notifBody').value);
+                    } else if (res === 'denied') {
+                        toast('Browser එකෙන් block කළා — address bar එකේ lock icon එකෙන් reset කරන්න', true);
+                    }
+                };
+                if (p && typeof p.then === 'function') p.then(onRes); else onRes(p);
+            } catch (e) { toast('Permission ඉල්ලන්න බැරි වුනා', true); }
+        };
+        window.notifSendTest = function() {
+            if (!("Notification" in window)) { toast('Browser එක notifications support කරන්නෙ නෑ', true); return; }
+            if (Notification.permission !== 'granted') { toast('Permission එක තාම allow කරලා නෑ — "Allow Now" ඔබන්න', true); return; }
+            const cfg = getNotifCfg();
+            notifShow($('notifTitle').value || cfg.title, $('notifBody').value || cfg.body);
+            logAction('Test notification sent');
+            toast('Test notification යව්වා ✅');
+        };
+        window.notifPreviewCfg = function() {
+            const cfg = getNotifCfg();
+            $('notifEnabled').checked = cfg.enabled;
+            $('notifTitle').value = cfg.title || '';
+            $('notifBody').value = cfg.body || '';
+            $('notifStateTxt').textContent = cfg.enabled ? 'Enabled' : 'Disabled';
+            toast('Saved settings load කළා — බලන්න');
+        };
+        window.notifResetFlags = function() {
+            localStorage.removeItem(K_NOTIF_WELCOMED);
+            logAction('Notification welcomed-flag reset (visitors get welcome notification again)');
+            toast('Reset කළා — ඊළඟට allow කරන/ඉන්න අයට welcome notification එක යනවා');
         };
 
         // ===== SITE SETTINGS =====
@@ -800,6 +905,7 @@
             renderUsers();
             loadApiKeys();
             loadPopupUI();
+            loadNotifUI();
             renderLog();
             loadPhotos();
         }
