@@ -1,6 +1,5 @@
-/* ============================================================
-   ZETA CHAT — Backend + Static Server (MongoDB)
-   ============================================================ */
+
+/* ZETA CHAT — Backend (MongoDB) */
 const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
@@ -15,16 +14,12 @@ app.use(cors({ origin: '*' }));
 app.use(express.json({ limit: '20mb' }));
 app.use(express.static(__dirname));
 
-/* =============== MongoDB =============== */
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/zetachat';
 mongoose.connect(MONGO_URI)
   .then(() => console.log('✅ MongoDB connected'))
-  .catch(err => {
-    console.error('❌ MongoDB error:', err.message);
-    console.error('   → MongoDB service run වෙනවද?');
-  });
+  .catch(err => console.error('❌ MongoDB error:', err.message));
 
-/* =============== Schemas =============== */
+/* ============ SCHEMAS ============ */
 const UserSchema = new mongoose.Schema({
   name: { type: String, required: true },
   username: { type: String, required: true, unique: true, lowercase: true, index: true },
@@ -33,6 +28,7 @@ const UserSchema = new mongoose.Schema({
   avatar: { type: String, default: null },
   color: { type: String, default: '#00A3FF' },
   about: { type: String, default: 'Hey there! I am using ZETA CHAT.' },
+  lastSeen: { type: Date, default: Date.now },
   sessions: [{ sessionId: String, device: String, browser: String, time: Date, current: Boolean }],
   loginHistory: [{ time: Date, device: String, browser: String, success: Boolean, reason: String }],
   createdAt: { type: Date, default: Date.now }
@@ -68,7 +64,12 @@ const CallSchema = new mongoose.Schema({
 });
 
 const StatusSchema = new mongoose.Schema({
-  userId: String, text: String, time: { type: Date, default: Date.now }
+  userId: String,
+  type: { type: String, default: 'text' },
+  text: { type: String, default: '' },
+  media: { type: String, default: null },
+  color: { type: String, default: '#00A3FF' },
+  time: { type: Date, default: Date.now }
 });
 
 const User = mongoose.model('User', UserSchema);
@@ -79,7 +80,7 @@ const Status = mongoose.model('Status', StatusSchema);
 
 const JWT_SECRET = process.env.JWT_SECRET || 'zeta_default_secret';
 
-/* =============== Helpers =============== */
+/* ============ HELPERS ============ */
 function sanitize(u){
   const o = u.toObject ? u.toObject() : { ...u };
   delete o.password;
@@ -92,12 +93,12 @@ function auth(req, res, next){
   catch (e) { res.status(401).json({ error: 'Invalid token' }); }
 }
 
-/* =============== Health =============== */
+/* ============ HEALTH ============ */
 app.get('/api/health', (req, res) => {
   res.json({ ok: true, db: mongoose.connection.readyState === 1 });
 });
 
-/* =============== AUTH =============== */
+/* ============ AUTH ============ */
 app.post('/api/register', async (req, res) => {
   try {
     const { name, username, email, password, avatar, color } = req.body;
@@ -118,11 +119,11 @@ app.post('/api/register', async (req, res) => {
       email: email.toLowerCase().trim(),
       password: hashed,
       avatar: avatar || null,
-      color: color || '#00A3FF'
+      color: color || '#00A3FF',
+      lastSeen: new Date()
     });
     res.json({ success: true, userId: user._id });
   } catch (e) {
-    console.error('Register:', e);
     res.status(500).json({ error: e.message });
   }
 });
@@ -154,6 +155,7 @@ app.post('/api/login', async (req, res) => {
     }
     user.loginHistory.unshift({ time: new Date(), device, browser, success: true });
     user.loginHistory = user.loginHistory.slice(0, 30);
+    user.lastSeen = new Date();
     await user.save();
 
     const token = jwt.sign(
@@ -163,7 +165,6 @@ app.post('/api/login', async (req, res) => {
     );
     res.json({ success: true, token, sessionId, user: sanitize(user) });
   } catch (e) {
-    console.error('Login:', e);
     res.status(500).json({ error: e.message });
   }
 });
@@ -174,7 +175,25 @@ app.get('/api/me', auth, async (req, res) => {
     if (!user) return res.status(404).json({ error: 'User not found' });
     const session = user.sessions.find(s => s.sessionId === req.user.sessionId);
     if (!session) return res.status(401).json({ error: 'Session expired' });
+    user.lastSeen = new Date();
+    await user.save();
     res.json({ user: sanitize(user), sessionId: req.user.sessionId });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/heartbeat', auth, async (req, res) => {
+  try {
+    await User.findByIdAndUpdate(req.user.userId, { lastSeen: new Date() });
+    res.json({ ok: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/offline', auth, async (req, res) => {
+  try {
+    // Set lastSeen to 2 minutes ago → makes user appear offline
+    const past = new Date(Date.now() - 120000);
+    await User.findByIdAndUpdate(req.user.userId, { lastSeen: past });
+    res.json({ ok: true });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
@@ -183,6 +202,7 @@ app.post('/api/logout', auth, async (req, res) => {
     const user = await User.findById(req.user.userId);
     if (user) {
       user.sessions = user.sessions.filter(s => s.sessionId !== req.user.sessionId);
+      user.lastSeen = new Date(Date.now() - 120000);
       await user.save();
     }
     res.json({ success: true });
@@ -192,7 +212,11 @@ app.post('/api/logout', auth, async (req, res) => {
 app.post('/api/logout-all', auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.userId);
-    if (user) { user.sessions = []; await user.save(); }
+    if (user) {
+      user.sessions = [];
+      user.lastSeen = new Date(Date.now() - 120000);
+      await user.save();
+    }
     res.json({ success: true });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
@@ -240,7 +264,7 @@ app.post('/api/forgot-password', async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-/* =============== Users =============== */
+/* ============ USERS ============ */
 app.get('/api/users', auth, async (req, res) => {
   try {
     const users = await User.find({ _id: { $ne: req.user.userId } }).select('-password');
@@ -248,7 +272,7 @@ app.get('/api/users', auth, async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-/* =============== Messages =============== */
+/* ============ MESSAGES ============ */
 app.get('/api/messages/:contactId', auth, async (req, res) => {
   try {
     const key = [req.user.userId, req.params.contactId].sort().join('|');
@@ -263,8 +287,7 @@ app.post('/api/messages', auth, async (req, res) => {
     const key = [req.user.userId, to].sort().join('|');
     const message = await Message.create({
       threadKey: key,
-      from: req.user.userId,
-      to,
+      from: req.user.userId, to,
       type: type || 'text',
       text: text || '',
       media: media || null,
@@ -293,7 +316,7 @@ app.delete('/api/messages/thread/:contactId', auth, async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-/* =============== Meta =============== */
+/* ============ META ============ */
 app.get('/api/meta', auth, async (req, res) => {
   try {
     const metas = await Meta.find({ userId: req.user.userId });
@@ -324,7 +347,7 @@ app.put('/api/meta/:contactId', auth, async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-/* =============== Calls =============== */
+/* ============ CALLS ============ */
 app.get('/api/calls', auth, async (req, res) => {
   try {
     const calls = await Call.find({ userId: req.user.userId }).sort({ time: -1 }).limit(120);
@@ -339,7 +362,7 @@ app.post('/api/calls', auth, async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-/* =============== Status =============== */
+/* ============ STATUS ============ */
 app.get('/api/status', auth, async (req, res) => {
   try {
     const statuses = await Status.find().sort({ time: -1 }).limit(50);
@@ -349,24 +372,29 @@ app.get('/api/status', auth, async (req, res) => {
 
 app.post('/api/status', auth, async (req, res) => {
   try {
+    const { type, text, media, color } = req.body;
+    // Remove old statuses from same user
+    await Status.deleteMany({ userId: req.user.userId });
     const status = await Status.create({
       userId: req.user.userId,
-      text: req.body.text,
+      type: type || 'text',
+      text: text || '',
+      media: media || null,
+      color: color || '#00A3FF',
       time: new Date()
     });
     res.json({ success: true, status });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-/* =============== SPA fallback =============== */
+/* ============ SPA FALLBACK ============ */
 app.get('*', (req, res) => {
   if (req.path.startsWith('/api/')) return res.status(404).json({ error: 'Not found' });
-  const indexPath = path.join(__dirname, 'index.html');
-  if (fs.existsSync(indexPath)) res.sendFile(indexPath);
+  const p = path.join(__dirname, 'index.html');
+  if (fs.existsSync(p)) res.sendFile(p);
   else res.status(404).send('index.html not found');
 });
 
-/* =============== Start =============== */
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log('');
