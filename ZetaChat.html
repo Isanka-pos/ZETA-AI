@@ -1,519 +1,2468 @@
-    <!DOCTYPE html>
+
+<!DOCTYPE html>
 <html lang="si">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ZETA CHAT | Login</title>
-<meta name="description" content="ZETA CHAT - Secure messaging">
-<script src="https://cdn.tailwindcss.com"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#04060C">
+<title>ZETA CHAT</title>
 <script src="https://unpkg.com/lucide@latest"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<script>
-tailwind.config = { theme: { extend: { colors: { zeta: { bg:'#04060C', surface:'#0A0E1A', card:'#0D1120', border:'#1A2035', blue:'#00A3FF', cyan:'#00D4FF' } }, fontFamily: { orbitron:['Orbitron','sans-serif'], inter:['Inter','sans-serif'] } } } }
-</script>
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior:smooth; }
-body { font-family:'Inter',sans-serif; background:#04060C; color:#E0E8F0; overflow-x:hidden; }
-::-webkit-scrollbar { width:6px; height:6px; }
-::-webkit-scrollbar-track { background:#04060C; }
-::-webkit-scrollbar-thumb { background:#00A3FF33; border-radius:3px; }
-::-webkit-scrollbar-thumb:hover { background:#00A3FF66; }
+:root{
+  --bg:#04060C;--surface:#0A0E1A;--card:#0D1120;--line:rgba(0,163,255,.12);
+  --blue:#00A3FF;--cyan:#00D4FF;--green:#22C55E;--red:#FF5B5B;
+  --text:#E0E8F0;--muted:rgba(224,232,240,.45);--muted2:rgba(224,232,240,.25);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:#020306;color:var(--text);overflow:hidden;overscroll-behavior:none;}
+input,button,textarea,select{font-family:inherit;font-size:16px;}
+button{border:none;background:none;color:inherit;cursor:pointer;}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(0,163,255,.25);border-radius:3px;}
 
-.cyber-grid { position:fixed; top:0; left:0; width:100%; height:100%; background-image:linear-gradient(rgba(0,163,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,163,255,0.03) 1px,transparent 1px); background-size:60px 60px; z-index:0; }
-
-.glass-card { background:linear-gradient(135deg,rgba(13,17,32,0.96),rgba(10,14,26,0.94)); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border:1px solid rgba(0,163,255,0.12); border-radius:20px; position:relative; overflow:hidden; }
-.glass-card::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(0,163,255,0.4),transparent); }
-@media (max-width:768px), (pointer:coarse) { .glass-card { backdrop-filter:none !important; -webkit-backdrop-filter:none !important; } }
-
-.neon-btn { display:inline-flex; align-items:center; justify-content:center; gap:10px; padding:14px 32px; background:linear-gradient(135deg,#00A3FF,#0066CC); color:#fff; font-weight:600; border-radius:12px; border:none; cursor:pointer; font-size:15px; font-family:'Inter',sans-serif; transition:all 0.3s ease; box-shadow:0 0 15px rgba(0,163,255,0.3); text-decoration:none; width:100%; }
-.neon-btn:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 0 25px rgba(0,163,255,0.5); }
-.neon-btn:disabled { opacity:0.6; cursor:not-allowed; }
-
-.neon-input { background:rgba(13,17,32,0.7); border:1px solid rgba(0,163,255,0.15); border-radius:12px; padding:14px 18px; color:#E0E8F0; font-size:15px; width:100%; transition:all 0.3s; outline:none; }
-.neon-input:focus { border-color:#00A3FF; box-shadow:0 0 18px rgba(0,163,255,0.12); }
-.neon-input::placeholder { color:rgba(224,232,240,0.3); }
-
-.field-label { display:block; font-size:13px; font-weight:600; color:rgba(224,232,240,0.6); margin-bottom:8px; letter-spacing:0.3px; }
-
-.error-box { display:none; background:rgba(255,68,68,0.08); border:1px solid rgba(255,68,68,0.3); border-radius:10px; padding:12px 16px; font-size:14px; color:#FF6B6B; }
-.error-box.show { display:block; animation:shake 0.4s ease; }
-@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
-
-.success-box { display:none; background:rgba(0,255,150,0.06); border:1px solid rgba(0,255,150,0.25); border-radius:10px; padding:12px 16px; font-size:14px; color:#4ADE80; }
-.success-box.show { display:block; }
-
-.auth-tab { flex:1; padding:12px; text-align:center; cursor:pointer; font-weight:600; font-size:14px; border-radius:10px; color:rgba(224,232,240,0.4); transition:all 0.3s; user-select:none; }
-.auth-tab.active { background:rgba(0,163,255,0.12); color:#00D4FF; box-shadow:inset 0 0 0 1px rgba(0,163,255,0.3); }
-
-/* ===== CHAT APP ===== */
-#app { display:none; height:100vh; height:100dvh; }
-#app.active { display:flex; }
-
-.sidebar { width:340px; min-width:280px; height:100%; display:flex; flex-direction:column; border-right:1px solid rgba(0,163,255,0.08); background:rgba(8,11,20,0.9); z-index:10; }
-@media (max-width:820px) {
-  .sidebar { position:fixed; left:0; top:0; bottom:0; transform:translateX(-100%); transition:transform 0.3s ease; }
-  .sidebar.open { transform:translateX(0); }
+.device{position:relative;width:100%;max-width:480px;margin:0 auto;height:100vh;height:100dvh;background:var(--bg);overflow:hidden;}
+@media(min-width:520px){
+  body{display:flex;align-items:center;justify-content:center;}
+  .device{height:min(900px,96dvh);border-radius:28px;border:1px solid rgba(0,163,255,.18);box-shadow:0 30px 80px rgba(0,0,0,.85);}
 }
 
-.chat-area { flex:1; height:100%; display:flex; flex-direction:column; position:relative; background:radial-gradient(ellipse at 30% 20%, rgba(0,163,255,0.04), transparent 60%), #06080F; }
-.chat-bg-pattern { position:absolute; inset:0; background-image:radial-gradient(rgba(0,163,255,0.05) 1px, transparent 1px); background-size:28px 28px; pointer-events:none; }
+.screen{position:absolute;inset:0;display:none;flex-direction:column;background:var(--bg);z-index:5;}
+.screen.active{display:flex;animation:slideIn .22s ease;}
+@keyframes slideIn{from{transform:translateX(10%);opacity:.3;}to{transform:none;opacity:1;}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
 
-.contact-item { display:flex; align-items:center; gap:12px; padding:12px 16px; cursor:pointer; transition:background 0.2s; border-bottom:1px solid rgba(0,163,255,0.04); }
-.contact-item:hover { background:rgba(0,163,255,0.05); }
-.contact-item.active { background:rgba(0,163,255,0.1); border-left:3px solid #00A3FF; }
+/* ===== AUTH ===== */
+.auth-wrap{
+  position:absolute;inset:0;z-index:20;overflow-y:auto;
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  background:radial-gradient(ellipse at 20% 0%,rgba(0,163,255,.10),transparent 55%),
+             radial-gradient(ellipse at 90% 100%,rgba(0,80,255,.08),transparent 55%),var(--bg);
+}
+.cyber-grid{position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(0,163,255,.035) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(0,163,255,.035) 1px,transparent 1px);
+  background-size:56px 56px;}
+.glass-card{width:100%;max-width:420px;padding:30px 24px;position:relative;
+  background:linear-gradient(135deg,rgba(13,17,32,.97),rgba(10,14,26,.95));
+  border:1px solid rgba(0,163,255,.14);border-radius:22px;
+  box-shadow:0 20px 60px rgba(0,0,0,.6);}
+.glass-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(0,163,255,.5),transparent);}
+.brand-logo{width:58px;height:58px;margin:0 auto 12px;border-radius:16px;
+  background:linear-gradient(135deg,#00A3FF,#0066CC);display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 26px rgba(0,163,255,.45);}
+.brand-logo svg{width:29px;height:29px;color:#fff;}
+.brand-title{font-family:'Orbitron',sans-serif;font-size:20px;font-weight:800;letter-spacing:1.5px;text-align:center;}
+.brand-title span{color:var(--cyan);}
+.brand-sub{font-size:12px;color:var(--muted);text-align:center;margin-top:6px;}
 
-.avatar { width:46px; height:46px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:16px; color:#fff; flex-shrink:0; position:relative; }
-.avatar .online-dot { position:absolute; bottom:1px; right:1px; width:12px; height:12px; border-radius:50%; background:#22C55E; border:2px solid #0A0E1A; display:none; }
-.avatar.online .online-dot { display:block; }
+.auth-tabs{display:flex;gap:6px;background:rgba(13,17,32,.7);padding:5px;border-radius:14px;margin:20px 0 18px;border:1px solid rgba(0,163,255,.08);}
+.auth-tab{flex:1;padding:10px;text-align:center;font-weight:600;font-size:13px;border-radius:10px;color:var(--muted);transition:.25s;user-select:none;}
+.auth-tab.active{background:rgba(0,163,255,.14);color:var(--cyan);box-shadow:inset 0 0 0 1px rgba(0,163,255,.35);}
 
-.msg-row { display:flex; margin-bottom:8px; animation:msgIn 0.25s ease; }
-@keyframes msgIn { from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:translateY(0)} }
-.msg-bubble { max-width:70%; padding:10px 14px; border-radius:14px; font-size:14.5px; line-height:1.5; word-wrap:break-word; position:relative; }
-.msg-row.sent { justify-content:flex-end; }
-.msg-row.sent .msg-bubble { background:linear-gradient(135deg,#0077C8,#005A99); color:#fff; border-bottom-right-radius:4px; box-shadow:0 2px 8px rgba(0,163,255,0.15); }
-.msg-row.received .msg-bubble { background:rgba(19,25,42,0.95); border:1px solid rgba(0,163,255,0.1); border-bottom-left-radius:4px; }
-.msg-time { font-size:10.5px; opacity:0.55; margin-top:4px; text-align:right; }
+.field-label{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--muted);margin-bottom:7px;}
+.field-label svg{width:13px;height:13px;}
+.form-group{margin-bottom:14px;}
+.pass-wrap{position:relative;}
+.pass-wrap .neon-input{padding-right:44px;}
+.pass-toggle{
+  position:absolute;right:6px;top:50%;transform:translateY(-50%);
+  width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  color:var(--muted);transition:.2s;
+}
+.pass-toggle:active{background:rgba(0,163,255,.14);color:var(--cyan);}
+.pass-toggle svg{width:17px;height:17px;}
 
-.msg-input-wrap { display:flex; gap:10px; padding:14px 16px; background:rgba(8,11,20,0.95); border-top:1px solid rgba(0,163,255,0.08); }
-.msg-input { flex:1; background:rgba(13,17,32,0.8); border:1px solid rgba(0,163,255,0.15); border-radius:24px; padding:13px 20px; color:#E0E8F0; font-size:15px; outline:none; transition:border 0.3s; }
-.msg-input:focus { border-color:#00A3FF; }
-.send-btn { width:48px; height:48px; min-width:48px; border-radius:50%; border:none; background:linear-gradient(135deg,#00A3FF,#0066CC); color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 0 15px rgba(0,163,255,0.3); transition:transform 0.2s; }
-.send-btn:hover { transform:scale(1.08); }
-.send-btn:active { transform:scale(0.95); }
+.neon-input{width:100%;background:rgba(13,17,32,.75);border:1px solid rgba(0,163,255,.16);
+  border-radius:12px;padding:12px 15px;color:var(--text);font-size:15.5px;transition:.25s;outline:none;}
+.neon-input:focus{border-color:var(--blue);box-shadow:0 0 18px rgba(0,163,255,.15);}
+.neon-input::placeholder{color:rgba(224,232,240,.25);}
+.neon-input:disabled{opacity:.55;}
+textarea.neon-input{resize:none;font-family:inherit;}
 
-.empty-chat { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; color:rgba(224,232,240,0.3); }
-.typing-indicator { font-size:12px; color:#00D4FF; padding:4px 14px; font-style:italic; }
+.neon-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:9px;
+  padding:13px;border-radius:12px;font-weight:600;font-size:15px;color:#fff;
+  background:linear-gradient(135deg,#00A3FF,#0066CC);box-shadow:0 0 18px rgba(0,163,255,.3);
+  transition:.25s;}
+.neon-btn:active{transform:scale(.98);}
+.neon-btn:disabled{opacity:.6;cursor:not-allowed;}
+.neon-btn svg{width:18px;height:18px;}
+.neon-btn.ghost{background:rgba(0,163,255,.1);border:1px solid rgba(0,163,255,.3);box-shadow:none;color:var(--cyan);}
 
-#toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(100px); background:rgba(13,17,32,0.97); border:1px solid rgba(0,163,255,0.3); color:#E0E8F0; padding:12px 24px; border-radius:12px; font-size:14px; z-index:9999; transition:transform 0.35s cubic-bezier(0.16,1,0.3,1); box-shadow:0 8px 30px rgba(0,0,0,0.5); }
-#toast.show { transform:translateX(-50%) translateY(0); }
+.checkbox-row{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--muted);cursor:pointer;user-select:none;}
+.checkbox-row input{width:17px;height:17px;accent-color:var(--blue);cursor:pointer;}
 
-.hamburger { display:none; }
-@media (max-width:820px) { .hamburger { display:flex !important; } }
+.link-text{color:var(--cyan);font-weight:600;cursor:pointer;text-decoration:none;font-size:13.5px;}
+.link-text:active{opacity:.7;}
+
+.auth-footer{text-align:center;font-size:13.5px;color:var(--muted);margin-top:16px;}
+.auth-footer .link-text{margin-left:4px;}
+
+.alert{display:none;border-radius:11px;padding:11px 14px;font-size:13.5px;margin-bottom:12px;line-height:1.5;}
+.alert.show{display:block;}
+.alert-error{background:rgba(255,68,68,.09);border:1px solid rgba(255,68,68,.32);color:#FF7B7B;animation:shake .4s;}
+.alert-success{background:rgba(0,255,150,.07);border:1px solid rgba(0,255,150,.28);color:#4ADE80;}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.spinner{animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* profile picture picker */
+.pfp-picker{display:flex;flex-direction:column;align-items:center;gap:9px;margin-bottom:18px;}
+.pfp-circle{
+  width:88px;height:88px;border-radius:50%;overflow:hidden;position:relative;
+  background:linear-gradient(135deg,#00A3FF,#0066FF);
+  display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:700;color:#fff;
+  border:2px solid rgba(0,163,255,.4);cursor:pointer;transition:.25s;
+}
+.pfp-circle:active{transform:scale(.96);}
+.pfp-circle img{width:100%;height:100%;object-fit:cover;}
+.pfp-circle .pfp-plus{
+  position:absolute;bottom:0;right:0;width:28px;height:28px;border-radius:50%;
+  background:linear-gradient(135deg,#00A3FF,#0066CC);display:flex;align-items:center;justify-content:center;
+  border:2px solid var(--bg);
+}
+.pfp-circle .pfp-plus svg{width:14px;height:14px;color:#fff;}
+.pfp-hint{font-size:12px;color:var(--muted);}
+
+/* ===== APP ===== */
+.app-header{display:flex;align-items:center;gap:10px;padding:12px 14px;
+  background:rgba(10,14,26,.96);border-bottom:1px solid var(--line);
+  padding-top:calc(12px + env(safe-area-inset-top));position:relative;z-index:6;flex-shrink:0;}
+.app-header h1{font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;letter-spacing:1.2px;flex:1;}
+.app-header h1 span{color:var(--cyan);}
+.app-header h1.plain{font-family:'Inter',sans-serif;font-weight:700;font-size:16px;letter-spacing:0;}
+
+.icon-btn{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--text);transition:.2s;flex-shrink:0;}
+.icon-btn:active{background:rgba(0,163,255,.14);}
+.icon-btn svg{width:20px;height:20px;}
+.icon-btn.danger{color:var(--red);}
+
+.search-bar{display:none;align-items:center;gap:9px;padding:9px 14px;background:rgba(10,14,26,.96);border-bottom:1px solid var(--line);flex-shrink:0;}
+.search-bar.show{display:flex;}
+.search-bar svg{width:17px;height:17px;color:var(--muted2);flex-shrink:0;}
+.search-bar input{flex:1;background:rgba(13,17,32,.8);border:1px solid rgba(0,163,255,.14);border-radius:20px;padding:9px 15px;color:var(--text);outline:none;font-size:15px;}
+.search-bar input:focus{border-color:var(--blue);}
+
+.tab-content{flex:1;overflow-y:auto;display:none;-webkit-overflow-scrolling:touch;}
+.tab-content.active{display:block;}
+.section-label{padding:12px 16px 6px;font-size:10.5px;font-weight:800;letter-spacing:1.6px;color:rgba(0,212,255,.55);text-transform:uppercase;}
+
+.contact-item{display:flex;align-items:center;gap:12px;padding:11px 14px;cursor:pointer;
+  border-bottom:1px solid rgba(0,163,255,.05);transition:background .18s;position:relative;animation:fadeIn .2s;}
+.contact-item:active{background:rgba(0,163,255,.09);}
+.contact-item.pinned{background:rgba(0,163,255,.035);}
+.ci-body{flex:1;min-width:0;}
+.ci-top{display:flex;align-items:center;gap:6px;}
+.ci-name{font-weight:600;font-size:14.5px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center;gap:5px;}
+.ci-name svg{width:12px;height:12px;color:var(--cyan);flex-shrink:0;}
+.ci-time{font-size:10.5px;color:var(--muted2);flex-shrink:0;}
+.ci-sub{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--blue);margin-top:2px;font-weight:500;}
+.ci-sub svg{width:11px;height:11px;opacity:.8;}
+.ci-bottom{display:flex;align-items:center;gap:6px;margin-top:3px;}
+.ci-preview{flex:1;font-size:12.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ci-preview svg{width:13px;height:13px;vertical-align:-2px;color:var(--cyan);}
+.unread-badge{min-width:19px;height:19px;padding:0 5px;border-radius:10px;
+  background:linear-gradient(135deg,#00A3FF,#0066CC);color:#fff;font-size:10.5px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;box-shadow:0 0 10px rgba(0,163,255,.5);flex-shrink:0;}
+.mute-ic{width:13px;height:13px;color:var(--muted2);flex-shrink:0;}
+
+.avatar{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:16px;color:#fff;flex-shrink:0;position:relative;user-select:none;overflow:hidden;}
+.avatar img{width:100%;height:100%;object-fit:cover;}
+.avatar .online-dot{position:absolute;bottom:1px;right:1px;width:12px;height:12px;border-radius:50%;
+  background:var(--green);border:2.5px solid #0A0E1A;}
+.avatar.xl{width:96px;height:96px;font-size:34px;}
+.avatar.xl .online-dot{width:20px;height:20px;border-width:4px;}
+
+.empty-list{padding:50px 24px;text-align:center;color:var(--muted2);font-size:13.5px;line-height:1.7;}
+.empty-list svg{width:38px;height:38px;margin:0 auto 12px;color:rgba(0,163,255,.3);display:block;}
+
+/* chat */
+.chat-header{display:flex;align-items:center;gap:8px;padding:9px 8px;
+  background:rgba(10,14,26,.97);border-bottom:1px solid var(--line);
+  padding-top:calc(9px + env(safe-area-inset-top));flex-shrink:0;z-index:6;}
+.chat-header .avatar{width:39px;height:39px;font-size:14px;}
+.chat-title{flex:1;min-width:0;cursor:pointer;}
+.chat-title p{font-weight:700;font-size:14.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.chat-title span{font-size:11.5px;color:var(--green);display:block;margin-top:1px;}
+.chat-header .icon-btn{width:35px;height:35px;}
+.chat-header .icon-btn svg{width:18px;height:18px;}
+
+.messages{flex:1;overflow-y:auto;padding:14px 12px 6px;position:relative;z-index:1;
+  background:radial-gradient(ellipse at 30% 15%,rgba(0,163,255,.045),transparent 60%);
+  -webkit-overflow-scrolling:touch;overscroll-behavior:contain;}
+.chat-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:9px;color:var(--muted2);text-align:center;padding:20px;}
+.lock-circle{width:64px;height:64px;border-radius:50%;background:rgba(0,163,255,.07);
+  border:1px solid rgba(0,163,255,.16);display:flex;align-items:center;justify-content:center;}
+.lock-circle svg{width:26px;height:26px;}
+.chat-empty p{font-size:13px;line-height:1.6;}
+
+.day-sep{text-align:center;margin:12px 0;}
+.day-sep span{background:rgba(13,17,32,.95);border:1px solid rgba(0,163,255,.13);
+  padding:4px 13px;border-radius:12px;font-size:11px;color:var(--muted);display:inline-block;font-weight:500;}
+
+.msg-row{display:flex;margin-bottom:5px;animation:msgIn .22s ease;}
+@keyframes msgIn{from{opacity:0;transform:translateY(7px);}to{opacity:1;transform:none;}}
+.msg-row.sent{justify-content:flex-end;}
+.msg-bubble{max-width:78%;padding:7px 11px 6px;border-radius:14px;font-size:14.5px;line-height:1.48;word-break:break-word;position:relative;}
+.msg-row.sent .msg-bubble{background:linear-gradient(135deg,#0077C8,#005A99);color:#fff;border-bottom-right-radius:4px;box-shadow:0 2px 9px rgba(0,163,255,.18);}
+.msg-row.received .msg-bubble{background:rgba(19,25,42,.96);border:1px solid rgba(0,163,255,.1);border-bottom-left-radius:4px;}
+.msg-text{white-space:pre-wrap;}
+.msg-img{max-width:100%;border-radius:9px;display:block;margin:-2px 0 4px;cursor:pointer;}
+.msg-caption{font-size:14px;margin-top:3px;}
+.msg-meta{display:flex;align-items:center;justify-content:flex-end;gap:4px;font-size:10px;opacity:.62;margin-top:3px;}
+.ticks{letter-spacing:-2px;font-size:11px;}
+.ticks.read{color:#53D9FF;opacity:1;font-weight:700;}
+.reply-quote{border-left:3px solid #53D9FF;background:rgba(0,0,0,.2);border-radius:6px;padding:5px 9px;margin-bottom:5px;font-size:12.5px;overflow:hidden;}
+.reply-quote b{display:block;font-size:11.5px;color:#53D9FF;margin-bottom:2px;font-weight:700;}
+.reply-quote span{opacity:.85;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.deleted-msg{font-style:italic;opacity:.6;font-size:13px;display:flex;align-items:center;gap:5px;}
+.deleted-msg svg{width:13px;height:13px;}
+.star-ic{position:absolute;top:5px;right:7px;width:12px;height:12px;color:#FCD34D;}
+.voice-msg{display:flex;align-items:center;gap:8px;min-width:190px;}
+.voice-msg svg{width:17px;height:17px;flex-shrink:0;opacity:.9;}
+.voice-msg audio{height:34px;flex:1;max-width:220px;}
+.file-msg{display:flex;align-items:center;gap:10px;padding:5px 2px;min-width:180px;}
+.file-msg .fic{width:38px;height:38px;border-radius:9px;background:rgba(0,163,255,.16);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.file-msg .fic svg{width:18px;height:18px;color:#7DD3FC;}
+.file-msg .fmeta{min-width:0;}
+.file-msg .fmeta p{font-size:13.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.file-msg .fmeta span{font-size:11px;opacity:.6;}
+.typing-line{font-size:11.5px;color:var(--cyan);font-style:italic;padding:2px 14px 4px;}
+
+.reply-bar{display:none;align-items:center;gap:10px;padding:8px 12px;background:rgba(10,14,26,.98);border-top:1px solid rgba(0,163,255,.1);flex-shrink:0;}
+.reply-bar.show{display:flex;}
+.reply-bar .rb-line{width:3px;align-self:stretch;background:#53D9FF;border-radius:2px;}
+.reply-bar .rb-body{flex:1;min-width:0;}
+.reply-bar .rb-body b{display:block;font-size:11.5px;color:#53D9FF;}
+.reply-bar .rb-body span{font-size:12.5px;color:var(--muted);display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+.composer{display:flex;align-items:flex-end;gap:7px;padding:9px 10px;
+  padding-bottom:calc(9px + env(safe-area-inset-bottom));
+  background:rgba(8,11,20,.98);border-top:1px solid rgba(0,163,255,.08);flex-shrink:0;}
+.composer .icon-btn{width:40px;height:40px;}
+.input-wrap{flex:1;display:flex;align-items:center;background:rgba(13,17,32,.85);border:1px solid rgba(0,163,255,.15);border-radius:22px;padding:0 8px 0 15px;transition:.25s;}
+.input-wrap:focus-within{border-color:var(--blue);}
+.input-wrap input{flex:1;background:none;border:none;outline:none;color:var(--text);padding:11px 0;font-size:16px;min-width:0;}
+.input-wrap input::placeholder{color:rgba(224,232,240,.28);}
+.send-btn{width:44px;height:44px;min-width:44px;border-radius:50%;background:linear-gradient(135deg,#00A3FF,#0066CC);color:#fff;
+  display:flex;align-items:center;justify-content:center;box-shadow:0 0 15px rgba(0,163,255,.35);transition:transform .15s;flex-shrink:0;}
+.send-btn:active{transform:scale(.9);}
+.send-btn svg{width:19px;height:19px;}
+
+.rec-bar{display:none;align-items:center;gap:12px;padding:11px 14px;
+  padding-bottom:calc(11px + env(safe-area-inset-bottom));
+  background:rgba(20,8,8,.98);border-top:1px solid rgba(255,91,91,.2);flex-shrink:0;}
+.rec-bar.show{display:flex;}
+.rec-dot{width:10px;height:10px;border-radius:50%;background:var(--red);animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.8)}}
+#recTime{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums;color:#FF8A8A;}
+.rec-hint{flex:1;font-size:12.5px;color:var(--muted);}
+
+.emoji-panel{display:none;height:230px;overflow-y:auto;background:rgba(10,14,26,.99);border-top:1px solid var(--line);padding:10px;flex-shrink:0;}
+.emoji-panel.show{display:block;animation:fadeIn .18s;}
+.emoji-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:2px;}
+.emoji-grid button{font-size:24px;padding:5px 0;border-radius:8px;line-height:1;transition:.15s;}
+.emoji-grid button:active{background:rgba(0,163,255,.16);transform:scale(1.2);}
+
+.bottom-nav{display:flex;background:rgba(8,11,20,.99);border-top:1px solid var(--line);
+  padding-bottom:env(safe-area-inset-bottom);flex-shrink:0;z-index:7;}
+.bottom-nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 4px 8px;
+  color:var(--muted2);font-size:10px;font-weight:600;transition:.2s;position:relative;}
+.bottom-nav button svg{width:21px;height:21px;}
+.bottom-nav button.active{color:var(--cyan);}
+.bottom-nav button.active::after{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:26px;height:2.5px;border-radius:0 0 3px 3px;background:var(--cyan);box-shadow:0 0 10px var(--cyan);}
+#navBadge{position:absolute;top:3px;right:calc(50% - 22px);min-width:17px;height:17px;padding:0 4px;border-radius:9px;
+  background:#FF3B5C;color:#fff;font-size:10px;font-weight:700;display:none;align-items:center;justify-content:center;
+  box-shadow:0 0 8px rgba(255,59,92,.6);}
+
+.sheet-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.6);opacity:0;pointer-events:none;transition:opacity .25s;z-index:70;}
+.sheet-backdrop.open{opacity:1;pointer-events:auto;}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--card);
+  border-top-left-radius:22px;border-top-right-radius:22px;
+  transform:translateY(110%);transition:transform .3s cubic-bezier(.16,1,.3,1);
+  z-index:71;max-height:78%;overflow-y:auto;
+  padding-bottom:calc(14px + env(safe-area-inset-bottom));
+  border-top:1px solid rgba(0,163,255,.18);box-shadow:0 -14px 50px rgba(0,0,0,.7);}
+.sheet.open{transform:translateY(0);}
+.sheet-title{padding:16px 20px 6px;font-size:13px;font-weight:700;color:var(--muted);letter-spacing:.4px;}
+.sheet-handle{width:38px;height:4px;border-radius:3px;background:rgba(255,255,255,.18);margin:9px auto 2px;}
+.sheet-item{display:flex;align-items:center;gap:15px;width:100%;padding:14px 20px;font-size:15px;color:var(--text);transition:background .16s;text-align:left;}
+.sheet-item:active{background:rgba(0,163,255,.1);}
+.sheet-item svg{width:19px;height:19px;color:var(--cyan);flex-shrink:0;}
+.sheet-item.danger{color:#FF7B7B;}
+.sheet-item.danger svg{color:#FF7B7B;}
+
+#toast{position:absolute;bottom:96px;left:50%;transform:translateX(-50%) translateY(30px);
+  background:rgba(13,17,32,.98);border:1px solid rgba(0,163,255,.32);color:var(--text);
+  padding:11px 22px;border-radius:24px;font-size:13.5px;z-index:200;
+  transition:all .3s cubic-bezier(.16,1,.3,1);box-shadow:0 10px 35px rgba(0,0,0,.7);
+  opacity:0;pointer-events:none;max-width:88%;text-align:center;}
+#toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+
+.settings-profile{display:flex;align-items:center;gap:14px;padding:16px;margin:12px;
+  background:linear-gradient(135deg,rgba(13,17,32,.97),rgba(10,14,26,.95));
+  border:1px solid rgba(0,163,255,.13);border-radius:18px;cursor:pointer;}
+.settings-profile:active{background:rgba(0,163,255,.08);}
+.sp-name{font-weight:700;font-size:16px;}
+.sp-about{font-size:12.5px;color:var(--muted);margin-top:2px;}
+.sp-phone{font-size:12px;color:var(--blue);margin-top:3px;font-weight:500;}
+
+.setting-row{display:flex;align-items:center;gap:14px;padding:14px 18px;border-bottom:1px solid rgba(0,163,255,.05);cursor:pointer;transition:.18s;}
+.setting-row:active{background:rgba(0,163,255,.07);}
+.setting-row > svg{width:19px;height:19px;color:var(--cyan);flex-shrink:0;}
+.sr-text{flex:1;min-width:0;}
+.sr-text p{font-size:14.5px;font-weight:500;}
+.sr-text span{font-size:11.5px;color:var(--muted);display:block;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.switch{position:relative;width:44px;height:25px;flex-shrink:0;}
+.switch input{opacity:0;width:0;height:0;}
+.switch .slider{position:absolute;inset:0;background:rgba(255,255,255,.13);border-radius:25px;transition:.25s;cursor:pointer;}
+.switch .slider::before{content:'';position:absolute;width:19px;height:19px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.25s;}
+.switch input:checked + .slider{background:linear-gradient(135deg,#00A3FF,#0066CC);}
+.switch input:checked + .slider::before{transform:translateX(19px);}
+
+.call-item{display:flex;align-items:center;gap:12px;padding:12px 15px;border-bottom:1px solid rgba(0,163,255,.05);}
+.call-item .avatar{width:42px;height:42px;font-size:15px;}
+.call-info{flex:1;min-width:0;}
+.call-info p{font-size:14.5px;font-weight:600;}
+.call-info span{font-size:11.5px;color:var(--muted);display:flex;align-items:center;gap:4px;margin-top:2px;}
+.call-info span svg{width:12px;height:12px;}
+
+.status-item{display:flex;align-items:center;gap:12px;padding:11px 15px;cursor:pointer;}
+.status-ring{width:50px;height:50px;border-radius:50%;padding:2.5px;background:linear-gradient(135deg,#00A3FF,#00D4FF);flex-shrink:0;}
+.status-ring.seen{background:rgba(255,255,255,.15);}
+.status-ring > div{width:100%;height:100%;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:16px;color:#fff;border:2.5px solid var(--bg);}
+
+#statusViewer{position:absolute;inset:0;background:#000;z-index:90;display:none;flex-direction:column;}
+#statusViewer.show{display:flex;animation:fadeIn .2s;}
+.sv-bars{display:flex;gap:4px;padding:10px 10px 0;padding-top:calc(10px + env(safe-area-inset-top));}
+.sv-bar{flex:1;height:2.5px;background:rgba(255,255,255,.28);border-radius:2px;overflow:hidden;}
+.sv-bar i{display:block;height:100%;width:0;background:#fff;border-radius:2px;}
+.sv-bar.done i{width:100%;}
+.sv-bar.active i{animation:fillBar 5s linear forwards;}
+@keyframes fillBar{to{width:100%;}}
+.sv-head{display:flex;align-items:center;gap:11px;padding:12px 14px;}
+.sv-head .avatar{width:38px;height:38px;font-size:14px;}
+.sv-head p{font-weight:600;font-size:14px;}
+.sv-head span{font-size:11.5px;opacity:.6;display:block;}
+.sv-body{flex:1;display:flex;align-items:center;justify-content:center;padding:20px;}
+.sv-text{font-size:26px;font-weight:700;text-align:center;line-height:1.5;padding:36px 24px;border-radius:20px;max-width:340px;width:100%;min-height:220px;display:flex;align-items:center;justify-content:center;}
+
+#imgViewer{position:absolute;inset:0;background:rgba(0,0,0,.96);z-index:95;display:none;align-items:center;justify-content:center;padding:16px;}
+#imgViewer.show{display:flex;animation:fadeIn .2s;}
+#imgViewer img{max-width:100%;max-height:88%;border-radius:12px;object-fit:contain;}
+#imgViewer .close{position:absolute;top:calc(14px + env(safe-area-inset-top));right:14px;width:40px;height:40px;border-radius:50%;
+  background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;}
+#imgViewer .close svg{width:20px;height:20px;color:#fff;}
+
+.profile-body{padding:20px 18px;overflow-y:auto;flex:1;}
+.avatar-edit{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:24px;}
+.avatar-edit .palette-btn{display:flex;align-items:center;gap:7px;padding:8px 16px;border-radius:20px;
+  background:rgba(0,163,255,.12);border:1px solid rgba(0,163,255,.28);color:var(--cyan);font-size:13px;font-weight:600;}
+.avatar-edit .palette-btn svg{width:15px;height:15px;}
+
+.overlay-msg{position:absolute;inset:0;background:rgba(0,0,0,.85);z-index:80;display:none;flex-direction:column;align-items:center;justify-content:center;gap:18px;}
+.overlay-msg.show{display:flex;animation:fadeIn .2s;}
+.overlay-msg .avatar{width:90px;height:90px;font-size:32px;animation:pulseRing 1.8s infinite;}
+@keyframes pulseRing{0%,100%{box-shadow:0 0 0 0 rgba(0,163,255,.5);}50%{box-shadow:0 0 0 22px rgba(0,163,255,0);}}
+.overlay-msg p{font-size:18px;font-weight:700;}
+.overlay-msg span{font-size:13.5px;color:var(--muted);}
+.overlay-msg .end-call{width:62px;height:62px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;box-shadow:0 0 22px rgba(255,91,91,.5);}
+.overlay-msg .end-call svg{width:26px;height:26px;color:#fff;}
+
+/* sessions / history cards */
+.list-card{margin:12px 14px;background:rgba(13,17,32,.7);border:1px solid rgba(0,163,255,.12);border-radius:14px;overflow:hidden;}
+.list-card-item{display:flex;align-items:flex-start;gap:12px;padding:14px 15px;border-bottom:1px solid rgba(0,163,255,.06);}
+.list-card-item:last-child{border-bottom:none;}
+.list-card-item .lic-icon{width:36px;height:36px;border-radius:10px;background:rgba(0,163,255,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.list-card-item .lic-icon svg{width:17px;height:17px;color:var(--cyan);}
+.lic-body{flex:1;min-width:0;}
+.lic-body .lic-title{font-size:14px;font-weight:600;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+.lic-body .lic-sub{font-size:11.5px;color:var(--muted);margin-top:3px;}
+.current-tag{font-size:9.5px;padding:2px 7px;background:rgba(34,197,94,.15);color:#4ADE80;border-radius:6px;font-weight:700;letter-spacing:.5px;}
+.failed-tag{color:#FF7B7B;font-weight:600;}
+.success-tag{color:#4ADE80;font-weight:600;}
+.divider{height:1px;background:rgba(0,163,255,.07);margin:6px 0;}
+
+.pwd-strength{height:4px;border-radius:2px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:6px;}
+.pwd-strength i{display:block;height:100%;width:0;border-radius:2px;transition:width .3s,background .3s;}
+.pwd-hint{font-size:11px;color:var(--muted);margin-top:5px;display:flex;justify-content:space-between;}
 </style>
-<base target="_blank">
+<base target="_self">
 </head>
 <body>
 
-<div class="cyber-grid"></div>
+<div class="device" id="device">
 
-<!-- ================= AUTH SCREEN ================= -->
-<div id="authScreen" style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; position:relative; z-index:2;">
-  <div style="position:absolute; width:400px; height:400px; border-radius:50%; background:rgba(0,163,255,0.07); filter:blur(90px); top:-50px; right:-80px;"></div>
-  <div style="position:absolute; width:300px; height:300px; border-radius:50%; background:rgba(0,100,255,0.05); filter:blur(80px); bottom:-40px; left:-60px;"></div>
+  <!-- ================= AUTH SCREEN ================= -->
+  <div id="authScreen" class="auth-wrap">
+    <div class="cyber-grid"></div>
+    <div class="glass-card">
+      <div class="brand-logo"><i data-lucide="message-circle"></i></div>
+      <h1 class="brand-title">ZETA <span>CHAT</span></h1>
+      <p class="brand-sub">ආරක්ෂිත මැසේජ් ඇප් එක</p>
 
-  <div class="glass-card" style="width:100%; max-width:420px; padding:36px 32px;">
-    <div style="text-align:center; margin-bottom:28px;">
-      <div style="width:60px; height:60px; margin:0 auto 14px; background:linear-gradient(135deg,#00A3FF,#0066CC); border-radius:16px; display:flex; align-items:center; justify-content:center; box-shadow:0 0 25px rgba(0,163,255,0.4);">
-        <i data-lucide="message-circle" style="width:30px; height:30px; color:#fff;"></i>
+      <div class="auth-tabs">
+        <div class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">ලොග් වෙන්න</div>
+        <div class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">ගිණුම හදන්න</div>
       </div>
-      <h1 style="font-family:'Orbitron',sans-serif; font-size:22px; font-weight:800; letter-spacing:1px;">ZETA <span style="color:#00D4FF;">CHAT</span></h1>
-      <p style="font-size:13px; color:rgba(224,232,240,0.4); margin-top:6px;">ආරක්ෂිත මැසේජ් ඇප් එක</p>
-    </div>
 
-    <div style="display:flex; gap:8px; background:rgba(13,17,32,0.6); padding:6px; border-radius:14px; margin-bottom:24px;">
-      <div class="auth-tab active" id="tabLogin" onclick="switchTab('login')">ලොග් වෙන්න</div>
-      <div class="auth-tab" id="tabRegister" onclick="switchTab('register')">ගිණුම හදන්න</div>
-    </div>
+      <div class="alert alert-error" id="authError"></div>
+      <div class="alert alert-success" id="authSuccess"></div>
 
-    <div class="error-box" id="authError"></div>
-    <div class="success-box" id="authSuccess" style="margin-bottom:12px;"></div>
-
-    <!-- LOGIN FORM -->
-    <form id="loginForm" autocomplete="off">
-      <div style="margin-bottom:16px;">
-        <label class="field-label"><i data-lucide="phone" style="width:14px;height:14px;display:inline;vertical-align:-2px;"></i> ෆෝන් නම්බර්</label>
-        <input type="tel" id="loginPhone" class="neon-input" placeholder="07X XXX XXXX" maxlength="12" required>
-      </div>
-      <div style="margin-bottom:20px;">
-        <label class="field-label"><i data-lucide="lock" style="width:14px;height:14px;display:inline;vertical-align:-2px;"></i> පාස්වර්ඩ්</label>
-        <input type="password" id="loginPassword" class="neon-input" placeholder="••••••••" required>
-      </div>
-      <button type="submit" class="neon-btn" id="loginBtn"><i data-lucide="log-in" style="width:18px;height:18px;"></i> ලොග් වෙන්න</button>
-    </form>
-
-    <!-- REGISTER FORM -->
-    <form id="registerForm" style="display:none;" autocomplete="off">
-      <div style="margin-bottom:14px;">
-        <label class="field-label"><i data-lucide="user" style="width:14px;height:14px;display:inline;vertical-align:-2px;"></i> සම්පූර්ණ නම</label>
-        <input type="text" id="regName" class="neon-input" placeholder="ඔබේ නම" required>
-      </div>
-      <div style="margin-bottom:14px;">
-        <label class="field-label"><i data-lucide="phone" style="width:14px;height:14px;display:inline;vertical-align:-2px;"></i> ෆෝන් නම්බර්</label>
-        <input type="tel" id="regPhone" class="neon-input" placeholder="07X XXX XXXX" maxlength="12" required>
-      </div>
-      <div style="margin-bottom:20px;">
-        <label class="field-label"><i data-lucide="lock" style="width:14px;height:14px;display:inline;vertical-align:-2px;"></i> පාස්වර්ඩ්</label>
-        <input type="password" id="regPassword" class="neon-input" placeholder="අකුරු 4ට වැඩි" required>
-      </div>
-      <button type="submit" class="neon-btn" id="registerBtn"><i data-lucide="user-plus" style="width:18px;height:18px;"></i> ගිණුම හදන්න</button>
-    </form>
-
-    <p style="font-size:11px; color:rgba(224,232,240,0.25); text-align:center; margin-top:20px;">Demo version — දත්ත මේ browser එකේම save වෙනවා</p>
-  </div>
-</div>
-
-<!-- ================= CHAT APP ================= -->
-<div id="app">
-  <!-- SIDEBAR -->
-  <div class="sidebar" id="sidebar">
-    <div style="padding:16px; border-bottom:1px solid rgba(0,163,255,0.08); display:flex; align-items:center; gap:12px; background:rgba(10,14,26,0.9);">
-      <div class="avatar online" id="myAvatar" style="background:linear-gradient(135deg,#00A3FF,#0066FF);"><span id="myAvatarLetter">Z</span><span class="online-dot"></span></div>
-      <div style="flex:1; min-width:0;">
-        <p id="myName" style="font-weight:700; font-size:15px; margin:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">User</p>
-        <p id="myPhone" style="font-size:12px; color:rgba(224,232,240,0.4); margin:0;">07x</p>
-      </div>
-      <button onclick="logout()" title="Logout" style="background:none; border:1px solid rgba(0,163,255,0.2); color:#FF6B6B; border-radius:10px; padding:8px; cursor:pointer; transition:all 0.3s;" onmouseover="this.style.borderColor='#FF4444'" onmouseout="this.style.borderColor='rgba(0,163,255,0.2)'">
-        <i data-lucide="log-out" style="width:17px;height:17px;"></i>
-      </button>
-    </div>
-
-    <div style="padding:12px 14px;">
-      <div style="position:relative;">
-        <i data-lucide="search" style="position:absolute; left:14px; top:50%; transform:translateY(-50%); width:16px; height:16px; color:rgba(224,232,240,0.3);"></i>
-        <input type="text" id="contactSearch" class="neon-input" placeholder="නම්බර් හෝ නමෙන් හොයන්න..." style="padding:10px 14px 10px 40px; font-size:14px; border-radius:22px;">
-      </div>
-    </div>
-
-    <div style="padding:6px 18px 4px; font-size:11px; font-weight:700; letter-spacing:1.5px; color:rgba(0,212,255,0.5); text-transform:uppercase;">ලොග් වුන අය</div>
-    <div id="contactList" style="flex:1; overflow-y:auto;"></div>
-  </div>
-
-  <!-- CHAT AREA -->
-  <div class="chat-area">
-    <div class="chat-bg-pattern"></div>
-
-    <div id="emptyChat" class="empty-chat" style="position:relative; z-index:1;">
-      <div style="width:80px; height:80px; border-radius:50%; background:rgba(0,163,255,0.06); border:1px solid rgba(0,163,255,0.15); display:flex; align-items:center; justify-content:center;">
-        <i data-lucide="messages-square" style="width:36px; height:36px; color:#00A3FF;"></i>
-      </div>
-      <p style="font-size:16px; font-weight:600; color:rgba(224,232,240,0.5);">ZETA CHAT</p>
-      <p style="font-size:13px; text-align:center; max-width:300px;">වම් පැත්තෙන් contact කෙනෙක් තෝරන්න, මැසේජ් එකක් යවන්න 🚀</p>
-    </div>
-
-    <div id="activeChat" style="display:none; flex:1; flex-direction:column; height:100%; position:relative; z-index:1;">
-      <div style="display:flex; align-items:center; gap:12px; padding:12px 16px; background:rgba(10,14,26,0.92); border-bottom:1px solid rgba(0,163,255,0.08);">
-        <button class="hamburger" onclick="toggleSidebar()" style="background:none; border:none; color:#E0E8F0; cursor:pointer; padding:6px;">
-          <i data-lucide="arrow-left" style="width:20px;height:20px;"></i>
-        </button>
-        <div class="avatar" id="chatAvatar" style="width:42px; height:42px; background:linear-gradient(135deg,#00A3FF,#0066FF);"><span id="chatAvatarLetter">?</span><span class="online-dot"></span></div>
-        <div style="flex:1; min-width:0;">
-          <p id="chatName" style="font-weight:700; font-size:15px; margin:0;">Contact</p>
-          <p id="chatStatus" style="font-size:12px; color:#22C55E; margin:0;">online</p>
+      <!-- LOGIN -->
+      <form id="loginForm" autocomplete="off">
+        <div class="form-group">
+          <label class="field-label"><i data-lucide="at-sign"></i> Email හෝ Username</label>
+          <input type="text" id="loginIdentity" class="neon-input" placeholder="you@example.com හෝ username" autocomplete="username" required>
         </div>
+        <div class="form-group" style="margin-bottom:14px;">
+          <label class="field-label"><i data-lucide="lock"></i> පාස්වර්ඩ්</label>
+          <div class="pass-wrap">
+            <input type="password" id="loginPassword" class="neon-input" placeholder="••••••••" autocomplete="current-password" required>
+            <button type="button" class="pass-toggle" onclick="togglePass('loginPassword',this)"><i data-lucide="eye"></i></button>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+          <label class="checkbox-row"><input type="checkbox" id="rememberMe"> මතක තියාගන්න</label>
+          <span class="link-text" onclick="showForgot()">පාස්වර්ඩ් අමතකද?</span>
+        </div>
+        <button type="submit" class="neon-btn" id="loginBtn"><i data-lucide="log-in"></i> ලොග් වෙන්න</button>
+      </form>
+
+      <!-- REGISTER -->
+      <form id="registerForm" style="display:none;" autocomplete="off">
+        <div class="pfp-picker">
+          <div class="pfp-circle" id="pfpPreview" onclick="document.getElementById('pfpInput').click()">
+            <span id="pfpLetter">?</span>
+            <div class="pfp-plus"><i data-lucide="camera"></i></div>
+          </div>
+          <p class="pfp-hint">Profile picture (optional)</p>
+        </div>
+
+        <div class="form-group">
+          <label class="field-label"><i data-lucide="user"></i> සම්පූර්ණ නම</label>
+          <input type="text" id="regName" class="neon-input" placeholder="ඔබේ නම" required>
+        </div>
+        <div class="form-group">
+          <label class="field-label"><i data-lucide="at-sign"></i> Username</label>
+          <input type="text" id="regUsername" class="neon-input" placeholder="johndoe (අකුරු, ඉලක්කම්, _)" maxlength="20" required>
+        </div>
+        <div class="form-group">
+          <label class="field-label"><i data-lucide="mail"></i> Email</label>
+          <input type="email" id="regEmail" class="neon-input" placeholder="you@example.com" autocomplete="email" required>
+        </div>
+        <div class="form-group">
+          <label class="field-label"><i data-lucide="lock"></i> පාස්වර්ඩ්</label>
+          <div class="pass-wrap">
+            <input type="password" id="regPassword" class="neon-input" placeholder="අකුරු 6ට වැඩි" autocomplete="new-password" required>
+            <button type="button" class="pass-toggle" onclick="togglePass('regPassword',this)"><i data-lucide="eye"></i></button>
+          </div>
+          <div class="pwd-strength"><i id="pwdStrengthBar"></i></div>
+          <div class="pwd-hint"><span id="pwdStrengthLabel">—</span></div>
+        </div>
+        <div class="form-group" style="margin-bottom:18px;">
+          <label class="field-label"><i data-lucide="lock"></i> Confirm පාස්වර්ඩ්</label>
+          <div class="pass-wrap">
+            <input type="password" id="regPassword2" class="neon-input" placeholder="නැවත ටයිප් කරන්න" autocomplete="new-password" required>
+            <button type="button" class="pass-toggle" onclick="togglePass('regPassword2',this)"><i data-lucide="eye"></i></button>
+          </div>
+        </div>
+        <button type="submit" class="neon-btn" id="registerBtn"><i data-lucide="user-plus"></i> ගිණුම හදන්න</button>
+      </form>
+
+      <!-- FORGOT PASSWORD -->
+      <form id="forgotForm" style="display:none;" autocomplete="off">
+        <div class="form-group">
+          <label class="field-label"><i data-lucide="at-sign"></i> Email හෝ Username</label>
+          <input type="text" id="forgotIdentity" class="neon-input" placeholder="ගිණුමේ email හෝ username" required>
+        </div>
+        <div class="form-group">
+          <label class="field-label"><i data-lucide="key-round"></i> නව පාස්වර්ඩ්</label>
+          <div class="pass-wrap">
+            <input type="password" id="forgotNewPass" class="neon-input" placeholder="අකුරු 6ට වැඩි" required>
+            <button type="button" class="pass-toggle" onclick="togglePass('forgotNewPass',this)"><i data-lucide="eye"></i></button>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:18px;">
+          <label class="field-label"><i data-lucide="key-round"></i> නැවත ටයිප් කරන්න</label>
+          <div class="pass-wrap">
+            <input type="password" id="forgotNewPass2" class="neon-input" placeholder="නැවත ටයිප් කරන්න" required>
+            <button type="button" class="pass-toggle" onclick="togglePass('forgotNewPass2',this)"><i data-lucide="eye"></i></button>
+          </div>
+        </div>
+        <button type="submit" class="neon-btn"><i data-lucide="refresh-cw"></i> පාස්වර්ඩ් Reset කරන්න</button>
+        <p style="text-align:center;margin-top:14px;"><span class="link-text" onclick="hideForgot()">← ලොග් වීමට ආපසු</span></p>
+      </form>
+
+      <p class="auth-footer" id="authFooter">
+        <span id="authFooterText">ගිණුමක් නැද්ද?</span>
+        <span class="link-text" id="authFooterLink" onclick="switchAuthTab('register')">ගිණුමක් හදන්න</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- ================= APP ================= -->
+  <div id="app" style="position:absolute;inset:0;display:none;">
+    <div style="position:relative;width:100%;height:100%;display:flex;flex-direction:column;">
+
+      <!-- MAIN SCREEN -->
+      <section class="screen active" id="screenMain">
+        <header class="app-header">
+          <div style="width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#00A3FF,#0066CC);display:flex;align-items:center;justify-content:center;box-shadow:0 0 16px rgba(0,163,255,.4);">
+            <i data-lucide="message-circle" style="width:19px;height:19px;color:#fff;"></i>
+          </div>
+          <h1>ZETA <span>CHAT</span></h1>
+          <button class="icon-btn" onclick="toggleSearch()"><i data-lucide="search"></i></button>
+          <button class="icon-btn" onclick="openMainMenu()"><i data-lucide="more-vertical"></i></button>
+        </header>
+
+        <div class="search-bar" id="searchBar">
+          <i data-lucide="search"></i>
+          <input type="text" id="contactSearch" placeholder="නම හෝ @username හොයන්න...">
+          <button class="icon-btn" onclick="toggleSearch()"><i data-lucide="x"></i></button>
+        </div>
+
+        <div class="tab-content active" id="tabChats">
+          <div class="section-label">Contacts</div>
+          <div id="contactList"></div>
+        </div>
+
+        <div class="tab-content" id="tabStatus">
+          <div class="section-label">My Status</div>
+          <div class="status-item" onclick="addMyStatus()">
+            <div class="status-ring seen" id="myStatusRing">
+              <div id="myStatusAvatar" style="background:linear-gradient(135deg,#00A3FF,#0066FF);">Z</div>
+            </div>
+            <div class="call-info">
+              <p>My Status</p>
+              <span id="myStatusText">Status එකක් එකතු කරන්න</span>
+            </div>
+            <i data-lucide="plus-circle" style="width:22px;height:22px;color:#00D4FF;"></i>
+          </div>
+          <div class="section-label">Recent Updates</div>
+          <div id="statusList"></div>
+        </div>
+
+        <div class="tab-content" id="tabCalls">
+          <div class="section-label">Recent Calls</div>
+          <div id="callList"></div>
+        </div>
+
+        <div class="tab-content" id="tabSettings">
+          <div class="settings-profile" onclick="openProfileEdit()">
+            <div class="avatar xl" id="setAvatar" style="width:60px;height:60px;font-size:22px;background:linear-gradient(135deg,#00A3FF,#0066FF);">
+              <span id="setAvatarLetter">Z</span>
+            </div>
+            <div style="flex:1;min-width:0;">
+              <p class="sp-name" id="setName">User</p>
+              <p class="sp-about" id="setAbout">Hey there! I am using ZETA CHAT.</p>
+              <p class="sp-phone" id="setUsername">@user</p>
+            </div>
+            <i data-lucide="pencil" style="width:17px;height:17px;color:rgba(224,232,240,.35);"></i>
+          </div>
+
+          <div class="section-label">Account Security</div>
+
+          <div class="setting-row" onclick="openProfileEdit()">
+            <i data-lucide="user-cog"></i>
+            <div class="sr-text"><p>Account</p><span>නම, About, Profile picture</span></div>
+            <i data-lucide="chevron-right" style="width:17px;height:17px;color:rgba(224,232,240,.3);"></i>
+          </div>
+
+          <div class="setting-row" onclick="openChangePassword()">
+            <i data-lucide="key-round"></i>
+            <div class="sr-text"><p>Change Password</p><span>පාස්වර්ඩ් එක වෙනස් කරන්න</span></div>
+            <i data-lucide="chevron-right" style="width:17px;height:17px;color:rgba(224,232,240,.3);"></i>
+          </div>
+
+          <div class="setting-row" onclick="openSessions()">
+            <i data-lucide="monitor-smartphone"></i>
+            <div class="sr-text"><p>Active Sessions</p><span id="sessionsCount">—</span></div>
+            <i data-lucide="chevron-right" style="width:17px;height:17px;color:rgba(224,232,240,.3);"></i>
+          </div>
+
+          <div class="setting-row" onclick="openLoginHistory()">
+            <i data-lucide="history"></i>
+            <div class="sr-text"><p>Login History</p><span>මෑත login වීම්</span></div>
+            <i data-lucide="chevron-right" style="width:17px;height:17px;color:rgba(224,232,240,.3);"></i>
+          </div>
+
+          <div class="setting-row" onclick="logoutAllDevices()">
+            <i data-lucide="log-out"></i>
+            <div class="sr-text"><p>Logout from all devices</p><span>සියලු sessions වලින් ඉවත් වෙන්න</span></div>
+            <i data-lucide="chevron-right" style="width:17px;height:17px;color:rgba(224,232,240,.3);"></i>
+          </div>
+
+          <div class="section-label">Preferences</div>
+
+          <div class="setting-row">
+            <i data-lucide="bell"></i>
+            <div class="sr-text"><p>Notifications</p><span>මැසේජ් notification පෙන්වන්න</span></div>
+            <label class="switch"><input type="checkbox" id="setNotif" onchange="onToggle('notif',this.checked)"><span class="slider"></span></label>
+          </div>
+
+          <div class="setting-row">
+            <i data-lucide="bot"></i>
+            <div class="sr-text"><p>Demo Auto-Reply</p><span>Demo contacts reply කරනවා</span></div>
+            <label class="switch"><input type="checkbox" id="setAutoReply" onchange="onToggle('autoreply',this.checked)"><span class="slider"></span></label>
+          </div>
+
+          <div class="setting-row">
+            <i data-lucide="volume-2"></i>
+            <div class="sr-text"><p>Sounds</p><span>මැසේජ් හඬ</span></div>
+            <label class="switch"><input type="checkbox" id="setSounds" onchange="onToggle('sounds',this.checked)"><span class="slider"></span></label>
+          </div>
+
+          <div class="setting-row" onclick="clearAllChats()">
+            <i data-lucide="trash-2"></i>
+            <div class="sr-text"><p>Chats</p><span>සියලුම chats මකන්න</span></div>
+            <i data-lucide="chevron-right" style="width:17px;height:17px;color:rgba(224,232,240,.3);"></i>
+          </div>
+
+          <div class="setting-row" onclick="showStorageInfo()">
+            <i data-lucide="hard-drive"></i>
+            <div class="sr-text"><p>Storage &amp; Data</p><span id="storageInfo">—</span></div>
+            <i data-lucide="chevron-right" style="width:17px;height:17px;color:rgba(224,232,240,.3);"></i>
+          </div>
+
+          <div class="setting-row" onclick="openAbout()">
+            <i data-lucide="info"></i>
+            <div class="sr-text"><p>About ZETA CHAT</p><span>Version 3.0</span></div>
+            <i data-lucide="chevron-right" style="width:17px;height:17px;color:rgba(224,232,240,.3);"></i>
+          </div>
+
+          <div class="setting-row" onclick="logout()" style="border-bottom:none;">
+            <i data-lucide="log-out" style="color:#FF7B7B !important;"></i>
+            <div class="sr-text"><p style="color:#FF7B7B;">Logout</p><span>මේ device එකෙන් ඉවත් වෙන්න</span></div>
+          </div>
+
+          <div style="height:24px;"></div>
+        </div>
+
+        <nav class="bottom-nav">
+          <button data-tab="chats" class="active" onclick="switchAppTab('chats')">
+            <i data-lucide="message-square"></i><span>Chats</span><em id="navBadge"></em>
+          </button>
+          <button data-tab="status" onclick="switchAppTab('status')">
+            <i data-lucide="circle-dot"></i><span>Status</span>
+          </button>
+          <button data-tab="calls" onclick="switchAppTab('calls')">
+            <i data-lucide="phone"></i><span>Calls</span>
+          </button>
+          <button data-tab="settings" onclick="switchAppTab('settings')">
+            <i data-lucide="settings"></i><span>Settings</span>
+          </button>
+        </nav>
+      </section>
+
+      <!-- CHAT SCREEN -->
+      <section class="screen" id="screenChat">
+        <header class="chat-header">
+          <button class="icon-btn" onclick="closeChat()"><i data-lucide="arrow-left"></i></button>
+          <div class="avatar" id="chatAvatar" onclick="openContactInfo()" style="background:linear-gradient(135deg,#00A3FF,#0066FF);">
+            <span id="chatAvatarLetter">?</span><span class="online-dot"></span>
+          </div>
+          <div class="chat-title" onclick="openContactInfo()">
+            <p id="chatName">Contact</p>
+            <span id="chatStatus">online</span>
+          </div>
+          <button class="icon-btn" onclick="startCall('voice')"><i data-lucide="phone"></i></button>
+          <button class="icon-btn" onclick="startCall('video')"><i data-lucide="video"></i></button>
+          <button class="icon-btn" onclick="openChatMenu()"><i data-lucide="more-vertical"></i></button>
+        </header>
+
+        <div class="messages" id="messagesArea"></div>
+
+        <div class="reply-bar" id="replyBar">
+          <div class="rb-line"></div>
+          <div class="rb-body"><b id="rbName">Reply</b><span id="rbText"></span></div>
+          <button class="icon-btn" onclick="cancelReply()"><i data-lucide="x"></i></button>
+        </div>
+
+        <div class="emoji-panel" id="emojiPanel">
+          <div class="emoji-grid" id="emojiGrid"></div>
+        </div>
+
+        <div class="composer" id="composer">
+          <button class="icon-btn" onclick="toggleEmoji()"><i data-lucide="smile"></i></button>
+          <div class="input-wrap">
+            <input type="text" id="msgInput" placeholder="මැසේජ් එකක් ලියන්න..." autocomplete="off">
+          </div>
+          <button class="icon-btn" onclick="openAttach()"><i data-lucide="paperclip"></i></button>
+          <button class="send-btn" id="sendBtn" onclick="onSendClick()"><i data-lucide="send"></i></button>
+        </div>
+
+        <div class="rec-bar" id="recBar">
+          <button class="icon-btn danger" onclick="cancelVoice()"><i data-lucide="trash-2"></i></button>
+          <span class="rec-dot"></span>
+          <span id="recTime">0:00</span>
+          <span class="rec-hint">රෙකෝඩ් වෙමින්...</span>
+          <button class="send-btn" onclick="stopVoice(true)"><i data-lucide="send"></i></button>
+        </div>
+      </section>
+
+      <!-- PROFILE EDIT -->
+      <section class="screen" id="screenProfile">
+        <header class="app-header">
+          <button class="icon-btn" onclick="backFromProfile()"><i data-lucide="arrow-left"></i></button>
+          <h1 class="plain">Profile</h1>
+        </header>
+        <div class="profile-body">
+          <div class="avatar-edit">
+            <div class="pfp-circle" id="peAvatar" onclick="document.getElementById('peAvatarInput').click()">
+              <span id="peLetter">Z</span>
+              <div class="pfp-plus"><i data-lucide="camera"></i></div>
+            </div>
+            <button class="palette-btn" onclick="cycleAvatarColor()">
+              <i data-lucide="palette"></i> පාට වෙනස් කරන්න
+            </button>
+            <button class="palette-btn" onclick="removeAvatar()" id="removeAvatarBtn" style="display:none;background:rgba(255,91,91,.12);border-color:rgba(255,91,91,.3);color:#FF7B7B;">
+              <i data-lucide="trash-2"></i> Photo එක අයින් කරන්න
+            </button>
+          </div>
+
+          <div class="form-group">
+            <label class="field-label"><i data-lucide="user"></i> නම</label>
+            <input type="text" id="peName" class="neon-input" placeholder="ඔබේ නම" maxlength="40">
+          </div>
+          <div class="form-group">
+            <label class="field-label"><i data-lucide="info"></i> About</label>
+            <input type="text" id="peAbout" class="neon-input" placeholder="Hey there! I am using ZETA CHAT." maxlength="90">
+          </div>
+          <div class="form-group">
+            <label class="field-label"><i data-lucide="at-sign"></i> Username</label>
+            <input type="text" id="peUsername" class="neon-input" disabled>
+          </div>
+          <div class="form-group" style="margin-bottom:24px;">
+            <label class="field-label"><i data-lucide="mail"></i> Email</label>
+            <input type="text" id="peEmail" class="neon-input" disabled>
+          </div>
+
+          <button class="neon-btn" onclick="saveProfile()"><i data-lucide="check"></i> Save කරන්න</button>
+          <div style="height:20px;"></div>
+        </div>
+      </section>
+
+      <!-- CONTACT INFO -->
+      <section class="screen" id="screenContactInfo">
+        <header class="app-header">
+          <button class="icon-btn" onclick="showScreen('screenChat')"><i data-lucide="arrow-left"></i></button>
+          <h1 class="plain">Contact Info</h1>
+        </header>
+        <div class="profile-body">
+          <div class="avatar-edit">
+            <div class="avatar xl" id="ciAvatar"><span id="ciLetter">?</span></div>
+            <p id="ciName" style="font-size:20px;font-weight:700;"></p>
+            <p id="ciContactId" style="font-size:14px;color:var(--blue);font-weight:500;"></p>
+          </div>
+          <div style="background:rgba(13,17,32,.7);border-radius:14px;padding:14px;margin-bottom:18px;border:1px solid rgba(0,163,255,.1);">
+            <p style="font-size:11px;color:var(--muted);margin-bottom:4px;letter-spacing:.5px;">ABOUT</p>
+            <p id="ciAbout" style="font-size:14px;">Hey there! I am using ZETA CHAT.</p>
+          </div>
+          <div style="display:flex;gap:10px;">
+            <button class="neon-btn" onclick="openChat(activeContact.id)" style="flex:1;">
+              <i data-lucide="message-circle"></i> Message
+            </button>
+            <button class="neon-btn" onclick="startCall('voice')" style="flex:1;background:linear-gradient(135deg,#22C55E,#15803D);box-shadow:0 0 16px rgba(34,197,94,.3);">
+              <i data-lucide="phone"></i> Call
+            </button>
+          </div>
+          <div class="divider" style="margin:22px 0;"></div>
+          <div class="setting-row" onclick="toggleMuteContact()">
+            <i data-lucide="bell-off"></i>
+            <div class="sr-text"><p id="ciMuteLabel">Mute notifications</p></div>
+          </div>
+          <div class="setting-row" onclick="clearChatWith(activeContact.id)">
+            <i data-lucide="eraser"></i>
+            <div class="sr-text"><p>Clear chat</p></div>
+          </div>
+          <div class="setting-row" onclick="deleteChatWith(activeContact.id)" style="border-bottom:none;">
+            <i data-lucide="trash-2" style="color:#FF7B7B !important;"></i>
+            <div class="sr-text"><p style="color:#FF7B7B;">Delete chat</p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CHANGE PASSWORD -->
+      <section class="screen" id="screenChangePass">
+        <header class="app-header">
+          <button class="icon-btn" onclick="backToSettings()"><i data-lucide="arrow-left"></i></button>
+          <h1 class="plain">Change Password</h1>
+        </header>
+        <div class="profile-body">
+          <div class="alert alert-error" id="cpError"></div>
+          <div class="alert alert-success" id="cpSuccess"></div>
+
+          <div class="form-group">
+            <label class="field-label"><i data-lucide="lock"></i> වත්මන් පාස්වර්ඩ්</label>
+            <div class="pass-wrap">
+              <input type="password" id="cpOld" class="neon-input" placeholder="••••••••" autocomplete="current-password">
+              <button type="button" class="pass-toggle" onclick="togglePass('cpOld',this)"><i data-lucide="eye"></i></button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="field-label"><i data-lucide="key-round"></i> නව පාස්වර්ඩ්</label>
+            <div class="pass-wrap">
+              <input type="password" id="cpNew" class="neon-input" placeholder="අකුරු 6ට වැඩි" autocomplete="new-password">
+              <button type="button" class="pass-toggle" onclick="togglePass('cpNew',this)"><i data-lucide="eye"></i></button>
+            </div>
+            <div class="pwd-strength"><i id="cpStrengthBar"></i></div>
+            <div class="pwd-hint"><span id="cpStrengthLabel">—</span></div>
+          </div>
+          <div class="form-group" style="margin-bottom:24px;">
+            <label class="field-label"><i data-lucide="key-round"></i> නව පාස්වර්ඩ් (නැවත)</label>
+            <div class="pass-wrap">
+              <input type="password" id="cpNew2" class="neon-input" placeholder="නැවත ටයිප් කරන්න" autocomplete="new-password">
+              <button type="button" class="pass-toggle" onclick="togglePass('cpNew2',this)"><i data-lucide="eye"></i></button>
+            </div>
+          </div>
+
+          <button class="neon-btn" onclick="submitChangePassword()"><i data-lucide="check"></i> පාස්වර්ඩ් වෙනස් කරන්න</button>
+        </div>
+      </section>
+
+      <!-- ACTIVE SESSIONS -->
+      <section class="screen" id="screenSessions">
+        <header class="app-header">
+          <button class="icon-btn" onclick="backToSettings()"><i data-lucide="arrow-left"></i></button>
+          <h1 class="plain">Active Sessions</h1>
+        </header>
+        <div class="profile-body" style="padding:0;">
+          <div style="padding:14px 18px 4px;font-size:12.5px;color:var(--muted);line-height:1.6;">
+            ඔබේ ගිණුමට log වී ඇති සියලු devices. හඳුනා නොගන්නා device එකක් ඇත්නම් "Logout all devices" භාවිතා කරන්න.
+          </div>
+          <div id="sessionsList"></div>
+          <div style="padding:16px;">
+            <button class="neon-btn" onclick="logoutAllDevices()" style="background:linear-gradient(135deg,#DC2626,#991B1B);box-shadow:0 0 16px rgba(220,38,38,.3);">
+              <i data-lucide="log-out"></i> Logout from all devices
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- LOGIN HISTORY -->
+      <section class="screen" id="screenHistory">
+        <header class="app-header">
+          <button class="icon-btn" onclick="backToSettings()"><i data-lucide="arrow-left"></i></button>
+          <h1 class="plain">Login History</h1>
+        </header>
+        <div class="profile-body" style="padding:0;">
+          <div id="historyList"></div>
+        </div>
+      </section>
+
+      <!-- CALL OVERLAY -->
+      <div class="overlay-msg" id="callOverlay">
+        <div class="avatar" id="callAvatar" style="background:linear-gradient(135deg,#00A3FF,#0066FF);"><span id="callLetter">?</span></div>
+        <div style="text-align:center;">
+          <p id="callName">Contact</p>
+          <span id="callStatus" style="margin-top:6px;display:block;">Calling...</span>
+        </div>
+        <button class="end-call" onclick="endCall()"><i data-lucide="phone-off"></i></button>
       </div>
 
-      <div id="messagesArea" style="flex:1; overflow-y:auto; padding:20px 16px;"></div>
-      <div id="typingArea" style="padding:0 16px; height:0;"></div>
-
-      <div class="msg-input-wrap">
-        <input type="text" id="msgInput" class="msg-input" placeholder="මැසේජ් එකක් ටයිප් කරන්න..." autocomplete="off">
-        <button class="send-btn" onclick="sendMessage()" title="Send"><i data-lucide="send" style="width:20px;height:20px;"></i></button>
+      <!-- STATUS VIEWER -->
+      <div id="statusViewer">
+        <div class="sv-bars" id="svBars"></div>
+        <div class="sv-head">
+          <div class="avatar" id="svAvatar"><span id="svLetter">?</span></div>
+          <div style="flex:1;"><p id="svName">Name</p><span id="svTime">just now</span></div>
+          <button class="icon-btn" onclick="closeStatusViewer()"><i data-lucide="x"></i></button>
+        </div>
+        <div class="sv-body"><div class="sv-text" id="svText"></div></div>
       </div>
+
+      <!-- IMAGE VIEWER -->
+      <div id="imgViewer">
+        <button class="close" onclick="closeImageViewer()"><i data-lucide="x"></i></button>
+        <img id="imgViewerSrc" src="" alt="preview">
+      </div>
+
+      <div class="sheet-backdrop" id="sheetBackdrop" onclick="closeSheet()"></div>
+      <div class="sheet" id="sheet"></div>
+
+      <div id="toast"></div>
+
+      <input type="file" id="pfpInput" accept="image/*" style="display:none">
+      <input type="file" id="peAvatarInput" accept="image/*" style="display:none">
+      <input type="file" id="imgInput" accept="image/*" style="display:none">
+      <input type="file" id="camInput" accept="image/*" capture="environment" style="display:none">
+      <input type="file" id="docInput" style="display:none">
     </div>
   </div>
 </div>
-
-<div id="toast"></div>
 
 <script>
-// ================= HELPERS =================
-function esc(s) {
+/* ============ HELPERS ============ */
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const uid = () => 'u_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+const sid = () => 's_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+
+function esc(s){
   const d = document.createElement('div');
   d.textContent = (s == null) ? '' : String(s);
   return d.innerHTML;
 }
-function toast(msg) {
-  const t = document.getElementById('toast');
+function toast(msg){
+  const t = $('#toast');
   t.textContent = msg;
   t.classList.add('show');
-  clearTimeout(t._timer);
-  t._timer = setTimeout(() => t.classList.remove('show'), 2600);
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 2400);
 }
-function validPhone(p) {
-  p = String(p || '').replace(/\s/g, '');
-  return /^0\d{9}$/.test(p);
+function hashPass(p){
+  try { return btoa(unescape(encodeURIComponent('zc::v3::' + p + '::salt'))); } catch(e){ return 'x' + p; }
 }
-function fmtTime(ts) {
+function validEmail(e){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(e || '').trim()); }
+function validUsername(u){ return /^[a-zA-Z0-9_]{3,20}$/.test(String(u || '').trim()); }
+function fmtTime(ts){
   const d = new Date(ts);
   let h = d.getHours(); const m = String(d.getMinutes()).padStart(2, '0');
   const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12;
   return h + ':' + m + ' ' + ap;
 }
+function fmtDateTime(ts){
+  const d = new Date(ts);
+  return d.toLocaleDateString() + ' ' + fmtTime(ts);
+}
+function dayLabel(ts){
+  const d = new Date(ts), n = new Date();
+  const same = (a, b) => a.toDateString() === b.toDateString();
+  if (same(d, n)) return 'අද';
+  const y = new Date(n); y.setDate(y.getDate() - 1);
+  if (same(d, y)) return 'ඊයේ';
+  return d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear();
+}
+function timeAgo(ts){
+  const s = Math.floor((Date.now() - ts) / 1000);
+  if (s < 60) return 'just now';
+  if (s < 3600) return Math.floor(s / 60) + ' min ago';
+  if (s < 86400) return Math.floor(s / 3600) + ' hr ago';
+  return Math.floor(s / 86400) + ' days ago';
+}
+function detectDevice(){
+  const ua = navigator.userAgent || '';
+  if (/android/i.test(ua)) return 'Android device';
+  if (/iphone|ipad|ipod/i.test(ua)) return 'iOS device';
+  if (/windows/i.test(ua)) return 'Windows';
+  if (/macintosh|mac os x/i.test(ua)) return 'Mac';
+  if (/linux/i.test(ua)) return 'Linux';
+  return 'Unknown device';
+}
+function detectBrowser(){
+  const ua = navigator.userAgent || '';
+  if (/edg/i.test(ua)) return 'Edge';
+  if (/chrome/i.test(ua)) return 'Chrome';
+  if (/firefox/i.test(ua)) return 'Firefox';
+  if (/safari/i.test(ua)) return 'Safari';
+  return 'Browser';
+}
 const AVATAR_COLORS = ['#00A3FF','#7C3AED','#059669','#D97706','#DC2626','#DB2777','#0891B2','#65A30D'];
-
-// ================= STORAGE =================
-function getUsers() { try { return JSON.parse(localStorage.getItem('zc_users')) || []; } catch(e) { return []; } }
-function saveUsers(u) { localStorage.setItem('zc_users', JSON.stringify(u)); }
-function getMsgs() { try { return JSON.parse(localStorage.getItem('zc_msgs')) || {}; } catch(e) { return {}; } }
-function saveMsgs(m) { localStorage.setItem('zc_msgs', JSON.stringify(m)); }
-function getSession() { try { return JSON.parse(localStorage.getItem('zc_session')); } catch(e) { return null; } }
-function setSession(s) { localStorage.setItem('zc_session', JSON.stringify(s)); }
-function clearSession() { localStorage.removeItem('zc_session'); }
-
-// Demo contacts (always visible so the app feels alive)
-const DEMO_CONTACTS = [
-  { phone: '0771234567', name: 'Kasun Perera' },
-  { phone: '0769876543', name: 'Nimal Silva' },
-  { phone: '0715554433', name: 'Sithum Fernando' },
-  { phone: '0752228899', name: 'Dilshan Bandara' }
-];
-const DEMO_REPLIES = [
-  'හරි bro 👍', 'ඔව්, එහෙමයි!', 'හෙහ් 😄 සුපිරි!', 'ඔව් ඔව්, මම බලන්නම්.',
-  'අනිවාර්යයෙන්ම! 🙌', 'හොඳයි, කියන්න ඕන දෙයක්?', 'මම දැන් busy, පස්සේ කතා කරමු.',
-  '😂😂😂 සිරා!', 'ඔව් ඔව්, එහෙම තමයි!', 'OK bro, deal! 🤝'
-];
-
-// ================= AUTH =================
-let currentUser = null;
-let activeContact = null;
-
-function switchTab(tab) {
-  document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
-  document.getElementById('registerForm').style.display = tab === 'register' ? 'block' : 'none';
-  document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
-  document.getElementById('tabRegister').classList.toggle('active', tab === 'register');
-  hideError(); hideSuccess();
+function colorFor(s){
+  let h = 0; s = String(s || '0');
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+  return AVATAR_COLORS[h % AVATAR_COLORS.length];
 }
 
-function showError(msg) {
-  const e = document.getElementById('authError');
+/* ============ STORAGE ============ */
+const DB = {
+  users: { get(){ try { return JSON.parse(localStorage.getItem('zc_users') || '[]'); } catch(e){ return []; } },
+           set(v){ try { localStorage.setItem('zc_users', JSON.stringify(v)); } catch(e){ toast('Storage පිරී ඇත ⚠️'); } } },
+  msgs:  { get(){ try { return JSON.parse(localStorage.getItem('zc_msgs') || '{}'); } catch(e){ return {}; } },
+           set(v){ try { localStorage.setItem('zc_msgs', JSON.stringify(v)); } catch(e){ toast('Storage පිරී ඇත ⚠️'); } } },
+  meta:  { get(){ try { return JSON.parse(localStorage.getItem('zc_meta') || '{}'); } catch(e){ return {}; } },
+           set(v){ try { localStorage.setItem('zc_meta', JSON.stringify(v)); } catch(e){} } },
+  calls: { get(){ try { return JSON.parse(localStorage.getItem('zc_calls') || '[]'); } catch(e){ return []; } },
+           set(v){ try { localStorage.setItem('zc_calls', JSON.stringify(v)); } catch(e){} } },
+  status:{ get(){ try { return JSON.parse(localStorage.getItem('zc_status') || '{}'); } catch(e){ return {}; } },
+           set(v){ try { localStorage.setItem('zc_status', JSON.stringify(v)); } catch(e){} } }
+};
+const Session = {
+  set(userId, sessionId, remember){
+    const data = { userId, sessionId, time: Date.now() };
+    try { sessionStorage.setItem('zc_session', JSON.stringify(data)); } catch(e){}
+    try {
+      if (remember) localStorage.setItem('zc_session_persist', JSON.stringify(data));
+      else localStorage.removeItem('zc_session_persist');
+    } catch(e){}
+  },
+  get(){
+    try {
+      const s = sessionStorage.getItem('zc_session');
+      if (s) return JSON.parse(s);
+    } catch(e){}
+    try {
+      const p = localStorage.getItem('zc_session_persist');
+      if (p) return JSON.parse(p);
+    } catch(e){}
+    return null;
+  },
+  clear(){
+    try { sessionStorage.removeItem('zc_session'); } catch(e){}
+    try { localStorage.removeItem('zc_session_persist'); } catch(e){}
+  }
+};
+function getSettings(){
+  let s = {};
+  try { s = JSON.parse(localStorage.getItem('zc_settings') || '{}'); } catch(e){}
+  return Object.assign({ notif:true, autoreply:true, sounds:true, readReceipts:true, lastSeen:true }, s);
+}
+function setSetting(k, v){
+  const s = getSettings(); s[k] = v;
+  try { localStorage.setItem('zc_settings', JSON.stringify(s)); } catch(e){}
+}
+
+/* ============ STATE ============ */
+let currentUser = null;
+let currentSessionId = null;
+let activeContact = null;
+let replyTarget = null;
+let suppressClickUntil = 0;
+let recTimer = null, recStart = 0, mediaRecorder = null, audioChunks = [], recStream = null;
+let pendingPfp = null;
+
+const DEMO_CONTACTS = [
+  { id:'d1', name:'Kasun Perera',    phone:'0771234567', about:'Busy 🚀' },
+  { id:'d2', name:'Nimal Silva',     phone:'0769876543', about:'Available' },
+  { id:'d3', name:'Sithum Fernando', phone:'0715554433', about:'At work 💼' },
+  { id:'d4', name:'Dilshan Bandara', phone:'0752228899', about:'Hey there! I am using ZETA CHAT.' }
+];
+const DEMO_REPLIES = [
+  'හරි bro 👍','ඔව්, එහෙමයි!','හෙහ් 😄 සුපිරි!','ඔව් ඔව්, මම බලන්නම්.',
+  'අනිවාර්යයෙන්ම! 🙌','හොඳයි, කියන්න ඕන දේකුත්?','මම දැන් busy, පස්සේ කතා කරමු.',
+  '😂😂😂 සිරා!','ඔව් ඔව්, එහෙම තමයි!','OK bro, deal! 🤝','සුපිරි සුපිරි 🔥',
+  'හරි, මම එන්නම්.','එල එල 👌','ගොඩක් ස්තූතියි! 🙏'
+];
+const DEMO_STATUSES = [
+  { id:'d1', name:'Kasun Perera',    text:'හෙට නිවාඩු 🎉',        color:'#00A3FF', time: Date.now() - 3600000 },
+  { id:'d2', name:'Nimal Silva',     text:'Good vibes only ✨',     color:'#7C3AED', time: Date.now() - 7200000 },
+  { id:'d3', name:'Sithum Fernando', text:'වැස්ස නිසා traffic 😩', color:'#059669', time: Date.now() - 14400000 }
+];
+
+/* ============ AUTH ============ */
+function switchAuthTab(tab){
+  $('#loginForm').style.display    = tab === 'login' ? 'block' : 'none';
+  $('#registerForm').style.display = tab === 'register' ? 'block' : 'none';
+  $('#forgotForm').style.display   = 'none';
+  $('#tabLogin').classList.toggle('active', tab === 'login');
+  $('#tabRegister').classList.toggle('active', tab === 'register');
+  $('#authFooter').style.display = '';
+  $('#authFooterText').textContent = tab === 'login' ? 'ගිණුමක් නැද්ද?' : 'දැනටමත් ගිණුමක් තියෙනවද?';
+  $('#authFooterLink').textContent = tab === 'login' ? 'ගිණුමක් හදන්න' : 'ලොග් වෙන්න';
+  $('#authFooterLink').onclick = () => switchAuthTab(tab === 'login' ? 'register' : 'login');
+  hideAuthAlert('authError'); hideAuthAlert('authSuccess');
+  lucide.createIcons();
+}
+function showForgot(){
+  $('#loginForm').style.display = 'none';
+  $('#registerForm').style.display = 'none';
+  $('#forgotForm').style.display = 'block';
+  $('#authFooter').style.display = 'none';
+  hideAuthAlert('authError'); hideAuthAlert('authSuccess');
+  lucide.createIcons();
+}
+function hideForgot(){ switchAuthTab('login'); }
+
+function showAuthAlert(id, msg){
+  const e = document.getElementById(id);
   e.textContent = msg;
   e.classList.remove('show'); void e.offsetWidth; e.classList.add('show');
 }
-function hideError() { document.getElementById('authError').classList.remove('show'); }
-function showSuccess(msg) {
-  const s = document.getElementById('authSuccess');
-  s.textContent = msg; s.classList.add('show');
+function hideAuthAlert(id){ document.getElementById(id).classList.remove('show'); }
+
+function togglePass(inputId, btn){
+  const inp = document.getElementById(inputId);
+  if (!inp) return;
+  const show = inp.type === 'password';
+  inp.type = show ? 'text' : 'password';
+  btn.innerHTML = `<i data-lucide="${show ? 'eye-off' : 'eye'}"></i>`;
+  lucide.createIcons();
 }
-function hideSuccess() { document.getElementById('authSuccess').classList.remove('show'); }
 
-document.getElementById('registerForm').addEventListener('submit', function(e) {
+function pwdStrength(p){
+  let s = 0;
+  if (p.length >= 6) s++;
+  if (p.length >= 10) s++;
+  if (/[A-Z]/.test(p)) s++;
+  if (/[0-9]/.test(p)) s++;
+  if (/[^A-Za-z0-9]/.test(p)) s++;
+  return Math.min(s, 4);
+}
+function updatePwdStrength(inputId, barId, labelId){
+  const v = document.getElementById(inputId).value;
+  const s = pwdStrength(v);
+  const bar = document.getElementById(barId);
+  const lbl = document.getElementById(labelId);
+  const colors = ['#EF4444', '#F59E0B', '#F59E0B', '#22C55E', '#22C55E'];
+  const labels = ['—', 'දුර්වල', 'මධ්‍යම', 'හොඳ', 'ශක්තිමත්'];
+  bar.style.width = (s / 4 * 100) + '%';
+  bar.style.background = colors[s] || '#EF4444';
+  if (lbl) lbl.textContent = labels[s];
+}
+
+/* ---- REGISTER ---- */
+$('#pfpInput').addEventListener('change', function(){
+  const f = this.files && this.files[0];
+  this.value = '';
+  if (!f) return;
+  if (f.size > 2 * 1024 * 1024) return toast('රූපය 2MB ට වඩා ලොකුයි ⚠️');
+  const fr = new FileReader();
+  fr.onload = () => {
+    pendingPfp = fr.result;
+    const prev = $('#pfpPreview');
+    prev.innerHTML = `<img src="${fr.result}" alt="pfp"><div class="pfp-plus"><i data-lucide="camera"></i></div>`;
+    lucide.createIcons();
+  };
+  fr.readAsDataURL(f);
+});
+
+$('#regPassword').addEventListener('input', () => updatePwdStrength('regPassword', 'pwdStrengthBar', 'pwdStrengthLabel'));
+$('#cpNew').addEventListener('input', () => updatePwdStrength('cpNew', 'cpStrengthBar', 'cpStrengthLabel'));
+
+$('#registerForm').addEventListener('submit', function(e){
   e.preventDefault();
-  hideError(); hideSuccess();
-  const name = document.getElementById('regName').value.trim();
-  const phone = document.getElementById('regPhone').value.replace(/\s/g, '');
-  const pass = document.getElementById('regPassword').value;
+  hideAuthAlert('authError'); hideAuthAlert('authSuccess');
 
-  if (name.length < 2) { showError('නම ටිකක් වැඩි දිගු එකක් දාන්න.'); return; }
-  if (!validPhone(phone)) { showError('ෆෝන් නම්බර් එක වැරදියි. (07XXXXXXXX)'); return; }
-  if (pass.length < 4) { showError('පාස්වර්ඩ් අකුරු 4ට වැඩි එකක් දාන්න.'); return; }
+  const name  = $('#regName').value.trim();
+  const uname = $('#regUsername').value.trim().toLowerCase();
+  const email = $('#regEmail').value.trim().toLowerCase();
+  const pass  = $('#regPassword').value;
+  const pass2 = $('#regPassword2').value;
 
-  const users = getUsers();
-  if (users.some(u => u.phone === phone)) { showError('මේ නම්බර් එකෙන් ගිණුමක් තියෙනවා. ලොග් වෙන්න.'); return; }
+  if (name.length < 2)          return showAuthAlert('authError', 'නම අඩුම අකුරු 2ක් වත් දාන්න.');
+  if (!validUsername(uname))    return showAuthAlert('authError', 'Username: අකුරු/ඉලක්කම්/_ , 3-20 අකුරු.');
+  if (!validEmail(email))       return showAuthAlert('authError', 'Email එක වැරදියි.');
+  if (pass.length < 6)          return showAuthAlert('authError', 'පාස්වර්ඩ් අකුරු 6ට වැඩි එකක් දාන්න.');
+  if (pass !== pass2)           return showAuthAlert('authError', 'පාස්වර්ඩ් දෙක සමාන නෑ.');
 
-  const btn = document.getElementById('registerBtn');
+  const users = DB.users.get();
+  if (users.some(u => u.username === uname))
+    return showAuthAlert('authError', 'මේ username එක දැනටමත් තියෙනවා.');
+  if (users.some(u => u.email === email))
+    return showAuthAlert('authError', 'මේ email එකෙන් ගිණුමක් තියෙනවා.');
+
+  const btn = $('#registerBtn');
   btn.disabled = true;
-  btn.innerHTML = '<i data-lucide="loader" style="width:18px;height:18px;animation:spin 1s linear infinite;"></i> හදමින්...';
+  btn.innerHTML = '<i data-lucide="loader" class="spinner"></i> හදමින්...';
   lucide.createIcons();
 
   setTimeout(() => {
-    users.push({ name: name, phone: phone, pass: btoa(pass) });
-    saveUsers(users);
+    const id = uid();
+    users.push({
+      id,
+      name,
+      username: uname,
+      email,
+      pass: hashPass(pass),
+      avatar: pendingPfp || null,
+      color: colorOf(uname),
+      about: 'Hey there! I am using ZETA CHAT.',
+      created: Date.now(),
+      sessions: [],
+      loginHistory: []
+    });
+    DB.users.set(users);
+
     btn.disabled = false;
-    btn.innerHTML = '<i data-lucide="user-plus" style="width:18px;height:18px;"></i> ගිණුම හදන්න';
+    btn.innerHTML = '<i data-lucide="user-plus"></i> ගිණුම හදන්න';
     lucide.createIcons();
-    showSuccess('✅ ගිණුම හදලා ඉවරයි! දැන් ලොග් වෙන්න.');
-    switchTab('login');
-    document.getElementById('loginPhone').value = phone;
+
+    // reset form
+    $('#regName').value = ''; $('#regUsername').value = ''; $('#regEmail').value = '';
+    $('#regPassword').value = ''; $('#regPassword2').value = '';
+    pendingPfp = null;
+    $('#pfpPreview').innerHTML = '<span id="pfpLetter">?</span><div class="pfp-plus"><i data-lucide="camera"></i></div>';
+    lucide.createIcons();
+
+    $('#loginIdentity').value = uname;
+    switchAuthTab('login');
+    showAuthAlert('authSuccess', '✅ ගිණුම හදලා ඉවරයි! දැන් ලොග් වෙන්න.');
   }, 700);
 });
 
-document.getElementById('loginForm').addEventListener('submit', function(e) {
+function colorOf(seed){ return colorFor(seed); }
+
+/* ---- LOGIN ---- */
+$('#loginForm').addEventListener('submit', function(e){
   e.preventDefault();
-  hideError(); hideSuccess();
-  const phone = document.getElementById('loginPhone').value.replace(/\s/g, '');
-  const pass = document.getElementById('loginPassword').value;
+  hideAuthAlert('authError'); hideAuthAlert('authSuccess');
 
-  if (!validPhone(phone)) { showError('ෆෝන් නම්බර් එක වැරදියි. (07XXXXXXXX)'); return; }
+  const ident = $('#loginIdentity').value.trim().toLowerCase();
+  const pass  = $('#loginPassword').value;
+  const remember = $('#rememberMe').checked;
 
-  const btn = document.getElementById('loginBtn');
+  if (!ident) return showAuthAlert('authError', 'Email හෝ Username දාන්න.');
+  if (!pass)  return showAuthAlert('authError', 'පාස්වර්ඩ් එක දාන්න.');
+
+  const btn = $('#loginBtn');
   btn.disabled = true;
-  btn.innerHTML = '<i data-lucide="loader" style="width:18px;height:18px;animation:spin 1s linear infinite;"></i> ලොග් වෙමින්...';
+  btn.innerHTML = '<i data-lucide="loader" class="spinner"></i> ලොග් වෙමින්...';
   lucide.createIcons();
 
   setTimeout(() => {
-    const users = getUsers();
-    const found = users.find(u => u.phone === phone && u.pass === btoa(pass));
+    const users = DB.users.get();
+    const encoded = hashPass(pass);
+    const idx = users.findIndex(u =>
+      (u.username === ident || u.email === ident)
+    );
+
     btn.disabled = false;
-    btn.innerHTML = '<i data-lucide="log-in" style="width:18px;height:18px;"></i> ලොග් වෙන්න';
+    btn.innerHTML = '<i data-lucide="log-in"></i> ලොග් වෙන්න';
     lucide.createIcons();
-    if (!found) { showError('නම්බර් එක හෝ පාස්වර්ඩ් එක වැරදියි.'); return; }
-    setSession({ phone: found.phone, name: found.name });
-    enterApp();
-  }, 600);
+
+    if (idx === -1){
+      showAuthAlert('authError', 'ගිණුමක් හමු වුනේ නෑ.');
+      return;
+    }
+    const user = users[idx];
+    if (user.pass !== encoded){
+      // log failed attempt
+      if (!user.loginHistory) user.loginHistory = [];
+      user.loginHistory.unshift({
+        time: Date.now(), device: detectDevice(), browser: detectBrowser(),
+        success: false, reason: 'වැරදි පාස්වර්ඩ්'
+      });
+      user.loginHistory = user.loginHistory.slice(0, 30);
+      DB.users.set(users);
+      showAuthAlert('authError', 'පාස්වර්ඩ් එක වැරදියි.');
+      return;
+    }
+
+    // success — create session
+    const sessionId = sid();
+    if (!user.sessions) user.sessions = [];
+    if (!user.loginHistory) user.loginHistory = [];
+
+    user.sessions.forEach(s => s.current = false);
+    user.sessions.push({
+      id: sessionId,
+      device: detectDevice(),
+      browser: detectBrowser(),
+      time: Date.now(),
+      current: true
+    });
+    // keep only last 8 sessions
+    if (user.sessions.length > 8){
+      user.sessions.sort((a, b) => b.time - a.time);
+      user.sessions = user.sessions.slice(0, 8);
+    }
+
+    user.loginHistory.unshift({
+      time: Date.now(), device: detectDevice(), browser: detectBrowser(),
+      success: true
+    });
+    user.loginHistory = user.loginHistory.slice(0, 30);
+
+    DB.users.set(users);
+    Session.set(user.id, sessionId, remember);
+    currentSessionId = sessionId;
+
+    $('#loginPassword').value = '';
+    enterApp(user);
+  }, 550);
 });
 
-function logout() {
-  clearSession();
-  currentUser = null; activeContact = null;
-  document.getElementById('app').classList.remove('active');
-  document.getElementById('authScreen').style.display = 'flex';
-  document.getElementById('loginForm').reset();
-  document.getElementById('loginPassword').value = '';
+/* ---- FORGOT PASSWORD ---- */
+$('#forgotForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  hideAuthAlert('authError'); hideAuthAlert('authSuccess');
+
+  const ident = $('#forgotIdentity').value.trim().toLowerCase();
+  const np    = $('#forgotNewPass').value;
+  const np2   = $('#forgotNewPass2').value;
+
+  if (!ident)        return showAuthAlert('authError', 'Email හෝ Username දාන්න.');
+  if (np.length < 6) return showAuthAlert('authError', 'නව පාස්වර්ඩ් අකුරු 6ට වැඩි.');
+  if (np !== np2)    return showAuthAlert('authError', 'නව පාස්වර්ඩ් දෙක සමාන නෑ.');
+
+  const users = DB.users.get();
+  const idx = users.findIndex(u => u.username === ident || u.email === ident);
+  if (idx === -1) return showAuthAlert('authError', 'ගිණුමක් හමු වුනේ නෑ.');
+
+  users[idx].pass = hashPass(np);
+  // invalidate all sessions for security
+  users[idx].sessions = [];
+  DB.users.set(users);
+
+  $('#forgotIdentity').value = ''; $('#forgotNewPass').value = ''; $('#forgotNewPass2').value = '';
+  hideForgot();
+  showAuthAlert('authSuccess', '✅ පාස්වර්ඩ් reset කළා! දැන් ලොග් වෙන්න.');
+});
+
+/* ---- LOGOUT ---- */
+function logout(){
+  if (currentUser){
+    // remove current session
+    const users = DB.users.get();
+    const u = users.find(x => x.id === currentUser.id);
+    if (u && u.sessions){
+      u.sessions = u.sessions.filter(s => s.id !== currentSessionId);
+      DB.users.set(users);
+    }
+  }
+  Session.clear();
+  currentUser = null; currentSessionId = null; activeContact = null;
+  $('#app').style.display = 'none';
+  $('#authScreen').style.display = 'flex';
+  $('#loginForm').reset();
+  $('#loginPassword').value = '';
+  $('#searchBar').classList.remove('show');
+  closeSheet();
+  switchAppTab('chats');
+  switchAuthTab('login');
   lucide.createIcons();
   toast('ලොග් අවුට් වුනා 👋');
 }
 
-function enterApp() {
-  const s = getSession();
-  currentUser = s;
-  document.getElementById('authScreen').style.display = 'none';
-  document.getElementById('app').classList.add('active');
-  document.getElementById('myName').textContent = s.name;
-  document.getElementById('myPhone').textContent = s.phone;
-  document.getElementById('myAvatarLetter').textContent = (s.name[0] || 'Z').toUpperCase();
-  renderContacts('');
+function logoutAllDevices(){
+  if (!currentUser) return;
+  if (!confirm('සියලුම devices වලින් ඉවත් වෙන්නද?')) return;
+  const users = DB.users.get();
+  const u = users.find(x => x.id === currentUser.id);
+  if (u){ u.sessions = []; DB.users.set(users); }
+  Session.clear();
+  currentUser = null; currentSessionId = null; activeContact = null;
+  $('#app').style.display = 'none';
+  $('#authScreen').style.display = 'flex';
+  switchAuthTab('login');
   lucide.createIcons();
-  toast('සාදරයෙන් පිළිගන්නවා, ' + s.name + '! 🎉');
+  toast('සියලු devices වලින් ඉවත් වුනා 🔒');
 }
 
-// ================= CONTACTS =================
-function getAllContacts() {
-  const registered = getUsers().filter(u => u.phone !== currentUser.phone);
-  const all = registered.slice();
-  DEMO_CONTACTS.forEach(d => {
-    if (!all.some(u => u.phone === d.phone)) all.push(d);
+/* ---- ENTER APP ---- */
+function enterApp(user){
+  const users = DB.users.get();
+  const fresh = users.find(u => u.id === user.id);
+  if (!fresh){ DB.session && Session.clear(); return; }
+
+  currentUser = {
+    id: fresh.id,
+    name: fresh.name,
+    username: fresh.username,
+    email: fresh.email,
+    avatar: fresh.avatar || null,
+    about: fresh.about || 'Hey there! I am using ZETA CHAT.',
+    color: fresh.color || colorFor(fresh.username)
+  };
+
+  $('#authScreen').style.display = 'none';
+  $('#app').style.display = 'block';
+
+  const letter = (currentUser.name[0] || 'Z').toUpperCase();
+  const setAv = $('#setAvatar');
+  if (currentUser.avatar){
+    setAv.innerHTML = `<img src="${currentUser.avatar}" alt="me"><span class="online-dot" style="display:none"></span>`;
+  } else {
+    setAv.innerHTML = `<span id="setAvatarLetter">${esc(letter)}</span>`;
+    setAv.style.background = currentUser.color;
+  }
+  $('#setName').textContent    = currentUser.name;
+  $('#setAbout').textContent   = currentUser.about;
+  $('#setUsername').textContent = '@' + currentUser.username;
+
+  const st = getSettings();
+  $('#setNotif').checked     = st.notif;
+  $('#setAutoReply').checked = st.autoreply;
+  $('#setSounds').checked    = st.sounds;
+
+  updateSessionsCount();
+  renderContacts();
+  renderStatusList();
+  renderCalls();
+  updateStorageInfo();
+  showScreen('screenMain');
+  lucide.createIcons();
+  setTimeout(() => toast('සාදරයෙන් පිළිගන්නවා, ' + currentUser.name + '! 🎉'), 350);
+}
+
+function updateSessionsCount(){
+  if (!currentUser) return;
+  const u = DB.users.get().find(x => x.id === currentUser.id);
+  const n = u && u.sessions ? u.sessions.length : 0;
+  const el = $('#sessionsCount');
+  if (el) el.textContent = n + ' active session' + (n === 1 ? '' : 's');
+}
+
+/* ============ CONTACTS ============ */
+function getAllContacts(){
+  if (!currentUser) return [];
+  const reg = DB.users.get()
+    .filter(u => u.id !== currentUser.id)
+    .map(u => ({
+      id: u.id,
+      name: u.name,
+      username: u.username,
+      avatar: u.avatar || null,
+      color: u.color || colorFor(u.username),
+      about: u.about || 'Hey there! I am using ZETA CHAT.',
+      kind: 'user'
+    }));
+  const demo = DEMO_CONTACTS.map(d => ({
+    id: d.id, name: d.name, phone: d.phone, about: d.about,
+    color: colorFor(d.id), kind: 'demo'
+  }));
+  return reg.concat(demo);
+}
+function findContact(id){
+  return getAllContacts().find(c => c.id === id)
+    || { id, name: id, about: 'Hey there!', color: colorFor(id) };
+}
+
+/* ============ RENDER CONTACTS ============ */
+function contactHTML(c){
+  const key  = threadKey(currentUser.id, c.id);
+  const meta = getMeta(key);
+  const thread = getThread(c.id);
+  const last = thread[thread.length - 1];
+
+  let preview = '<i data-lucide="message-circle"></i> කතා කරන්න පටන් ගන්න';
+  if (last){
+    let t;
+    if (last.deleted)             t = 'මැකූ පණිවිඩය';
+    else if (last.type === 'image') t = '📷 Photo';
+    else if (last.type === 'voice') t = '🎤 Voice message';
+    else if (last.type === 'file')  t = '📄 ' + esc(last.text || 'Document');
+    else                          t = esc(last.text);
+    preview = (last.from === currentUser.id ? 'ඔබ: ' : '') + t;
+  }
+  const unread = meta.unread || 0;
+
+  const avatarHTML = c.avatar
+    ? `<img src="${c.avatar}" alt="${esc(c.name)}">`
+    : `<span>${esc((c.name[0] || '?').toUpperCase())}</span>`;
+
+  const subline = c.phone
+    ? `<i data-lucide="phone"></i>${esc(c.phone)}`
+    : `<i data-lucide="at-sign"></i>${esc(c.username || '')}`;
+
+  return `
+  <div class="contact-item ${meta.pinned ? 'pinned' : ''}" data-id="${c.id}">
+    <div class="avatar" style="background:${c.color || colorFor(c.id)}">
+      ${avatarHTML}
+      <span class="online-dot"></span>
+    </div>
+    <div class="ci-body">
+      <div class="ci-top">
+        <span class="ci-name">${esc(c.name)}${meta.pinned ? '<i data-lucide="pin"></i>' : ''}</span>
+        <span class="ci-time">${last ? fmtTime(last.time) : ''}</span>
+      </div>
+      <div class="ci-sub">${subline}</div>
+      <div class="ci-bottom">
+        <span class="ci-preview">${preview}</span>
+        ${meta.muted ? '<i data-lucide="bell-off" class="mute-ic"></i>' : ''}
+        ${unread ? `<span class="unread-badge">${unread > 99 ? '99+' : unread}</span>` : ''}
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderContacts(){
+  if (!currentUser) return;
+  const listEl = $('#contactList');
+  const q = ($('#contactSearch').value || '').toLowerCase().trim();
+  let contacts = getAllContacts();
+  if (q){
+    contacts = contacts.filter(c =>
+      c.name.toLowerCase().includes(q) ||
+      (c.username && c.username.toLowerCase().includes(q)) ||
+      (c.email && c.email.toLowerCase().includes(q)) ||
+      (c.phone && c.phone.includes(q))
+    );
+  }
+
+  contacts.sort((a, b) => {
+    const pa = getMeta(threadKey(currentUser.id, a.id)).pinned ? 1 : 0;
+    const pb = getMeta(threadKey(currentUser.id, b.id)).pinned ? 1 : 0;
+    if (pa !== pb) return pb - pa;
+    return lastTime(b.id) - lastTime(a.id);
   });
-  return all;
-}
 
-function avatarColor(phone) {
-  let h = 0;
-  for (let i = 0; i < phone.length; i++) h = (h * 31 + phone.charCodeAt(i)) >>> 0;
-  return AVATAR_COLORS[h % AVATAR_COLORS.length];
-}
-
-function renderContacts(filter) {
-  const listEl = document.getElementById('contactList');
-  const contacts = getAllContacts();
-  const f = (filter || '').toLowerCase();
-  const filtered = contacts.filter(c => c.name.toLowerCase().includes(f) || c.phone.includes(f));
-
-  if (filtered.length === 0) {
-    listEl.innerHTML = '<p style="padding:24px; text-align:center; font-size:13px; color:rgba(224,232,240,0.3);">Contact කෙනෙක් හමු වුනේ නෑ 😕</p>';
+  if (!contacts.length){
+    listEl.innerHTML = `<div class="empty-list"><i data-lucide="search-x"></i>Contact කෙනෙක් හමු වුනේ නෑ 😕</div>`;
+    lucide.createIcons();
+    updateNavBadge();
     return;
   }
 
-  listEl.innerHTML = filtered.map(c => {
-    const msgs = getMsgs();
-    const thread = msgs[threadKey(c.phone)] || [];
-    const last = thread[thread.length - 1];
-    const preview = last ? ((last.from === currentUser.phone ? 'ඔයා: ' : '') + esc(last.text)) : 'මැසේජ් නෑ';
-    return `
-      <div class="contact-item ${activeContact && activeContact.phone === c.phone ? 'active' : ''}" onclick="openChat('${c.phone}','${esc(c.name)}')">
-        <div class="avatar online" style="background:${avatarColor(c.phone)};">
-          <span>${esc(c.name[0].toUpperCase())}</span><span class="online-dot"></span>
-        </div>
-        <div style="flex:1; min-width:0;">
-          <p style="font-weight:600; font-size:14px; margin:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${esc(c.name)}</p>
-          <p style="font-size:12px; color:rgba(224,232,240,0.4); margin:1px 0 0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${preview}</p>
-        </div>
-        ${last ? `<span style="font-size:10.5px; color:rgba(224,232,240,0.3); flex-shrink:0;">${fmtTime(last.time)}</span>` : ''}
+  listEl.innerHTML = contacts.map(contactHTML).join('');
+  lucide.createIcons();
+  updateNavBadge();
+}
+
+function updateNavBadge(){
+  if (!currentUser) return;
+  let total = 0;
+  getAllContacts().forEach(c => {
+    total += (getMeta(threadKey(currentUser.id, c.id)).unread || 0);
+  });
+  const b = $('#navBadge');
+  if (total > 0){ b.textContent = total > 99 ? '99+' : total; b.style.display = 'flex'; }
+  else b.style.display = 'none';
+}
+
+/* ============ THREAD ============ */
+function threadKey(a, b){ return [String(a), String(b)].sort().join('|'); }
+function getThread(id){
+  const all = DB.msgs.get();
+  return all[threadKey(currentUser.id, id)] || [];
+}
+function setThread(id, arr){
+  const all = DB.msgs.get();
+  all[threadKey(currentUser.id, id)] = arr;
+  DB.msgs.set(all);
+}
+function pushMsg(id, m){
+  const arr = getThread(id); arr.push(m); setThread(id, arr);
+}
+function updateMsg(id, msgId, patch){
+  const arr = getThread(id);
+  const i = arr.findIndex(m => m.id === msgId);
+  if (i > -1){ Object.assign(arr[i], patch); setThread(id, arr); }
+}
+function getMeta(key){
+  const m = DB.meta.get();
+  return m[key] || {};
+}
+function setMeta(key, patch){
+  const m = DB.meta.get();
+  m[key] = Object.assign({}, m[key] || {}, patch);
+  DB.meta.set(m);
+}
+function lastTime(id){
+  const t = getThread(id);
+  return t.length ? t[t.length - 1].time : 0;
+}
+
+/* ============ MESSAGES ============ */
+function tickHTML(status){
+  if (status === 'read')      return '<span class="ticks read">✓✓</span>';
+  if (status === 'delivered') return '<span class="ticks">✓✓</span>';
+  return '<span class="ticks">✓</span>';
+}
+function msgHTML(m){
+  const mine = m.from === currentUser.id;
+  let content = '';
+
+  if (m.deleted){
+    content = `<span class="deleted-msg"><i data-lucide="ban"></i> මේ පණිවිඩය මකා දමා ඇත</span>`;
+  } else if (m.type === 'image'){
+    content = `<img class="msg-img" src="${m.media}" alt="photo" data-img="${m.id}">`
+            + (m.text ? `<div class="msg-caption">${esc(m.text)}</div>` : '');
+  } else if (m.type === 'voice'){
+    content = `<div class="voice-msg"><i data-lucide="mic"></i><audio controls preload="metadata" src="${m.media}"></audio></div>`;
+  } else if (m.type === 'file'){
+    content = `<div class="file-msg">
+        <div class="fic"><i data-lucide="file-text"></i></div>
+        <div class="fmeta"><p>${esc(m.text)}</p><span>${esc(m.fileSize || '')}</span></div>
       </div>`;
-  }).join('');
+  } else {
+    content = `<div class="msg-text">${esc(m.text)}</div>`;
+  }
+
+  const reply = m.replyTo
+    ? `<div class="reply-quote"><b>${esc(m.replyTo.name || '')}</b><span>${esc(m.replyTo.text || '')}</span></div>`
+    : '';
+  const star = m.starred ? '<i data-lucide="star" class="star-ic"></i>' : '';
+
+  return `<div class="msg-row ${mine ? 'sent' : 'received'}" data-id="${m.id}">
+      <div class="msg-bubble">
+        ${star}${reply}${content}
+        <div class="msg-meta"><span>${fmtTime(m.time)}</span>${mine ? tickHTML(m.status) : ''}</div>
+      </div>
+    </div>`;
 }
 
-document.getElementById('contactSearch').addEventListener('input', function() {
-  renderContacts(this.value.trim());
-});
+function renderMessages(){
+  const area = $('#messagesArea');
+  if (!activeContact) return;
+  const thread = getThread(activeContact.id);
 
-function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
-
-// ================= MESSAGING =================
-function threadKey(otherPhone) {
-  return [currentUser.phone, otherPhone].sort().join('|');
-}
-
-function openChat(phone, name) {
-  activeContact = { phone: phone, name: name };
-  document.getElementById('emptyChat').style.display = 'none';
-  document.getElementById('activeChat').style.display = 'flex';
-  document.getElementById('chatName').textContent = name;
-  document.getElementById('chatAvatarLetter').textContent = name[0].toUpperCase();
-  document.getElementById('chatAvatar').style.background = avatarColor(phone);
-  document.getElementById('chatStatus').textContent = 'online';
-  document.getElementById('chatStatus').style.color = '#22C55E';
-  renderContacts(document.getElementById('contactSearch').value.trim());
-  renderMessages();
-  document.getElementById('msgInput').focus();
-  if (window.innerWidth <= 820) document.getElementById('sidebar').classList.remove('open');
-}
-
-function renderMessages() {
-  const area = document.getElementById('messagesArea');
-  const msgs = getMsgs();
-  const thread = msgs[threadKey(activeContact.phone)] || [];
-  if (thread.length === 0) {
-    area.innerHTML = `
-      <div style="text-align:center; padding:40px 20px; color:rgba(224,232,240,0.3);">
-        <div style="width:60px; height:60px; margin:0 auto 12px; border-radius:50%; background:rgba(0,163,255,0.06); border:1px solid rgba(0,163,255,0.15); display:flex; align-items:center; justify-content:center;">
-          <i data-lucide="lock" style="width:24px; height:24px; color:#00A3FF;"></i>
-        </div>
-        <p style="font-size:13px;">මේ chat එක encrypted 🔒<br>${esc(activeContact.name)} ට මැසේජ් එකක් යවන්න.</p>
+  if (!thread.length){
+    area.innerHTML = `<div class="chat-empty">
+        <div class="lock-circle"><i data-lucide="lock"></i></div>
+        <p>මේ chat එක end-to-end encrypted 🔒</p>
+        <p class="sub" style="font-size:12px;opacity:.7;">${esc(activeContact.name)} ට පළමු මැසේජ් එක යවන්න</p>
       </div>`;
     lucide.createIcons();
     return;
   }
-  area.innerHTML = thread.map(m => `
-    <div class="msg-row ${m.from === currentUser.phone ? 'sent' : 'received'}">
-      <div class="msg-bubble">
-        <div>${esc(m.text)}</div>
-        <div class="msg-time">${fmtTime(m.time)} ${m.from === currentUser.phone ? '✓✓' : ''}</div>
-      </div>
-    </div>`).join('');
+
+  let html = '', lastDay = '';
+  thread.forEach(m => {
+    const d = dayLabel(m.time);
+    if (d !== lastDay){
+      html += `<div class="day-sep"><span>${d}</span></div>`;
+      lastDay = d;
+    }
+    html += msgHTML(m);
+  });
+
+  area.innerHTML = html;
   area.scrollTop = area.scrollHeight;
+  lucide.createIcons();
 }
 
-function sendMessage() {
-  const input = document.getElementById('msgInput');
+/* ============ LONG PRESS ============ */
+function longPress(container, selector, handler){
+  let timer = null;
+  let lastTouch = 0;
+  const fire = el => {
+    suppressClickUntil = Date.now() + 650;
+    if (navigator.vibrate){ try { navigator.vibrate(18); } catch(e){} }
+    handler(el);
+  };
+  container.addEventListener('touchstart', e => {
+    const el = e.target.closest(selector);
+    if (!el) return;
+    lastTouch = Date.now();
+    clearTimeout(timer);
+    timer = setTimeout(() => fire(el), 480);
+  }, { passive:true });
+  const cancel = () => clearTimeout(timer);
+  container.addEventListener('touchmove', cancel, { passive:true });
+  container.addEventListener('touchend', cancel);
+  container.addEventListener('touchcancel', cancel);
+  container.addEventListener('mousedown', e => {
+    if (Date.now() - lastTouch < 800) return;
+    const el = e.target.closest(selector);
+    if (!el) return;
+    clearTimeout(timer);
+    timer = setTimeout(() => fire(el), 480);
+  });
+  container.addEventListener('mouseup', cancel);
+  container.addEventListener('mouseleave', cancel);
+  container.addEventListener('contextmenu', e => {
+    const el = e.target.closest(selector);
+    if (!el) return;
+    e.preventDefault();
+    fire(el);
+  });
+}
+
+/* ============ SHEET ============ */
+function openSheet(title, items){
+  const el = $('#sheet');
+  el.innerHTML = '<div class="sheet-handle"></div>'
+    + (title ? `<div class="sheet-title">${esc(title)}</div>` : '')
+    + items.map((it, i) => `
+        <button class="sheet-item ${it.danger ? 'danger' : ''}" data-i="${i}">
+          <i data-lucide="${it.icon}"></i><span>${esc(it.label)}</span>
+        </button>`).join('');
+  el.querySelectorAll('.sheet-item').forEach(btn => {
+    btn.onclick = () => {
+      const idx = +btn.dataset.i;
+      closeSheet();
+      setTimeout(() => { if (items[idx].onClick) items[idx].onClick(); }, 120);
+    };
+  });
+  lucide.createIcons();
+  el.classList.add('open');
+  $('#sheetBackdrop').classList.add('open');
+}
+function closeSheet(){
+  $('#sheet').classList.remove('open');
+  $('#sheetBackdrop').classList.remove('open');
+}
+
+/* ============ SCREEN NAV ============ */
+function showScreen(id){
+  $$('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById(id);
+  if (el) el.classList.add('active');
+  lucide.createIcons();
+}
+
+/* ============ MAIN MENU / SEARCH ============ */
+function toggleSearch(){
+  const bar = $('#searchBar');
+  bar.classList.toggle('show');
+  if (bar.classList.contains('show')) $('#contactSearch').focus();
+  else { $('#contactSearch').value = ''; renderContacts(); }
+}
+function openMainMenu(){
+  openSheet('ZETA CHAT', [
+    { icon:'users',         label:'New group',        onClick:()=>toast('Group chats ඉදිරියේදී 🔜') },
+    { icon:'star',          label:'Starred messages', onClick:()=>toast('Starred messages ඉදිරියේදී 🔜') },
+    { icon:'settings',      label:'Settings',         onClick:()=>switchAppTab('settings') },
+    { icon:'refresh-cw',    label:'Refresh contacts', onClick:()=>{ renderContacts(); toast('Refresh කළා ✓'); } },
+    { icon:'log-out',       label:'Logout', danger:true, onClick: logout }
+  ]);
+}
+
+/* ============ APP TABS ============ */
+function switchAppTab(tab){
+  $$('.bottom-nav button').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  $$('.tab-content').forEach(c => c.classList.remove('active'));
+  const el = document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1));
+  if (el) el.classList.add('active');
+
+  if (tab === 'chats')    renderContacts();
+  if (tab === 'status')   renderStatusList();
+  if (tab === 'calls')    renderCalls();
+  if (tab === 'settings') updateStorageInfo();
+  lucide.createIcons();
+}
+
+/* ============ CHAT OPEN / CLOSE ============ */
+function openChat(id){
+  const c = findContact(id);
+  activeContact = { id: c.id, name: c.name, about: c.about, color: c.color, avatar: c.avatar || null };
+  replyTarget = null;
+  renderReplyBar();
+  closeEmoji();
+
+  $('#chatName').textContent = c.name;
+  $('#chatStatus').textContent = 'online';
+  $('#chatStatus').style.color = 'var(--green)';
+
+  const av = $('#chatAvatar');
+  if (c.avatar){
+    av.innerHTML = `<img src="${c.avatar}" alt=""><span class="online-dot"></span>`;
+    av.style.background = '';
+  } else {
+    av.innerHTML = `<span id="chatAvatarLetter">${esc((c.name[0] || '?').toUpperCase())}</span><span class="online-dot"></span>`;
+    av.style.background = c.color || colorFor(c.id);
+  }
+
+  setMeta(threadKey(currentUser.id, id), { unread: 0 });
+  renderMessages();
+  renderContacts();
+  showScreen('screenChat');
+  setTimeout(() => { try { $('#msgInput').focus(); } catch(e){} }, 220);
+}
+function closeChat(){
+  closeEmoji();
+  cancelReply();
+  activeContact = null;
+  showScreen('screenMain');
+  renderContacts();
+}
+function openContactInfo(){
+  if (!activeContact) return;
+  const c = activeContact;
+  const av = $('#ciAvatar');
+  if (c.avatar){
+    av.innerHTML = `<img src="${c.avatar}" alt=""><span class="online-dot" style="display:none"></span>`;
+    av.style.background = '';
+  } else {
+    av.innerHTML = `<span>${esc((c.name[0] || '?').toUpperCase())}</span>`;
+    av.style.background = c.color || colorFor(c.id);
+  }
+  $('#ciName').textContent = c.name;
+  const info = findContact(c.id);
+  $('#ciContactId').textContent = info.phone ? info.phone : ('@' + (info.username || ''));
+  $('#ciAbout').textContent = c.about || 'Hey there! I am using ZETA CHAT.';
+
+  const meta = getMeta(threadKey(currentUser.id, c.id));
+  $('#ciMuteLabel').textContent = meta.muted ? 'Unmute notifications' : 'Mute notifications';
+  showScreen('screenContactInfo');
+}
+function openChatMenu(){
+  if (!activeContact) return;
+  const key = threadKey(currentUser.id, activeContact.id);
+  const meta = getMeta(key);
+  openSheet(activeContact.name, [
+    { icon:'user',     label:'View contact',  onClick: openContactInfo },
+    { icon:'search',   label:'Search in chat', onClick:()=>{ toggleSearch(); showScreen('screenMain'); switchAppTab('chats'); } },
+    { icon: meta.muted ? 'bell' : 'bell-off',
+      label: meta.muted ? 'Unmute notifications' : 'Mute notifications',
+      onClick: () => { setMeta(key, { muted: !meta.muted }); renderContacts(); toast(meta.muted ? 'Unmuted 🔔' : 'Muted 🔕'); } },
+    { icon:'eraser',   label:'Clear chat',    onClick: () => clearChatWith(activeContact.id) },
+    { icon:'trash-2',  label:'Delete chat',   danger:true, onClick: () => deleteChatWith(activeContact.id) }
+  ]);
+}
+
+/* ============ SEND ============ */
+function onSendClick(){
+  const val = $('#msgInput').value.trim();
+  if (val) sendMessage();
+  else toggleVoice();
+}
+function sendMessage(){
+  const input = $('#msgInput');
   const text = input.value.trim();
   if (!text || !activeContact) return;
 
-  const msgs = getMsgs();
-  const key = threadKey(activeContact.phone);
-  if (!msgs[key]) msgs[key] = [];
-  msgs[key].push({ from: currentUser.phone, to: activeContact.phone, text: text, time: Date.now() });
-  saveMsgs(msgs);
-
+  const m = {
+    id: uid(), from: currentUser.id, to: activeContact.id,
+    type: 'text', text, time: Date.now(), status: 'sent',
+    replyTo: replyTarget ? Object.assign({}, replyTarget) : null
+  };
+  pushMsg(activeContact.id, m);
   input.value = '';
+  cancelReply();
+  updateComposerBtn();
   renderMessages();
-  renderContacts(document.getElementById('contactSearch').value.trim());
-
-  // Simulated reply (demo)
-  const typingArea = document.getElementById('typingArea');
-  document.getElementById('chatStatus').textContent = 'typing...';
-  document.getElementById('chatStatus').style.color = '#00D4FF';
-  typingArea.innerHTML = '<div class="typing-indicator">typing...</div>';
-  typingArea.style.height = 'auto';
-
+  renderContacts();
+  autoReplyFlow(activeContact.id, m.id);
+}
+function sendMedia(type, data, extra){
+  if (!activeContact) return;
+  const m = {
+    id: uid(), from: currentUser.id, to: activeContact.id, type,
+    text: (extra && extra.text) || '', media: data || null,
+    fileSize: (extra && extra.fileSize) || '',
+    time: Date.now(), status: 'sent',
+    replyTo: replyTarget ? Object.assign({}, replyTarget) : null
+  };
+  pushMsg(activeContact.id, m);
+  cancelReply();
+  renderMessages();
+  renderContacts();
+  autoReplyFlow(activeContact.id, m.id);
+}
+function autoReplyFlow(contactId, msgId){
+  const isDemo = String(contactId).startsWith('d') && contactId.length <= 3;
   setTimeout(() => {
-    typingArea.innerHTML = ''; typingArea.style.height = '0';
-    document.getElementById('chatStatus').textContent = 'online';
-    document.getElementById('chatStatus').style.color = '#22C55E';
-    const msgs2 = getMsgs();
-    if (!msgs2[key]) msgs2[key] = [];
-    msgs2[key].push({
-      from: activeContact.phone, to: currentUser.phone,
-      text: DEMO_REPLIES[Math.floor(Math.random() * DEMO_REPLIES.length)],
-      time: Date.now()
-    });
-    saveMsgs(msgs2);
-    renderMessages();
-    renderContacts(document.getElementById('contactSearch').value.trim());
-  }, 1200 + Math.random() * 1500);
+    updateMsg(contactId, msgId, { status: 'delivered' });
+    if (activeContact && activeContact.id === contactId) renderMessages();
+  }, 450);
+  setTimeout(() => {
+    updateMsg(contactId, msgId, { status: 'read' });
+    if (activeContact && activeContact.id === contactId) renderMessages();
+    if (!isDemo || !getSettings().autoreply) return;
+    setTimeout(() => {
+      showTyping(contactId);
+      const delay = 1200 + Math.random() * 1300;
+      setTimeout(() => {
+        hideTyping(contactId);
+        const replyText = DEMO_REPLIES[Math.floor(Math.random() * DEMO_REPLIES.length)];
+        pushMsg(contactId, {
+          id: uid(), from: contactId, to: currentUser.id,
+          type: 'text', text: replyText, time: Date.now(), status: 'read'
+        });
+        const key = threadKey(currentUser.id, contactId);
+        const isOpen = activeContact && activeContact.id === contactId;
+        if (!isOpen) setMeta(key, { unread: (getMeta(key).unread || 0) + 1 });
+        if (isOpen) renderMessages();
+        renderContacts();
+        if (getSettings().sounds && navigator.vibrate){ try { navigator.vibrate(25); } catch(e){} }
+      }, delay);
+    }, 700);
+  }, 1300);
+}
+function showTyping(id){
+  if (activeContact && activeContact.id === id){
+    $('#chatStatus').textContent = 'typing...';
+    $('#chatStatus').style.color = 'var(--cyan)';
+    const area = $('#messagesArea');
+    let el = document.getElementById('typingLine');
+    if (!el){
+      el = document.createElement('div');
+      el.id = 'typingLine'; el.className = 'typing-line'; el.textContent = 'typing...';
+      area.appendChild(el); area.scrollTop = area.scrollHeight;
+    }
+  }
+}
+function hideTyping(id){
+  if (activeContact && activeContact.id === id){
+    $('#chatStatus').textContent = 'online';
+    $('#chatStatus').style.color = 'var(--green)';
+  }
+  const el = document.getElementById('typingLine'); if (el) el.remove();
 }
 
-document.getElementById('msgInput').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') { e.preventDefault(); sendMessage(); }
+/* ============ REPLY ============ */
+function renderReplyBar(){
+  const bar = $('#replyBar');
+  if (!replyTarget){ bar.classList.remove('show'); return; }
+  $('#rbName').textContent = replyTarget.name;
+  $('#rbText').textContent = replyTarget.text;
+  bar.classList.add('show');
+}
+function cancelReply(){ replyTarget = null; renderReplyBar(); }
+
+/* ============ MESSAGE MENU ============ */
+function openMsgMenu(msgId){
+  if (!activeContact) return;
+  const thread = getThread(activeContact.id);
+  const m = thread.find(x => x.id === msgId);
+  if (!m) return;
+  const mine = m.from === currentUser.id;
+  const items = [];
+  if (!m.deleted){
+    items.push({
+      icon:'reply', label:'පිළිතුරු දෙන්න',
+      onClick: () => {
+        const preview = m.type === 'image' ? '📷 Photo'
+                      : m.type === 'voice' ? '🎤 Voice message'
+                      : m.type === 'file'  ? '📄 ' + m.text
+                      : m.text;
+        replyTarget = { id: m.id, name: mine ? 'ඔබ' : activeContact.name, text: preview };
+        renderReplyBar();
+        $('#msgInput').focus();
+      }
+    });
+    if (m.type === 'text'){
+      items.push({
+        icon:'copy', label:'පිටපත් කරන්න',
+        onClick: () => {
+          if (navigator.clipboard && navigator.clipboard.writeText){
+            navigator.clipboard.writeText(m.text).then(()=>toast('පිටපත් වුනා ✓')).catch(()=>toast('පිටපත් කරන්න බෑ'));
+          } else toast('පිටපත් කරන්න බෑ');
+        }
+      });
+    }
+    items.push({ icon:'forward', label:'Forward කරන්න', onClick: () => toast('Forward කරන ලදී (demo) ✓') });
+    items.push({
+      icon:'star', label: m.starred ? 'Star ඉවත් කරන්න' : 'Star කරන්න',
+      onClick: () => { updateMsg(activeContact.id, msgId, { starred: !m.starred }); renderMessages(); }
+    });
+  }
+  items.push({
+    icon:'info', label:'විස්තර',
+    onClick: () => {
+      const st = mine ? ({ sent:'යවන ලදී', delivered:'ලැබුණා', read:'කියවා ඇත' }[m.status] || '-') : 'ලැබුණා';
+      toast(new Date(m.time).toLocaleString() + ' • ' + st);
+    }
+  });
+  items.push({
+    icon:'trash-2', label:'මකන්න', danger:true,
+    onClick: () => {
+      updateMsg(activeContact.id, msgId, { deleted:true, text:'', media:null, starred:false });
+      renderMessages();
+      renderContacts();
+      toast('මැසේජ් එක මකා දැමුවා 🗑️');
+    }
+  });
+  openSheet('', items);
+}
+
+/* ============ CONTACT MENU ============ */
+function openContactMenu(id){
+  const c = findContact(id);
+  const key = threadKey(currentUser.id, id);
+  const meta = getMeta(key);
+  const title = c.phone ? (c.name + ' • ' + c.phone) : (c.name + ' • @' + (c.username || ''));
+  openSheet(title, [
+    { icon:'message-circle', label:'Chat කරන්න', onClick: () => openChat(id) },
+    { icon:'phone',          label:'ඇමතුමක් ගන්න', onClick: () => { activeContact = c; startCall('voice'); } },
+    { icon: meta.pinned ? 'pin-off' : 'pin',
+      label: meta.pinned ? 'Unpin කරන්න' : 'Pin කරන්න',
+      onClick: () => { setMeta(key, { pinned: !meta.pinned }); renderContacts(); toast(meta.pinned ? 'Unpinned' : 'Pinned 📌'); } },
+    { icon: meta.muted ? 'bell' : 'bell-off',
+      label: meta.muted ? 'Unmute' : 'Mute',
+      onClick: () => { setMeta(key, { muted: !meta.muted }); renderContacts(); toast(meta.muted ? 'Unmuted 🔔' : 'Muted 🔕'); } },
+    { icon:'eraser',  label:'Chat එක හිස් කරන්න', onClick: () => clearChatWith(id) },
+    { icon:'trash-2', label:'Chat එක මකන්න', danger:true, onClick: () => deleteChatWith(id) }
+  ]);
+}
+function clearChatWith(id){
+  setThread(id, []);
+  if (activeContact && activeContact.id === id) renderMessages();
+  renderContacts();
+  toast('Chat එක හිස් කළා 🧹');
+}
+function deleteChatWith(id){
+  const all = DB.msgs.get();
+  delete all[threadKey(currentUser.id, id)];
+  DB.msgs.set(all);
+  const m = DB.meta.get();
+  delete m[threadKey(currentUser.id, id)];
+  DB.meta.set(m);
+  if (activeContact && activeContact.id === id){
+    activeContact = null;
+    showScreen('screenMain');
+  }
+  renderContacts();
+  toast('Chat එක මකා දැමුවා 🗑️');
+}
+function toggleMuteContact(){
+  if (!activeContact) return;
+  const key = threadKey(currentUser.id, activeContact.id);
+  const meta = getMeta(key);
+  setMeta(key, { muted: !meta.muted });
+  $('#ciMuteLabel').textContent = meta.muted ? 'Mute notifications' : 'Unmute notifications';
+  renderContacts();
+  toast(meta.muted ? 'Unmuted 🔔' : 'Muted 🔕');
+}
+
+/* ============ EMOJI ============ */
+const EMOJIS = ('😀 😃 😄 😁 😆 😅 😂 🤣 😊 😇 🙂 🙃 😉 😌 😍 🥰 😘 😗 😙 😚 😋 😛 😝 😜 🤪 🤨 🧐 🤓 😎 🥳 😏 😒 😞 😔 😟 😕 🙁 😣 😖 😫 😩 🥺 😢 😭 😤 😠 😡 🤬 🤯 😳 🥵 🥶 😱 😨 😰 😥 😓 🤗 🤔 🤭 🤫 🤥 😶 😐 😑 😬 🙄 😯 😦 😧 😮 😲 🥱 😴 🤤 😪 😵 🤐 🥴 🤢 🤮 🤧 😷 🤒 🤕 🤑 🤠 😈 👿 👻 💀 👽 🤖 💩 👍 👎 👌 ✌️ 🤞 🤟 🤘 🤙 👋 🙏 💪 🔥 ✨ 🎉 🎊 ❤️ 🧡 💛 💚 💙 💜 🖤 🤍 💔 💯 ✅ ❌ ⚡ 🌟 ⭐ 🚀 🌙 ☀️ 🍕 🍔 ☕ 🍺 🎵 🎶 📷 📱 💻 🎮 ⚽ 🏆 🚗 ✈️ 🎁 💐 🌹 🐶 🐱 🌈').split(' ');
+function buildEmoji(){
+  $('#emojiGrid').innerHTML = EMOJIS.filter(e => e.trim())
+    .map(e => `<button type="button" onclick="insertEmoji('${e}')">${e}</button>`).join('');
+}
+function insertEmoji(e){
+  const inp = $('#msgInput');
+  inp.value += e; inp.focus(); updateComposerBtn();
+}
+function toggleEmoji(){
+  const p = $('#emojiPanel');
+  p.classList.toggle('show');
+  if (p.classList.contains('show')) p.scrollTop = 0;
+}
+function closeEmoji(){ $('#emojiPanel').classList.remove('show'); }
+
+function updateComposerBtn(){
+  const has = $('#msgInput').value.trim().length > 0;
+  $('#sendBtn').innerHTML = has ? '<i data-lucide="send"></i>' : '<i data-lucide="mic"></i>';
+  lucide.createIcons();
+}
+
+/* ============ ATTACH ============ */
+function openAttach(){
+  openSheet('Attach', [
+    { icon:'image',    label:'Photos & Videos', onClick: () => $('#imgInput').click() },
+    { icon:'camera',   label:'Camera',          onClick: () => $('#camInput').click() },
+    { icon:'file-text',label:'Document',        onClick: () => $('#docInput').click() },
+    { icon:'map-pin',  label:'Location',        onClick: sendLocation },
+    { icon:'user',     label:'Contact',         onClick: () => toast('Contact share (demo) 📇') }
+  ]);
+}
+function handleImageFile(input){
+  const f = input.files && input.files[0];
+  input.value = '';
+  if (!f) return;
+  if (f.size > 2.5 * 1024 * 1024) return toast('ෆයිල් එක 2.5MB ට වඩා ලොකුයි ⚠️');
+  const fr = new FileReader();
+  fr.onload = () => sendMedia('image', fr.result);
+  fr.onerror = () => toast('ෆයිල් එක කියවන්න බෑ');
+  fr.readAsDataURL(f);
+}
+function handleDocFile(input){
+  const f = input.files && input.files[0];
+  input.value = '';
+  if (!f) return;
+  const size = f.size > 1048576
+    ? (f.size / 1048576).toFixed(1) + ' MB'
+    : Math.max(1, Math.round(f.size / 1024)) + ' KB';
+  sendMedia('file', null, { text: f.name, fileSize: size });
+}
+function sendLocation(){
+  if (!activeContact) return;
+  const lat = (5.9 + Math.random() * 0.4).toFixed(4);
+  const lng = (79.8 + Math.random() * 0.5).toFixed(4);
+  sendMedia('text', null, { text: `📍 මගේ ස්ථානය\nhttps://maps.google.com/?q=${lat},${lng}` });
+}
+
+/* ============ VOICE ============ */
+async function toggleVoice(){
+  if (mediaRecorder && mediaRecorder.state === 'recording'){ stopVoice(true); return; }
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || typeof MediaRecorder === 'undefined'){
+    return toast('මේ browser එකේ voice record support නෑ 🎤');
+  }
+  try {
+    recStream = await navigator.mediaDevices.getUserMedia({ audio:true });
+    audioChunks = [];
+    mediaRecorder = new MediaRecorder(recStream);
+    mediaRecorder.ondataavailable = e => { if (e.data && e.data.size) audioChunks.push(e.data); };
+    mediaRecorder.onstop = () => {
+      recStream.getTracks().forEach(t => t.stop());
+      const blob = new Blob(audioChunks, { type:'audio/webm' });
+      if (blob.size > 500000) return toast('Recording එක ලොකු වැඩියි ⚠️');
+      const fr = new FileReader();
+      fr.onload = () => sendMedia('voice', fr.result);
+      fr.readAsDataURL(blob);
+    };
+    mediaRecorder.start();
+    recStart = Date.now();
+    showRecUI();
+  } catch(err){
+    toast('මයික්‍රොෆෝනයට අවසර නෑ 🎤');
+  }
+}
+function showRecUI(){
+  $('#composer').style.display = 'none';
+  $('#recBar').classList.add('show');
+  $('#recTime').textContent = '0:00';
+  clearInterval(recTimer);
+  recTimer = setInterval(() => {
+    const s = Math.floor((Date.now() - recStart) / 1000);
+    $('#recTime').textContent = Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+    if (s >= 30) stopVoice(true);
+  }, 250);
+  if (navigator.vibrate){ try { navigator.vibrate(20); } catch(e){} }
+}
+function stopVoice(send){
+  clearInterval(recTimer);
+  $('#recBar').classList.remove('show');
+  $('#composer').style.display = 'flex';
+  if (mediaRecorder && mediaRecorder.state === 'recording'){
+    if (!send){
+      mediaRecorder.onstop = () => { if (recStream) recStream.getTracks().forEach(t => t.stop()); };
+    }
+    mediaRecorder.stop();
+  }
+  mediaRecorder = null;
+}
+function cancelVoice(){ stopVoice(false); toast('Recording එක අවලංගු කළා'); }
+
+/* ============ CALLS ============ */
+function startCall(type){
+  if (!activeContact) return;
+  const calls = DB.calls.get();
+  calls.unshift({
+    id: activeContact.id, name: activeContact.name,
+    kind: 'outgoing', media: type, time: Date.now()
+  });
+  DB.calls.set(calls.slice(0, 120));
+  $('#callLetter').textContent = (activeContact.name[0] || '?').toUpperCase();
+  $('#callAvatar').style.background = activeContact.color || colorFor(activeContact.id);
+  $('#callName').textContent = activeContact.name;
+  $('#callStatus').textContent = (type === 'video' ? 'Video' : 'Voice') + ' ඇමතුම අරඹමින්...';
+  $('#callOverlay').classList.add('show');
+  lucide.createIcons();
+  setTimeout(() => { const s = $('#callStatus'); if (s) s.textContent = 'Ringing...'; }, 1400);
+}
+function endCall(){
+  $('#callOverlay').classList.remove('show');
+  renderCalls();
+  toast('ඇමතුම අවසන් 📞');
+}
+function renderCalls(){
+  const list = $('#callList');
+  const calls = DB.calls.get();
+  if (!calls.length){
+    list.innerHTML = `<div class="empty-list"><i data-lucide="phone-off"></i>ඇමතුම් ඉතිහාසයක් නෑ</div>`;
+    lucide.createIcons();
+    return;
+  }
+  list.innerHTML = calls.map(c => `
+    <div class="call-item">
+      <div class="avatar" style="background:${colorFor(c.id)}">
+        <span>${esc((c.name[0] || '?').toUpperCase())}</span>
+      </div>
+      <div class="call-info">
+        <p>${esc(c.name)}</p>
+        <span><i data-lucide="phone-outgoing"></i>${fmtTime(c.time)}</span>
+      </div>
+      <button class="icon-btn" onclick="quickCall('${c.id}')"><i data-lucide="${c.media === 'video' ? 'video' : 'phone'}"></i></button>
+    </div>`).join('');
+  lucide.createIcons();
+}
+function quickCall(id){
+  activeContact = findContact(id);
+  startCall('voice');
+}
+
+/* ============ STATUS ============ */
+function renderStatusList(){
+  const list = $('#statusList');
+  if (!list || !currentUser) return;
+  const mine = DB.status.get()[currentUser.id] || null;
+  const av = $('#myStatusAvatar');
+  if (currentUser.avatar){
+    av.innerHTML = `<img src="${currentUser.avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+    av.style.background = '';
+  } else {
+    av.textContent = (currentUser.name[0] || 'Z').toUpperCase();
+    av.style.background = currentUser.color;
+  }
+  $('#myStatusText').textContent = mine ? mine.text : 'Status එකක් එකතු කරන්න';
+  $('#myStatusRing').className = 'status-ring' + (mine ? '' : ' seen');
+
+  list.innerHTML = DEMO_STATUSES.map((s, i) => `
+    <div class="status-item" onclick="openStatusViewer(${i})">
+      <div class="status-ring"><div style="background:${s.color}">${esc(s.name[0].toUpperCase())}</div></div>
+      <div class="call-info"><p>${esc(s.name)}</p><span>${timeAgo(s.time)}</span></div>
+    </div>`).join('');
+  lucide.createIcons();
+}
+function addMyStatus(){
+  const val = prompt('ඔබේ status එක ලියන්න:', '');
+  if (val === null) return;
+  const txt = val.trim().slice(0, 90);
+  if (!txt) return;
+  const all = DB.status.get();
+  all[currentUser.id] = { text: txt, time: Date.now() };
+  DB.status.set(all);
+  renderStatusList();
+  toast('Status එක update කළා ✓');
+}
+let svTimer = null;
+function openStatusViewer(i){
+  const s = DEMO_STATUSES[i]; if (!s) return;
+  $('#svLetter').textContent = s.name[0].toUpperCase();
+  $('#svAvatar').style.background = s.color;
+  $('#svName').textContent = s.name;
+  $('#svTime').textContent = timeAgo(s.time);
+  $('#svText').textContent = s.text;
+  $('#svText').style.background = `linear-gradient(135deg, ${s.color}55, ${s.color}22)`;
+  $('#svBars').innerHTML = DEMO_STATUSES.map((_, j) =>
+    `<div class="sv-bar ${j < i ? 'done' : ''} ${j === i ? 'active' : ''}"><i></i></div>`
+  ).join('');
+  $('#statusViewer').classList.add('show');
+  lucide.createIcons();
+  clearTimeout(svTimer);
+  svTimer = setTimeout(() => closeStatusViewer(), 5000);
+}
+function closeStatusViewer(){
+  clearTimeout(svTimer);
+  $('#statusViewer').classList.remove('show');
+}
+
+/* ============ IMAGE VIEWER ============ */
+function openImageViewer(src){ $('#imgViewerSrc').src = src; $('#imgViewer').classList.add('show'); }
+function closeImageViewer(){ $('#imgViewer').classList.remove('show'); $('#imgViewerSrc').src = ''; }
+
+/* ============ PROFILE EDIT ============ */
+function openProfileEdit(){
+  const letter = (currentUser.name[0] || 'Z').toUpperCase();
+  const av = $('#peAvatar');
+  if (currentUser.avatar){
+    av.innerHTML = `<img src="${currentUser.avatar}" alt="me"><div class="pfp-plus"><i data-lucide="camera"></i></div>`;
+    av.style.background = '';
+    $('#removeAvatarBtn').style.display = 'flex';
+  } else {
+    av.innerHTML = `<span id="peLetter">${esc(letter)}</span><div class="pfp-plus"><i data-lucide="camera"></i></div>`;
+    av.style.background = currentUser.color;
+    $('#removeAvatarBtn').style.display = 'none';
+  }
+  $('#peName').value  = currentUser.name;
+  $('#peAbout').value = currentUser.about;
+  $('#peUsername').value = '@' + currentUser.username;
+  $('#peEmail').value = currentUser.email;
+  showScreen('screenProfile');
+  lucide.createIcons();
+}
+function backFromProfile(){
+  showScreen('screenMain');
+  switchAppTab('settings');
+}
+$('#peAvatarInput').addEventListener('change', function(){
+  const f = this.files && this.files[0];
+  this.value = '';
+  if (!f) return;
+  if (f.size > 2 * 1024 * 1024) return toast('රූපය 2MB ට වඩා ලොකුයි ⚠️');
+  const fr = new FileReader();
+  fr.onload = () => {
+    currentUser.avatar = fr.result;
+    const av = $('#peAvatar');
+    av.innerHTML = `<img src="${fr.result}" alt="me"><div class="pfp-plus"><i data-lucide="camera"></i></div>`;
+    av.style.background = '';
+    $('#removeAvatarBtn').style.display = 'flex';
+    lucide.createIcons();
+  };
+  fr.readAsDataURL(f);
+});
+function cycleAvatarColor(){
+  if (currentUser.avatar) return toast('Photo එකක් තියෙන නිසා පාට අදාළ නෑ');
+  const cur = currentUser.color;
+  let idx = AVATAR_COLORS.indexOf(cur);
+  idx = (idx + 1) % AVATAR_COLORS.length;
+  currentUser.color = AVATAR_COLORS[idx];
+  $('#peAvatar').style.background = currentUser.color;
+  $('#setAvatar').style.background = currentUser.color;
+}
+function removeAvatar(){
+  currentUser.avatar = null;
+  const letter = (currentUser.name[0] || 'Z').toUpperCase();
+  const av = $('#peAvatar');
+  av.innerHTML = `<span id="peLetter">${esc(letter)}</span><div class="pfp-plus"><i data-lucide="camera"></i></div>`;
+  av.style.background = currentUser.color;
+  $('#removeAvatarBtn').style.display = 'none';
+  lucide.createIcons();
+}
+function saveProfile(){
+  const name  = $('#peName').value.trim();
+  const about = $('#peAbout').value.trim() || 'Hey there! I am using ZETA CHAT.';
+  if (name.length < 2) return toast('නම අඩුම අකුරු 2ක් වත් දාන්න');
+
+  const users = DB.users.get();
+  const u = users.find(x => x.id === currentUser.id);
+  if (u){
+    u.name = name;
+    u.about = about;
+    u.avatar = currentUser.avatar;
+    u.color = currentUser.color;
+    DB.users.set(users);
+  }
+  currentUser.name  = name;
+  currentUser.about = about;
+
+  const letter = (name[0] || 'Z').toUpperCase();
+  const setAv = $('#setAvatar');
+  if (currentUser.avatar){
+    setAv.innerHTML = `<img src="${currentUser.avatar}" alt="me">`;
+  } else {
+    setAv.innerHTML = `<span id="setAvatarLetter">${esc(letter)}</span>`;
+    setAv.style.background = currentUser.color;
+  }
+  $('#setName').textContent = name;
+  $('#setAbout').textContent = about;
+
+  renderStatusList();
+  renderContacts();
+  showScreen('screenMain');
+  switchAppTab('settings');
+  toast('Profile එක save කළා ✓');
+}
+
+/* ============ CHANGE PASSWORD ============ */
+function openChangePassword(){
+  $('#cpOld').value = ''; $('#cpNew').value = ''; $('#cpNew2').value = '';
+  hideAuthAlert('cpError'); hideAuthAlert('cpSuccess');
+  updatePwdStrength('cpNew', 'cpStrengthBar', 'cpStrengthLabel');
+  showScreen('screenChangePass');
+}
+function backToSettings(){
+  showScreen('screenMain');
+  switchAppTab('settings');
+}
+function submitChangePassword(){
+  hideAuthAlert('cpError'); hideAuthAlert('cpSuccess');
+  const oldP = $('#cpOld').value;
+  const np   = $('#cpNew').value;
+  const np2  = $('#cpNew2').value;
+  if (!oldP) return showAuthAlert('cpError', 'වත්මන් පාස්වර්ඩ් එක දාන්න.');
+  if (np.length < 6) return showAuthAlert('cpError', 'නව පාස්වර්ඩ් අකුරු 6ට වැඩි.');
+  if (np !== np2) return showAuthAlert('cpError', 'නව පාස්වර්ඩ් දෙක සමාන නෑ.');
+
+  const users = DB.users.get();
+  const u = users.find(x => x.id === currentUser.id);
+  if (!u) return showAuthAlert('cpError', 'ගිණුමක් හමු වුනේ නෑ.');
+  if (u.pass !== hashPass(oldP)) return showAuthAlert('cpError', 'වත්මන් පාස්වර්ඩ් එක වැරදියි.');
+
+  u.pass = hashPass(np);
+  // Invalidate other sessions except current
+  if (u.sessions){
+    u.sessions = u.sessions.filter(s => s.id === currentSessionId);
+  }
+  DB.users.set(users);
+
+  $('#cpOld').value = ''; $('#cpNew').value = ''; $('#cpNew2').value = '';
+  updatePwdStrength('cpNew', 'cpStrengthBar', 'cpStrengthLabel');
+  showAuthAlert('cpSuccess', '✅ පාස්වර්ඩ් එක වෙනස් කළා! අනෙක් sessions logout වුනා.');
+  updateSessionsCount();
+}
+
+/* ============ SESSIONS / HISTORY ============ */
+function openSessions(){
+  const u = DB.users.get().find(x => x.id === currentUser.id);
+  const sessions = (u && u.sessions ? u.sessions.slice() : []).sort((a, b) => b.time - a.time);
+  const el = $('#sessionsList');
+  if (!sessions.length){
+    el.innerHTML = `<div class="empty-list"><i data-lucide="monitor-off"></i>Active sessions නෑ</div>`;
+  } else {
+    el.innerHTML = `<div class="list-card">${sessions.map(s => `
+      <div class="list-card-item">
+        <div class="lic-icon"><i data-lucide="${/android|ios|iphone|ipad/i.test(s.device) ? 'smartphone' : 'monitor'}"></i></div>
+        <div class="lic-body">
+          <div class="lic-title">${esc(s.device)}
+            ${s.id === currentSessionId ? '<span class="current-tag">මේ device එක</span>' : ''}
+          </div>
+          <div class="lic-sub">${esc(s.browser || '')} • ${fmtDateTime(s.time)}</div>
+        </div>
+      </div>`).join('')}</div>`;
+  }
+  lucide.createIcons();
+  showScreen('screenSessions');
+}
+function openLoginHistory(){
+  const u = DB.users.get().find(x => x.id === currentUser.id);
+  const hist = (u && u.loginHistory ? u.loginHistory.slice() : []);
+  const el = $('#historyList');
+  if (!hist.length){
+    el.innerHTML = `<div class="empty-list"><i data-lucide="history"></i>Login history නෑ</div>`;
+  } else {
+    el.innerHTML = `<div class="list-card">${hist.map(h => `
+      <div class="list-card-item">
+        <div class="lic-icon"><i data-lucide="${h.success ? 'check-circle' : 'x-circle'}"></i></div>
+        <div class="lic-body">
+          <div class="lic-title">${esc(h.device)} ${h.browser ? '• ' + esc(h.browser) : ''}</div>
+          <div class="lic-sub">${fmtDateTime(h.time)} — <span class="${h.success ? 'success-tag' : 'failed-tag'}">${h.success ? 'සාර්ථක' : (h.reason || 'අසාර්ථක')}</span></div>
+        </div>
+      </div>`).join('')}</div>`;
+  }
+  lucide.createIcons();
+  showScreen('screenHistory');
+}
+
+/* ============ SETTINGS ============ */
+function onToggle(key, val){ setSetting(key, val); toast(val ? 'On ✓' : 'Off'); }
+function clearAllChats(){
+  openSheet('Chats', [
+    { icon:'eraser', label:'සියලුම chats හිස් කරන්න', danger:true, onClick: () => {
+        DB.msgs.set({}); DB.meta.set({}); renderContacts(); toast('සියලුම chats හිස් කළා 🧹');
+      } },
+    { icon:'trash-2', label:'සියලුම දත්ත මකන්න', danger:true, onClick: () => {
+        if (confirm('සියලුම chat දත්ත මකා දමන්නද? undo කරන්න බෑ.')){
+          DB.msgs.set({}); DB.meta.set({}); DB.calls.set({}); DB.status.set({});
+          renderContacts(); renderCalls(); renderStatusList();
+          toast('දත්ත මකා දැමුවා 🗑️');
+        }
+      } }
+  ]);
+}
+function updateStorageInfo(){
+  try {
+    let total = 0;
+    for (const k in localStorage){
+      if (Object.prototype.hasOwnProperty.call(localStorage, k)) total += (localStorage[k] || '').length;
+    }
+    const kb = (total / 1024).toFixed(1);
+    const el = $('#storageInfo');
+    if (el) el.textContent = kb + ' KB භාවිතා වේ';
+  } catch(e){}
+}
+function showStorageInfo(){ updateStorageInfo(); toast($('#storageInfo').textContent); }
+function openAbout(){
+  openSheet('ZETA CHAT', [
+    { icon:'info',        label:'Version 3.0 (Mobile)', onClick:()=>toast('ZETA CHAT v3.0 🔒') },
+    { icon:'shield-check',label:'End-to-end encrypted', onClick:()=>toast('Demo encryption 🔐') },
+    { icon:'heart',       label:'Made with ❤️', onClick:()=>toast('Thanks for using ZETA CHAT!') }
+  ]);
+}
+
+/* ============ EVENT WIRING ============ */
+$('#contactSearch').addEventListener('input', renderContacts);
+$('#contactList').addEventListener('click', e => {
+  if (Date.now() < suppressClickUntil) return;
+  const item = e.target.closest('.contact-item');
+  if (item) openChat(item.dataset.id);
+});
+longPress($('#contactList'), '.contact-item', el => openContactMenu(el.dataset.id));
+
+$('#messagesArea').addEventListener('click', e => {
+  if (Date.now() < suppressClickUntil) return;
+  const img = e.target.closest('.msg-img');
+  if (img) openImageViewer(img.src);
+});
+longPress($('#messagesArea'), '.msg-row', el => openMsgMenu(el.dataset.id));
+
+$('#msgInput').addEventListener('input', updateComposerBtn);
+$('#msgInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendMessage(); }
 });
 
-// ================= INIT =================
+$('#imgInput').addEventListener('change', function(){ handleImageFile(this); });
+$('#camInput').addEventListener('change', function(){ handleImageFile(this); });
+$('#docInput').addEventListener('change', function(){ handleDocFile(this); });
+
+document.addEventListener('dblclick', e => e.preventDefault(), { passive:false });
+
+/* ============ INIT ============ */
+buildEmoji();
 lucide.createIcons();
-const sess = getSession();
-if (sess && getUsers().some(u => u.phone === sess.phone)) {
-  enterApp();
-}
+
+(function boot(){
+  const s = Session.get();
+  if (!s){ $('#authScreen').style.display = 'flex'; return; }
+  const user = DB.users.get().find(u => u.id === s.userId);
+  if (!user){ Session.clear(); $('#authScreen').style.display = 'flex'; return; }
+  // verify session still active
+  if (!user.sessions || !user.sessions.some(x => x.id === s.sessionId)){
+    Session.clear();
+    $('#authScreen').style.display = 'flex';
+    return;
+  }
+  currentSessionId = s.sessionId;
+  $('#authScreen').style.display = 'none';
+  enterApp(user);
+})();
+
+window.addEventListener('beforeunload', () => {
+  if (mediaRecorder && mediaRecorder.state === 'recording'){ try { mediaRecorder.stop(); } catch(e){} }
+  if (recStream) recStream.getTracks().forEach(t => t.stop());
+});
 </script>
 </body>
 </html>
