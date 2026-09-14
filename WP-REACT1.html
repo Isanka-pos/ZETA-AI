@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WP React HUB</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --watsapp-green: #25d366;
+      --primary-accent: #06b6d4;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+      background-image: radial-gradient(at 10% 10%, rgba(37, 211, 102, 0.15) 0px, transparent 50%),
+                        radial-gradient(at 90% 90%, rgba(6, 182, 212, 0.15) 0px, transparent 50%);
+    }
+
+    @keyframes slideInUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .card {
+      background: var(--card-bg);
+      padding: 35px;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.05);
+      animation: slideInUp 0.5s ease-out;
+    }
+
+    h2 {
+      text-align: center;
+      color: var(--watsapp-green);
+      font-weight: 700;
+      font-size: 26px;
+      margin: 0 0 5px 0;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
+      margin-bottom: 25px;
+    }
+
+    label {
+      font-size: 13px;
+      font-weight: 600;
+      display: block;
+      margin-top: 18px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px 15px;
+      margin-top: 6px;
+      border-radius: 10px;
+      border: 2px solid rgba(255,255,255,0.1);
+      background: rgba(15, 23, 42, 0.6);
+      color: var(--text-main);
+      box-sizing: border-box;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--watsapp-green);
+      box-shadow: 0 0 10px rgba(37, 211, 102, 0.3);
+    }
+
+    .emoji-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-top: 8px;
+      padding: 12px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 12px;
+      max-height: 160px;
+      overflow-y: auto;
+    }
+
+    .emoji-btn {
+      font-size: 20px;
+      padding: 8px;
+      text-align: center;
+      cursor: pointer;
+      border-radius: 8px;
+      background: var(--bg-color);
+      border: 2px solid transparent;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .emoji-btn:hover {
+      background: rgba(255,255,255,0.08);
+      transform: scale(1.1);
+    }
+
+    .emoji-btn.selected {
+      border-color: var(--watsapp-green);
+      background: rgba(37, 211, 102, 0.2);
+      box-shadow: 0 0 8px rgba(37, 211, 102, 0.3);
+    }
+
+    .emoji-btn.custom-item {
+      border-color: var(--primary-accent);
+    }
+
+    .custom-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .custom-row input {
+      margin-top: 0;
+      flex-grow: 1;
+    }
+
+    .add-btn {
+      width: auto;
+      padding: 0 20px;
+      border-radius: 10px;
+      border: none;
+      background: var(--primary-accent);
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .add-btn:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .added-notify {
+      font-size: 12px;
+      color: var(--primary-accent);
+      margin-top: 6px;
+      text-align: center;
+      min-height: 16px;
+      transition: opacity 0.3s ease;
+      opacity: 0;
+    }
+
+    button.submit-btn {
+      width: 100%;
+      padding: 14px;
+      margin-top: 25px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #25d366 0%, #1da851 100%);
+      color: #000;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      border: none;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(29, 168, 81, 0.4);
+    }
+
+    button.submit-btn:hover {
+      box-shadow: 0 6px 20px rgba(29, 168, 81, 0.6);
+      transform: translateY(-2px);
+    }
+
+    .error { color: #ef4444; font-size: 12px; margin-top: 5px; display: none; font-weight: 500; }
+    .success { color: #25d366; font-size: 14px; margin-top: 15px; text-align: center; display: none; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h2>WP React HUB</h2>
+  <div class="subtitle">Next Gen WhatsApp Channel Tool</div>
+  
+  <label>WhatsApp Channel Post URL:</label>
+  <input type="text" id="postUrl" placeholder="https://whatsapp.com/channel/...">
+
+  <label>Select React Count:</label>
+  <select id="reactCount">
+    <option value="10">10</option>
+    <option value="50">50</option>
+    <option value="100">100</option>
+    <option value="150">150</option>
+    <option value="200">200</option>
+    <option value="250">250</option>
+    <option value="300">300</option>
+    <option value="350" selected>350</option>
+    <option value="400">400</option>
+    <option value="450">450</option>
+    <option value="500">500</option>
+  </select>
+
+  <label>Select Emojis (Max 6):</label>
+  <div class="emoji-grid" id="emojiContainer"></div>
+  
+  <div class="custom-row">
+    <input type="text" id="customEmoji" placeholder="Custom Emojis (e.g. 💀🥺✨)">
+    <button type="button" class="add-btn" onclick="addCustomEmoji()">Add</button>
+  </div>
+  <div class="added-notify" id="addedNotify"></div>
+
+  <label>Did you add 'Reactions' keyword in description?</label>
+  <select id="hasKeyword">
+    <option value="">-- Choose Option --</option>
+    <option value="yes">Yes</option>
+    <option value="no">No</option>
+  </select>
+  <div class="error" id="keywordError">❌ Please add it first!</div>
+
+  <button class="submit-btn" id="submitBtn" onclick="submitRequest()">React My Post</button>
+  <div class="success" id="responseMsg"></div>
+</div>
+
+<script>
+  const defaultEmojis = ['👍', '❤️', '😂', '😮', '😢', '🔥', '💀', '🥺', '✨'];
+  
+  let currentDisplayEmojis = [...defaultEmojis];
+  let selectedEmojis = [];
+
+  const container = document.getElementById('emojiContainer');
+  const notifyEl = document.getElementById('addedNotify');
+  
+  function renderEmojis() {
+    container.innerHTML = '';
+    currentDisplayEmojis.forEach(e => {
+      const isCustom = !defaultEmojis.includes(e);
+      const btn = document.createElement('div');
+      btn.className = `emoji-btn ${selectedEmojis.includes(e) ? 'selected' : ''} ${isCustom ? 'custom-item' : ''}`;
+      btn.innerText = e;
+      btn.onclick = () => toggleEmoji(e);
+      container.appendChild(btn);
+    });
+  }
+
+  function toggleEmoji(emoji) {
+    if (selectedEmojis.includes(emoji)) {
+      selectedEmojis = selectedEmojis.filter(item => item !== emoji);
+    } else {
+      if (selectedEmojis.length >= 6) return alert('Maximum 6 emojis allowed!');
+      selectedEmojis.push(emoji);
+    }
+    renderEmojis();
+  }
+
+  // Multi-emoji String Splitter / Segmenter
+  function splitEmojis(input) {
+    if (Intl && Intl.Segmenter) {
+      const segmenter = new Intl.Segmenter('en', { granularity: 'grapheme' });
+      return Array.from(segmenter.segment(input))
+        .map(s => s.segment.trim())
+        .filter(s => s && s !== ',');
+    }
+    return input.replace(/,/g, ' ').split(/\s+/).filter(Boolean);
+  }
+
+  function addCustomEmoji() {
+    const customInput = document.getElementById('customEmoji').value.trim();
+    if (!customInput) return;
+
+    const extractedEmojis = splitEmojis(customInput);
+    let addedList = [];
+
+    for (let char of extractedEmojis) {
+      if (selectedEmojis.length >= 6) {
+        alert('Maximum 6 emojis limit reached!');
+        break;
+      }
+
+      if (!currentDisplayEmojis.includes(char)) {
+        currentDisplayEmojis.push(char);
+      }
+      
+      if (!selectedEmojis.includes(char)) {
+        selectedEmojis.push(char);
+        addedList.push(char);
+      }
+    }
+
+    renderEmojis();
+    document.getElementById('customEmoji').value = '';
+
+    if (addedList.length > 0) {
+      showAddedNotification(`Added: ${addedList.join(' ')}`);
+    }
+  }
+
+  function showAddedNotification(text) {
+    notifyEl.innerText = text;
+    notifyEl.style.opacity = '1';
+    
+    clearTimeout(window.notifyTimeout);
+    window.notifyTimeout = setTimeout(() => {
+      notifyEl.style.opacity = '0';
+    }, 2500);
+  }
+
+  async function submitRequest() {
+    const url = document.getElementById('postUrl').value;
+    const count = document.getElementById('reactCount').value;
+    const keyword = document.getElementById('hasKeyword').value;
+    const errorEl = document.getElementById('keywordError');
+    const msgEl = document.getElementById('responseMsg');
+    const submitBtn = document.getElementById('submitBtn');
+
+    errorEl.style.display = 'none';
+    msgEl.style.display = 'none';
+
+    if (keyword !== 'yes') {
+      errorEl.style.display = 'block';
+      return;
+    }
+
+    if (!url) { alert('Please enter WhatsApp Channel Post URL.'); return; }
+    if (selectedEmojis.length === 0) { alert('Please select at least 1 emoji.'); return; }
+
+    submitBtn.innerText = "Submitting...";
+    submitBtn.disabled = true;
+
+    try {
+      const res = await fetch('/api/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url, count, emojis: selectedEmojis })
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        msgEl.innerHTML = "✅ Your Request Been Submitted";
+        msgEl.style.display = 'block';
+
+        document.getElementById('postUrl').value = '';
+        selectedEmojis = [];
+        currentDisplayEmojis = [...defaultEmojis];
+        renderEmojis();
+      } else {
+        alert(data.error || 'Request Failed');
+      }
+    } catch (error) {
+      alert("Server connection failed.");
+    } finally {
+      submitBtn.innerText = "React My Post";
+      submitBtn.disabled = false;
+    }
+  }
+
+  renderEmojis();
+</script>
+</body>
+</html>
