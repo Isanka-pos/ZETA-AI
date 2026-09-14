@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="si">
 <head>
@@ -33,7 +34,7 @@ button{border:none;background:none;color:inherit;cursor:pointer;}
 @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
 @keyframes spin{to{transform:rotate(360deg);}}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.85)}}
 
 /* AUTH */
 .auth-wrap{position:absolute;inset:0;z-index:20;overflow-y:auto;display:flex;align-items:center;justify-content:center;padding:20px;
@@ -143,6 +144,7 @@ button{border:none;background:none;color:inherit;cursor:pointer;}
 .ci-time{font-size:10.5px;color:var(--muted2);flex-shrink:0;}
 .ci-sub{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--blue);margin-top:2px;font-weight:500;}
 .ci-sub svg{width:11px;height:11px;opacity:.8;}
+.ci-sub.online-text{color:var(--green);}
 .ci-bottom{display:flex;align-items:center;gap:6px;margin-top:3px;}
 .ci-preview{flex:1;font-size:12.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .ci-preview svg{width:13px;height:13px;vertical-align:-2px;color:var(--cyan);}
@@ -155,7 +157,8 @@ button{border:none;background:none;color:inherit;cursor:pointer;}
   font-size:16px;color:#fff;flex-shrink:0;position:relative;overflow:hidden;user-select:none;}
 .avatar img{width:100%;height:100%;object-fit:cover;}
 .avatar .online-dot{position:absolute;bottom:1px;right:1px;width:12px;height:12px;border-radius:50%;
-  background:var(--green);border:2.5px solid #0A0E1A;}
+  background:var(--green);border:2.5px solid #0A0E1A;display:none;}
+.avatar.online .online-dot{display:block;}
 .avatar.xl{width:96px;height:96px;font-size:34px;}
 
 .empty-list{padding:50px 24px;text-align:center;color:var(--muted2);font-size:13.5px;line-height:1.7;}
@@ -168,6 +171,7 @@ button{border:none;background:none;color:inherit;cursor:pointer;}
 .chat-title{flex:1;min-width:0;cursor:pointer;}
 .chat-title p{font-weight:700;font-size:14.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .chat-title span{font-size:11.5px;color:var(--green);display:block;margin-top:1px;}
+.chat-title span.offline{color:var(--muted);}
 .chat-header .icon-btn{width:35px;height:35px;}
 .chat-header .icon-btn svg{width:18px;height:18px;}
 
@@ -208,7 +212,6 @@ button{border:none;background:none;color:inherit;cursor:pointer;}
 .file-msg .fic svg{width:18px;height:18px;color:#7DD3FC;}
 .file-msg .fmeta p{font-size:13.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .file-msg .fmeta span{font-size:11px;opacity:.6;}
-.typing-line{font-size:11.5px;color:var(--cyan);font-style:italic;padding:2px 14px 4px;}
 
 .reply-bar{display:none;align-items:center;gap:10px;padding:8px 12px;background:rgba(10,14,26,.98);
   border-top:1px solid rgba(0,163,255,.1);flex-shrink:0;}
@@ -228,9 +231,10 @@ button{border:none;background:none;color:inherit;cursor:pointer;}
 .input-wrap input::placeholder{color:rgba(224,232,240,.28);}
 .send-btn{width:44px;height:44px;min-width:44px;border-radius:50%;background:linear-gradient(135deg,#00A3FF,#0066CC);
   color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 0 15px rgba(0,163,255,.35);
-  transition:transform .15s;flex-shrink:0;}
-.send-btn:active{transform:scale(.9);}
-.send-btn svg{width:19px;height:19px;}
+  transition:transform .15s;flex-shrink:0;user-select:none;-webkit-user-select:none;touch-action:none;
+  -webkit-touch-callout:none;}
+.send-btn:active,.send-btn.recording{transform:scale(1.1);background:linear-gradient(135deg,#DC2626,#991B1B);}
+.send-btn svg{width:19px;height:19px;pointer-events:none;}
 
 .rec-bar{display:none;align-items:center;gap:12px;padding:11px 14px;padding-bottom:calc(11px + env(safe-area-inset-bottom));
   background:rgba(20,8,8,.98);border-top:1px solid rgba(255,91,91,.2);flex-shrink:0;}
@@ -313,8 +317,8 @@ button{border:none;background:none;color:inherit;cursor:pointer;}
 .status-ring{width:50px;height:50px;border-radius:50%;padding:2.5px;background:linear-gradient(135deg,#00A3FF,#00D4FF);flex-shrink:0;}
 .status-ring.seen{background:rgba(255,255,255,.15);}
 .status-ring > div{width:100%;height:100%;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  font-weight:700;font-size:16px;color:#fff;border:2.5px solid var(--bg);overflow:hidden;}
-.status-ring img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+  font-weight:700;font-size:16px;color:#fff;border:2.5px solid var(--bg);overflow:hidden;position:relative;}
+.status-ring img{width:100%;height:100%;object-fit:cover;}
 
 /* STATUS VIEWER */
 #statusViewer{position:absolute;inset:0;background:#000;z-index:90;display:none;flex-direction:column;}
@@ -322,16 +326,18 @@ button{border:none;background:none;color:inherit;cursor:pointer;}
 .sv-bars{display:flex;gap:4px;padding:10px 10px 0;padding-top:calc(10px + env(safe-area-inset-top));}
 .sv-bar{flex:1;height:2.5px;background:rgba(255,255,255,.28);border-radius:2px;overflow:hidden;}
 .sv-bar i{display:block;height:100%;width:0;background:#fff;border-radius:2px;}
-.sv-bar.done i{width:100%;}
 .sv-bar.active i{animation:fillBar 5s linear forwards;}
 @keyframes fillBar{to{width:100%;}}
 .sv-head{display:flex;align-items:center;gap:11px;padding:12px 14px;}
 .sv-head .avatar{width:38px;height:38px;font-size:14px;}
 .sv-head p{font-weight:600;font-size:14px;}
 .sv-head span{font-size:11.5px;opacity:.6;display:block;}
-.sv-body{flex:1;display:flex;align-items:center;justify-content:center;padding:20px;}
+.sv-body{flex:1;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;}
 .sv-text{font-size:26px;font-weight:700;text-align:center;line-height:1.5;padding:36px 24px;border-radius:20px;
-  max-width:340px;width:100%;min-height:220px;display:flex;align-items:center;justify-content:center;}
+  max-width:340px;width:100%;min-height:220px;display:flex;align-items:center;justify-content:center;word-break:break-word;}
+.sv-photo{max-width:100%;max-height:100%;object-fit:contain;border-radius:12px;}
+.sv-caption{position:absolute;bottom:24px;left:20px;right:20px;background:rgba(0,0,0,.7);color:#fff;
+  padding:12px 16px;border-radius:12px;font-size:14px;text-align:center;}
 
 #imgViewer{position:absolute;inset:0;background:rgba(0,0,0,.96);z-index:95;display:none;align-items:center;justify-content:center;padding:16px;}
 #imgViewer.show{display:flex;animation:fadeIn .2s;}
@@ -368,8 +374,6 @@ button{border:none;background:none;color:inherit;cursor:pointer;}
 .lic-body .lic-title{font-size:14px;font-weight:600;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
 .lic-body .lic-sub{font-size:11.5px;color:var(--muted);margin-top:3px;}
 .current-tag{font-size:9.5px;padding:2px 7px;background:rgba(34,197,94,.15);color:#4ADE80;border-radius:6px;font-weight:700;}
-.success-tag{color:#4ADE80;font-weight:600;}
-.failed-tag{color:#FF7B7B;font-weight:600;}
 .divider{height:1px;background:rgba(0,163,255,.07);margin:6px 0;}
 
 .pwd-strength{height:4px;border-radius:2px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:6px;}
@@ -382,6 +386,21 @@ button{border:none;background:none;color:inherit;cursor:pointer;}
 .loading-overlay .spinner-ring{width:48px;height:48px;border-radius:50%;border:3px solid rgba(0,163,255,.15);
   border-top-color:var(--cyan);animation:spin .9s linear infinite;}
 .loading-overlay p{font-size:13px;color:var(--muted);}
+
+/* status text input modal */
+.modal-overlay{position:absolute;inset:0;background:rgba(0,0,0,.75);z-index:110;display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.show{display:flex;animation:fadeIn .2s;}
+.modal-card{width:100%;max-width:380px;background:var(--card);border:1px solid rgba(0,163,255,.2);
+  border-radius:18px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.7);}
+.modal-card h3{font-size:15px;font-weight:700;margin-bottom:14px;color:var(--cyan);}
+.modal-card textarea{width:100%;background:rgba(13,17,32,.75);border:1px solid rgba(0,163,255,.16);
+  border-radius:12px;padding:12px 15px;color:var(--text);font-size:15px;outline:none;resize:none;min-height:90px;}
+.modal-card textarea:focus{border-color:var(--blue);}
+.modal-actions{display:flex;gap:8px;margin-top:14px;}
+.modal-actions button{flex:1;padding:11px;border-radius:11px;font-weight:600;font-size:14px;transition:.2s;}
+.modal-actions .cancel{background:rgba(255,255,255,.08);color:var(--muted);}
+.modal-actions .ok{background:linear-gradient(135deg,#00A3FF,#0066CC);color:#fff;box-shadow:0 0 15px rgba(0,163,255,.3);}
+.modal-actions button:active{transform:scale(.97);}
 </style>
 </head>
 <body>
@@ -395,7 +414,6 @@ button{border:none;background:none;color:inherit;cursor:pointer;}
       <div class="brand-logo"><i data-lucide="message-circle"></i></div>
       <h1 class="brand-title">ZETA <span>CHAT</span></h1>
       <p class="brand-sub">ආරක්ෂිත මැසේජ් ඇප් එක</p>
-
       <div class="badge-wrap">
         <div class="backend-badge" id="backendBadge">
           <span class="dot"></span>
@@ -411,7 +429,6 @@ button{border:none;background:none;color:inherit;cursor:pointer;}
       <div class="alert alert-error" id="authError"></div>
       <div class="alert alert-success" id="authSuccess"></div>
 
-      <!-- LOGIN -->
       <form id="loginForm" novalidate>
         <div class="form-group">
           <label class="field-label"><i data-lucide="at-sign"></i> Email හෝ Username</label>
@@ -431,7 +448,6 @@ button{border:none;background:none;color:inherit;cursor:pointer;}
         <button type="submit" class="neon-btn" id="loginBtn"><i data-lucide="log-in"></i> ලොග් වෙන්න</button>
       </form>
 
-      <!-- REGISTER -->
       <form id="registerForm" style="display:none;" novalidate>
         <div class="pfp-picker">
           <div class="pfp-circle" id="pfpPreview" onclick="document.getElementById('pfpInput').click()">
@@ -440,7 +456,6 @@ button{border:none;background:none;color:inherit;cursor:pointer;}
           </div>
           <p class="pfp-hint">Profile picture (optional)</p>
         </div>
-
         <div class="form-group">
           <label class="field-label"><i data-lucide="user"></i> සම්පූර්ණ නම</label>
           <input type="text" id="regName" class="neon-input" placeholder="ඔබේ නම" maxlength="40">
@@ -472,7 +487,6 @@ button{border:none;background:none;color:inherit;cursor:pointer;}
         <button type="submit" class="neon-btn" id="registerBtn"><i data-lucide="user-plus"></i> ගිණුම හදන්න</button>
       </form>
 
-      <!-- FORGOT -->
       <form id="forgotForm" style="display:none;" novalidate>
         <div class="form-group">
           <label class="field-label"><i data-lucide="at-sign"></i> Email හෝ Username</label>
@@ -597,11 +611,6 @@ button{border:none;background:none;color:inherit;cursor:pointer;}
             <label class="switch"><input type="checkbox" id="setNotif" onchange="onToggle('notif',this.checked)"><span class="slider"></span></label>
           </div>
           <div class="setting-row">
-            <i data-lucide="bot"></i>
-            <div class="sr-text"><p>Demo Auto-Reply</p><span>Demo contacts reply කරනවා</span></div>
-            <label class="switch"><input type="checkbox" id="setAutoReply" onchange="onToggle('autoreply',this.checked)"><span class="slider"></span></label>
-          </div>
-          <div class="setting-row">
             <i data-lucide="volume-2"></i>
             <div class="sr-text"><p>Sounds</p><span>මැසේජ් හඬ</span></div>
             <label class="switch"><input type="checkbox" id="setSounds" onchange="onToggle('sounds',this.checked)"><span class="slider"></span></label>
@@ -609,7 +618,7 @@ button{border:none;background:none;color:inherit;cursor:pointer;}
 
           <div class="setting-row" onclick="openAbout()">
             <i data-lucide="info"></i>
-            <div class="sr-text"><p>About</p><span>Version 4.0 (MongoDB)</span></div>
+            <div class="sr-text"><p>About</p><span>Version 5.0 (MongoDB)</span></div>
             <i data-lucide="chevron-right" style="width:17px;height:17px;color:rgba(224,232,240,.3);"></i>
           </div>
 
@@ -640,12 +649,12 @@ button{border:none;background:none;color:inherit;cursor:pointer;}
       <section class="screen" id="screenChat">
         <header class="chat-header">
           <button class="icon-btn" onclick="closeChat()"><i data-lucide="arrow-left"></i></button>
-          <div class="avatar" id="chatAvatar" onclick="openContactInfo()" style="background:linear-gradient(135deg,#00A3FF,#0066FF);">
+          <div class="avatar" id="chatAvatar" onclick="openContactInfo()">
             <span id="chatAvatarLetter">?</span><span class="online-dot"></span>
           </div>
           <div class="chat-title" onclick="openContactInfo()">
             <p id="chatName">Contact</p>
-            <span id="chatStatus">online</span>
+            <span id="chatStatus" class="offline">offline</span>
           </div>
           <button class="icon-btn" onclick="startCall('voice')"><i data-lucide="phone"></i></button>
           <button class="icon-btn" onclick="startCall('video')"><i data-lucide="video"></i></button>
@@ -668,15 +677,16 @@ button{border:none;background:none;color:inherit;cursor:pointer;}
             <input type="text" id="msgInput" placeholder="මැසේජ් එකක් ලියන්න..." autocomplete="off">
           </div>
           <button class="icon-btn" onclick="openAttach()"><i data-lucide="paperclip"></i></button>
-          <button class="send-btn" id="sendBtn" onclick="onSendClick()"><i data-lucide="send"></i></button>
+          <button class="send-btn" id="sendBtn" title="Send | Long-press to record">
+            <i data-lucide="send"></i>
+          </button>
         </div>
 
         <div class="rec-bar" id="recBar">
           <button class="icon-btn danger" onclick="cancelVoice()"><i data-lucide="trash-2"></i></button>
           <span class="rec-dot"></span>
           <span id="recTime">0:00</span>
-          <span class="rec-hint">රෙකෝඩ් වෙමින්...</span>
-          <button class="send-btn" onclick="stopVoice(true)"><i data-lucide="send"></i></button>
+          <span class="rec-hint">රෙකෝඩ් වෙමින්... (release to send)</span>
         </div>
       </section>
 
@@ -706,7 +716,7 @@ button{border:none;background:none;color:inherit;cursor:pointer;}
           </div>
           <div class="form-group">
             <label class="field-label"><i data-lucide="info"></i> About</label>
-            <input type="text" id="peAbout" class="neon-input" placeholder="Hey there! I am using ZETA CHAT." maxlength="90">
+            <input type="text" id="peAbout" class="neon-input" placeholder="Hey there!" maxlength="90">
           </div>
           <div class="form-group">
             <label class="field-label"><i data-lucide="at-sign"></i> Username</label>
@@ -732,6 +742,7 @@ button{border:none;background:none;color:inherit;cursor:pointer;}
             <div class="avatar xl" id="ciAvatar"><span id="ciLetter">?</span></div>
             <p id="ciName" style="font-size:20px;font-weight:700;"></p>
             <p id="ciContactId" style="font-size:14px;color:var(--blue);font-weight:500;"></p>
+            <p id="ciOnlineStatus" style="font-size:12px;color:var(--muted);"></p>
           </div>
           <div style="background:rgba(13,17,32,.7);border-radius:14px;padding:14px;margin-bottom:18px;border:1px solid rgba(0,163,255,.1);">
             <p style="font-size:11px;color:var(--muted);margin-bottom:4px;">ABOUT</p>
@@ -769,7 +780,6 @@ button{border:none;background:none;color:inherit;cursor:pointer;}
         <div class="profile-body">
           <div class="alert alert-error" id="cpError"></div>
           <div class="alert alert-success" id="cpSuccess"></div>
-
           <div class="form-group">
             <label class="field-label"><i data-lucide="lock"></i> වත්මන් පාස්වර්ඩ්</label>
             <div class="pass-wrap">
@@ -793,7 +803,6 @@ button{border:none;background:none;color:inherit;cursor:pointer;}
               <button type="button" class="pass-toggle" onclick="togglePass('cpNew2',this)"><i data-lucide="eye"></i></button>
             </div>
           </div>
-
           <button class="neon-btn" onclick="submitChangePassword()"><i data-lucide="check"></i> පාස්වර්ඩ් වෙනස් කරන්න</button>
         </div>
       </section>
@@ -824,7 +833,7 @@ button{border:none;background:none;color:inherit;cursor:pointer;}
       </section>
 
       <div class="overlay-msg" id="callOverlay">
-        <div class="avatar" id="callAvatar" style="background:linear-gradient(135deg,#00A3FF,#0066FF);"><span id="callLetter">?</span></div>
+        <div class="avatar" id="callAvatar"><span id="callLetter">?</span></div>
         <div style="text-align:center;">
           <p id="callName">Contact</p>
           <span id="callStatus" style="margin-top:6px;display:block;">Calling...</span>
@@ -839,7 +848,7 @@ button{border:none;background:none;color:inherit;cursor:pointer;}
           <div style="flex:1;"><p id="svName">Name</p><span id="svTime">just now</span></div>
           <button class="icon-btn" onclick="closeStatusViewer()"><i data-lucide="x"></i></button>
         </div>
-        <div class="sv-body"><div class="sv-text" id="svText"></div></div>
+        <div class="sv-body" id="svBody"></div>
       </div>
 
       <div id="imgViewer">
@@ -849,6 +858,18 @@ button{border:none;background:none;color:inherit;cursor:pointer;}
 
       <div class="sheet-backdrop" id="sheetBackdrop" onclick="closeSheet()"></div>
       <div class="sheet" id="sheet"></div>
+
+      <!-- Status text input modal -->
+      <div class="modal-overlay" id="statusModal">
+        <div class="modal-card">
+          <h3 id="statusModalTitle">Text Status</h3>
+          <textarea id="statusInput" placeholder="ඔබට කියන්න ඕන දේ..." maxlength="200"></textarea>
+          <div class="modal-actions">
+            <button class="cancel" onclick="closeStatusModal()">Cancel</button>
+            <button class="ok" onclick="submitTextStatus()">Publish</button>
+          </div>
+        </div>
+      </div>
 
       <div id="toast"></div>
 
@@ -862,15 +883,17 @@ button{border:none;background:none;color:inherit;cursor:pointer;}
       <input type="file" id="imgInput" accept="image/*" style="display:none">
       <input type="file" id="camInput" accept="image/*" capture="environment" style="display:none">
       <input type="file" id="docInput" style="display:none">
+      <input type="file" id="statusImgInput" accept="image/*" style="display:none">
     </div>
   </div>
 </div>
 
 <script>
-/* ========== HELPERS ========== */
+/* ============ HELPERS ============ */
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
 const uid = () => 'u_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+const ONLINE_THRESHOLD = 45000; // 45 seconds
 
 function esc(s){
   const d = document.createElement('div');
@@ -888,25 +911,19 @@ function toast(msg){
 function safeCreateIcons(){
   try { if (window.lucide && lucide.createIcons) lucide.createIcons(); } catch(e){}
 }
-function showLoading(text){
+function showLoading(t){
   const o = $('#loadingOverlay');
-  if (text) $('#loadingText').textContent = text;
+  if (t) $('#loadingText').textContent = t;
   if (o) o.classList.add('show');
 }
-function hideLoading(){
-  const o = $('#loadingOverlay');
-  if (o) o.classList.remove('show');
-}
+function hideLoading(){ $('#loadingOverlay')?.classList.remove('show'); }
 function fmtTime(ts){
   const d = new Date(ts);
   let h = d.getHours(); const m = String(d.getMinutes()).padStart(2, '0');
   const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12;
   return h + ':' + m + ' ' + ap;
 }
-function fmtDateTime(ts){
-  const d = new Date(ts);
-  return d.toLocaleDateString() + ' ' + fmtTime(ts);
-}
+function fmtDateTime(ts){ return new Date(ts).toLocaleDateString() + ' ' + fmtTime(ts); }
 function dayLabel(ts){
   const d = new Date(ts), n = new Date();
   const same = (a, b) => a.toDateString() === b.toDateString();
@@ -947,8 +964,12 @@ function colorFor(s){
   for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
   return AVATAR_COLORS[h % AVATAR_COLORS.length];
 }
+function isUserOnline(user){
+  if (!user || !user.lastSeen) return false;
+  return (Date.now() - new Date(user.lastSeen).getTime()) < ONLINE_THRESHOLD;
+}
 
-/* ========== API ========== */
+/* ============ API ============ */
 const API_BASE = '/api';
 let API_MODE = false;
 
@@ -978,7 +999,7 @@ const Cache = {
   user: null, users: [], msgs: {}, meta: {}, calls: [], status: {}, sessionId: null
 };
 
-/* ========== SESSION ========== */
+/* ============ SESSION ============ */
 const Session = {
   set(token, sessionId, remember){
     API.token = token;
@@ -1003,38 +1024,29 @@ const Session = {
   }
 };
 
-/* ========== SETTINGS ========== */
+/* ============ SETTINGS ============ */
 function getSettings(){
   let s = {};
   try { s = JSON.parse(localStorage.getItem('zc_settings') || '{}'); } catch(e){}
-  return Object.assign({ notif:true, autoreply:true, sounds:true }, s || {});
+  return Object.assign({ notif:true, sounds:true }, s || {});
 }
 function setSetting(k, v){
   const s = getSettings(); s[k] = v;
   try { localStorage.setItem('zc_settings', JSON.stringify(s)); } catch(e){}
 }
 
-/* ========== STATE ========== */
+/* ============ STATE ============ */
 let currentUser = null;
 let activeContact = null;
 let replyTarget = null;
 let suppressClickUntil = 0;
 let recTimer = null, recStart = 0, mediaRecorder = null, audioChunks = [], recStream = null;
 let pendingPfp = null;
+let heartbeatTimer = null;
+let chatPoller = null;
+let listPoller = null;
 
-const DEMO_CONTACTS = [
-  { id:'d1', name:'Kasun Perera',    phone:'0771234567', about:'Busy 🚀' },
-  { id:'d2', name:'Nimal Silva',     phone:'0769876543', about:'Available' },
-  { id:'d3', name:'Sithum Fernando', phone:'0715554433', about:'At work 💼' },
-  { id:'d4', name:'Dilshan Bandara', phone:'0752228899', about:'Hey there!' }
-];
-const DEMO_REPLIES = [
-  'හරි bro 👍','ඔව්, එහෙමයි!','හෙහ් 😄 සුපිරි!','ඔව් ඔව්, මම බලන්නම්.',
-  'අනිවාර්යයෙන්ම! 🙌','හොඳයි, කියන්න ඕන දේකුත්?','මම දැන් busy, පස්සේ කතා කරමු.',
-  '😂😂😂 සිරා!','OK bro, deal! 🤝','සුපිරි සුපිරි 🔥','එල එල 👌'
-];
-
-/* ========== BACKEND DETECT ========== */
+/* ============ BACKEND DETECT ============ */
 async function detectBackend(){
   const badge = $('#backendBadge');
   const text = $('#backendText');
@@ -1048,17 +1060,17 @@ async function detectBackend(){
       if (data.ok){
         API_MODE = true;
         if (badge) badge.classList.add('ok');
-        if (text) text.textContent = data.db ? 'MongoDB connected ✓' : 'Backend online (DB pending)';
+        if (text) text.textContent = data.db ? 'MongoDB connected ✓' : 'Backend online';
         return;
       }
     }
   } catch(e){}
   API_MODE = false;
   if (badge) badge.classList.remove('ok');
-  if (text) text.textContent = 'Backend offline — Start server';
+  if (text) text.textContent = 'Backend offline — server start කරන්න';
 }
 
-/* ========== AUTH TABS ========== */
+/* ============ AUTH TABS ============ */
 function switchAuthTab(tab){
   const lf = $('#loginForm'), rf = $('#registerForm'), ff = $('#forgotForm');
   if (!lf || !rf || !ff) return;
@@ -1125,7 +1137,7 @@ function updatePwdStrength(inputId, barId, labelId){
   if (lbl) lbl.textContent = labels[s];
 }
 
-/* ========== PFP INPUT ========== */
+/* ============ PFP ============ */
 $('#pfpInput')?.addEventListener('change', function(){
   const f = this.files && this.files[0];
   this.value = '';
@@ -1145,24 +1157,22 @@ $('#pfpInput')?.addEventListener('change', function(){
 $('#regPassword')?.addEventListener('input', () => updatePwdStrength('regPassword', 'pwdStrengthBar', 'pwdStrengthLabel'));
 $('#cpNew')?.addEventListener('input', () => updatePwdStrength('cpNew', 'cpStrengthBar', 'cpStrengthLabel'));
 
-/* ========== REGISTER ========== */
+/* ============ REGISTER ============ */
 $('#registerForm')?.addEventListener('submit', async function(e){
   e.preventDefault();
   hideAuthAlert('authError'); hideAuthAlert('authSuccess');
-
-  const name  = ($('#regName').value || '').trim();
+  const name = ($('#regName').value || '').trim();
   const uname = ($('#regUsername').value || '').trim().toLowerCase();
   const email = ($('#regEmail').value || '').trim().toLowerCase();
-  const pass  = $('#regPassword').value || '';
+  const pass = $('#regPassword').value || '';
   const pass2 = $('#regPassword2').value || '';
 
   if (name.length < 2){ showAuthAlert('authError', 'නම අඩුම අකුරු 2ක්.'); return; }
-  if (!validUsername(uname)){ showAuthAlert('authError', 'Username: අකුරු/ඉලක්කම්/_ (3-20).'); return; }
+  if (!validUsername(uname)){ showAuthAlert('authError', 'Username: අකුරු/ඉලක්කම්/_ (3-20)'); return; }
   if (!validEmail(email)){ showAuthAlert('authError', 'Email එක වැරදියි.'); return; }
   if (pass.length < 6){ showAuthAlert('authError', 'පාස්වර්ඩ් අඩුම 6.'); return; }
   if (pass !== pass2){ showAuthAlert('authError', 'පාස්වර්ඩ් දෙක සමාන නෑ.'); return; }
-
-  if (!API_MODE){ showAuthAlert('authError', 'Backend offline. Server එක start කරන්න.'); return; }
+  if (!API_MODE){ showAuthAlert('authError', 'Backend offline.'); return; }
 
   const btn = $('#registerBtn');
   btn.disabled = true;
@@ -1174,7 +1184,6 @@ $('#registerForm')?.addEventListener('submit', async function(e){
       name, username: uname, email, password: pass,
       avatar: pendingPfp || null, color: colorFor(uname)
     });
-
     btn.disabled = false;
     btn.innerHTML = '<i data-lucide="user-plus"></i> ගිණුම හදන්න';
     safeCreateIcons();
@@ -1199,18 +1208,17 @@ $('#registerForm')?.addEventListener('submit', async function(e){
   }
 });
 
-/* ========== LOGIN ========== */
+/* ============ LOGIN ============ */
 $('#loginForm')?.addEventListener('submit', async function(e){
   e.preventDefault();
   hideAuthAlert('authError'); hideAuthAlert('authSuccess');
-
   const ident = ($('#loginIdentity').value || '').trim().toLowerCase();
   const pass = $('#loginPassword').value || '';
   const remember = $('#rememberMe').checked;
 
   if (!ident){ showAuthAlert('authError', 'Email/Username දාන්න.'); return; }
   if (!pass){ showAuthAlert('authError', 'පාස්වර්ඩ් දාන්න.'); return; }
-  if (!API_MODE){ showAuthAlert('authError', 'Backend offline. Server එක start කරන්න.'); return; }
+  if (!API_MODE){ showAuthAlert('authError', 'Backend offline.'); return; }
 
   const btn = $('#loginBtn');
   btn.disabled = true;
@@ -1229,7 +1237,6 @@ $('#loginForm')?.addEventListener('submit', async function(e){
       email: r.user.email, avatar: r.user.avatar || null,
       about: r.user.about, color: r.user.color || colorFor(r.user.username)
     };
-
     btn.disabled = false;
     btn.innerHTML = '<i data-lucide="log-in"></i> ලොග් වෙන්න';
     safeCreateIcons();
@@ -1248,38 +1255,33 @@ $('#loginForm')?.addEventListener('submit', async function(e){
   }
 });
 
-/* ========== FORGOT ========== */
+/* ============ FORGOT ============ */
 $('#forgotForm')?.addEventListener('submit', async function(e){
   e.preventDefault();
   hideAuthAlert('authError'); hideAuthAlert('authSuccess');
-
   const ident = ($('#forgotIdentity').value || '').trim().toLowerCase();
   const np = $('#forgotNewPass').value || '';
   const np2 = $('#forgotNewPass2').value || '';
-
   if (!ident){ showAuthAlert('authError', 'Email/Username දාන්න.'); return; }
   if (np.length < 6){ showAuthAlert('authError', 'නව පාස්වර්ඩ් අඩුම 6.'); return; }
   if (np !== np2){ showAuthAlert('authError', 'සමාන නෑ.'); return; }
   if (!API_MODE){ showAuthAlert('authError', 'Backend offline.'); return; }
-
   try {
     await API.post('/forgot-password', { identity: ident, newPassword: np });
     $('#forgotIdentity').value = ''; $('#forgotNewPass').value = ''; $('#forgotNewPass2').value = '';
     hideForgot();
     showAuthAlert('authSuccess', '✅ පාස්වර්ඩ් reset කළා!');
-  } catch(err){
-    showAuthAlert('authError', err.message);
-  }
+  } catch(err){ showAuthAlert('authError', err.message); }
 });
 
-/* ========== LOAD DATA ========== */
+/* ============ LOAD DATA ============ */
 async function loadAllData(){
   try {
     const usersRes = await API.get('/users');
     Cache.users = (usersRes.users || []).map(u => ({
       id: u._id, name: u.name, username: u.username, email: u.email,
       avatar: u.avatar || null, color: u.color || colorFor(u.username),
-      about: u.about, kind: 'user'
+      about: u.about, lastSeen: u.lastSeen, kind: 'user'
     }));
   } catch(e){ Cache.users = []; }
 
@@ -1297,7 +1299,11 @@ async function loadAllData(){
     const statusRes = await API.get('/status');
     Cache.status = {};
     (statusRes.statuses || []).forEach(s => {
-      Cache.status[s.userId] = { text: s.text, time: new Date(s.time).getTime() };
+      Cache.status[s.userId] = {
+        type: s.type || 'text', text: s.text || '',
+        media: s.media || null, color: s.color || '#00A3FF',
+        time: new Date(s.time).getTime()
+      };
     });
   } catch(e){ Cache.status = {}; }
 
@@ -1316,9 +1322,117 @@ async function loadAllData(){
   }));
 }
 
-/* ========== LOGOUT ========== */
+/* ============ HEARTBEAT ============ */
+function startHeartbeat(){
+  stopHeartbeat();
+  const ping = async () => {
+    if (!API.token || !API_MODE) return;
+    try { await API.post('/heartbeat', {}); } catch(e){}
+  };
+  ping();
+  heartbeatTimer = setInterval(ping, 15000);
+}
+function stopHeartbeat(){
+  if (heartbeatTimer){ clearInterval(heartbeatTimer); heartbeatTimer = null; }
+}
+
+/* ============ POLLING ============ */
+function startChatPolling(contactId){
+  stopChatPolling();
+  chatPoller = setInterval(async () => {
+    if (!API_MODE) return;
+    if (document.hidden) return;
+    if (!activeContact || activeContact.id !== contactId) return;
+    try {
+      const r = await API.get('/messages/' + contactId);
+      if (r.messages){
+        const hasNew = mergeMessages(contactId, r.messages);
+        if (activeContact && activeContact.id === contactId){
+          renderMessages();
+          if (hasNew) renderContacts();
+        }
+      }
+      // Also refresh contact online status
+      try {
+        const uRes = await API.get('/users');
+        const u = (uRes.users || []).find(x => x._id === contactId);
+        if (u){
+          const idx = Cache.users.findIndex(c => c.id === contactId);
+          if (idx > -1){ Cache.users[idx].lastSeen = u.lastSeen; }
+          updateChatHeaderStatus();
+        }
+      } catch(e){}
+    } catch(e){}
+  }, 2500);
+}
+function stopChatPolling(){
+  if (chatPoller){ clearInterval(chatPoller); chatPoller = null; }
+}
+
+function startListPolling(){
+  stopListPolling();
+  listPoller = setInterval(async () => {
+    if (!API_MODE) return;
+    if (document.hidden) return;
+    try {
+      const [usersRes, metaRes] = await Promise.all([
+        API.get('/users'),
+        API.get('/meta')
+      ]);
+      Cache.users = (usersRes.users || []).map(u => ({
+        id: u._id, name: u.name, username: u.username, email: u.email,
+        avatar: u.avatar || null, color: u.color || colorFor(u.username),
+        about: u.about, lastSeen: u.lastSeen, kind: 'user'
+      }));
+      Cache.meta = metaRes.meta || {};
+      if (!activeContact) renderContacts();
+      updateNavBadge();
+    } catch(e){}
+  }, 5000);
+}
+function stopListPolling(){
+  if (listPoller){ clearInterval(listPoller); listPoller = null; }
+}
+
+function mergeMessages(contactId, serverMsgs){
+  const local = getThread(contactId);
+  const byId = {};
+  local.forEach(m => { if (m && m.id) byId[m.id] = m; });
+  let hasNew = false;
+  serverMsgs.forEach(sm => {
+    const mapped = {
+      id: sm._id, from: sm.from, to: sm.to,
+      type: sm.type, text: sm.text, media: sm.media,
+      fileSize: sm.fileSize, status: sm.status,
+      starred: sm.starred, deleted: sm.deleted,
+      replyTo: sm.replyTo, time: new Date(sm.time).getTime()
+    };
+    if (!byId[mapped.id]){
+      local.push(mapped);
+      hasNew = true;
+      // If it's from other user and chat not open, increment unread
+      if (mapped.from !== currentUser.id){
+        const key = [currentUser.id, contactId].sort().join('|');
+        const isOpen = activeContact && activeContact.id === contactId && !document.hidden;
+        if (!isOpen){
+          const m = Cache.meta[key] || {};
+          m.unread = (m.unread || 0) + 1;
+          Cache.meta[key] = m;
+        }
+      }
+    } else {
+      Object.assign(byId[mapped.id], mapped);
+    }
+  });
+  local.sort((a, b) => a.time - b.time);
+  setThread(contactId, local);
+  return hasNew;
+}
+
+/* ============ LOGOUT ============ */
 async function logout(){
   try { if (API_MODE && API.token) await API.post('/logout', {}); } catch(e){}
+  stopHeartbeat(); stopChatPolling(); stopListPolling();
   Session.clear();
   Cache.users = []; Cache.msgs = {}; Cache.meta = {};
   Cache.calls = []; Cache.status = {}; Cache.user = null;
@@ -1336,6 +1450,7 @@ async function logout(){
 async function logoutAllDevices(){
   if (!confirm('සියලුම devices වලින් ඉවත් වෙන්නද?')) return;
   try { if (API_MODE) await API.post('/logout-all', {}); } catch(e){}
+  stopHeartbeat(); stopChatPolling(); stopListPolling();
   Session.clear();
   currentUser = null; Cache.user = null;
   $('#app').style.display = 'none';
@@ -1345,13 +1460,11 @@ async function logoutAllDevices(){
   toast('සියලු devices වලින් ඉවත් වුනා 🔒');
 }
 
-/* ========== ENTER APP ========== */
+/* ============ ENTER APP ============ */
 function enterApp(user){
   currentUser = {
     id: user.id || user._id,
-    name: user.name,
-    username: user.username,
-    email: user.email,
+    name: user.name, username: user.username, email: user.email,
     avatar: user.avatar || null,
     about: user.about || 'Hey there! I am using ZETA CHAT.',
     color: user.color || colorFor(user.username)
@@ -1375,7 +1488,6 @@ function enterApp(user){
 
   const st = getSettings();
   $('#setNotif').checked = st.notif;
-  $('#setAutoReply').checked = st.autoreply;
   $('#setSounds').checked = st.sounds;
 
   renderContacts();
@@ -1383,19 +1495,16 @@ function enterApp(user){
   renderCalls();
   showScreen('screenMain');
   safeCreateIcons();
+
+  startHeartbeat();
+  startListPolling();
+
   setTimeout(() => toast('සාදරයෙන් පිළිගන්නවා, ' + currentUser.name + '! 🎉'), 350);
 }
 
-/* ========== CONTACTS ========== */
+/* ============ CONTACTS ============ */
 function getAllContacts(){
-  const list = Cache.users.slice();
-  DEMO_CONTACTS.forEach(d => {
-    if (!list.some(c => c.id === d.id)) list.push({
-      id: d.id, name: d.name, phone: d.phone,
-      about: d.about, color: colorFor(d.id), kind: 'demo'
-    });
-  });
-  return list;
+  return Cache.users.slice();
 }
 function findContact(id){
   return getAllContacts().find(c => c.id === id)
@@ -1428,6 +1537,7 @@ function contactHTML(c){
   const meta = getMeta(key);
   const thread = getThread(c.id);
   const last = thread[thread.length - 1];
+  const online = isUserOnline(c);
 
   let preview = '<i data-lucide="message-circle"></i> කතා කරන්න පටන් ගන්න';
   if (last){
@@ -1440,22 +1550,24 @@ function contactHTML(c){
     preview = (last.from === currentUser.id ? 'ඔබ: ' : '') + t;
   }
   const unread = meta.unread || 0;
+
   const avatarHTML = c.avatar
     ? '<img src="' + c.avatar + '" alt="">'
     : '<span>' + esc((c.name[0] || '?').toUpperCase()) + '</span>';
-  const subline = c.phone
-    ? '<i data-lucide="phone"></i>' + esc(c.phone)
+
+  const subline = online
+    ? '<i data-lucide="circle"></i> online'
     : '<i data-lucide="at-sign"></i>@' + esc(c.username || '');
 
   return '<div class="contact-item ' + (meta.pinned ? 'pinned' : '') + '" data-id="' + c.id + '">' +
-    '<div class="avatar" style="background:' + (c.color || colorFor(c.id)) + '">' +
+    '<div class="avatar' + (online ? ' online' : '') + '" style="background:' + (c.color || colorFor(c.id)) + '">' +
       avatarHTML + '<span class="online-dot"></span></div>' +
     '<div class="ci-body">' +
       '<div class="ci-top">' +
         '<span class="ci-name">' + esc(c.name) + (meta.pinned ? '<i data-lucide="pin"></i>' : '') + '</span>' +
         '<span class="ci-time">' + (last ? fmtTime(last.time) : '') + '</span>' +
       '</div>' +
-      '<div class="ci-sub">' + subline + '</div>' +
+      '<div class="ci-sub ' + (online ? 'online-text' : '') + '">' + subline + '</div>' +
       '<div class="ci-bottom">' +
         '<span class="ci-preview">' + preview + '</span>' +
         (meta.muted ? '<i data-lucide="bell-off" class="mute-ic"></i>' : '') +
@@ -1474,8 +1586,7 @@ function renderContacts(){
   if (q){
     contacts = contacts.filter(c =>
       (c.name || '').toLowerCase().includes(q) ||
-      (c.username && c.username.toLowerCase().includes(q)) ||
-      (c.phone && c.phone.includes(q))
+      (c.username && c.username.toLowerCase().includes(q))
     );
   }
   contacts.sort((a, b) => {
@@ -1507,7 +1618,7 @@ function updateNavBadge(){
   else b.style.display = 'none';
 }
 
-/* ========== MESSAGES ========== */
+/* ============ MESSAGES ============ */
 function tickHTML(status){
   if (status === 'read') return '<span class="ticks read">✓✓</span>';
   if (status === 'delivered') return '<span class="ticks">✓✓</span>';
@@ -1565,7 +1676,7 @@ function renderMessages(){
   safeCreateIcons();
 }
 
-/* ========== LONG PRESS ========== */
+/* ============ LONG PRESS ============ */
 function longPress(container, selector, handler){
   if (!container) return;
   let timer = null, lastTouch = 0;
@@ -1600,7 +1711,7 @@ function longPress(container, selector, handler){
   });
 }
 
-/* ========== SHEET ========== */
+/* ============ SHEET ============ */
 function openSheet(title, items){
   const el = $('#sheet');
   if (!el) return;
@@ -1626,7 +1737,7 @@ function closeSheet(){
   $('#sheetBackdrop')?.classList.remove('open');
 }
 
-/* ========== SCREEN NAV ========== */
+/* ============ SCREEN NAV ============ */
 function showScreen(id){
   $$('.screen').forEach(s => s.classList.remove('active'));
   const el = document.getElementById(id);
@@ -1658,13 +1769,13 @@ function switchAppTab(tab){
   $$('.tab-content').forEach(c => c.classList.remove('active'));
   const el = document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1));
   if (el) el.classList.add('active');
-  if (tab === 'chats') renderContacts();
+  if (tab === 'chats'){ renderContacts(); if (!activeContact) startListPolling(); }
   if (tab === 'status') renderStatusList();
   if (tab === 'calls') renderCalls();
   safeCreateIcons();
 }
 
-/* ========== CHAT ========== */
+/* ============ CHAT ============ */
 function openChat(id){
   const c = findContact(id);
   activeContact = { id: c.id, name: c.name, about: c.about, color: c.color, avatar: c.avatar || null };
@@ -1673,8 +1784,8 @@ function openChat(id){
   closeEmoji();
 
   $('#chatName').textContent = c.name;
-  $('#chatStatus').textContent = 'online';
-  $('#chatStatus').style.color = 'var(--green)';
+  updateChatHeaderStatus();
+
   const av = $('#chatAvatar');
   if (c.avatar){
     av.innerHTML = '<img src="' + c.avatar + '" alt=""><span class="online-dot"></span>';
@@ -1683,18 +1794,38 @@ function openChat(id){
     av.innerHTML = '<span id="chatAvatarLetter">' + esc((c.name[0] || '?').toUpperCase()) + '</span><span class="online-dot"></span>';
     av.style.background = c.color || colorFor(c.id);
   }
+  if (isUserOnline(c)) av.classList.add('online'); else av.classList.remove('online');
+
   setMeta([currentUser.id, id].sort().join('|'), { unread: 0 });
   renderMessages();
   renderContacts();
   showScreen('screenChat');
+  stopListPolling();
+  startChatPolling(id);
   setTimeout(() => { try { $('#msgInput').focus(); } catch(e){} }, 220);
 }
+
+function updateChatHeaderStatus(){
+  if (!activeContact) return;
+  const c = findContact(activeContact.id);
+  const online = isUserOnline(c);
+  const st = $('#chatStatus');
+  if (st){
+    if (online){ st.textContent = 'online'; st.style.color = 'var(--green)'; st.classList.remove('offline'); }
+    else { st.textContent = c.lastSeen ? 'last seen ' + timeAgo(new Date(c.lastSeen).getTime()) : 'offline'; st.style.color = 'var(--muted)'; st.classList.add('offline'); }
+  }
+  const av = $('#chatAvatar');
+  if (av){ if (online) av.classList.add('online'); else av.classList.remove('online'); }
+}
+
 function closeChat(){
   closeEmoji();
   cancelReply();
+  stopChatPolling();
   activeContact = null;
   showScreen('screenMain');
   renderContacts();
+  startListPolling();
 }
 function openContactInfo(){
   if (!activeContact) return;
@@ -1709,8 +1840,10 @@ function openContactInfo(){
   }
   $('#ciName').textContent = c.name;
   const info = findContact(c.id);
-  $('#ciContactId').textContent = info.phone ? info.phone : ('@' + (info.username || ''));
+  $('#ciContactId').textContent = '@' + (info.username || '');
   $('#ciAbout').textContent = c.about || 'Hey there!';
+  const online = isUserOnline(info);
+  $('#ciOnlineStatus').textContent = online ? '🟢 Online now' : (info.lastSeen ? 'Last seen ' + timeAgo(new Date(info.lastSeen).getTime()) : '');
   const meta = getMeta([currentUser.id, c.id].sort().join('|'));
   $('#ciMuteLabel').textContent = meta.muted ? 'Unmute notifications' : 'Mute notifications';
   showScreen('screenContactInfo');
@@ -1729,36 +1862,30 @@ function openChatMenu(){
   ]);
 }
 
-/* ========== SEND ========== */
-function onSendClick(){
-  const val = $('#msgInput').value.trim();
-  if (val) sendMessage();
-  else toggleVoice();
-}
+/* ============ SEND ============ */
 async function sendMessage(){
   const input = $('#msgInput');
   const text = input.value.trim();
   if (!text || !activeContact) return;
 
+  const reply = replyTarget ? Object.assign({}, replyTarget) : null;
   const m = {
     id: uid(), from: currentUser.id, to: activeContact.id,
     type: 'text', text, time: Date.now(), status: 'sent',
-    replyTo: replyTarget ? Object.assign({}, replyTarget) : null,
-    media: null, fileSize: '', starred: false, deleted: false
+    replyTo: reply, media: null, fileSize: '',
+    starred: false, deleted: false
   };
   const arr = getThread(activeContact.id);
   arr.push(m);
   setThread(activeContact.id, arr);
   input.value = '';
   cancelReply();
-  updateComposerBtn();
   renderMessages();
   renderContacts();
 
   try {
     const r = await API.post('/messages', {
-      to: activeContact.id, type: 'text', text,
-      replyTo: replyTarget
+      to: activeContact.id, type: 'text', text, replyTo: reply
     });
     if (r.message){
       const arr2 = getThread(activeContact.id);
@@ -1766,18 +1893,17 @@ async function sendMessage(){
       if (i > -1){ arr2[i].id = r.message._id; setThread(activeContact.id, arr2); }
     }
   } catch(e){ console.warn('Send failed:', e); }
-
-  autoReplyFlow(activeContact.id, m.id);
 }
+
 async function sendMedia(type, data, extra){
   if (!activeContact) return;
+  const reply = replyTarget ? Object.assign({}, replyTarget) : null;
   const m = {
     id: uid(), from: currentUser.id, to: activeContact.id, type,
     text: (extra && extra.text) || '', media: data || null,
     fileSize: (extra && extra.fileSize) || '',
     time: Date.now(), status: 'sent',
-    replyTo: replyTarget ? Object.assign({}, replyTarget) : null,
-    starred: false, deleted: false
+    replyTo: reply, starred: false, deleted: false
   };
   const arr = getThread(activeContact.id);
   arr.push(m);
@@ -1792,7 +1918,7 @@ async function sendMedia(type, data, extra){
       text: (extra && extra.text) || '',
       media: data || null,
       fileSize: (extra && extra.fileSize) || '',
-      replyTo: replyTarget
+      replyTo: reply
     });
     if (r.message){
       const arr2 = getThread(activeContact.id);
@@ -1800,75 +1926,157 @@ async function sendMedia(type, data, extra){
       if (i > -1){ arr2[i].id = r.message._id; setThread(activeContact.id, arr2); }
     }
   } catch(e){ console.warn('Send failed:', e); }
-
-  autoReplyFlow(activeContact.id, m.id);
-}
-function autoReplyFlow(contactId, msgId){
-  const isDemo = String(contactId).indexOf('d') === 0 && contactId.length <= 3;
-  setTimeout(() => {
-    const arr = getThread(contactId);
-    const i = arr.findIndex(x => x.id === msgId);
-    if (i > -1){
-      arr[i].status = 'delivered';
-      setThread(contactId, arr);
-      if (activeContact && activeContact.id === contactId) renderMessages();
-    }
-  }, 450);
-  setTimeout(() => {
-    const arr = getThread(contactId);
-    const i = arr.findIndex(x => x.id === msgId);
-    if (i > -1){
-      arr[i].status = 'read';
-      setThread(contactId, arr);
-      if (activeContact && activeContact.id === contactId) renderMessages();
-    }
-    if (!isDemo || !getSettings().autoreply) return;
-    setTimeout(() => {
-      showTyping(contactId);
-      const delay = 1200 + Math.random() * 1300;
-      setTimeout(() => {
-        hideTyping(contactId);
-        const replyText = DEMO_REPLIES[Math.floor(Math.random() * DEMO_REPLIES.length)];
-        const replyMsg = {
-          id: uid(), from: contactId, to: currentUser.id,
-          type: 'text', text: replyText, time: Date.now(),
-          status: 'read', starred: false, deleted: false,
-          media: null, fileSize: '', replyTo: null
-        };
-        const arr2 = getThread(contactId);
-        arr2.push(replyMsg);
-        setThread(contactId, arr2);
-        const key = [currentUser.id, contactId].sort().join('|');
-        const isOpen = activeContact && activeContact.id === contactId;
-        if (!isOpen) setMeta(key, { unread: (getMeta(key).unread || 0) + 1 });
-        if (isOpen) renderMessages();
-        renderContacts();
-      }, delay);
-    }, 700);
-  }, 1300);
-}
-function showTyping(id){
-  if (activeContact && activeContact.id === id){
-    $('#chatStatus').textContent = 'typing...';
-    $('#chatStatus').style.color = 'var(--cyan)';
-    const area = $('#messagesArea');
-    let el = document.getElementById('typingLine');
-    if (!el){
-      el = document.createElement('div');
-      el.id = 'typingLine'; el.className = 'typing-line'; el.textContent = 'typing...';
-      area.appendChild(el); area.scrollTop = area.scrollHeight;
-    }
-  }
-}
-function hideTyping(id){
-  if (activeContact && activeContact.id === id){
-    $('#chatStatus').textContent = 'online';
-    $('#chatStatus').style.color = 'var(--green)';
-  }
-  document.getElementById('typingLine')?.remove();
 }
 
-/* ========== REPLY ========== */
+/* ============ SEND BUTTON (click = send, long-press = record) ============ */
+let sendBtnLongPressFired = false;
+let sendBtnPressTimer = null;
+let voiceRecordingActive = false;
+
+function setupSendButton(){
+  const btn = $('#sendBtn');
+  if (!btn) return;
+
+  const startPress = () => {
+    sendBtnLongPressFired = false;
+    clearTimeout(sendBtnPressTimer);
+    sendBtnPressTimer = setTimeout(async () => {
+      sendBtnLongPressFired = true;
+      voiceRecordingActive = true;
+      btn.classList.add('recording');
+      if (navigator.vibrate){ try { navigator.vibrate(30); } catch(e){} }
+      await startVoiceRecording();
+    }, 350);
+  };
+
+  const endPress = (cancel) => {
+    clearTimeout(sendBtnPressTimer);
+    if (voiceRecordingActive){
+      voiceRecordingActive = false;
+      btn.classList.remove('recording');
+      if (cancel) cancelVoiceRecording();
+      else stopVoiceAndSend();
+    }
+  };
+
+  // Touch
+  btn.addEventListener('touchstart', e => {
+    e.preventDefault();
+    startPress();
+  }, { passive: false });
+  btn.addEventListener('touchend', e => {
+    e.preventDefault();
+    endPress(false);
+  }, { passive: false });
+  btn.addEventListener('touchcancel', e => {
+    endPress(true);
+  });
+
+  // Mouse
+  btn.addEventListener('mousedown', e => {
+    if (e.button !== 0) return;
+    e.preventDefault();
+    startPress();
+  });
+  btn.addEventListener('mouseup', e => {
+    if (e.button !== 0) return;
+    e.preventDefault();
+    endPress(false);
+  });
+  btn.addEventListener('mouseleave', () => {
+    if (voiceRecordingActive) endPress(true);
+    else clearTimeout(sendBtnPressTimer);
+  });
+
+  // Click handler (fires after tap on most browsers)
+  btn.addEventListener('click', e => {
+    e.preventDefault();
+    if (sendBtnLongPressFired){
+      sendBtnLongPressFired = false;
+      return;
+    }
+    // Short tap: send text
+    const text = $('#msgInput').value.trim();
+    if (text) sendMessage();
+    else toast('මැසේජ් එකක් ලියන්න හෝ long-press කරලා voice එකක් යවන්න');
+  });
+}
+
+/* ============ VOICE RECORDING ============ */
+async function startVoiceRecording(){
+  if (!activeContact){ voiceRecordingActive = false; return; }
+  if (!navigator.mediaDevices || typeof MediaRecorder === 'undefined'){
+    toast('මේ browser එකේ voice record support නෑ');
+    voiceRecordingActive = false;
+    return;
+  }
+  try {
+    recStream = await navigator.mediaDevices.getUserMedia({ audio:true });
+    audioChunks = [];
+    mediaRecorder = new MediaRecorder(recStream);
+    mediaRecorder.ondataavailable = e => { if (e.data && e.data.size) audioChunks.push(e.data); };
+    mediaRecorder.start();
+    recStart = Date.now();
+    showRecUI();
+  } catch(err){
+    console.warn('Record start error:', err);
+    toast('මයික්‍රොෆෝනයට අවසර ලබාගන්න බෑ 🎤');
+    voiceRecordingActive = false;
+  }
+}
+
+function stopVoiceAndSend(){
+  clearInterval(recTimer);
+  $('#recBar')?.classList.remove('show');
+  $('#composer').style.display = 'flex';
+  if (mediaRecorder && mediaRecorder.state === 'recording'){
+    mediaRecorder.onstop = () => {
+      if (recStream) recStream.getTracks().forEach(t => t.stop());
+      const blob = new Blob(audioChunks, { type:'audio/webm' });
+      if (blob.size < 500){ return; }
+      if (blob.size > 800000){ toast('Recording ලොකු වැඩියි ⚠️'); return; }
+      const fr = new FileReader();
+      fr.onload = () => sendMedia('voice', fr.result);
+      fr.readAsDataURL(blob);
+    };
+    mediaRecorder.stop();
+  }
+  mediaRecorder = null;
+}
+
+function cancelVoiceRecording(){
+  clearInterval(recTimer);
+  $('#recBar')?.classList.remove('show');
+  $('#composer').style.display = 'flex';
+  if (mediaRecorder && mediaRecorder.state === 'recording'){
+    mediaRecorder.onstop = () => {
+      if (recStream) recStream.getTracks().forEach(t => t.stop());
+    };
+    mediaRecorder.stop();
+  }
+  mediaRecorder = null;
+  toast('Recording අවලංගු කළා');
+}
+
+function showRecUI(){
+  $('#composer').style.display = 'none';
+  $('#recBar').classList.add('show');
+  $('#recTime').textContent = '0:00';
+  clearInterval(recTimer);
+  recTimer = setInterval(() => {
+    const s = Math.floor((Date.now() - recStart) / 1000);
+    $('#recTime').textContent = Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+    if (s >= 60) stopVoiceAndSend();
+  }, 250);
+}
+
+function cancelVoice(){
+  voiceRecordingActive = false;
+  $('#sendBtn')?.classList.remove('recording');
+  cancelVoiceRecording();
+}
+
+/* ============ REPLY ============ */
 function renderReplyBar(){
   const bar = $('#replyBar');
   if (!bar) return;
@@ -1879,7 +2087,7 @@ function renderReplyBar(){
 }
 function cancelReply(){ replyTarget = null; renderReplyBar(); }
 
-/* ========== MSG MENU ========== */
+/* ============ MSG MENU ============ */
 function openMsgMenu(msgId){
   if (!activeContact) return;
   const thread = getThread(activeContact.id);
@@ -1910,7 +2118,6 @@ function openMsgMenu(msgId){
         }
       });
     }
-    items.push({ icon:'forward', label:'Forward', onClick: () => toast('Forward ✓') });
     items.push({
       icon:'star', label: m.starred ? 'Unstar' : 'Star',
       onClick: async () => {
@@ -1943,12 +2150,12 @@ function openMsgMenu(msgId){
   openSheet('', items);
 }
 
-/* ========== CONTACT MENU ========== */
+/* ============ CONTACT MENU ============ */
 function openContactMenu(id){
   const c = findContact(id);
   const key = [currentUser.id, id].sort().join('|');
   const meta = getMeta(key);
-  const title = c.phone ? (c.name + ' • ' + c.phone) : (c.name + ' • @' + (c.username || ''));
+  const title = c.name + ' • @' + (c.username || '');
   openSheet(title, [
     { icon:'message-circle', label:'Chat කරන්න', onClick: () => openChat(id) },
     { icon:'phone', label:'ඇමතුමක්', onClick: () => { activeContact = c; startCall('voice'); } },
@@ -1977,6 +2184,8 @@ async function deleteChatWith(id){
   await setMeta(key, { pinned: false, muted: false, unread: 0 });
   if (activeContact && activeContact.id === id){
     activeContact = null;
+    stopChatPolling();
+    startListPolling();
     showScreen('screenMain');
   }
   renderContacts();
@@ -1992,7 +2201,7 @@ async function toggleMuteContact(){
   toast(meta.muted ? 'Unmuted 🔔' : 'Muted 🔕');
 }
 
-/* ========== EMOJI ========== */
+/* ============ EMOJI ============ */
 const EMOJI_STR = '😀 😃 😄 😁 😆 😅 😂 🤣 😊 😇 🙂 🙃 😉 😌 😍 🥰 😘 😗 😙 😚 😋 😛 😝 😜 🤪 🤨 🧐 🤓 😎 🥳 😏 😒 😞 😔 😟 😕 🙁 😣 😖 😫 😩 🥺 😢 😭 😤 😠 😡 🤬 🤯 😳 🥵 🥶 😱 😨 😰 😥 😓 🤗 🤔 🤭 🤫 🤥 😶 😐 😑 😬 🙄 😯 😦 😧 😮 😲 🥱 😴 🤤 😪 😵 🤐 🥴 🤢 🤮 🤧 😷 🤒 🤕 🤑 🤠 😈 👿 👻 💀 👽 🤖 💩 👍 👎 👌 ✌️ 🤞 🤟 🤘 🤙 👋 🙏 💪 🔥 ✨ 🎉 🎊 ❤️ 🧡 💛 💚 💙 💜 🖤 🤍 💔 💯 ✅ ❌ ⚡ 🌟 ⭐ 🚀 🌙 ☀️ 🍕 🍔 ☕ 🍺 🎵 🎶 📷 📱 💻 🎮 ⚽ 🏆 🚗 ✈️ 🎁 💐 🌹 🐶 🐱 🌈';
 const EMOJIS = EMOJI_STR.split(' ').filter(e => e.trim());
 function buildEmoji(){
@@ -2005,23 +2214,11 @@ function insertEmoji(e){
   if (!inp) return;
   inp.value += e;
   inp.focus();
-  updateComposerBtn();
 }
-function toggleEmoji(){
-  const p = $('#emojiPanel');
-  if (!p) return;
-  p.classList.toggle('show');
-}
+function toggleEmoji(){ $('#emojiPanel')?.classList.toggle('show'); }
 function closeEmoji(){ $('#emojiPanel')?.classList.remove('show'); }
-function updateComposerBtn(){
-  const has = $('#msgInput').value.trim().length > 0;
-  const btn = $('#sendBtn');
-  if (!btn) return;
-  btn.innerHTML = has ? '<i data-lucide="send"></i>' : '<i data-lucide="mic"></i>';
-  safeCreateIcons();
-}
 
-/* ========== ATTACH ========== */
+/* ============ ATTACH ============ */
 function openAttach(){
   openSheet('Attach', [
     { icon:'image', label:'Photos', onClick: () => $('#imgInput').click() },
@@ -2055,58 +2252,7 @@ function sendLocation(){
   sendMedia('text', null, { text: '📍 මගේ ස්ථානය\nhttps://maps.google.com/?q=' + lat + ',' + lng });
 }
 
-/* ========== VOICE ========== */
-async function toggleVoice(){
-  if (mediaRecorder && mediaRecorder.state === 'recording'){ stopVoice(true); return; }
-  if (!navigator.mediaDevices || typeof MediaRecorder === 'undefined'){
-    toast('Voice record support නෑ'); return;
-  }
-  try {
-    recStream = await navigator.mediaDevices.getUserMedia({ audio:true });
-    audioChunks = [];
-    mediaRecorder = new MediaRecorder(recStream);
-    mediaRecorder.ondataavailable = e => { if (e.data && e.data.size) audioChunks.push(e.data); };
-    mediaRecorder.onstop = () => {
-      if (recStream) recStream.getTracks().forEach(t => t.stop());
-      const blob = new Blob(audioChunks, { type:'audio/webm' });
-      if (blob.size > 500000){ toast('Recording ලොකු වැඩියි'); return; }
-      const fr = new FileReader();
-      fr.onload = () => sendMedia('voice', fr.result);
-      fr.readAsDataURL(blob);
-    };
-    mediaRecorder.start();
-    recStart = Date.now();
-    showRecUI();
-  } catch(err){
-    toast('මයික්‍රොෆෝනයට අවසර නෑ 🎤');
-  }
-}
-function showRecUI(){
-  $('#composer').style.display = 'none';
-  $('#recBar').classList.add('show');
-  $('#recTime').textContent = '0:00';
-  clearInterval(recTimer);
-  recTimer = setInterval(() => {
-    const s = Math.floor((Date.now() - recStart) / 1000);
-    $('#recTime').textContent = Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
-    if (s >= 30) stopVoice(true);
-  }, 250);
-}
-function stopVoice(send){
-  clearInterval(recTimer);
-  $('#recBar').classList.remove('show');
-  $('#composer').style.display = 'flex';
-  if (mediaRecorder && mediaRecorder.state === 'recording'){
-    if (!send){
-      mediaRecorder.onstop = () => { if (recStream) recStream.getTracks().forEach(t => t.stop()); };
-    }
-    mediaRecorder.stop();
-  }
-  mediaRecorder = null;
-}
-function cancelVoice(){ stopVoice(false); toast('Recording අවලංගු'); }
-
-/* ========== CALLS ========== */
+/* ============ CALLS ============ */
 async function startCall(type){
   if (!activeContact) return;
   const call = {
@@ -2154,20 +2300,25 @@ function quickCall(id){
   startCall('voice');
 }
 
-/* ========== STATUS ========== */
+/* ============ STATUS ============ */
 function renderStatusList(){
   const list = $('#statusList');
   if (!list || !currentUser) return;
   const mine = Cache.status[currentUser.id] || null;
   const av = $('#myStatusAvatar');
-  if (currentUser.avatar){
+  if (mine && mine.type === 'image' && mine.media){
+    av.innerHTML = '<img src="' + mine.media + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%">';
+    av.style.background = '';
+  } else if (currentUser.avatar){
     av.innerHTML = '<img src="' + currentUser.avatar + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%">';
     av.style.background = '';
   } else {
     av.textContent = (currentUser.name[0] || 'Z').toUpperCase();
     av.style.background = currentUser.color;
   }
-  $('#myStatusText').textContent = mine ? mine.text : 'Status එකක් එකතු කරන්න';
+  $('#myStatusText').textContent = mine
+    ? (mine.type === 'image' ? '📷 Photo status' : mine.text)
+    : 'Status එකක් එකතු කරන්න';
   $('#myStatusRing').className = 'status-ring' + (mine ? '' : ' seen');
 
   const others = Object.keys(Cache.status).filter(k => k !== currentUser.id);
@@ -2179,23 +2330,75 @@ function renderStatusList(){
   list.innerHTML = others.map(uid => {
     const s = Cache.status[uid];
     const u = Cache.users.find(x => x.id === uid) || { name: 'User', color: colorFor(uid) };
+    const avatarHTML = (s.type === 'image' && s.media)
+      ? '<img src="' + s.media + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%">'
+      : esc((u.name[0] || '?').toUpperCase());
     return '<div class="status-item" onclick="viewStatus(\'' + uid + '\')">' +
-      '<div class="status-ring"><div style="background:' + (u.color || colorFor(uid)) + '">' + esc((u.name[0] || '?').toUpperCase()) + '</div></div>' +
+      '<div class="status-ring"><div style="background:' + (u.color || colorFor(uid)) + '">' + avatarHTML + '</div></div>' +
       '<div class="call-info"><p>' + esc(u.name) + '</p><span>' + timeAgo(s.time) + '</span></div>' +
     '</div>';
   }).join('');
   safeCreateIcons();
 }
-async function addMyStatus(){
-  const val = prompt('ඔබේ status එක ලියන්න:', '');
-  if (val === null) return;
-  const txt = val.trim().slice(0, 90);
-  if (!txt) return;
-  Cache.status[currentUser.id] = { text: txt, time: Date.now() };
-  try { await API.post('/status', { text: txt }); } catch(e){}
-  renderStatusList();
-  toast('Status update කළා ✓');
+
+function addMyStatus(){
+  openSheet('Add Status', [
+    { icon:'text', label:'Text Status', onClick: () => openTextStatusModal() },
+    { icon:'image', label:'Photo Status', onClick: () => $('#statusImgInput').click() }
+  ]);
 }
+
+function openTextStatusModal(){
+  const modal = $('#statusModal');
+  $('#statusModalTitle').textContent = 'Text Status';
+  const existing = Cache.status[currentUser.id];
+  $('#statusInput').value = (existing && existing.type === 'text') ? existing.text : '';
+  modal.classList.add('show');
+  setTimeout(() => $('#statusInput').focus(), 100);
+}
+function closeStatusModal(){
+  $('#statusModal').classList.remove('show');
+  $('#statusInput').value = '';
+}
+async function submitTextStatus(){
+  const text = $('#statusInput').value.trim();
+  if (!text){ toast('Text එකක් ලියන්න'); return; }
+  const status = {
+    type: 'text', text,
+    media: null, color: currentUser.color,
+    time: Date.now()
+  };
+  Cache.status[currentUser.id] = status;
+  closeStatusModal();
+  renderStatusList();
+  try {
+    await API.post('/status', { type: 'text', text, color: currentUser.color });
+    toast('Status update කළා ✓');
+  } catch(e){ toast('Save කරන්න බෑ: ' + e.message); }
+}
+
+$('#statusImgInput')?.addEventListener('change', function(){
+  const f = this.files && this.files[0];
+  this.value = '';
+  if (!f) return;
+  if (f.size > 3 * 1024 * 1024){ toast('රූපය 3MB ට වඩා ලොකුයි'); return; }
+  const fr = new FileReader();
+  fr.onload = async () => {
+    const status = {
+      type: 'image', text: '',
+      media: fr.result, color: currentUser.color,
+      time: Date.now()
+    };
+    Cache.status[currentUser.id] = status;
+    renderStatusList();
+    try {
+      await API.post('/status', { type: 'image', media: fr.result, color: currentUser.color });
+      toast('Photo status දැම්මා ✓');
+    } catch(e){ toast('Save කරන්න බෑ: ' + e.message); }
+  };
+  fr.readAsDataURL(f);
+});
+
 let svTimer = null;
 function viewStatus(userId){
   const s = Cache.status[userId];
@@ -2205,9 +2408,14 @@ function viewStatus(userId){
   $('#svAvatar').style.background = u.color || colorFor(userId);
   $('#svName').textContent = u.name;
   $('#svTime').textContent = timeAgo(s.time);
-  $('#svText').textContent = s.text;
-  $('#svText').style.background = 'linear-gradient(135deg,' + (u.color || colorFor(userId)) + '55,' + (u.color || colorFor(userId)) + '22)';
   $('#svBars').innerHTML = '<div class="sv-bar active"><i></i></div>';
+  const body = $('#svBody');
+  if (s.type === 'image' && s.media){
+    body.innerHTML = '<img class="sv-photo" src="' + s.media + '" alt="">' +
+      (s.text ? '<div class="sv-caption">' + esc(s.text) + '</div>' : '');
+  } else {
+    body.innerHTML = '<div class="sv-text" style="background:linear-gradient(135deg,' + (u.color || colorFor(userId)) + '55,' + (u.color || colorFor(userId)) + '22)">' + esc(s.text) + '</div>';
+  }
   $('#statusViewer').classList.add('show');
   safeCreateIcons();
   clearTimeout(svTimer);
@@ -2218,11 +2426,11 @@ function closeStatusViewer(){
   $('#statusViewer').classList.remove('show');
 }
 
-/* ========== IMAGE VIEWER ========== */
+/* ============ IMAGE VIEWER ============ */
 function openImageViewer(src){ $('#imgViewerSrc').src = src; $('#imgViewer').classList.add('show'); }
 function closeImageViewer(){ $('#imgViewer').classList.remove('show'); $('#imgViewerSrc').src = ''; }
 
-/* ========== PROFILE ========== */
+/* ============ PROFILE ============ */
 function openProfileEdit(){
   if (!currentUser) return;
   const letter = (currentUser.name[0] || 'Z').toUpperCase();
@@ -2286,14 +2494,12 @@ async function saveProfile(){
   const name = $('#peName').value.trim();
   const about = $('#peAbout').value.trim() || 'Hey there! I am using ZETA CHAT.';
   if (name.length < 2){ toast('නම අඩුම අකුරු 2ක්'); return; }
-
   try {
-    const r = await API.put('/profile', {
+    await API.put('/profile', {
       name, about, avatar: currentUser.avatar, color: currentUser.color
     });
     currentUser.name = name;
     currentUser.about = about;
-
     const letter = (name[0] || 'Z').toUpperCase();
     const setAv = $('#setAvatar');
     if (currentUser.avatar){
@@ -2304,7 +2510,6 @@ async function saveProfile(){
     }
     $('#setName').textContent = name;
     $('#setAbout').textContent = about;
-
     renderStatusList();
     renderContacts();
     showScreen('screenMain');
@@ -2315,7 +2520,7 @@ async function saveProfile(){
   }
 }
 
-/* ========== CHANGE PASSWORD ========== */
+/* ============ CHANGE PASSWORD ============ */
 function openChangePassword(){
   $('#cpOld').value = ''; $('#cpNew').value = ''; $('#cpNew2').value = '';
   hideAuthAlert('cpError'); hideAuthAlert('cpSuccess');
@@ -2341,7 +2546,7 @@ async function submitChangePassword(){
   }
 }
 
-/* ========== SESSIONS / HISTORY ========== */
+/* ============ SESSIONS / HISTORY ============ */
 function openSessions(){
   const el = $('#sessionsList');
   if (!el) return;
@@ -2359,17 +2564,17 @@ function openLoginHistory(){
   el.innerHTML = '<div class="list-card"><div class="list-card-item">' +
     '<div class="lic-icon"><i data-lucide="check-circle"></i></div>' +
     '<div class="lic-body"><div class="lic-title">' + esc(detectDevice()) + ' • ' + esc(detectBrowser()) + '</div>' +
-    '<div class="lic-sub">' + fmtDateTime(Date.now()) + ' — <span class="success-tag">සාර්ථක</span></div></div>' +
+    '<div class="lic-sub">' + fmtDateTime(Date.now()) + ' — <span style="color:#4ADE80;font-weight:600;">සාර්ථක</span></div></div>' +
     '</div></div>';
   safeCreateIcons();
   showScreen('screenHistory');
 }
 
-/* ========== SETTINGS ========== */
+/* ============ SETTINGS ============ */
 function onToggle(key, val){ setSetting(key, val); toast(val ? 'On ✓' : 'Off'); }
 function openAbout(){
   openSheet('ZETA CHAT', [
-    { icon:'info', label:'Version 4.0 (MongoDB)', onClick:()=>toast('ZETA CHAT v4.0') },
+    { icon:'info', label:'Version 5.0 (MongoDB)', onClick:()=>toast('ZETA CHAT v5.0') },
     { icon: API_MODE ? 'server' : 'alert-triangle',
       label: API_MODE ? 'MongoDB connected ✓' : 'Backend offline',
       onClick:()=>toast(API_MODE ? 'දත්ත MongoDB එකේ save වෙනවා' : 'Server එක start කරන්න') },
@@ -2377,7 +2582,7 @@ function openAbout(){
   ]);
 }
 
-/* ========== EVENT WIRING ========== */
+/* ============ EVENT WIRING ============ */
 $('#contactSearch')?.addEventListener('input', renderContacts);
 $('#contactList')?.addEventListener('click', e => {
   if (Date.now() < suppressClickUntil) return;
@@ -2393,7 +2598,6 @@ $('#messagesArea')?.addEventListener('click', e => {
 });
 if ($('#messagesArea')) longPress($('#messagesArea'), '.msg-row', el => openMsgMenu(el.dataset.id));
 
-$('#msgInput')?.addEventListener('input', updateComposerBtn);
 $('#msgInput')?.addEventListener('keydown', e => {
   if (e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendMessage(); }
 });
@@ -2404,8 +2608,27 @@ $('#docInput')?.addEventListener('change', function(){ handleDocFile(this); });
 
 document.addEventListener('dblclick', e => e.preventDefault(), { passive:false });
 
-/* ========== INIT ========== */
+/* ============ VISIBILITY ============ */
+document.addEventListener('visibilitychange', () => {
+  if (!currentUser) return;
+  if (document.visibilityState === 'visible'){
+    if (API_MODE) API.post('/heartbeat', {}).catch(()=>{});
+    if (activeContact) startChatPolling(activeContact.id);
+    else startListPolling();
+  }
+});
+
+window.addEventListener('beforeunload', () => {
+  if (API_MODE && API.token){
+    try { navigator.sendBeacon(API_BASE + '/offline', JSON.stringify({ token: API.token })); } catch(e){}
+  }
+  if (mediaRecorder && mediaRecorder.state === 'recording'){ try { mediaRecorder.stop(); } catch(e){} }
+  if (recStream) recStream.getTracks().forEach(t => t.stop());
+});
+
+/* ============ INIT ============ */
 buildEmoji();
+setupSendButton();
 safeCreateIcons();
 
 (async function boot(){
@@ -2441,11 +2664,6 @@ safeCreateIcons();
     $('#authScreen').style.display = 'flex';
   }
 })();
-
-window.addEventListener('beforeunload', () => {
-  if (mediaRecorder && mediaRecorder.state === 'recording'){ try { mediaRecorder.stop(); } catch(e){} }
-  if (recStream) recStream.getTracks().forEach(t => t.stop());
-});
 </script>
 </body>
 </html>
