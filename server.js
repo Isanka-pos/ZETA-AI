@@ -1,21 +1,30 @@
-// server.js
+/* ============================================================
+   ZETA CHAT — Backend + Static Server (MongoDB)
+   ============================================================ */
 const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
+const path = require('path');
+const fs = require('fs');
 require('dotenv').config();
 
 const app = express();
 app.use(cors({ origin: '*' }));
-app.use(express.json({ limit: '15mb' }));
+app.use(express.json({ limit: '20mb' }));
+app.use(express.static(__dirname));
 
-// ==================== MongoDB Connect ====================
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/zetachat')
+/* =============== MongoDB =============== */
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/zetachat';
+mongoose.connect(MONGO_URI)
   .then(() => console.log('✅ MongoDB connected'))
-  .catch(err => { console.error('❌ MongoDB error:', err.message); process.exit(1); });
+  .catch(err => {
+    console.error('❌ MongoDB error:', err.message);
+    console.error('   → MongoDB service run වෙනවද?');
+  });
 
-// ==================== Schemas ====================
+/* =============== Schemas =============== */
 const UserSchema = new mongoose.Schema({
   name: { type: String, required: true },
   username: { type: String, required: true, unique: true, lowercase: true, index: true },
@@ -24,20 +33,8 @@ const UserSchema = new mongoose.Schema({
   avatar: { type: String, default: null },
   color: { type: String, default: '#00A3FF' },
   about: { type: String, default: 'Hey there! I am using ZETA CHAT.' },
-  sessions: [{
-    sessionId: String,
-    device: String,
-    browser: String,
-    time: { type: Date, default: Date.now },
-    current: { type: Boolean, default: false }
-  }],
-  loginHistory: [{
-    time: { type: Date, default: Date.now },
-    device: String,
-    browser: String,
-    success: Boolean,
-    reason: String
-  }],
+  sessions: [{ sessionId: String, device: String, browser: String, time: Date, current: Boolean }],
+  loginHistory: [{ time: Date, device: String, browser: String, success: Boolean, reason: String }],
   createdAt: { type: Date, default: Date.now }
 });
 
@@ -66,18 +63,12 @@ const MetaSchema = new mongoose.Schema({
 });
 
 const CallSchema = new mongoose.Schema({
-  userId: String,
-  contactId: String,
-  name: String,
-  kind: String,
-  media: String,
-  time: { type: Date, default: Date.now }
+  userId: String, contactId: String, name: String,
+  kind: String, media: String, time: { type: Date, default: Date.now }
 });
 
 const StatusSchema = new mongoose.Schema({
-  userId: String,
-  text: String,
-  time: { type: Date, default: Date.now }
+  userId: String, text: String, time: { type: Date, default: Date.now }
 });
 
 const User = mongoose.model('User', UserSchema);
@@ -86,80 +77,75 @@ const Meta = mongoose.model('Meta', MetaSchema);
 const Call = mongoose.model('Call', CallSchema);
 const Status = mongoose.model('Status', StatusSchema);
 
-const JWT_SECRET = process.env.JWT_SECRET || 'zeta_secret';
+const JWT_SECRET = process.env.JWT_SECRET || 'zeta_default_secret';
 
-// ==================== Auth Middleware ====================
-function auth(req, res, next) {
+/* =============== Helpers =============== */
+function sanitize(u){
+  const o = u.toObject ? u.toObject() : { ...u };
+  delete o.password;
+  return o;
+}
+function auth(req, res, next){
   const token = (req.headers.authorization || '').replace('Bearer ', '');
-  if (!token) return res.status(401).json({ error: 'No token provided' });
-  try {
-    req.user = jwt.verify(token, JWT_SECRET);
-    next();
-  } catch (e) {
-    res.status(401).json({ error: 'Invalid or expired token' });
-  }
+  if (!token) return res.status(401).json({ error: 'No token' });
+  try { req.user = jwt.verify(token, JWT_SECRET); next(); }
+  catch (e) { res.status(401).json({ error: 'Invalid token' }); }
 }
 
-function sanitize(user) {
-  const u = user.toObject ? user.toObject() : { ...user };
-  delete u.password;
-  return u;
-}
+/* =============== Health =============== */
+app.get('/api/health', (req, res) => {
+  res.json({ ok: true, db: mongoose.connection.readyState === 1 });
+});
 
-// ==================== AUTH ROUTES ====================
-
-// Register
+/* =============== AUTH =============== */
 app.post('/api/register', async (req, res) => {
   try {
     const { name, username, email, password, avatar, color } = req.body;
     if (!name || !username || !email || !password)
-      return res.status(400).json({ error: 'Missing required fields' });
+      return res.status(400).json({ error: 'සියලු fields පුරවන්න' });
+    if (password.length < 6)
+      return res.status(400).json({ error: 'පාස්වර්ඩ් අකුරු 6ට වැඩි' });
 
     const exists = await User.findOne({
       $or: [{ username: username.toLowerCase() }, { email: email.toLowerCase() }]
     });
-    if (exists) return res.status(400).json({ error: 'Username or email already exists' });
+    if (exists) return res.status(400).json({ error: 'Username හෝ email දැනටමත් තියෙනවා' });
 
     const hashed = await bcrypt.hash(password, 10);
     const user = await User.create({
-      name,
-      username: username.toLowerCase(),
-      email: email.toLowerCase(),
+      name: name.trim(),
+      username: username.toLowerCase().trim(),
+      email: email.toLowerCase().trim(),
       password: hashed,
       avatar: avatar || null,
       color: color || '#00A3FF'
     });
-
     res.json({ success: true, userId: user._id });
   } catch (e) {
-    console.error('Register error:', e);
+    console.error('Register:', e);
     res.status(500).json({ error: e.message });
   }
 });
 
-// Login
 app.post('/api/login', async (req, res) => {
   try {
     const { identity, password, device, browser, remember } = req.body;
-    if (!identity || !password)
-      return res.status(400).json({ error: 'Missing fields' });
+    if (!identity || !password) return res.status(400).json({ error: 'Missing fields' });
 
     const user = await User.findOne({
       $or: [{ username: identity.toLowerCase() }, { email: identity.toLowerCase() }]
     });
-    if (!user) return res.status(400).json({ error: 'User not found' });
+    if (!user) return res.status(400).json({ error: 'ගිණුමක් හමු වුනේ නෑ' });
 
     const ok = await bcrypt.compare(password, user.password);
     if (!ok) {
-      user.loginHistory.unshift({
-        time: new Date(), device, browser, success: false, reason: 'Wrong password'
-      });
+      user.loginHistory.unshift({ time: new Date(), device, browser, success: false, reason: 'වැරදි පාස්වර්ඩ්' });
       user.loginHistory = user.loginHistory.slice(0, 30);
       await user.save();
-      return res.status(400).json({ error: 'Wrong password' });
+      return res.status(400).json({ error: 'පාස්වර්ඩ් එක වැරදියි' });
     }
 
-    const sessionId = 's_' + Date.now() + Math.random().toString(36).slice(2, 8);
+    const sessionId = 's_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
     user.sessions.forEach(s => s.current = false);
     user.sessions.push({ sessionId, device, browser, time: new Date(), current: true });
     if (user.sessions.length > 8) {
@@ -175,33 +161,23 @@ app.post('/api/login', async (req, res) => {
       JWT_SECRET,
       { expiresIn: remember ? '30d' : '1d' }
     );
-
-    res.json({
-      success: true, token, sessionId,
-      user: sanitize(user)
-    });
+    res.json({ success: true, token, sessionId, user: sanitize(user) });
   } catch (e) {
-    console.error('Login error:', e);
+    console.error('Login:', e);
     res.status(500).json({ error: e.message });
   }
 });
 
-// Verify session / get me
 app.get('/api/me', auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.userId);
     if (!user) return res.status(404).json({ error: 'User not found' });
-
     const session = user.sessions.find(s => s.sessionId === req.user.sessionId);
     if (!session) return res.status(401).json({ error: 'Session expired' });
-
     res.json({ user: sanitize(user), sessionId: req.user.sessionId });
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
+  } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// Logout current device
 app.post('/api/logout', auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.userId);
@@ -213,7 +189,6 @@ app.post('/api/logout', auth, async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// Logout all devices
 app.post('/api/logout-all', auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.userId);
@@ -222,7 +197,6 @@ app.post('/api/logout-all', auth, async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// Update profile
 app.put('/api/profile', auth, async (req, res) => {
   try {
     const { name, about, avatar, color } = req.body;
@@ -231,50 +205,42 @@ app.put('/api/profile', auth, async (req, res) => {
     if (about !== undefined) update.about = about;
     if (avatar !== undefined) update.avatar = avatar;
     if (color !== undefined) update.color = color;
-
     const user = await User.findByIdAndUpdate(req.user.userId, update, { new: true });
     res.json({ success: true, user: sanitize(user) });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// Change password
 app.post('/api/change-password', auth, async (req, res) => {
   try {
     const { oldPassword, newPassword } = req.body;
     const user = await User.findById(req.user.userId);
     if (!user) return res.status(404).json({ error: 'User not found' });
-
     const ok = await bcrypt.compare(oldPassword, user.password);
-    if (!ok) return res.status(400).json({ error: 'Current password is wrong' });
-    if (newPassword.length < 6) return res.status(400).json({ error: 'Password too short' });
-
+    if (!ok) return res.status(400).json({ error: 'වත්මන් පාස්වර්ඩ් එක වැරදියි' });
+    if (newPassword.length < 6) return res.status(400).json({ error: 'අකුරු 6ට වැඩි' });
     user.password = await bcrypt.hash(newPassword, 10);
     user.sessions = user.sessions.filter(s => s.sessionId === req.user.sessionId);
     await user.save();
-
     res.json({ success: true });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// Forgot password (demo — production එකේ OTP/email verify ඕන)
 app.post('/api/forgot-password', async (req, res) => {
   try {
     const { identity, newPassword } = req.body;
     const user = await User.findOne({
       $or: [{ username: identity.toLowerCase() }, { email: identity.toLowerCase() }]
     });
-    if (!user) return res.status(400).json({ error: 'User not found' });
-    if (newPassword.length < 6) return res.status(400).json({ error: 'Password too short' });
-
+    if (!user) return res.status(400).json({ error: 'ගිණුමක් හමු වුනේ නෑ' });
+    if (newPassword.length < 6) return res.status(400).json({ error: 'අකුරු 6ට වැඩි' });
     user.password = await bcrypt.hash(newPassword, 10);
     user.sessions = [];
     await user.save();
-
     res.json({ success: true });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// ==================== USER ROUTES ====================
+/* =============== Users =============== */
 app.get('/api/users', auth, async (req, res) => {
   try {
     const users = await User.find({ _id: { $ne: req.user.userId } }).select('-password');
@@ -282,15 +248,7 @@ app.get('/api/users', auth, async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.get('/api/users/:id', auth, async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id).select('-password');
-    if (!user) return res.status(404).json({ error: 'Not found' });
-    res.json({ user });
-  } catch (e) { res.status(500).json({ error: e.message }); }
-});
-
-// ==================== MESSAGE ROUTES ====================
+/* =============== Messages =============== */
 app.get('/api/messages/:contactId', auth, async (req, res) => {
   try {
     const key = [req.user.userId, req.params.contactId].sort().join('|');
@@ -322,19 +280,11 @@ app.post('/api/messages', auth, async (req, res) => {
 app.put('/api/messages/:id', auth, async (req, res) => {
   try {
     const message = await Message.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!message) return res.status(404).json({ error: 'Message not found' });
+    if (!message) return res.status(404).json({ error: 'Not found' });
     res.json({ success: true, message });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.delete('/api/messages/:id', auth, async (req, res) => {
-  try {
-    await Message.findByIdAndDelete(req.params.id);
-    res.json({ success: true });
-  } catch (e) { res.status(500).json({ error: e.message }); }
-});
-
-// Clear chat
 app.delete('/api/messages/thread/:contactId', auth, async (req, res) => {
   try {
     const key = [req.user.userId, req.params.contactId].sort().join('|');
@@ -343,7 +293,7 @@ app.delete('/api/messages/thread/:contactId', auth, async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// ==================== META ROUTES ====================
+/* =============== Meta =============== */
 app.get('/api/meta', auth, async (req, res) => {
   try {
     const metas = await Meta.find({ userId: req.user.userId });
@@ -364,7 +314,9 @@ app.put('/api/meta/:contactId', auth, async (req, res) => {
         userId: req.user.userId,
         contactId: req.params.contactId,
         threadKey: key,
-        ...req.body
+        pinned: req.body.pinned || false,
+        muted: req.body.muted || false,
+        unread: req.body.unread || 0
       },
       { upsert: true, new: true }
     );
@@ -372,7 +324,7 @@ app.put('/api/meta/:contactId', auth, async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// ==================== CALLS ROUTES ====================
+/* =============== Calls =============== */
 app.get('/api/calls', auth, async (req, res) => {
   try {
     const calls = await Call.find({ userId: req.user.userId }).sort({ time: -1 }).limit(120);
@@ -387,7 +339,7 @@ app.post('/api/calls', auth, async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// ==================== STATUS ROUTES ====================
+/* =============== Status =============== */
 app.get('/api/status', auth, async (req, res) => {
   try {
     const statuses = await Status.find().sort({ time: -1 }).limit(50);
@@ -406,8 +358,20 @@ app.post('/api/status', auth, async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// ==================== START ====================
+/* =============== SPA fallback =============== */
+app.get('*', (req, res) => {
+  if (req.path.startsWith('/api/')) return res.status(404).json({ error: 'Not found' });
+  const indexPath = path.join(__dirname, 'index.html');
+  if (fs.existsSync(indexPath)) res.sendFile(indexPath);
+  else res.status(404).send('index.html not found');
+});
+
+/* =============== Start =============== */
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log('🚀 ZETA CHAT backend running on http://localhost:' + PORT);
+  console.log('');
+  console.log('  🚀 ZETA CHAT running');
+  console.log('  📱 Open: http://localhost:' + PORT);
+  console.log('  💾 DB:   ' + MONGO_URI);
+  console.log('');
 });
