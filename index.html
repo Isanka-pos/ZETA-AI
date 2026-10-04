@@ -9,18 +9,22 @@
     <link rel="shortcut icon" type="image/png" href="https://files.catbox.moe/vy8h5y.png">
     <link rel="apple-touch-icon" href="https://files.catbox.moe/vy8h5y.png">
     <meta name="theme-color" content="#03050C">
+    <meta name="description" content="ZETA TOOLS — your all-in-one AI toolkit: image blur, AI code generator, photo gallery, movie search and image search. Owner: Isanka.">
+    <meta name="author" content="Isanka">
+    <meta property="og:title" content="ZETA TOOLS — AI Command Center">
+    <meta property="og:description" content="Your all-in-one AI toolkit. Free tools, daily updates.">
+    <meta property="og:image" content="https://files.catbox.moe/mu4e5j.png">
+    <link rel="preconnect" href="https://files.catbox.moe" crossorigin>
+    <link rel="preload" as="image" href="https://files.catbox.moe/mu4e5j.png" fetchpriority="high">
     <!-- ===== ONESIGNAL PUSH (real, all-devices) SDK — set your App ID below ===== -->
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..900&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-    <script src="https://cdn.tailwindcss.com">
-    </script>
-    <script>
-        tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] } } } }
-    </script>
-    <style>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@700;800&display=swap" /></noscript>
+    <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" /></noscript>
+        <style>
         /* ===== root variables (same as original) ===== */
         * { margin:0; padding:0; box-sizing:border-box; }
         :root {
@@ -568,13 +572,9 @@
             .zeta-sidebar.open { transform:translateX(0); }
             .sidebar-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(6px); z-index:99; opacity:0; pointer-events:none; transition:opacity var(--transition-smooth); }
             .sidebar-overlay.active { opacity:1; pointer-events:all; }
-            .mobile-toggle { position:fixed; top:16px; left:16px; z-index:101; width:40px; height:40px; border-radius:12px; background:linear-gradient(135deg, #FF3B4E, #C81E3A); border:1px solid rgba(255,59,78,0.5); color:#fff; font-size:16px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:opacity 0.25s ease, transform 0.25s ease, box-shadow var(--transition-fast); box-shadow:0 0 20px rgba(255,59,78,0.45); text-decoration:none; opacity:1; }
-            .mobile-toggle:hover { transform:translateY(-1px) scale(1.05); box-shadow:0 0 28px rgba(255,59,78,0.65); }
-            .mobile-toggle:active { transform:scale(0.94); }
             .zeta-sidebar:not(.open) { visibility:hidden; transition:transform var(--transition-smooth), visibility 0s linear 0.4s; }
             .zeta-sidebar.open { visibility:visible; transition-delay:0s; }
             .zeta-sidebar::after { display:none; }
-            .mobile-toggle { backdrop-filter:none; -webkit-backdrop-filter:none; background:linear-gradient(135deg, #FF3B4E, #C81E3A); }
             .premium-banner { margin:12px 12px 0 12px; padding:14px 16px; flex-wrap:wrap; }
             .premium-banner .banner-title { font-size:12px; }
             .premium-banner .banner-text { font-size:11px; }
@@ -612,7 +612,7 @@
             .zeta-sidebar.collapsed .status-panel .panel-grid .stat { font-size:9px; }
             .zeta-sidebar.collapsed .status-panel .panel-grid .stat strong { font-size:10px; display:block; }
         }
-        @media(min-width:769px) { .mobile-toggle, .sidebar-overlay { display:none !important; } .zeta-sidebar { transform:translateX(0) !important; } }
+        @media(min-width:769px) { .sidebar-overlay { display:none !important; } .zeta-sidebar { transform:translateX(0) !important; } }
         @media(min-width:769px) and (max-width:1024px) { .zeta-sidebar { width:250px; min-width:250px; } }
         @media(min-width:1024px) { .app-grid { grid-template-columns:1fr 1fr; } }
         @media(min-width:768px) { .hero-section { padding:64px 36px 56px; } }
@@ -920,25 +920,50 @@
             .is-grid { grid-template-columns:repeat(2,1fr); gap:10px; }
         }
 
+
+        /* ============================================================
+           v4 — performance + new UI bits
+           ============================================================ */
+        .hero-chip { text-decoration:none; cursor:pointer; }
+        .zt-jump { margin-top:12px; }
+        .zt-fab-wrap { position:fixed; right:16px; bottom:16px; z-index:90; display:flex; flex-direction:column; gap:10px; align-items:flex-end; padding-bottom:env(safe-area-inset-bottom,0); }
+        .zt-fab { width:46px; height:46px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:none; cursor:pointer; text-decoration:none; box-shadow:0 6px 22px rgba(0,0,0,0.5); transition:transform var(--transition-fast), opacity var(--transition-fast); }
+        .zt-fab:hover { transform:translateY(-2px) scale(1.05); }
+        .zt-fab:active { transform:scale(0.94); }
+        .zt-fab-wa { background:linear-gradient(135deg,#25D366,#128C7E); color:#fff; font-size:23px; }
+        .zt-fab-top { width:40px; height:40px; background:var(--bg-elevated); color:var(--text-secondary); border:1px solid var(--border-default); font-size:14px; opacity:0; pointer-events:none; transform:translateY(8px); }
+        .zt-fab-top.show { opacity:1; pointer-events:auto; transform:translateY(0); }
+        .zt-toast { position:fixed; left:50%; bottom:28px; transform:translate(-50%,16px); z-index:1000; max-width:calc(100% - 32px); padding:10px 18px; border-radius:100px; background:rgba(16,20,42,0.96); border:1px solid var(--border-glow); color:var(--text-primary); font-size:12.5px; font-weight:500; box-shadow:var(--shadow-elevated); opacity:0; pointer-events:none; transition:opacity .25s ease, transform .25s ease; text-align:center; }
+        .zt-toast.show { opacity:1; transform:translate(-50%,0); }
+        .zg-btn.zg-wa { color:#4ADE80; }
+        .zg-btn.zg-wa:hover { border-color:rgba(37,211,102,0.45); background:rgba(37,211,102,0.08); }
+        .footer-link.footer-static { cursor:default; }
+        a.footer-link { text-decoration:none; }
+        a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible { outline:2px solid var(--accent-blue); outline-offset:2px; }
+
+        /* phones: drop the expensive GPU effects (blur filters / backdrop-filter / paint animations) */
+        @media (max-width:768px) {
+            .hero-glow, .hero-img-glow { display:none; }
+            .hero-img-card { animation:none; }
+            .hero-heading-accent { animation:none; }
+            .zeta-sidebar { backdrop-filter:none; -webkit-backdrop-filter:none; background:#0A0D1A; }
+            .status-panel { backdrop-filter:none; -webkit-backdrop-filter:none; }
+            .sidebar-overlay { backdrop-filter:none; -webkit-backdrop-filter:none; background:rgba(0,0,0,0.72); }
+            .update-popup-overlay { backdrop-filter:none; -webkit-backdrop-filter:none; background:rgba(3,5,12,0.86); }
+            .update-popup { backdrop-filter:none; -webkit-backdrop-filter:none; background:rgb(10,13,26); }
+            .zt-fab-wrap { right:12px; bottom:12px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important; }
+            .marquee-track { animation:none !important; }
+        }
     </style>
-<base target="_blank">
-<base target="_blank">
-<base target="_blank">
-<base target="_blank">
-<base target="_blank">
-<base target="_blank">
-<base target="_blank">
-<base target="_blank">
 </head>
 <body>
 
     <!-- ===== SIDEBAR OVERLAY (mobile) ===== -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- ===== MOBILE TOGGLE ===== -->
-    <a class="mobile-toggle" id="mobileToggle" href="https://zeta-mini-8e229a0a0f1e.herokuapp.com/hack.html" aria-label="Hack Generator">
-        <i class="fa-solid fa-code"></i>
-    </a>
 
     <!-- ===== APP CONTAINER ===== -->
     <div class="app-container">
@@ -995,21 +1020,20 @@
                     <div class="stat"><strong>100%</strong>System</div>
                 </div>
             </div>
-            <div class="upgrade-card" onclick="alert('🚀 Unlock ZETA PRO — Access the full AI arsenal.')">
+            <div class="upgrade-card" onclick="zetaOpenWA('Hi Isanka, I want ZETA PRO')">
                 <div class="upgrade-title"><i class="fa-regular fa-gem"></i> <span>UNLOCK ZETA PRO</span></div>
                 <div class="upgrade-sub">Access the full AI arsenal.</div>
                 <span class="upgrade-arrow">UPGRADE →</span>
             </div>
             <div class="bottom-area">
                 <div class="bottom-actions">
-                    <button class="action-btn" onclick="alert('⚙️ Settings')"><i class="fa-solid fa-gear"></i><span class="action-label">Settings</span></button>
-                    <button class="action-btn" onclick="alert('❓ Help Center')"><i class="fa-regular fa-circle-question"></i><span class="action-label">Help</span></button>
-                    <button class="action-btn" onclick="alert('👤 Profile')"><i class="fa-regular fa-user"></i><span class="action-label">Profile</span></button>
+                    <button class="action-btn" onclick="zetaOpenWA('Hi Isanka, I need help with ZETA TOOLS')"><i class="fa-brands fa-whatsapp"></i><span class="action-label">Support</span></button>
+                    <button class="action-btn" onclick="zetaNavigate('dashboard')"><i class="fa-solid fa-house"></i><span class="action-label">Home</span></button>
                 </div>
-                <div class="user-area" onclick="alert('👤 ZETA User — PRO MEMBER')">
-                    <img class="user-avatar" src="https://ui-avatars.com/api/?name=ZETA+User&background=4F7DF7&color=fff&size=64&bold=true" alt="avatar" />
-                    <div class="user-info"><div class="user-name">ZETA User</div><div class="user-badge"><span class="dot"></span> PRO MEMBER</div></div>
-                    <i class="fa-solid fa-ellipsis-vertical user-more"></i>
+                <div class="user-area" onclick="zetaOpenWA('Hi Isanka, I need help with ZETA TOOLS')" title="Chat with the owner on WhatsApp">
+                    <img class="user-avatar" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMzIiIGZpbGw9IiM0RjdERjciLz48dGV4dCB4PSIzMiIgeT0iNDIiIGZvbnQtZmFtaWx5PSJBcmlhbCxzYW5zLXNlcmlmIiBmb250LXNpemU9IjMwIiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5JPC90ZXh0Pjwvc3ZnPg==" alt="Isanka" width="32" height="32" />
+                    <div class="user-info"><div class="user-name">Isanka</div><div class="user-badge"><span class="dot"></span> OWNER</div></div>
+                    <i class="fa-brands fa-whatsapp user-more"></i>
                 </div>
             </div>
         </aside>
@@ -1028,20 +1052,22 @@
                     <div class="hero-img-wrap reveal">
                         <div class="hero-img-glow"></div>
                         <div class="hero-img-card">
-                            <img src="https://files.catbox.moe/mu4e5j.png" alt="ZETA TOOLS" loading="eager" />
+                            <img src="https://files.catbox.moe/mu4e5j.png" alt="ZETA TOOLS" loading="eager" decoding="async" fetchpriority="high" />
                             <span class="hero-img-chip"><span class="dot"></span> ZETA TOOLS</span>
                         </div>
-                    </div>
-                    <div id="ztButtons" style="margin-top:24px; display:flex; flex-direction:column; gap:12px; align-items:center;">
-                        <button class="zeta-btn zeta-btn-chat" onclick="location.href='https://zeta-mini-8e229a0a0f1e.herokuapp.com/support.html'"><span class="sweep"></span><i class="fa-solid fa-comment"></i> SUPPORT TEAM</button>
-                        <button class="zeta-btn zeta-btn-download" onclick="location.href='https://zeta-mini-8e229a0a0f1e.herokuapp.com/Download.html'"><span class="sweep"></span><i class="fa-solid fa-download"></i> DOWNLOAD</button>
-                        <button class="zeta-btn zeta-btn-apk" onclick="location.href='https://zeta-mini-8e229a0a0f1e.herokuapp.com/Apk.html'"><span class="sweep"></span><i class="fa-solid fa-mobile-screen-button"></i> APK DOWNLOAD</button>
                     </div>
                     <div class="hero-chips reveal">
                         <span class="hero-chip"><i class="fa-solid fa-bolt"></i> Super Fast</span>
                         <span class="hero-chip"><i class="fa-solid fa-shield-halved"></i> 100% Secure</span>
                         <span class="hero-chip"><i class="fa-solid fa-gift"></i> Free Forever</span>
                         <span class="hero-chip"><i class="fa-solid fa-rotate"></i> Daily Updates</span>
+                    </div>
+                    <div class="hero-chips zt-jump reveal" id="ztJump">
+                        <a class="hero-chip" href="#blurStudio" data-jump="blurStudio"><i class="fa-solid fa-droplet"></i> Image Blur</a>
+                        <a class="hero-chip" href="#codeStudio" data-jump="codeStudio"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Code</a>
+                        <a class="hero-chip" href="#zetaGallery" data-jump="zetaGallery"><i class="fa-solid fa-images"></i> Gallery</a>
+                        <a class="hero-chip" href="#movieStudio" data-jump="movieStudio"><i class="fa-solid fa-film"></i> Movies</a>
+                        <a class="hero-chip" href="#imageSearchStudio" data-jump="imageSearchStudio"><i class="fa-solid fa-magnifying-glass"></i> Image Search</a>
                     </div>
                     <div class="hero-marquee reveal reveal-d1" aria-hidden="true">
                         <div class="marquee-track"><span>ZETA CHAT</span><span class="mq-dot"></span><span>EXPRESS VPN</span><span class="mq-dot"></span><span>VIDEO DOWNLOADER</span><span class="mq-dot"></span><span>APK STORE</span><span class="mq-dot"></span><span>AI GENERATOR</span><span class="mq-dot"></span><span>IMAGE STUDIO</span><span class="mq-dot"></span><span>CODE LAB</span><span class="mq-dot"></span><span>ZETA CHAT</span><span class="mq-dot"></span><span>EXPRESS VPN</span><span class="mq-dot"></span><span>VIDEO DOWNLOADER</span><span class="mq-dot"></span><span>APK STORE</span><span class="mq-dot"></span><span>AI GENERATOR</span><span class="mq-dot"></span><span>IMAGE STUDIO</span><span class="mq-dot"></span><span>CODE LAB</span><span class="mq-dot"></span></div>
@@ -1227,11 +1253,11 @@
             <!-- ===== FOOTER ===== -->
             <footer class="site-footer">
                 <div class="footer-grid">
-                    <div><div class="footer-brand">ZETA TOOLS</div><p class="footer-desc">Your all-in-one AI-powered toolkit. Chat, video downloads, APK downloads and more, all in one place.</p><div class="footer-social"><a href="#" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a><a href="#" title="Twitter"><i class="fa-brands fa-twitter"></i></a><a href="#" title="GitHub"><i class="fa-brands fa-github"></i></a></div></div>
-                    <div><div class="footer-col-title">Quick Links</div><button class="footer-link" onclick="location.href='https://zeta-mini-8e229a0a0f1e.herokuapp.com/Download.html'">Video Downloader</button><button class="footer-link" onclick="location.href='https://zeta-mini-8e229a0a0f1e.herokuapp.com/Apk.html'">APK Downloader</button><button class="footer-link" onclick="alert('📄 Documents')">Documents</button><button class="footer-link" onclick="alert('🆘 Support')">Support</button></div>
-                    <div><div class="footer-col-title">Info</div><button class="footer-link" onclick="alert('👤 Profile')">Profile</button><button class="footer-link" onclick="alert('⚙️ Settings')">Settings</button><button class="footer-link" onclick="alert('💾 Data')">Data</button></div>
+                    <div><div class="footer-brand">ZETA TOOLS</div><p class="footer-desc">Your all-in-one AI-powered toolkit. Chat, video downloads, APK downloads and more, all in one place.</p><div class="footer-social"><a href="https://wa.me/94763353368" target="_blank" rel="noopener" title="WhatsApp — Isanka" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a></div></div>
+                    <div><div class="footer-col-title">Quick Links</div><a class="footer-link" href="https://zeta-mini-8e229a0a0f1e.herokuapp.com/Download.html" target="_blank" rel="noopener">Video Downloader</a><a class="footer-link" href="https://zeta-mini-8e229a0a0f1e.herokuapp.com/Apk.html" target="_blank" rel="noopener">APK Downloader</a><a class="footer-link" href="https://zeta-mini-8e229a0a0f1e.herokuapp.com/support.html" target="_blank" rel="noopener">Support</a></div>
+                    <div><div class="footer-col-title">Contact</div><span class="footer-link footer-static">Owner: Isanka</span><a class="footer-link" href="https://wa.me/94763353368" target="_blank" rel="noopener">WhatsApp: +94 76 335 3368</a></div>
                 </div>
-                <div class="footer-bottom">&copy; 2026 ZETA TOOLS &middot; Sri Lanka &middot; All rights reserved.</div>
+                <div class="footer-bottom">&copy; 2026 ZETA TOOLS &middot; Owner: Isanka &middot; Sri Lanka &middot; All rights reserved.</div>
             </footer>
 
         </main>
@@ -1261,9 +1287,147 @@
                     </button>
                 </div>
             </div>
-        </div></div>
+        </div>
 
     </div>
+
+
+    <!-- ===== FLOATING CONTACT / BACK TO TOP / TOAST ===== -->
+    <div class="zt-fab-wrap">
+        <button class="zt-fab zt-fab-top" id="ztTop" type="button" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
+        <a class="zt-fab zt-fab-wa" href="https://wa.me/94763353368?text=Hi%20Isanka%2C%20I%20need%20help%20with%20ZETA%20TOOLS" target="_blank" rel="noopener" aria-label="Chat with Isanka on WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+    </div>
+    <div class="zt-toast" id="ztToast" role="status" aria-live="polite"></div>
+
+    <!-- ============================================================
+    ZETA CORE HELPERS — toast, clipboard, fetch-with-timeout, navigation
+    ============================================================ -->
+    <script>
+        (function() {
+            var WA_NUMBER = '94763353368';
+            var toastTimer = null;
+
+            window.zetaToast = function(msg, ms) {
+                var el = document.getElementById('ztToast');
+                if (!el) return;
+                el.textContent = msg;
+                el.classList.add('show');
+                clearTimeout(toastTimer);
+                toastTimer = setTimeout(function() { el.classList.remove('show'); }, ms || 2600);
+            };
+
+            window.zetaOpenWA = function(text) {
+                var u = 'https://wa.me/' + WA_NUMBER + (text ? ('?text=' + encodeURIComponent(text)) : '');
+                window.open(u, '_blank', 'noopener');
+            };
+
+            // clipboard that also works on http / older browsers
+            window.zetaCopy = function(text) {
+                function legacy() {
+                    return new Promise(function(resolve) {
+                        try {
+                            var ta = document.createElement('textarea');
+                            ta.value = text;
+                            ta.setAttribute('readonly', '');
+                            ta.style.cssText = 'position:fixed;top:-1000px;opacity:0;';
+                            document.body.appendChild(ta);
+                            ta.select();
+                            var ok = document.execCommand('copy');
+                            ta.remove();
+                            resolve(!!ok);
+                        } catch (e) { resolve(false); }
+                    });
+                }
+                if (navigator.clipboard && window.isSecureContext) {
+                    return navigator.clipboard.writeText(text).then(function() { return true; }, legacy);
+                }
+                return legacy();
+            };
+
+            // fetch that never hangs forever
+            window.zetaFetch = function(url, opts, ms) {
+                opts = opts || {};
+                var ctrl = ('AbortController' in window) ? new AbortController() : null;
+                var timer = null;
+                if (ctrl) {
+                    opts.signal = ctrl.signal;
+                    timer = setTimeout(function() { ctrl.abort(); }, ms || 20000);
+                }
+                return fetch(url, opts).then(function(r) { clearTimeout(timer); return r; },
+                                             function(e) { clearTimeout(timer); throw e; });
+            };
+
+            window.zetaScrollTo = function(id) {
+                var main = document.getElementById('mainContent');
+                if (id === 'top') { if (main) main.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+                var el = document.getElementById(id);
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            };
+
+            var NAV_MAP = {
+                'dashboard': 'top',
+                'ai-tools': 'codeStudio',
+                'ai-generator': 'codeStudio',
+                'code-lab': 'codeStudio',
+                'image-studio': 'blurStudio',
+                'video-studio': 'movieStudio',
+                'explore': 'imageSearchStudio',
+                'workspace': 'zetaGallery'
+            };
+            window.zetaNavigate = function(page) {
+                if (page === 'hack-generator') return; // has its own link
+                if (NAV_MAP[page]) { window.zetaScrollTo(NAV_MAP[page]); }
+                else { window.zetaToast('🚧 මේ feature එක ඉක්මනින් එනවා — Coming soon!'); }
+            };
+
+            document.addEventListener('click', function(e) {
+                var a = e.target.closest && e.target.closest('[data-jump]');
+                if (!a) return;
+                e.preventDefault();
+                window.zetaScrollTo(a.getAttribute('data-jump'));
+            });
+
+            document.addEventListener('DOMContentLoaded', function() {
+                var main = document.getElementById('mainContent');
+                var topBtn = document.getElementById('ztTop');
+                if (main && topBtn) {
+                    var ticking = false;
+                    main.addEventListener('scroll', function() {
+                        if (ticking) return;
+                        ticking = true;
+                        requestAnimationFrame(function() {
+                            topBtn.classList.toggle('show', main.scrollTop > 500);
+                            ticking = false;
+                        });
+                    }, { passive: true });
+                    topBtn.addEventListener('click', function() { window.zetaScrollTo('top'); });
+                }
+
+                // working sidebar search: filters the menu, Enter opens the first match
+                var si = document.getElementById('searchInput');
+                if (si) {
+                    si.addEventListener('input', function() {
+                        var q = si.value.trim().toLowerCase();
+                        document.querySelectorAll('.nav-scroll .nav-item').forEach(function(b) {
+                            b.classList.toggle('hidden', !!q && (b.textContent || '').toLowerCase().indexOf(q) === -1);
+                        });
+                        document.querySelectorAll('.nav-scroll .section-title').forEach(function(s) {
+                            s.classList.toggle('hidden', !!q);
+                        });
+                    });
+                    si.addEventListener('keydown', function(e) {
+                        if (e.key === 'Enter') {
+                            var first = document.querySelector('.nav-scroll .nav-item:not(.hidden)');
+                            if (first) first.click();
+                        }
+                    });
+                }
+            });
+
+            window.addEventListener('offline', function() { window.zetaToast('📡 Internet connection එක නෑ', 4000); });
+            window.addEventListener('online', function() { window.zetaToast('✅ Back online'); });
+        })();
+    </script>
 
     <!-- ============================================================
     JAVASCRIPT — FULL INTERACTIONS
@@ -1273,7 +1437,6 @@
             // ===== DOM refs =====
             const sidebar = document.getElementById('zetaSidebar');
             const overlay = document.getElementById('sidebarOverlay');
-            const mobileToggle = document.getElementById('mobileToggle');
             const brandToggle = document.getElementById('brandToggle');
             const searchInput = document.getElementById('searchInput');
 
@@ -1302,6 +1465,25 @@
             }
 
             overlay.addEventListener('click', toggleMobile);
+
+            // swipe right from the left edge = open menu, swipe left = close (phones)
+            let swX = null, swY = null, swOpenStart = false;
+            document.addEventListener('touchstart', function(e) {
+                const p = e.touches[0];
+                swX = p.clientX; swY = p.clientY;
+                swOpenStart = p.clientX < 24;
+            }, { passive: true });
+            document.addEventListener('touchend', function(e) {
+                if (swX === null || window.innerWidth >= 769) { swX = null; return; }
+                const p = e.changedTouches[0];
+                const dx = p.clientX - swX, dy = Math.abs(p.clientY - swY);
+                const isOpen = sidebar.classList.contains('open');
+                if (dy < 60) {
+                    if (!isOpen && swOpenStart && dx > 70) toggleMobile();
+                    else if (isOpen && dx < -70) toggleMobile();
+                }
+                swX = null;
+            }, { passive: true });
 
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape' && sidebar.classList.contains('open')) toggleMobile();
@@ -1340,7 +1522,7 @@
                     this.classList.add('active');
                     if (window.innerWidth < 769 && sidebar.classList.contains('open')) toggleMobile();
                     const page = this.dataset.page || 'dashboard';
-                    console.log('📍 Navigated to:', page);
+                    if (window.zetaNavigate) window.zetaNavigate(page);
                 });
             });
 
@@ -1352,34 +1534,10 @@
                 }
             });
 
-            // ===== MOBILE TOGGLE (fa-code button) — FADE ON SCROLL =====
-            // Scrolling down gradually hides the button; scrolling back up
-            // near the top gradually brings it back into view.
-            (function() {
-                const mainContent = document.getElementById('mainContent');
-                if (!mobileToggle || !mainContent) return;
-
-                const FADE_DISTANCE = 90; // px of scroll over which the fade happens
-
-                function updateToggleOpacity() {
-                    const scrollTop = mainContent.scrollTop;
-                    const ratio = Math.min(Math.max(scrollTop / FADE_DISTANCE, 0), 1);
-                    const opacity = 1 - ratio;
-                    mobileToggle.style.opacity = opacity;
-                    mobileToggle.style.transform = 'translateY(' + (-14 * ratio) + 'px) scale(' + (1 - 0.15 * ratio) + ')';
-                    mobileToggle.style.pointerEvents = opacity < 0.05 ? 'none' : 'auto';
-                    mobileToggle.style.visibility = opacity < 0.05 ? 'hidden' : 'visible';
-                }
-
-                mainContent.addEventListener('scroll', updateToggleOpacity, { passive: true });
-                // set initial state
-                updateToggleOpacity();
-            })();
-
             // ===== REVEAL OBSERVER =====
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    if (entry.isIntersecting) entry.target.classList.add('visible');
+                    if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
                 });
             }, { threshold: 0.06, rootMargin: '0px 0px -20px 0px' });
             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
@@ -1390,11 +1548,11 @@
 
             // check if user has seen this version
             function hasSeenUpdates() {
-                return localStorage.getItem(STORAGE_KEY) === 'true';
+                try { return localStorage.getItem(STORAGE_KEY) === 'true'; } catch (e) { return false; }
             }
 
             function markUpdatesSeen() {
-                localStorage.setItem(STORAGE_KEY, 'true');
+                try { localStorage.setItem(STORAGE_KEY, 'true'); } catch (e) { /* ignore */ }
             }
 
             // open popup with animation
@@ -1427,7 +1585,7 @@
             // handle view updates: scroll to the button group, close, remember
             function handleViewUpdates() {
                 markUpdatesSeen();
-                const target = document.getElementById('ztButtons');
+                const target = document.getElementById('ztJump');
                 if (target) {
                     target.scrollIntoView({ behavior: 'smooth' });
                 }
@@ -1491,40 +1649,43 @@
         (function() {
             let currentImage = null;   // loaded HTMLImageElement
             let currentOrigSrc = null; // original src for compare view
-            let lastBlobUrl = null;
+            let lastBlobUrl = null;    // blurred result
+            let uploadObjUrl = null;   // object URL of the uploaded file
+
+            const $ = function(id) { return document.getElementById(id); };
 
             // ===== TABS =====
             window.zsSwitchTab = function(tab) {
                 document.querySelectorAll('.zs-tab').forEach(function(t) {
                     t.classList.toggle('active', t.dataset.tab === tab);
                 });
-                document.getElementById('zsPanelUrl').classList.toggle('hidden', tab !== 'url');
-                document.getElementById('zsPanelUpload').classList.toggle('hidden', tab !== 'upload');
+                $('zsPanelUrl').classList.toggle('hidden', tab !== 'url');
+                $('zsPanelUpload').classList.toggle('hidden', tab !== 'upload');
                 hideMsgs();
             };
 
             function hideMsgs() {
-                document.getElementById('zsStatus').classList.add('hidden');
-                document.getElementById('zsError').classList.add('hidden');
+                $('zsStatus').classList.add('hidden');
+                $('zsError').classList.add('hidden');
             }
             function showError(msg) {
-                const el = document.getElementById('zsError');
+                const el = $('zsError');
                 el.textContent = msg;
                 el.classList.remove('hidden');
-                document.getElementById('zsStatus').classList.add('hidden');
+                $('zsStatus').classList.add('hidden');
             }
             function showStatus() {
-                document.getElementById('zsError').classList.add('hidden');
-                document.getElementById('zsResult').classList.add('hidden');
-                document.getElementById('zsStatus').classList.remove('hidden');
+                $('zsError').classList.add('hidden');
+                $('zsResult').classList.add('hidden');
+                $('zsStatus').classList.remove('hidden');
             }
-            function showResult(origSrc, outSrc, downloadUrl) {
-                document.getElementById('zsStatus').classList.add('hidden');
-                document.getElementById('zsError').classList.add('hidden');
-                document.getElementById('zsOrigImg').src = origSrc;
-                document.getElementById('zsOutImg').src = outSrc;
-                document.getElementById('zsDownload').href = downloadUrl;
-                const res = document.getElementById('zsResult');
+            function showResult(origSrc, outUrl) {
+                $('zsStatus').classList.add('hidden');
+                $('zsError').classList.add('hidden');
+                $('zsOrigImg').src = origSrc;
+                $('zsOutImg').src = outUrl;
+                $('zsDownload').href = outUrl;
+                const res = $('zsResult');
                 res.classList.remove('hidden');
                 res.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
@@ -1534,17 +1695,15 @@
                 return new Promise(function(resolve, reject) {
                     const img = new Image();
                     if (useCors) img.crossOrigin = 'anonymous';
+                    img.referrerPolicy = 'no-referrer';
                     img.onload = function() { resolve(img); };
                     img.onerror = function() { reject(new Error('IMG_LOAD')); };
                     img.src = src;
                 });
             }
             async function loadImageSmart(src) {
-                try {
-                    return await tryLoad(src, true);
-                } catch (e) {
-                    return await tryLoad(src, false); // retry without CORS
-                }
+                try { return await tryLoad(src, true); }
+                catch (e) { return await tryLoad(src, false); }
             }
 
             // ===== FALLBACK BOX BLUR (for browsers without ctx.filter) =====
@@ -1583,40 +1742,39 @@
                 ctx.putImageData(imgData, 0, 0);
             }
 
-            // ===== CORE BLUR (canvas, runs on device) =====
+            // ===== CORE BLUR (canvas, runs on the device) -> Promise<Blob> =====
             function canvasBlur(img, level) {
-                const maxDim = 1800;
-                let w = img.naturalWidth, h = img.naturalHeight;
-                if (!w || !h) throw new Error('IMG_LOAD');
-                const s = Math.min(1, maxDim / Math.max(w, h));
-                w = Math.max(1, Math.round(w * s));
-                h = Math.max(1, Math.round(h * s));
-                const canvas = document.createElement('canvas');
-                canvas.width = w; canvas.height = h;
-                const ctx = canvas.getContext('2d');
-                if (typeof ctx.filter === 'string') {
-                    ctx.filter = 'blur(' + level + 'px)';
-                    ctx.drawImage(img, 0, 0, w, h);
-                    ctx.filter = 'none';
-                } else {
-                    ctx.drawImage(img, 0, 0, w, h);
-                    boxBlurCanvas(ctx, w, h, level);
-                }
-                return canvas.toDataURL('image/jpeg', 0.92);
-            }
-
-            function dataUrlToBlobUrl(dataUrl) {
-                const parts = dataUrl.split(',');
-                const mime = (parts[0].match(/data:(.*?);/) || [])[1] || 'image/jpeg';
-                const bin = atob(parts[1]);
-                const arr = new Uint8Array(bin.length);
-                for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
-                return URL.createObjectURL(new Blob([arr], { type: mime }));
+                return new Promise(function(resolve, reject) {
+                    try {
+                        const maxDim = 1600;
+                        let w = img.naturalWidth, h = img.naturalHeight;
+                        if (!w || !h) throw new Error('IMG_LOAD');
+                        const s = Math.min(1, maxDim / Math.max(w, h));
+                        w = Math.max(1, Math.round(w * s));
+                        h = Math.max(1, Math.round(h * s));
+                        const canvas = document.createElement('canvas');
+                        canvas.width = w; canvas.height = h;
+                        const ctx = canvas.getContext('2d');
+                        if (typeof ctx.filter === 'string') {
+                            // draw a little bigger than the canvas so the edges don't fade to transparent
+                            ctx.filter = 'blur(' + level + 'px)';
+                            const pad = level * 2;
+                            ctx.drawImage(img, -pad, -pad, w + pad * 2, h + pad * 2);
+                            ctx.filter = 'none';
+                        } else {
+                            ctx.drawImage(img, 0, 0, w, h);
+                            boxBlurCanvas(ctx, w, h, level);
+                        }
+                        canvas.toBlob(function(blob) {
+                            if (blob) resolve(blob); else reject(new Error('BLOB_FAIL'));
+                        }, 'image/jpeg', 0.9);
+                    } catch (e) { reject(e); }
+                });
             }
 
             // ===== MODE 1: image URL =====
             window.zsBlurFromUrl = async function() {
-                const input = document.getElementById('zsUrlInput');
+                const input = $('zsUrlInput');
                 const url = (input.value || '').trim();
                 if (!url) { showError('⚠️ කරුණාකර image link එකක් paste කරන්න.'); return; }
                 if (!/^https?:\/\//i.test(url)) { showError('⚠️ Link එක http:// හෝ https:// වලින් පටන් ගත යුතුයි.'); return; }
@@ -1624,34 +1782,32 @@
                 try {
                     currentImage = await loadImageSmart(url);
                     currentOrigSrc = url;
-                    document.getElementById('zsStrengthWrap').classList.remove('hidden');
-                    await zsApplyBlur();
+                    $('zsStrengthWrap').classList.remove('hidden');
+                    await window.zsApplyBlur();
                 } catch (e) {
                     showError('❌ Image එක load කරන්න බැරි වුනා. Direct image link එකක් ද (.jpg / .png) කියලා check කරලා ආයේ try කරන්න.');
                 }
             };
 
             // ===== MODE 2: upload photo =====
-            window.zsHandleUpload = function(inputEl) {
+            window.zsHandleUpload = async function(inputEl) {
                 const file = inputEl.files && inputEl.files[0];
                 if (!file) return;
                 if (!file.type.startsWith('image/')) { showError('⚠️ කරුණාකර image file එකක් තෝරන්න.'); return; }
                 if (file.size > 8 * 1024 * 1024) { showError('⚠️ Photo එක 8MB ට වඩා අඩු වෙන්න ඕන.'); return; }
-                const reader = new FileReader();
-                reader.onload = async function(e) {
-                    currentOrigSrc = e.target.result;
-                    document.getElementById('zsUploadPreview').src = currentOrigSrc;
-                    document.getElementById('zsUploadPreviewWrap').classList.remove('hidden');
-                    showStatus();
-                    try {
-                        currentImage = await tryLoad(currentOrigSrc, false);
-                        document.getElementById('zsStrengthWrap').classList.remove('hidden');
-                        document.getElementById('zsStatus').classList.add('hidden');
-                    } catch (err) {
-                        showError('❌ Photo එක load කරන්න බැරි වුනා. වෙනත් photo එකක් try කරන්න.');
-                    }
-                };
-                reader.readAsDataURL(file);
+                if (uploadObjUrl) URL.revokeObjectURL(uploadObjUrl);
+                uploadObjUrl = URL.createObjectURL(file);
+                currentOrigSrc = uploadObjUrl;
+                $('zsUploadPreview').src = uploadObjUrl;
+                $('zsUploadPreviewWrap').classList.remove('hidden');
+                showStatus();
+                try {
+                    currentImage = await tryLoad(uploadObjUrl, false);
+                    $('zsStrengthWrap').classList.remove('hidden');
+                    $('zsStatus').classList.add('hidden');
+                } catch (err) {
+                    showError('❌ Photo එක load කරන්න බැරි වුනා. වෙනත් photo එකක් try කරන්න.');
+                }
             };
 
             // ===== APPLY BLUR =====
@@ -1661,11 +1817,11 @@
                 // let the spinner paint before the heavy canvas work
                 await new Promise(function(r) { setTimeout(r, 60); });
                 try {
-                    const level = parseInt(document.getElementById('zsStrength').value, 10);
-                    const blurredDataUrl = canvasBlur(currentImage, level);
+                    const level = parseInt($('zsStrength').value, 10);
+                    const blob = await canvasBlur(currentImage, level);
                     if (lastBlobUrl) URL.revokeObjectURL(lastBlobUrl);
-                    lastBlobUrl = dataUrlToBlobUrl(blurredDataUrl);
-                    showResult(currentOrigSrc, blurredDataUrl, lastBlobUrl);
+                    lastBlobUrl = URL.createObjectURL(blob);
+                    showResult(currentOrigSrc, lastBlobUrl);
                 } catch (e) {
                     console.error('Blur error:', e);
                     if (e && e.name === 'SecurityError') {
@@ -1677,18 +1833,17 @@
             };
 
             window.zsReset = function() {
-                document.getElementById('zsResult').classList.add('hidden');
-                document.getElementById('zsUrlInput').value = '';
-                document.getElementById('zsFileInput').value = '';
-                document.getElementById('zsUploadPreviewWrap').classList.add('hidden');
-                document.getElementById('zsStrengthWrap').classList.add('hidden');
+                $('zsResult').classList.add('hidden');
+                $('zsUrlInput').value = '';
+                $('zsFileInput').value = '';
+                $('zsUploadPreviewWrap').classList.add('hidden');
+                $('zsStrengthWrap').classList.add('hidden');
                 if (lastBlobUrl) { URL.revokeObjectURL(lastBlobUrl); lastBlobUrl = null; }
+                if (uploadObjUrl) { URL.revokeObjectURL(uploadObjUrl); uploadObjUrl = null; }
                 currentImage = null;
                 currentOrigSrc = null;
                 hideMsgs();
             };
-
-            console.log('🖼 Image Blur Studio loaded (browser-side canvas blur)');
         })();
     </script>
 
@@ -1727,29 +1882,32 @@
                        '';
             }
 
+            // API sometimes returns an object instead of a string -> never show "[object Object]"
+            function zcNorm(v) { return typeof v === 'string' ? v : (v ? JSON.stringify(v, null, 2) : ''); }
+
             async function zcCallApi(prompt) {
                 // Attempt 1: POST JSON body
                 try {
-                    const res = await fetch(API_URL, {
+                    const res = await zetaFetch(API_URL, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ prompt: prompt })
-                    });
+                    }, 60000);
                     if (res.ok) {
                         const data = await res.json().catch(function() { return null; });
-                        const code = zcExtractCode(data);
+                        const code = zcNorm(zcExtractCode(data));
                         if (code) return code;
                         if (data) return JSON.stringify(data, null, 2);
                     }
                 } catch (e) { /* fall through to GET */ }
 
                 // Attempt 2: GET with query param
-                const res2 = await fetch(API_URL + '&prompt=' + encodeURIComponent(prompt));
+                const res2 = await zetaFetch(API_URL + '&prompt=' + encodeURIComponent(prompt), {}, 60000);
                 if (!res2.ok) throw new Error('HTTP ' + res2.status);
                 const text = await res2.text();
                 try {
                     const data2 = JSON.parse(text);
-                    const code2 = zcExtractCode(data2);
+                    const code2 = zcNorm(zcExtractCode(data2));
                     if (code2) return code2;
                     return JSON.stringify(data2, null, 2);
                 } catch (e) {
@@ -1767,6 +1925,8 @@
                 zcHideAll();
                 document.getElementById('zcStatus').classList.remove('hidden');
                 btn.disabled = true;
+                const btnOld = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generating…';
                 try {
                     const code = await zcCallApi(prompt);
                     lastCode = code;
@@ -1777,15 +1937,19 @@
                     res.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 } catch (err) {
                     console.error('Code gen error:', err);
-                    zcShowError('❌ Code generate කරන්න බැරි වුනා. Internet connection එක check කරලා ආයේ try කරන්න.');
+                    zcShowError(err && err.name === 'AbortError'
+                        ? '⏱ AI එක උත්තර දෙන්න ගොඩක් වෙලා ගියා. ආයේ try කරන්න.'
+                        : '❌ Code generate කරන්න බැරි වුනා. Internet connection එක check කරලා ආයේ try කරන්න.');
                 } finally {
                     btn.disabled = false;
+                    btn.innerHTML = btnOld;
                 }
             };
 
             window.zcCopy = function() {
                 const btn = document.getElementById('zcCopyBtn');
-                navigator.clipboard.writeText(lastCode).then(function() {
+                zetaCopy(lastCode).then(function(ok) {
+                    if (!ok) { zetaToast('❌ Copy කරන්න බැරි වුනා — code එක select කරලා copy කරන්න'); return; }
                     btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
                     setTimeout(function() { btn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy'; }, 1800);
                 });
@@ -1796,8 +1960,10 @@
                 const a = document.createElement('a');
                 a.href = URL.createObjectURL(blob);
                 a.download = 'zeta-generated-code.txt';
+                document.body.appendChild(a);
                 a.click();
-                URL.revokeObjectURL(a.href);
+                a.remove();
+                setTimeout(function() { URL.revokeObjectURL(a.href); }, 3000);
             };
 
             window.zcClear = function() {
@@ -1818,56 +1984,6 @@
         })();
     </script>
 
-    <!-- ============================================================
-    SMOOTH SLOW SCROLL — butter-smooth lerped scrolling on mainContent
-    (wheel only; touch/keyboard keep native feel)
-    ============================================================ -->
-    <script>
-        (function() {
-            const container = document.getElementById('mainContent');
-            if (!container) return;
-
-            const SPEED = 0.45;      // lower = slower scroll (0.2 - 1.0)
-            const EASE = 0.085;      // lower = smoother/slower catch-up
-
-            let target = 0, current = 0, rafId = null;
-
-            function clamp(v) {
-                const max = container.scrollHeight - container.clientHeight;
-                return Math.max(0, Math.min(max, v));
-            }
-
-            function animate() {
-                current += (target - current) * EASE;
-                if (Math.abs(target - current) < 0.5) {
-                    current = target;
-                    container.scrollTop = current;
-                    rafId = null;
-                    return;
-                }
-                container.scrollTop = current;
-                rafId = requestAnimationFrame(animate);
-            }
-
-            container.addEventListener('wheel', function(e) {
-                if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
-                // Let inner scrollable elements (code box) scroll natively
-                const inner = e.target.closest('.zc-code-box, .nav-scroll');
-                if (inner) return;
-                e.preventDefault();
-                if (rafId === null) { current = container.scrollTop; target = current; }
-                target = clamp(target + e.deltaY * SPEED);
-                if (rafId === null) rafId = requestAnimationFrame(animate);
-            }, { passive: false });
-
-            // Keep target in sync when user scrolls by other means
-            container.addEventListener('scroll', function() {
-                if (rafId === null) { current = container.scrollTop; target = current; }
-            }, { passive: true });
-
-            console.log('🧈 Smooth slow-scroll enabled (speed ' + SPEED + ')');
-        })();
-    </script>
 
     <!-- ============================================================
     MOVIE DOWNLOADER — SCRIPT (chamindu.site API)
@@ -1889,6 +2005,11 @@
                 document.getElementById('smInfoWrap').classList.add('hidden');
                 document.getElementById('smStatus').classList.remove('hidden');
             }
+            function smShowStatusKeep() {
+                document.getElementById('smError').classList.add('hidden');
+                document.getElementById('smInfoWrap').classList.add('hidden');
+                document.getElementById('smStatus').classList.remove('hidden');
+            }
             function smHideMsgs() {
                 document.getElementById('smStatus').classList.add('hidden');
                 document.getElementById('smError').classList.add('hidden');
@@ -1905,7 +2026,7 @@
                 return d;
             }
             async function smFetchJson(url) {
-                const res = await fetch(url);
+                const res = await zetaFetch(url, {}, 25000);
                 if (!res.ok) throw new Error('HTTP ' + res.status);
                 return await res.json();
             }
@@ -1989,6 +2110,8 @@
                             img.src = poster;
                             img.alt = '';
                             img.loading = 'lazy';
+                            img.decoding = 'async';
+                            img.referrerPolicy = 'no-referrer';
                             img.addEventListener('error', function() { this.style.visibility = 'hidden'; });
                             pw.appendChild(img);
                         } else {
@@ -2029,7 +2152,7 @@
             // ===== INFO + DOWNLOAD LINKS =====
             async function smLoadInfo(pageUrl, btn) {
                 if (btn) btn.disabled = true;
-                smShowStatus();
+                smShowStatusKeep();
                 try {
                     const data = await smFetchJson(SM_API + '/infodl?q=' + encodeURIComponent(pageUrl) + '&api_key=' + SM_KEY);
                     const r = (data && data.result && typeof data.result === 'object') ? data.result
@@ -2078,6 +2201,8 @@
                         const a = smEl('a', 'sm-link-open', '<i class="fa-solid fa-arrow-up-right-from-square"></i> Open');
                         a.href = l.url;
                         a.title = l.url;
+                        a.target = '_blank';
+                        a.rel = 'noopener noreferrer';
                         row.appendChild(a);
                         listWrap.appendChild(row);
                     });
@@ -2146,7 +2271,7 @@
                 const fileName = (q || 'image').replace(/[^a-z0-9]+/gi, '_').toLowerCase() + '_' + (idx + 1) + '.jpg';
                 try {
                     // cross-origin photo එකක් නිසා fetch කරලා blob එකක් විදිහට download කරනවා
-                    const res = await fetch(imgUrl, { mode: 'cors' });
+                    const res = await zetaFetch(imgUrl, { mode: 'cors' }, 30000);
                     if (!res.ok) throw new Error('HTTP ' + res.status);
                     const blob = await res.blob();
                     const objUrl = URL.createObjectURL(blob);
@@ -2161,7 +2286,7 @@
                 } catch (e) {
                     console.warn('Direct download failed, opening in new tab instead.', e);
                     // CORS නිසා fetch fail උනොත් tab එකක් open කරලා download කරගන්න පුළුවන් විදිහට දෙනවා
-                    window.open(imgUrl, '_blank');
+                    window.open(imgUrl, '_blank', 'noopener');
                     btn.innerHTML = '<i class="fa-solid fa-arrow-up-right-from-square"></i> Opened';
                 } finally {
                     btn.disabled = false;
@@ -2176,7 +2301,7 @@
                 isShowStatus();
                 try {
                     const url = IS_API + '?q=' + encodeURIComponent(q) + '&apikey=' + encodeURIComponent(IS_KEY);
-                    const res = await fetch(url);
+                    const res = await zetaFetch(url, {}, 25000);
                     if (!res.ok) throw new Error('HTTP ' + res.status);
                     const data = await res.json();
 
@@ -2203,7 +2328,9 @@
                         img.src = imgUrl;
                         img.alt = q;
                         img.loading = 'lazy';
-                        img.addEventListener('click', function() { window.open(imgUrl, '_blank'); });
+                        img.decoding = 'async';
+                        img.referrerPolicy = 'no-referrer';
+                        img.addEventListener('click', function() { window.open(imgUrl, '_blank', 'noopener'); });
                         img.addEventListener('error', function() { item.remove(); });
                         picWrap.appendChild(img);
                         item.appendChild(picWrap);
@@ -2212,7 +2339,8 @@
 
                         const copyBtn = isEl('button', 'is-mini-btn ghost', '<i class="fa-regular fa-copy"></i> Copy');
                         copyBtn.addEventListener('click', function() {
-                            navigator.clipboard.writeText(imgUrl).then(function() {
+                            zetaCopy(imgUrl).then(function(ok) {
+                                if (!ok) { zetaToast('❌ Copy කරන්න බැරි වුනා'); return; }
                                 const old = copyBtn.innerHTML;
                                 copyBtn.innerHTML = '<i class="fa-solid fa-check"></i> OK';
                                 setTimeout(function() { copyBtn.innerHTML = old; }, 1400);
@@ -2223,6 +2351,7 @@
                         const openBtn = isEl('a', 'is-mini-btn', '<i class="fa-solid fa-arrow-up-right-from-square"></i> Open');
                         openBtn.href = imgUrl;
                         openBtn.target = '_blank';
+                        openBtn.rel = 'noopener noreferrer';
                         actions.appendChild(openBtn);
 
                         const dlBtn = isEl('button', 'is-mini-btn is-dl', '<i class="fa-solid fa-download"></i> Download');
@@ -2266,7 +2395,7 @@
             }
             function zgSave() {
                 try { localStorage.setItem(ZG_KEY, JSON.stringify(items)); }
-                catch (e) { console.warn('Gallery storage full — old photos may not persist.', e); }
+                catch (e) { console.warn('Gallery storage full — old photos may not persist.', e); if (window.zetaToast) zetaToast('⚠️ Storage full — පරණ photos delete කරන්න'); }
             }
             function zgError(msg) {
                 const el = $('zgError');
@@ -2325,7 +2454,7 @@
                     const fd = new FormData();
                     fd.append('reqtype', 'fileupload');
                     fd.append('fileToUpload', file, file.name);
-                    const res = await fetch('https://catbox.moe/user/api.php', { method: 'POST', body: fd });
+                    const res = await zetaFetch('https://catbox.moe/user/api.php', { method: 'POST', body: fd }, 45000);
                     if (res.ok) {
                         const t = (await res.text()).trim();
                         if (/^https?:\/\//i.test(t)) return { url: t, host: 'catbox' };
@@ -2335,7 +2464,7 @@
                 try {
                     const fd = new FormData();
                     fd.append('file', file, file.name);
-                    const res = await fetch('https://telegra.ph/upload', { method: 'POST', body: fd });
+                    const res = await zetaFetch('https://telegra.ph/upload', { method: 'POST', body: fd }, 45000);
                     if (res.ok) {
                         const j = await res.json();
                         if (Array.isArray(j) && j[0] && j[0].src) return { url: 'https://telegra.ph' + j[0].src, host: 'telegraph' };
@@ -2368,7 +2497,8 @@
                             '<div class="zg-item-btns">' +
                                 (it.link
                                     ? '<button class="zg-btn" onclick="zgCopy(' + it.id + ', this)"><i class="fa-regular fa-copy"></i> Copy</button>' +
-                                      '<a class="zg-btn" href="' + zgEsc(it.link) + '" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open</a>'
+                                      '<a class="zg-btn" href="' + zgEsc(it.link) + '" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open</a>' +
+                                      '<a class="zg-btn zg-wa" href="https://wa.me/?text=' + encodeURIComponent(it.link) + '" target="_blank" rel="noopener" aria-label="Share on WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>'
                                     : '<button class="zg-btn" onclick="zgRetry(' + it.id + ', this)"><i class="fa-solid fa-rotate"></i> Retry</button>') +
                                 '<button class="zg-btn zg-danger" onclick="zgDelete(' + it.id + ')"><i class="fa-regular fa-trash-can"></i></button>' +
                             '</div>' +
@@ -2405,9 +2535,11 @@
                 $('zgStatus').classList.remove('hidden');
                 zgSetProgress(15);
                 try {
-                    const dataUrl = await zgReadFile(file);
+                    // object URL = no giant base64 string in memory
+                    const objUrl = URL.createObjectURL(file);
                     zgSetProgress(40);
-                    const thumb = await zgMakeThumb(dataUrl);
+                    let thumb = '';
+                    try { thumb = await zgMakeThumb(objUrl); } finally { URL.revokeObjectURL(objUrl); }
                     zgSetProgress(55);
 
                     let link = '', host = '';
@@ -2441,7 +2573,8 @@
             window.zgCopy = function(id, btn) {
                 const it = items.find(function(x) { return x.id === id; });
                 if (!it || !it.link) return;
-                navigator.clipboard.writeText(it.link).then(function() {
+                zetaCopy(it.link).then(function(ok) {
+                    if (!ok) { zetaToast('❌ Copy කරන්න බැරි වුනා'); return; }
                     if (btn) {
                         const old = btn.innerHTML;
                         btn.innerHTML = '<i class="fa-solid fa-check"></i> OK';
@@ -2500,6 +2633,7 @@
             zgRender();
             console.log('🖼 ZETA Gallery loaded — photos only, links via free host');
         })();
+    </script>
 
     <!-- ============================================================
     ONESIGNAL PUSH — real notification permission + subscription.
@@ -2514,11 +2648,11 @@
       4. Site must be served over HTTPS for push to work
     ============================================================ -->
     <script>
-        var ONESIGNAL_APP_ID = "ONESIGNAL_APP_ID_HERE"; // <-- paste your OneSignal App ID here
+        var ONESIGNAL_APP_ID = "473c3ff9-4aab-403a-9396-0b6d8a0afd77"; // <-- your OneSignal App ID
 
         window.OneSignalDeferred = window.OneSignalDeferred || [];
         OneSignalDeferred.push(async function(OneSignal) {
-            if (!ONESIGNAL_APP_ID || ONESIGNAL_APP_ID === "473c3ff9-4aab-403a-9396-0b6d8a0afd77") {
+            if (!ONESIGNAL_APP_ID || ONESIGNAL_APP_ID === "ONESIGNAL_APP_ID_HERE") {
                 console.warn('⚠️ OneSignal App ID not set yet — edit index.html and paste your App ID.');
                 return;
             }
@@ -2536,7 +2670,7 @@
                             await OneSignal.Notifications.requestPermission();
                         }
                     } catch (e) { console.warn('OneSignal permission request failed:', e); }
-                }, 800);
+                }, 12000); // wait a bit — asking for notifications instantly makes people tap "Block"
             } catch (e) { console.warn('OneSignal init failed:', e); }
         });
 
